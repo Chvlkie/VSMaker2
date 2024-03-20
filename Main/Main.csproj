@@ -8,4 +8,49 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\Icons\add_ico.png" />
+    <None Remove="Resources\Icons\copy_ico.png" />
+    <None Remove="Resources\Icons\del_ico.png" />
+    <None Remove="Resources\Icons\export_ico.png" />
+    <None Remove="Resources\Icons\import_ico.png" />
+    <None Remove="Resources\Icons\nds_ico.png" />
+    <None Remove="Resources\Icons\open_ico.png" />
+    <None Remove="Resources\Icons\paste_ico.png" />
+    <None Remove="Resources\Icons\redo_ico.png" />
+    <None Remove="Resources\Icons\save_ico.png" />
+    <None Remove="Resources\Icons\sort_ico.png" />
+    <None Remove="Resources\Icons\undo_ico.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\add_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\copy_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\del_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\export_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\import_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\nds_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\open_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\paste_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\redo_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\save_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\sort_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\undo_ico.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
