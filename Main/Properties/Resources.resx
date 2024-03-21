@@ -118,40 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="add_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\add_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="copy_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\copy_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="del_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\del_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="export_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\export_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="import_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\import_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="nds_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\nds_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="open_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\open_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="paste_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\paste_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="save_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\save_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="redo_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\redo_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="save_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\save_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="copy_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\copy_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\add_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="sort_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\sort_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="del_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\del_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nds_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\nds_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="undo_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\undo_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="import_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\import_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="paste_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\paste_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poke_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\poke_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

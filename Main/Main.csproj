@@ -1,56 +1,75 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\Icons\add_ico.png" />
-    <None Remove="Resources\Icons\copy_ico.png" />
-    <None Remove="Resources\Icons\del_ico.png" />
-    <None Remove="Resources\Icons\export_ico.png" />
-    <None Remove="Resources\Icons\import_ico.png" />
-    <None Remove="Resources\Icons\nds_ico.png" />
-    <None Remove="Resources\Icons\open_ico.png" />
-    <None Remove="Resources\Icons\paste_ico.png" />
-    <None Remove="Resources\Icons\redo_ico.png" />
-    <None Remove="Resources\Icons\save_ico.png" />
-    <None Remove="Resources\Icons\sort_ico.png" />
-    <None Remove="Resources\Icons\undo_ico.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Resources\Fonts\pokemon-ds-font.ttf" />
+		<None Remove="Resources\Icons\add_ico.png" />
+		<None Remove="Resources\Icons\copy_ico.png" />
+		<None Remove="Resources\Icons\del_ico.png" />
+		<None Remove="Resources\Icons\export_ico.png" />
+		<None Remove="Resources\Icons\import_ico.png" />
+		<None Remove="Resources\Icons\nds_ico.png" />
+		<None Remove="Resources\Icons\open_ico.png" />
+		<None Remove="Resources\Icons\paste_ico.png" />
+		<None Remove="Resources\Icons\poke_ico.png" />
+		<None Remove="Resources\Icons\redo_ico.png" />
+		<None Remove="Resources\Icons\save_ico.png" />
+		<None Remove="Resources\Icons\sort_ico.png" />
+		<None Remove="Resources\Icons\undo_ico.png" />
+		<None Remove="Tools\blz.exe" />
+		<None Remove="Tools\ndstool.exe" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Icons\add_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\copy_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\del_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\export_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\import_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\nds_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\open_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\paste_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\redo_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\save_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\sort_ico.png" />
-    <EmbeddedResource Include="Resources\Icons\undo_ico.png" />
-  </ItemGroup>
+	<ItemGroup>
+	  <Content Include="Tools\blz.exe" />
+	  <Content Include="Tools\ndstool.exe" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Fonts\pokemon-ds-font.ttf" />
+		<EmbeddedResource Include="Resources\Icons\add_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\copy_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\del_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\export_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\import_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\nds_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\open_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\paste_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\poke_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\redo_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\save_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\sort_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\undo_ico.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Data\Data.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
 </Project>
