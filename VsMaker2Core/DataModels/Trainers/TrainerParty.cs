@@ -1,4 +1,4 @@
-﻿namespace Data
+﻿namespace VsMaker2Core.DataModels
 {
     public class TrainerParty
     {

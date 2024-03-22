@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DSUtils.EasyReaderWriter
+namespace DSUtils
 {
     public class EasyReader : BinaryReader
     {

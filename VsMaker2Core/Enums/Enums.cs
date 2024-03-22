@@ -4,21 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data
+namespace VsMaker2Core
 {
     public static class Enums
     {
         public enum GameFamily : byte
         {
-            None,
+            Unknown,
             DiamondPearl,
             Platinum,
             HeartGoldSoulSilver,
             HgEngine
         }
 
+        public enum GameVersion : byte
+        {
+            Unknown,
+            Diamond,
+            Pearl,
+            Platinum,
+            HeartGold,
+            SoulSilver,
+            HgEngine
+        }
+
         public enum GameLanguage : byte
         {
+            Unknown,
             English,
             Japanese,
             Italian,
@@ -30,6 +42,7 @@ namespace Data
 
         public enum DirectoryNames : byte
         {
+            Unknown,
             PersonalPokeData,
             SynthOverlay,
             TextArchive,
@@ -41,5 +54,7 @@ namespace Data
             BattleMessageTable,
             BattleMessageOffset
         }
+
+
     }
 }

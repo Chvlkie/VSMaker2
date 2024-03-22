@@ -53,13 +53,14 @@
             menu_Tools_UnpackNarcs = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
             menu_Tools_Settings = new ToolStripMenuItem();
-            toolsToolStripMenuItem = new ToolStripMenuItem();
             menu_Help = new ToolStripMenuItem();
             menu_Help_ViewHelp = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
             menu_Help_About = new ToolStripMenuItem();
             menu_Help_CheckUpdate = new ToolStripMenuItem();
             startupTab = new TabControl();
+            startupPage = new TabPage();
+            startupLabel = new Label();
             mainPage = new TabPage();
             main_MainTab = new TabControl();
             main_MainTab_TrainerTab = new TabPage();
@@ -335,15 +336,13 @@
             battleMessages_MessageUpBtn = new Button();
             battleMessages_MessageDOwnBtn = new Button();
             battleMessages_PreviewPicBox = new PictureBox();
-            startupPage = new TabPage();
-            startupLabel = new Label();
             mainStatusStrip = new StatusStrip();
             toolstripContainer = new SplitContainer();
             mainToolStrip = new ToolStrip();
             main_OpenRomBtn = new ToolStripButton();
             main_OpenFolderBtn = new ToolStripButton();
             toolStripSeparator7 = new ToolStripSeparator();
-            main_SaveRom = new ToolStripButton();
+            main_SaveRomBtn = new ToolStripButton();
             toolStripSeparator20 = new ToolStripSeparator();
             main_OpenPatchesBtn = new ToolStripButton();
             main_UnpackNarcsBtn = new ToolStripButton();
@@ -352,6 +351,7 @@
             romIcon_PicBox = new PictureBox();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
+            startupPage.SuspendLayout();
             mainPage.SuspendLayout();
             main_MainTab.SuspendLayout();
             main_MainTab_TrainerTab.SuspendLayout();
@@ -408,7 +408,6 @@
             panel7.SuspendLayout();
             toolStrip3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)battleMessages_PreviewPicBox).BeginInit();
-            startupPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)toolstripContainer).BeginInit();
             toolstripContainer.Panel1.SuspendLayout();
             toolstripContainer.Panel2.SuspendLayout();
@@ -438,6 +437,7 @@
             menu_File_OpenRom.Name = "menu_File_OpenRom";
             menu_File_OpenRom.Size = new Size(191, 22);
             menu_File_OpenRom.Text = "Open ROM";
+            menu_File_OpenRom.Click += menu_File_OpenRom_Click;
             // 
             // menu_File_OpenFolder
             // 
@@ -458,12 +458,14 @@
             // 
             // menu_File_Save
             // 
+            menu_File_Save.Enabled = false;
             menu_File_Save.Name = "menu_File_Save";
             menu_File_Save.Size = new Size(191, 22);
             menu_File_Save.Text = "Save";
             // 
             // menu_File_SaveAs
             // 
+            menu_File_SaveAs.Enabled = false;
             menu_File_SaveAs.Name = "menu_File_SaveAs";
             menu_File_SaveAs.Size = new Size(191, 22);
             menu_File_SaveAs.Text = "Save As...";
@@ -475,9 +477,11 @@
             // 
             // menu_File_Close
             // 
+            menu_File_Close.Enabled = false;
             menu_File_Close.Name = "menu_File_Close";
             menu_File_Close.Size = new Size(191, 22);
             menu_File_Close.Text = "Close Project";
+            menu_File_Close.Click += menu_File_Close_Click;
             // 
             // toolStripSeparator2
             // 
@@ -494,6 +498,7 @@
             // menu_Import
             // 
             menu_Import.DropDownItems.AddRange(new ToolStripItem[] { menu_Import_Trainers, menu_Import_Classes, menu_Import_BattleMessages });
+            menu_Import.Enabled = false;
             menu_Import.Name = "menu_Import";
             menu_Import.Size = new Size(55, 20);
             menu_Import.Text = "Import";
@@ -519,6 +524,7 @@
             // menu_Export
             // 
             menu_Export.DropDownItems.AddRange(new ToolStripItem[] { menu_Export_Trainers, menu_Export_Classes, menu_Export_BattleMessages });
+            menu_Export.Enabled = false;
             menu_Export.Name = "menu_Export";
             menu_Export.Size = new Size(53, 20);
             menu_Export.Text = "Export";
@@ -543,13 +549,14 @@
             // 
             // menu_Tools
             // 
-            menu_Tools.DropDownItems.AddRange(new ToolStripItem[] { menu_Tools_RomPatcher, menu_Tools_UnpackNarcs, toolStripSeparator5, menu_Tools_Settings, toolsToolStripMenuItem });
+            menu_Tools.DropDownItems.AddRange(new ToolStripItem[] { menu_Tools_RomPatcher, menu_Tools_UnpackNarcs, toolStripSeparator5, menu_Tools_Settings });
             menu_Tools.Name = "menu_Tools";
             menu_Tools.Size = new Size(46, 20);
             menu_Tools.Text = "Tools";
             // 
             // menu_Tools_RomPatcher
             // 
+            menu_Tools_RomPatcher.Enabled = false;
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
             menu_Tools_RomPatcher.Size = new Size(154, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
@@ -557,6 +564,7 @@
             // 
             // menu_Tools_UnpackNarcs
             // 
+            menu_Tools_UnpackNarcs.Enabled = false;
             menu_Tools_UnpackNarcs.Name = "menu_Tools_UnpackNarcs";
             menu_Tools_UnpackNarcs.Size = new Size(154, 22);
             menu_Tools_UnpackNarcs.Text = "Unpack NARCs";
@@ -572,12 +580,6 @@
             menu_Tools_Settings.Size = new Size(154, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
-            // 
-            // toolsToolStripMenuItem
-            // 
-            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(154, 22);
-            toolsToolStripMenuItem.Text = "Tools";
             // 
             // menu_Help
             // 
@@ -612,13 +614,35 @@
             // startupTab
             // 
             startupTab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            startupTab.Controls.Add(mainPage);
             startupTab.Controls.Add(startupPage);
+            startupTab.Controls.Add(mainPage);
             startupTab.Location = new Point(0, 52);
             startupTab.Name = "startupTab";
             startupTab.SelectedIndex = 0;
             startupTab.Size = new Size(1264, 604);
             startupTab.TabIndex = 1;
+            // 
+            // startupPage
+            // 
+            startupPage.Controls.Add(startupLabel);
+            startupPage.Location = new Point(4, 24);
+            startupPage.Name = "startupPage";
+            startupPage.Padding = new Padding(3);
+            startupPage.Size = new Size(1256, 576);
+            startupPage.TabIndex = 1;
+            startupPage.Text = "startupPage";
+            startupPage.UseVisualStyleBackColor = true;
+            // 
+            // startupLabel
+            // 
+            startupLabel.Dock = DockStyle.Fill;
+            startupLabel.Font = new Font("Segoe UI", 14F);
+            startupLabel.Location = new Point(3, 3);
+            startupLabel.Name = "startupLabel";
+            startupLabel.Size = new Size(1250, 570);
+            startupLabel.TabIndex = 0;
+            startupLabel.Text = "Please open an .nds ROM or Extracted ROM folder to get started.";
+            startupLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // mainPage
             // 
@@ -3307,28 +3331,6 @@
             battleMessages_PreviewPicBox.TabIndex = 12;
             battleMessages_PreviewPicBox.TabStop = false;
             // 
-            // startupPage
-            // 
-            startupPage.Controls.Add(startupLabel);
-            startupPage.Location = new Point(4, 24);
-            startupPage.Name = "startupPage";
-            startupPage.Padding = new Padding(3);
-            startupPage.Size = new Size(1256, 576);
-            startupPage.TabIndex = 1;
-            startupPage.Text = "startupPage";
-            startupPage.UseVisualStyleBackColor = true;
-            // 
-            // startupLabel
-            // 
-            startupLabel.Dock = DockStyle.Fill;
-            startupLabel.Font = new Font("Segoe UI", 14F);
-            startupLabel.Location = new Point(3, 3);
-            startupLabel.Name = "startupLabel";
-            startupLabel.Size = new Size(1250, 570);
-            startupLabel.TabIndex = 0;
-            startupLabel.Text = "Please open an .nds ROM or Extracted ROM folder to get started.";
-            startupLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // mainStatusStrip
             // 
             mainStatusStrip.Location = new Point(0, 659);
@@ -3357,7 +3359,7 @@
             // 
             // mainToolStrip
             // 
-            mainToolStrip.Items.AddRange(new ToolStripItem[] { main_OpenRomBtn, main_OpenFolderBtn, toolStripSeparator7, main_SaveRom, toolStripSeparator20, main_OpenPatchesBtn, main_UnpackNarcsBtn, main_SettingsBtn });
+            mainToolStrip.Items.AddRange(new ToolStripItem[] { main_OpenRomBtn, main_OpenFolderBtn, toolStripSeparator7, main_SaveRomBtn, toolStripSeparator20, main_OpenPatchesBtn, main_UnpackNarcsBtn, main_SettingsBtn });
             mainToolStrip.Location = new Point(0, 0);
             mainToolStrip.Name = "mainToolStrip";
             mainToolStrip.Size = new Size(1033, 25);
@@ -3386,13 +3388,14 @@
             toolStripSeparator7.Name = "toolStripSeparator7";
             toolStripSeparator7.Size = new Size(6, 25);
             // 
-            // main_SaveRom
+            // main_SaveRomBtn
             // 
-            main_SaveRom.Image = Properties.Resources.save_ico;
-            main_SaveRom.ImageTransparentColor = Color.Magenta;
-            main_SaveRom.Name = "main_SaveRom";
-            main_SaveRom.Size = new Size(81, 22);
-            main_SaveRom.Text = "Save ROM";
+            main_SaveRomBtn.Enabled = false;
+            main_SaveRomBtn.Image = Properties.Resources.save_ico;
+            main_SaveRomBtn.ImageTransparentColor = Color.Magenta;
+            main_SaveRomBtn.Name = "main_SaveRomBtn";
+            main_SaveRomBtn.Size = new Size(81, 22);
+            main_SaveRomBtn.Text = "Save ROM";
             // 
             // toolStripSeparator20
             // 
@@ -3402,6 +3405,7 @@
             // main_OpenPatchesBtn
             // 
             main_OpenPatchesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_OpenPatchesBtn.Enabled = false;
             main_OpenPatchesBtn.Image = Properties.Resources.patch_ico;
             main_OpenPatchesBtn.ImageTransparentColor = Color.Magenta;
             main_OpenPatchesBtn.Name = "main_OpenPatchesBtn";
@@ -3412,6 +3416,7 @@
             // main_UnpackNarcsBtn
             // 
             main_UnpackNarcsBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_UnpackNarcsBtn.Enabled = false;
             main_UnpackNarcsBtn.Image = Properties.Resources.unpack_ico;
             main_UnpackNarcsBtn.ImageTransparentColor = Color.Magenta;
             main_UnpackNarcsBtn.Name = "main_UnpackNarcsBtn";
@@ -3463,6 +3468,7 @@
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();
             startupTab.ResumeLayout(false);
+            startupPage.ResumeLayout(false);
             mainPage.ResumeLayout(false);
             main_MainTab.ResumeLayout(false);
             main_MainTab_TrainerTab.ResumeLayout(false);
@@ -3542,7 +3548,6 @@
             toolStrip3.ResumeLayout(false);
             toolStrip3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)battleMessages_PreviewPicBox).EndInit();
-            startupPage.ResumeLayout(false);
             toolstripContainer.Panel1.ResumeLayout(false);
             toolstripContainer.Panel1.PerformLayout();
             toolstripContainer.Panel2.ResumeLayout(false);
@@ -3598,7 +3603,7 @@
         private ToolStripButton main_OpenRomBtn;
         private ToolStripButton main_OpenFolderBtn;
         private ToolStripSeparator toolStripSeparator7;
-        private ToolStripButton main_SaveRom;
+        private ToolStripButton main_SaveRomBtn;
         private Label romName_Label;
         private PictureBox romIcon_PicBox;
         private TabControl main_MainTab;
@@ -3878,7 +3883,6 @@
         private ToolStripSeparator toolStripSeparator20;
         private ToolStripButton main_OpenPatchesBtn;
         private ToolStripButton main_UnpackNarcsBtn;
-        private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripButton main_SettingsBtn;
     }
 }

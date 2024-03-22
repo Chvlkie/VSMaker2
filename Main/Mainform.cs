@@ -1,5 +1,8 @@
-using Data;
+using VsMaker2Core.DataModels;
 using Main.Forms;
+using System.Text;
+using VsMaker2Core.Methods.Rom;
+using static VsMaker2Core.Enums;
 
 namespace Main
 {
@@ -14,24 +17,37 @@ namespace Main
 
         #endregion Forms
 
-        private bool IsLoadingData;
+        #region Methods
+
+        private IRomFileMethods romFileMethods;
+
+        #endregion Methods
 
         public const string NdsRomFilter = "NDS File (*.nds)|*.nds";
+        private bool IsLoadingData;
+        private RomFile LoadedRom;
+        private bool RomLoaded;
+
         public Mainform()
         {
             InitializeComponent();
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
+            RomLoaded = false;
+            romName_Label.Text = "";
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var dialogResult = MessageBox.Show("Are you sure you want to close VS Maker 2?" +
-                "\n\nAny unsaved changes will be lost.", "Close VS Maker 2", MessageBoxButtons.YesNo);
-            if (dialogResult != DialogResult.Yes)
+            if (RomLoaded)
             {
-                e.Cancel = true;
+                var dialogResult = MessageBox.Show("Are you sure you want to close VS Maker 2?" +
+                    "\n\nAny unsaved changes will be lost.", "Close VS Maker 2", MessageBoxButtons.YesNo);
+                if (dialogResult != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -41,25 +57,90 @@ namespace Main
             MoveSelector = new MoveSelector();
             LoadingData = new LoadingData();
             RomPatches = new RomPatches();
+            romFileMethods = new RomFileMethods();
         }
 
         #region MainMenu
 
-        private async void OpenRom()
+        private void CloseProject()
         {
-            OpenFileDialog openRom = new()
-            {
-                Filter = NdsRomFilter
-            };
+            LoadedRom = new RomFile();
+            IsLoadingData = false;
+            RomLoaded = false;
+            startupTab.SelectedTab = startupPage;
+            EnableDisableMenu(false);
         }
+
+        private void EnableDisableMenu(bool enable)
+        {
+            main_SaveRomBtn.Enabled = enable;
+            main_OpenRomBtn.Enabled = enable;
+            main_UnpackNarcsBtn.Enabled = enable;
+
+            menu_File_Save.Enabled = enable;
+            menu_File_SaveAs.Enabled = enable;
+            menu_File_Close.Enabled = enable;
+            menu_Import.Enabled = enable;
+            menu_Export.Enabled = enable;
+            menu_Tools_RomPatcher.Enabled = enable;
+            menu_Tools_UnpackNarcs.Enabled = enable;
+        }
+
+        private (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
+        {
+            using DSUtils.EasyReader reader = new(filePath, 0xC);
+            string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
+            reader.BaseStream.Position = 0x1E;
+            byte europeByte = reader.ReadByte();
+            reader.Close();
+            return (europeByte, gameCode);
+        }
+
         private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
         {
             OpenRomPatchesWindow();
         }
 
+        private void main_OpenRomBtn_Click(object sender, EventArgs e)
+        {
+            OpenRom();
+            EnableDisableMenu(true);
+            IsLoadingData = false;
+            RomLoaded = true;
+            startupTab.SelectedTab = mainPage;
+        }
+
         private void main_SettingsBtn_Click(object sender, EventArgs e)
         {
             OpenSettingsWindow();
+        }
+
+        private void menu_File_Close_Click(object sender, EventArgs e)
+        {
+            var confirmClose = MessageBox.Show("Are you sure you want to close this project?", "Close Project", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmClose == DialogResult.Yes)
+            {
+                if (UnsavedChanges)
+                {
+                    var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (saveChanges == DialogResult.Yes)
+                    {
+                        CloseProject();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                CloseProject();
+            }
+        }
+
+        private void menu_File_Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
@@ -72,15 +153,37 @@ namespace Main
             OpenSettingsWindow();
         }
 
-        private void menu_File_Exit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void main_OpenRomBtn_Click(object sender, EventArgs e)
+        private void menu_File_OpenRom_Click(object sender, EventArgs e)
         {
             OpenRom();
+            EnableDisableMenu(true);
             IsLoadingData = false;
+            RomLoaded = true;
+            startupTab.SelectedTab = mainPage;
+        }
+
+        private async void OpenRom()
+        {
+            OpenFileDialog openRom = new()
+            {
+                Filter = NdsRomFilter
+            };
+
+            if (openRom.ShowDialog(this) == DialogResult.OK)
+            {
+                IsLoadingData = true;
+                var loadedRom = LoadInitialRomData(openRom.FileName);
+                LoadedRom = new RomFile(loadedRom.GameCode, openRom.FileName, loadedRom.EuropeByte);
+                if (LoadedRom.GameVersion == GameVersion.Unknown)
+                {
+                    MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
+                        "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Sould Silver version."
+                        , "Unsupported ROM",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                LoadedRom.GameFamily = romFileMethods.SetGameFamily(LoadedRom.GameVersion);
+            }
         }
 
         private void OpenRomPatchesWindow()
@@ -225,7 +328,5 @@ namespace Main
         private bool UnsavedBattleMessageChanges;
 
         #endregion BattleMessageEditor
-
-       
     }
 }

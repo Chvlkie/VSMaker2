@@ -60,7 +60,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Data\Data.csproj" />
+	  <ProjectReference Include="..\DsUtilities\DSUtils.csproj" />
+	  <ProjectReference Include="..\VsMaker2Core\VsMaker2Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

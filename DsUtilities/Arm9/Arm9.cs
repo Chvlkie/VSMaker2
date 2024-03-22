@@ -1,14 +1,15 @@
-﻿using Data.Rom;
-using DSUtils.EasyReaderWriter;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using VsMaker2Core.DataModels;
+using static VsMaker2Core.Enums;
 
 namespace DSUtils
 {
-    public static class Arm9
+    public class Arm9(IMethods methods) : IArm9
     {
-        public static readonly uint Address = 0x02000000;
+        public readonly uint Address = 0x02000000;
+        private readonly IMethods methods = methods;
 
-        public static bool Arm9Compress(string path)
+        public bool Arm9Compress(string path)
         {
             Process compress = new();
             compress.StartInfo.FileName = @"Tools\blz.exe";
@@ -18,10 +19,10 @@ namespace DSUtils
             compress.Start();
             compress.WaitForExit();
 
-            return new FileInfo(RomInfo.Arm9Path).Length <= 0xBC000;
+            return new FileInfo(RomFile.Arm9Path).Length <= 0xBC000;
         }
 
-        public static bool Arm9Decompress(string path)
+        public bool Arm9Decompress(string path)
         {
             Process decompress = new();
             decompress.StartInfo.FileName = @"Tools\blz.exe";
@@ -31,18 +32,43 @@ namespace DSUtils
             decompress.Start();
             decompress.WaitForExit();
 
-            return new FileInfo(RomInfo.Arm9Path).Length > 0xBC000;
+            return new FileInfo(RomFile.Arm9Path).Length > 0xBC000;
         }
 
-        public static void Arm9EditSize(int increment)
+        public void Arm9EditSize(int increment)
         {
             using Arm9Writer writer = new();
             writer.EditSize(increment);
         }
 
+        public bool CheckCompressionMark(GameFamily gameFamily)
+        {
+            return BitConverter.ToInt32(ReadBytes((uint)(gameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4), 4), 0) != 0;
+        }
+
+        public byte ReadByte(uint startOffset)
+        {
+            return methods.ReadFromFile(RomFile.Arm9Path, startOffset, 1)[0];
+        }
+
+        public byte[] ReadBytes(uint startOffset, long numberOfBytes = 0)
+        {
+            return methods.ReadFromFile(RomFile.Arm9Path, startOffset, numberOfBytes);
+        }
+
+        public void WriteByte(byte value, uint destinationOffset)
+        {
+            methods.WriteToFile(RomFile.Arm9Path, BitConverter.GetBytes((short)value), destinationOffset, 0);
+        }
+
+        public void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)
+        {
+            methods.WriteToFile(RomFile.Arm9Path, bytesToWrite, destinationOffset, indexFirstByte, indexLastByte);
+        }
+
         public class Arm9Reader : EasyReader
         {
-            public Arm9Reader(long position = 0) : base(RomInfo.Arm9Path, position)
+            public Arm9Reader(long position = 0) : base(RomFile.Arm9Path, position)
             {
                 BaseStream.Position = position;
             }
@@ -50,15 +76,10 @@ namespace DSUtils
 
         public class Arm9Writer : EasyWriter
         {
-            public Arm9Writer(long position = 0) : base(RomInfo.Arm9Path, position)
+            public Arm9Writer(long position = 0) : base(RomFile.Arm9Path, position)
             {
                 BaseStream.Position = position;
             }
-        }
-
-        public static bool CheckCompressionMark()
-        {
-            return BitConverter.ToInt32(Rea)
         }
     }
 }
