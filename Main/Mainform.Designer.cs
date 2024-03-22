@@ -50,15 +50,10 @@
             menu_Export_BattleMessages = new ToolStripMenuItem();
             menu_Tools = new ToolStripMenuItem();
             menu_Tools_RomPatcher = new ToolStripMenuItem();
-            menu_Tools_RomPatcher_ExpandArm9 = new ToolStripMenuItem();
-            toolStripSeparator4 = new ToolStripSeparator();
-            menu_Tools_RomPatcher_ExpandTrainerNames = new ToolStripMenuItem();
-            menu_Tools_RomPatcher_ExpandPrizeMoney = new ToolStripMenuItem();
-            menu_Tools_RomPatcher_ExpandEyeContactMusic = new ToolStripMenuItem();
-            menu_Tools_RomPatcher_ExpandVersusFx = new ToolStripMenuItem();
             menu_Tools_UnpackNarcs = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
             menu_Tools_Settings = new ToolStripMenuItem();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
             menu_Help = new ToolStripMenuItem();
             menu_Help_ViewHelp = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
@@ -307,6 +302,10 @@
             messageTab = new TabPage();
             panel8 = new Panel();
             battleMessage_MessageTableDataGrid = new DataGridView();
+            messageId = new DataGridViewTextBoxColumn();
+            trainerId = new DataGridViewTextBoxColumn();
+            messageTrigger = new DataGridViewTextBoxColumn();
+            messageText = new DataGridViewTextBoxColumn();
             toolStrip4 = new ToolStrip();
             battleMessages_CopyBtn = new ToolStripButton();
             battleMessages_PasteBtn = new ToolStripButton();
@@ -341,16 +340,16 @@
             mainStatusStrip = new StatusStrip();
             toolstripContainer = new SplitContainer();
             mainToolStrip = new ToolStrip();
-            toolStripButton1 = new ToolStripButton();
-            toolStripButton2 = new ToolStripButton();
+            main_OpenRomBtn = new ToolStripButton();
+            main_OpenFolderBtn = new ToolStripButton();
             toolStripSeparator7 = new ToolStripSeparator();
-            toolStripButton3 = new ToolStripButton();
+            main_SaveRom = new ToolStripButton();
+            toolStripSeparator20 = new ToolStripSeparator();
+            main_OpenPatchesBtn = new ToolStripButton();
+            main_UnpackNarcsBtn = new ToolStripButton();
+            main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
-            messageId = new DataGridViewTextBoxColumn();
-            trainerId = new DataGridViewTextBoxColumn();
-            messageTrigger = new DataGridViewTextBoxColumn();
-            messageText = new DataGridViewTextBoxColumn();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             mainPage.SuspendLayout();
@@ -467,7 +466,7 @@
             // 
             menu_File_SaveAs.Name = "menu_File_SaveAs";
             menu_File_SaveAs.Size = new Size(191, 22);
-            menu_File_SaveAs.Text = "Save As";
+            menu_File_SaveAs.Text = "Save As...";
             // 
             // toolStripSeparator1
             // 
@@ -490,6 +489,7 @@
             menu_File_Exit.Name = "menu_File_Exit";
             menu_File_Exit.Size = new Size(191, 22);
             menu_File_Exit.Text = "Exit";
+            menu_File_Exit.Click += menu_File_Exit_Click;
             // 
             // menu_Import
             // 
@@ -543,52 +543,17 @@
             // 
             // menu_Tools
             // 
-            menu_Tools.DropDownItems.AddRange(new ToolStripItem[] { menu_Tools_RomPatcher, menu_Tools_UnpackNarcs, toolStripSeparator5, menu_Tools_Settings });
+            menu_Tools.DropDownItems.AddRange(new ToolStripItem[] { menu_Tools_RomPatcher, menu_Tools_UnpackNarcs, toolStripSeparator5, menu_Tools_Settings, toolsToolStripMenuItem });
             menu_Tools.Name = "menu_Tools";
             menu_Tools.Size = new Size(46, 20);
             menu_Tools.Text = "Tools";
             // 
             // menu_Tools_RomPatcher
             // 
-            menu_Tools_RomPatcher.DropDownItems.AddRange(new ToolStripItem[] { menu_Tools_RomPatcher_ExpandArm9, toolStripSeparator4, menu_Tools_RomPatcher_ExpandTrainerNames, menu_Tools_RomPatcher_ExpandPrizeMoney, menu_Tools_RomPatcher_ExpandEyeContactMusic, menu_Tools_RomPatcher_ExpandVersusFx });
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
             menu_Tools_RomPatcher.Size = new Size(154, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
-            // 
-            // menu_Tools_RomPatcher_ExpandArm9
-            // 
-            menu_Tools_RomPatcher_ExpandArm9.Name = "menu_Tools_RomPatcher_ExpandArm9";
-            menu_Tools_RomPatcher_ExpandArm9.Size = new Size(211, 22);
-            menu_Tools_RomPatcher_ExpandArm9.Text = "ARM9 Patcher";
-            // 
-            // toolStripSeparator4
-            // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new Size(208, 6);
-            // 
-            // menu_Tools_RomPatcher_ExpandTrainerNames
-            // 
-            menu_Tools_RomPatcher_ExpandTrainerNames.Name = "menu_Tools_RomPatcher_ExpandTrainerNames";
-            menu_Tools_RomPatcher_ExpandTrainerNames.Size = new Size(211, 22);
-            menu_Tools_RomPatcher_ExpandTrainerNames.Text = "Expand Trainer Names";
-            // 
-            // menu_Tools_RomPatcher_ExpandPrizeMoney
-            // 
-            menu_Tools_RomPatcher_ExpandPrizeMoney.Name = "menu_Tools_RomPatcher_ExpandPrizeMoney";
-            menu_Tools_RomPatcher_ExpandPrizeMoney.Size = new Size(211, 22);
-            menu_Tools_RomPatcher_ExpandPrizeMoney.Text = "Expand Prize Money Table";
-            // 
-            // menu_Tools_RomPatcher_ExpandEyeContactMusic
-            // 
-            menu_Tools_RomPatcher_ExpandEyeContactMusic.Name = "menu_Tools_RomPatcher_ExpandEyeContactMusic";
-            menu_Tools_RomPatcher_ExpandEyeContactMusic.Size = new Size(211, 22);
-            menu_Tools_RomPatcher_ExpandEyeContactMusic.Text = "Expand Eye-Contact Table";
-            // 
-            // menu_Tools_RomPatcher_ExpandVersusFx
-            // 
-            menu_Tools_RomPatcher_ExpandVersusFx.Name = "menu_Tools_RomPatcher_ExpandVersusFx";
-            menu_Tools_RomPatcher_ExpandVersusFx.Size = new Size(211, 22);
-            menu_Tools_RomPatcher_ExpandVersusFx.Text = "Expand Versus FX Table";
+            menu_Tools_RomPatcher.Click += menu_Tools_RomPatcher_Click;
             // 
             // menu_Tools_UnpackNarcs
             // 
@@ -607,6 +572,12 @@
             menu_Tools_Settings.Size = new Size(154, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(154, 22);
+            toolsToolStripMenuItem.Text = "Tools";
             // 
             // menu_Help
             // 
@@ -3026,6 +2997,44 @@
             battleMessage_MessageTableDataGrid.Size = new Size(1242, 341);
             battleMessage_MessageTableDataGrid.TabIndex = 1;
             // 
+            // messageId
+            // 
+            messageId.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            messageId.FillWeight = 30F;
+            messageId.Frozen = true;
+            messageId.HeaderText = "Message #";
+            messageId.MinimumWidth = 8;
+            messageId.Name = "messageId";
+            messageId.ReadOnly = true;
+            messageId.Width = 86;
+            // 
+            // trainerId
+            // 
+            trainerId.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            trainerId.FillWeight = 50F;
+            trainerId.Frozen = true;
+            trainerId.HeaderText = "Trainer";
+            trainerId.MinimumWidth = 8;
+            trainerId.Name = "trainerId";
+            trainerId.Width = 144;
+            // 
+            // messageTrigger
+            // 
+            messageTrigger.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            messageTrigger.FillWeight = 60F;
+            messageTrigger.Frozen = true;
+            messageTrigger.HeaderText = "Message Triggers";
+            messageTrigger.MinimumWidth = 8;
+            messageTrigger.Name = "messageTrigger";
+            messageTrigger.Width = 216;
+            // 
+            // messageText
+            // 
+            messageText.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            messageText.HeaderText = "Text";
+            messageText.MinimumWidth = 8;
+            messageText.Name = "messageText";
+            // 
             // toolStrip4
             // 
             toolStrip4.Items.AddRange(new ToolStripItem[] { battleMessages_CopyBtn, battleMessages_PasteBtn, toolStripSeparator17, battleMessages_ImportBtn, battleMessages_ExportBtn, toolStripSeparator18, battleMessages_SaveBtn, battleMessages_UndoAllBtn, toolStripSeparator19, battleMessages_AddLineBtn, battleMessages_RemoveBtn, battleMessages_SortBtn });
@@ -3348,47 +3357,76 @@
             // 
             // mainToolStrip
             // 
-            mainToolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripSeparator7, toolStripButton3 });
+            mainToolStrip.Items.AddRange(new ToolStripItem[] { main_OpenRomBtn, main_OpenFolderBtn, toolStripSeparator7, main_SaveRom, toolStripSeparator20, main_OpenPatchesBtn, main_UnpackNarcsBtn, main_SettingsBtn });
             mainToolStrip.Location = new Point(0, 0);
             mainToolStrip.Name = "mainToolStrip";
-            mainToolStrip.Size = new Size(1033, 27);
+            mainToolStrip.Size = new Size(1033, 25);
             mainToolStrip.TabIndex = 0;
             mainToolStrip.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // main_OpenRomBtn
             // 
-            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton1.Image = Properties.Resources.nds_ico;
-            toolStripButton1.ImageScaling = ToolStripItemImageScaling.None;
-            toolStripButton1.ImageTransparentColor = Color.Magenta;
-            toolStripButton1.Name = "toolStripButton1";
-            toolStripButton1.Size = new Size(24, 24);
-            toolStripButton1.Text = "toolStripButton1";
+            main_OpenRomBtn.Image = Properties.Resources.nds_ico;
+            main_OpenRomBtn.ImageTransparentColor = Color.Magenta;
+            main_OpenRomBtn.Name = "main_OpenRomBtn";
+            main_OpenRomBtn.Size = new Size(86, 22);
+            main_OpenRomBtn.Text = "Open ROM";
+            main_OpenRomBtn.Click += main_OpenRomBtn_Click;
             // 
-            // toolStripButton2
+            // main_OpenFolderBtn
             // 
-            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton2.Image = Properties.Resources.open_ico;
-            toolStripButton2.ImageScaling = ToolStripItemImageScaling.None;
-            toolStripButton2.ImageTransparentColor = Color.Magenta;
-            toolStripButton2.Name = "toolStripButton2";
-            toolStripButton2.Size = new Size(24, 24);
-            toolStripButton2.Text = "toolStripButton2";
+            main_OpenFolderBtn.Image = Properties.Resources.open_ico;
+            main_OpenFolderBtn.ImageTransparentColor = Color.Magenta;
+            main_OpenFolderBtn.Name = "main_OpenFolderBtn";
+            main_OpenFolderBtn.Size = new Size(144, 22);
+            main_OpenFolderBtn.Text = "Open Extracted Folder";
             // 
             // toolStripSeparator7
             // 
             toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new Size(6, 27);
+            toolStripSeparator7.Size = new Size(6, 25);
             // 
-            // toolStripButton3
+            // main_SaveRom
             // 
-            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton3.Image = Properties.Resources.save_ico;
-            toolStripButton3.ImageScaling = ToolStripItemImageScaling.None;
-            toolStripButton3.ImageTransparentColor = Color.Magenta;
-            toolStripButton3.Name = "toolStripButton3";
-            toolStripButton3.Size = new Size(24, 24);
-            toolStripButton3.Text = "toolStripButton3";
+            main_SaveRom.Image = Properties.Resources.save_ico;
+            main_SaveRom.ImageTransparentColor = Color.Magenta;
+            main_SaveRom.Name = "main_SaveRom";
+            main_SaveRom.Size = new Size(81, 22);
+            main_SaveRom.Text = "Save ROM";
+            // 
+            // toolStripSeparator20
+            // 
+            toolStripSeparator20.Name = "toolStripSeparator20";
+            toolStripSeparator20.Size = new Size(6, 25);
+            // 
+            // main_OpenPatchesBtn
+            // 
+            main_OpenPatchesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_OpenPatchesBtn.Image = Properties.Resources.patch_ico;
+            main_OpenPatchesBtn.ImageTransparentColor = Color.Magenta;
+            main_OpenPatchesBtn.Name = "main_OpenPatchesBtn";
+            main_OpenPatchesBtn.Size = new Size(23, 22);
+            main_OpenPatchesBtn.Text = "Open ROM Patches Toolbox";
+            main_OpenPatchesBtn.Click += main_OpenPatchesBtn_Click;
+            // 
+            // main_UnpackNarcsBtn
+            // 
+            main_UnpackNarcsBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_UnpackNarcsBtn.Image = Properties.Resources.unpack_ico;
+            main_UnpackNarcsBtn.ImageTransparentColor = Color.Magenta;
+            main_UnpackNarcsBtn.Name = "main_UnpackNarcsBtn";
+            main_UnpackNarcsBtn.Size = new Size(23, 22);
+            main_UnpackNarcsBtn.Text = "Unpack NARCs";
+            // 
+            // main_SettingsBtn
+            // 
+            main_SettingsBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_SettingsBtn.Image = Properties.Resources.settings_ico;
+            main_SettingsBtn.ImageTransparentColor = Color.Magenta;
+            main_SettingsBtn.Name = "main_SettingsBtn";
+            main_SettingsBtn.Size = new Size(23, 22);
+            main_SettingsBtn.Text = "Settings";
+            main_SettingsBtn.Click += main_SettingsBtn_Click;
             // 
             // romName_Label
             // 
@@ -3406,44 +3444,6 @@
             romIcon_PicBox.Size = new Size(20, 20);
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
-            // 
-            // messageId
-            // 
-            messageId.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            messageId.FillWeight = 30F;
-            messageId.Frozen = true;
-            messageId.HeaderText = "Message #";
-            messageId.MinimumWidth = 8;
-            messageId.Name = "messageId";
-            messageId.ReadOnly = true;
-            messageId.Width = 86;
-            // 
-            // trainerId
-            // 
-            trainerId.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            trainerId.FillWeight = 50F;
-            trainerId.Frozen = true;
-            trainerId.HeaderText = "Trainer";
-            trainerId.MinimumWidth = 8;
-            trainerId.Name = "trainerId";
-            trainerId.Width = 144;
-            // 
-            // messageTrigger
-            // 
-            messageTrigger.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            messageTrigger.FillWeight = 60F;
-            messageTrigger.Frozen = true;
-            messageTrigger.HeaderText = "Message Triggers";
-            messageTrigger.MinimumWidth = 8;
-            messageTrigger.Name = "messageTrigger";
-            messageTrigger.Width = 216;
-            // 
-            // messageText
-            // 
-            messageText.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            messageText.HeaderText = "Text";
-            messageText.MinimumWidth = 8;
-            messageText.Name = "messageText";
             // 
             // Mainform
             // 
@@ -3581,12 +3581,6 @@
         private ToolStripMenuItem menu_Tools;
         private ToolStripMenuItem menu_Help;
         private ToolStripMenuItem menu_Tools_RomPatcher;
-        private ToolStripMenuItem menu_Tools_RomPatcher_ExpandArm9;
-        private ToolStripSeparator toolStripSeparator4;
-        private ToolStripMenuItem menu_Tools_RomPatcher_ExpandTrainerNames;
-        private ToolStripMenuItem menu_Tools_RomPatcher_ExpandPrizeMoney;
-        private ToolStripMenuItem menu_Tools_RomPatcher_ExpandEyeContactMusic;
-        private ToolStripMenuItem menu_Tools_RomPatcher_ExpandVersusFx;
         private ToolStripMenuItem menu_Tools_UnpackNarcs;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripMenuItem menu_Tools_Settings;
@@ -3601,10 +3595,10 @@
         private StatusStrip mainStatusStrip;
         private SplitContainer toolstripContainer;
         private ToolStrip mainToolStrip;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
+        private ToolStripButton main_OpenRomBtn;
+        private ToolStripButton main_OpenFolderBtn;
         private ToolStripSeparator toolStripSeparator7;
-        private ToolStripButton toolStripButton3;
+        private ToolStripButton main_SaveRom;
         private Label romName_Label;
         private PictureBox romIcon_PicBox;
         private TabControl main_MainTab;
@@ -3881,5 +3875,10 @@
         private DataGridViewTextBoxColumn trainerId;
         private DataGridViewTextBoxColumn messageTrigger;
         private DataGridViewTextBoxColumn messageText;
+        private ToolStripSeparator toolStripSeparator20;
+        private ToolStripButton main_OpenPatchesBtn;
+        private ToolStripButton main_UnpackNarcsBtn;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripButton main_SettingsBtn;
     }
 }

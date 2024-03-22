@@ -1,4 +1,4 @@
-using Data.Trainers;
+using Data;
 using Main.Forms;
 
 namespace Main
@@ -7,26 +7,23 @@ namespace Main
     {
         #region Forms
 
-        private Settings Settings;
-        private MoveSelector MoveSelector;
         private LoadingData LoadingData;
+        private MoveSelector MoveSelector;
+        private RomPatches RomPatches;
+        private Settings Settings;
 
         #endregion Forms
 
-        private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
+        private bool IsLoadingData;
 
+        public const string NdsRomFilter = "NDS File (*.nds)|*.nds";
         public Mainform()
         {
             InitializeComponent();
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
         }
 
-        private void Mainform_Shown(object sender, EventArgs e)
-        {
-            Settings = new Settings();
-            MoveSelector = new MoveSelector();
-            LoadingData = new LoadingData();
-        }
+        private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -38,9 +35,60 @@ namespace Main
             }
         }
 
+        private void Mainform_Shown(object sender, EventArgs e)
+        {
+            Settings = new Settings();
+            MoveSelector = new MoveSelector();
+            LoadingData = new LoadingData();
+            RomPatches = new RomPatches();
+        }
+
         #region MainMenu
 
+        private async void OpenRom()
+        {
+            OpenFileDialog openRom = new()
+            {
+                Filter = NdsRomFilter
+            };
+        }
+        private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
+        {
+            OpenRomPatchesWindow();
+        }
+
+        private void main_SettingsBtn_Click(object sender, EventArgs e)
+        {
+            OpenSettingsWindow();
+        }
+
+        private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
+        {
+            OpenRomPatchesWindow();
+        }
+
         private void menu_Tools_Settings_Click(object sender, EventArgs e)
+        {
+            OpenSettingsWindow();
+        }
+
+        private void menu_File_Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void main_OpenRomBtn_Click(object sender, EventArgs e)
+        {
+            OpenRom();
+            IsLoadingData = false;
+        }
+
+        private void OpenRomPatchesWindow()
+        {
+            RomPatches.ShowDialog();
+        }
+
+        private void OpenSettingsWindow()
         {
             Settings.ShowDialog();
         }
@@ -49,29 +97,55 @@ namespace Main
 
         #region TrainerEditor
 
-        private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
+        private Trainer CurrentTrainer = new();
+        private Trainer EditTrainer = new();
+        private bool TrainerBattleMessagesChange;
         private bool TrainerDataChange;
         private bool TrainerPartyChange;
         private bool TrainerPropertyChange;
-        private bool TrainerBattleMessagesChange;
-
-        private Trainer CurrentTrainer = new();
-        private Trainer EditTrainer = new();
+        private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
 
         #region PartyEditor
 
-        private List<ComboBox> pokeComboBoxes;
-        private List<PictureBox> pokeIconsPictureBoxes;
-        private List<NumericUpDown> pokeLevelNums;
-        private List<NumericUpDown> pokeDVNums;
-        private List<ComboBox> pokeGenderComboBoxes;
-        private List<ComboBox> pokeFormsComboBoxes;
         private List<ComboBox> pokeAbilityComboBoxes;
         private List<ComboBox> pokeBalLSealComboBoxes;
+        private List<ComboBox> pokeComboBoxes;
+        private List<NumericUpDown> pokeDVNums;
+        private List<ComboBox> pokeFormsComboBoxes;
+        private List<ComboBox> pokeGenderComboBoxes;
         private List<ComboBox> pokeHeldItemComboBoxes;
+        private List<PictureBox> pokeIconsPictureBoxes;
+        private List<NumericUpDown> pokeLevelNums;
         private List<Button> pokeMoveButtons;
 
         #endregion PartyEditor
+
+        private void EditedTrainerBattleMessages(bool hasChanges)
+        {
+            TrainerBattleMessagesChange = hasChanges;
+            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
+            trainer_BattleMessageTab.Text = hasChanges ? "Battle Messages *" : "Battle";
+        }
+
+        private void EditedTrainerData(bool hasChanges)
+        {
+            TrainerDataChange = hasChanges;
+            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
+        }
+
+        private void EditedTrainerParty(bool hasChanges)
+        {
+            TrainerPartyChange = hasChanges;
+            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
+            trainer_PartyTab.Text = hasChanges ? "Party *" : "Party";
+        }
+
+        private void EditedTrainerProperty(bool hasChanges)
+        {
+            TrainerPropertyChange = hasChanges;
+            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
+            trainer_PropertiesTab.Text = hasChanges ? "Properties *" : "Properties";
+        }
 
         private void SetupPartyEditor()
         {
@@ -126,33 +200,6 @@ namespace Main
           ];
         }
 
-        private void EditedTrainerData(bool hasChanges)
-        {
-            TrainerDataChange = hasChanges;
-            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
-        }
-
-        private void EditedTrainerParty(bool hasChanges)
-        {
-            TrainerPartyChange = hasChanges;
-            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
-            trainer_PartyTab.Text = hasChanges ? "Party *" : "Party";
-        }
-
-        private void EditedTrainerProperty(bool hasChanges)
-        {
-            TrainerPropertyChange = hasChanges;
-            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
-            trainer_PropertiesTab.Text = hasChanges ? "Properties *" : "Properties";
-        }
-
-        private void EditedTrainerBattleMessages(bool hasChanges)
-        {
-            TrainerBattleMessagesChange = hasChanges;
-            main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
-            trainer_BattleMessageTab.Text = hasChanges ? "Battle Messages *" : "Battle";
-        }
-
         private void trainer_NameTextBox_TextChanged(object sender, EventArgs e)
         {
             EditTrainer.TrainerName = trainer_NameTextBox.Text;
@@ -178,5 +225,7 @@ namespace Main
         private bool UnsavedBattleMessageChanges;
 
         #endregion BattleMessageEditor
+
+       
     }
 }

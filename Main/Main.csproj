@@ -18,11 +18,14 @@
 		<None Remove="Resources\Icons\nds_ico.png" />
 		<None Remove="Resources\Icons\open_ico.png" />
 		<None Remove="Resources\Icons\paste_ico.png" />
+		<None Remove="Resources\Icons\patch_ico.png" />
 		<None Remove="Resources\Icons\poke_ico.png" />
 		<None Remove="Resources\Icons\redo_ico.png" />
 		<None Remove="Resources\Icons\save_ico.png" />
+		<None Remove="Resources\Icons\settings_ico.png" />
 		<None Remove="Resources\Icons\sort_ico.png" />
 		<None Remove="Resources\Icons\undo_ico.png" />
+		<None Remove="Resources\Icons\unpack_ico.png" />
 		<None Remove="Tools\blz.exe" />
 		<None Remove="Tools\ndstool.exe" />
 	</ItemGroup>
@@ -42,11 +45,14 @@
 		<EmbeddedResource Include="Resources\Icons\nds_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\open_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\paste_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\patch_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\poke_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\redo_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\save_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\settings_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\sort_ico.png" />
 		<EmbeddedResource Include="Resources\Icons\undo_ico.png" />
+		<EmbeddedResource Include="Resources\Icons\unpack_ico.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Data\Data.csproj" />
+	  <ProjectReference Include="..\Data\Data.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

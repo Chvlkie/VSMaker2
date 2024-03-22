@@ -143,10 +143,30 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap patch_ico {
+            get {
+                object obj = ResourceManager.GetObject("patch_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap poke_ico {
             get {
                 object obj = ResourceManager.GetObject("poke_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] pokemon_ds_font {
+            get {
+                object obj = ResourceManager.GetObject("pokemon_ds_font", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
@@ -173,6 +193,16 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap settings_ico {
+            get {
+                object obj = ResourceManager.GetObject("settings_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sort_ico {
             get {
                 object obj = ResourceManager.GetObject("sort_ico", resourceCulture);
@@ -186,6 +216,16 @@ namespace Main.Properties {
         internal static System.Drawing.Bitmap undo_ico {
             get {
                 object obj = ResourceManager.GetObject("undo_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap unpack_ico {
+            get {
+                object obj = ResourceManager.GetObject("unpack_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -1,6 +1,4 @@
-﻿using Data.Pokemons;
-
-namespace Data.Trainers
+﻿namespace Data
 {
     public class TrainerParty
     {
