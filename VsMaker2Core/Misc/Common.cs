@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VsMaker2Core.Glossary
+namespace VsMaker2Core
 {
-    public static class GlobalConstants
+    public static class Common
     {
         public const string VsMakerContentsFolder = "_VSMaker2_Data";
         public const string NdsToolsFilePath = @"Tools\ndstool.exe";

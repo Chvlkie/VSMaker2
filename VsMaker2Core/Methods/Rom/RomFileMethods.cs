@@ -1,8 +1,5 @@
-﻿using Microsoft.VisualBasic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.Glossary;
-using static System.Net.Mime.MediaTypeNames;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods.Rom
@@ -103,16 +100,16 @@ namespace VsMaker2Core.Methods.Rom
         public (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName)
         {
             Process unpack = new();
-            unpack.StartInfo.FileName = GlobalConstants.NdsToolsFilePath;
+            unpack.StartInfo.FileName = Common.NdsToolsFilePath;
             unpack.StartInfo.Arguments = "-x " + '"' + fileName + '"'
-                + " -9 " + '"' + workingDirectory + "\\" + GlobalConstants.Arm9FilePath + '"'
-                + " -7 " + '"' + workingDirectory + "\\" + GlobalConstants.Arm7FilePath + '"'
-                + " -y9 " + '"' + workingDirectory + "\\" + GlobalConstants.Y9FilePath + '"'
-                + " -y7 " + '"' + workingDirectory + "\\" + GlobalConstants.Y7FilePath + '"'
-                + " -d " + '"' + workingDirectory + "\\" + GlobalConstants.DataFilePath + '"'
-                + " -y " + '"' + workingDirectory + "\\" + GlobalConstants.OverlayFilePath + '"'
-                + " -t " + '"' + workingDirectory + "\\" + GlobalConstants.BannerFilePath + '"'
-                + " -h " + '"' + workingDirectory + "\\" + GlobalConstants.HeaderFilePath + '"';
+                + " -9 " + '"' + workingDirectory + "\\" + Common.Arm9FilePath + '"'
+                + " -7 " + '"' + workingDirectory + "\\" + Common.Arm7FilePath + '"'
+                + " -y9 " + '"' + workingDirectory + "\\" + Common.Y9FilePath + '"'
+                + " -y7 " + '"' + workingDirectory + "\\" + Common.Y7FilePath + '"'
+                + " -d " + '"' + workingDirectory + "\\" + Common.DataFilePath + '"'
+                + " -y " + '"' + workingDirectory + "\\" + Common.OverlayFilePath + '"'
+                + " -t " + '"' + workingDirectory + "\\" + Common.BannerFilePath + '"'
+                + " -h " + '"' + workingDirectory + "\\" + Common.HeaderFilePath + '"';
             unpack.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             unpack.StartInfo.CreateNoWindow = true;
             try

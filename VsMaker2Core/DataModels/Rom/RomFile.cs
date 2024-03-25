@@ -1,5 +1,4 @@
-﻿using VsMaker2Core.Glossary;
-using static VsMaker2Core.Enums;
+﻿using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels
 {
@@ -66,11 +65,11 @@ namespace VsMaker2Core.DataModels
 
         public RomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
         {
-            ExtractedFolderSuffix = suffix ? GlobalConstants.VsMakerContentsFolder : "";
+            ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
             WorkingDirectory = workingDirectory;
-            Arm9Path = WorkingDirectory + GlobalConstants.Arm9FilePath;
-            OverlayTablePath = WorkingDirectory + GlobalConstants.Y9FilePath;
-            OverlayPath = WorkingDirectory + GlobalConstants.OverlayFilePath;
+            Arm9Path = WorkingDirectory + Common.Arm9FilePath;
+            OverlayTablePath = WorkingDirectory + Common.Y9FilePath;
+            OverlayPath = WorkingDirectory + Common.OverlayFilePath;
 
             try
             {

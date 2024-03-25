@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
+using VsMaker2Core;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.Glossary;
 using static VsMaker2Core.Enums;
 
 namespace DSUtils
@@ -13,7 +13,7 @@ namespace DSUtils
         public bool Arm9Compress(string path)
         {
             Process compress = new();
-            compress.StartInfo.FileName = GlobalConstants.BlzFilePath;
+            compress.StartInfo.FileName = Common.BlzFilePath;
             compress.StartInfo.Arguments = @" -en9 " + '"' + path + '"';
             compress.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             compress.StartInfo.CreateNoWindow = true;
@@ -26,7 +26,7 @@ namespace DSUtils
         public bool Arm9Decompress(string path)
         {
             Process decompress = new();
-            decompress.StartInfo.FileName = GlobalConstants.BlzFilePath;
+            decompress.StartInfo.FileName = Common.BlzFilePath;
             decompress.StartInfo.Arguments = @" -d " + '"' + path + '"';
             decompress.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             decompress.StartInfo.CreateNoWindow = true;

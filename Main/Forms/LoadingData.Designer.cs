@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             progressBar = new ProgressBar();
+            label1 = new Label();
             SuspendLayout();
             // 
             // progressBar
@@ -37,28 +38,40 @@
             progressBar.Name = "progressBar";
             progressBar.Size = new Size(400, 23);
             progressBar.TabIndex = 0;
+            progressBar.UseWaitCursor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 39);
+            label1.Name = "label1";
+            label1.Size = new Size(207, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Please wait... This might take a while...";
             // 
             // LoadingData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(424, 50);
+            ClientSize = new Size(424, 63);
             ControlBox = false;
+            Controls.Add(label1);
             Controls.Add(progressBar);
             MaximizeBox = false;
-            MaximumSize = new Size(440, 89);
+            MaximumSize = new Size(440, 102);
             MinimizeBox = false;
-            MinimumSize = new Size(440, 89);
+            MinimumSize = new Size(440, 102);
             Name = "LoadingData";
             StartPosition = FormStartPosition.CenterParent;
             Text = "LoadingData";
-            TopMost = true;
             UseWaitCursor = true;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private ProgressBar progressBar;
+        private Label label1;
     }
 }

@@ -1,9 +1,9 @@
 using Main.Forms;
+using Main.Models;
 using System.Text;
+using VsMaker2Core;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.Glossary;
 using VsMaker2Core.Methods.Rom;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -25,9 +25,9 @@ namespace Main
 
         #endregion Methods
 
-        public const string NdsRomFilter = "NDS File (*.nds)|*.nds";
         private bool IsLoadingData;
         private RomFile LoadedRom;
+        private MainEditorModel MainEditorModel;
         private bool RomLoaded;
 
         public Mainform()
@@ -36,6 +36,7 @@ namespace Main
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
             RomLoaded = false;
             romName_Label.Text = "";
+            MainEditorModel = new();
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
@@ -60,6 +61,20 @@ namespace Main
 
         #region MainMenu
 
+        public void BeginUnpackNarcs(IProgress<int> progress)
+        {
+            var narcs = GameFamilyNarcs.GetGameFamilyNarcs(LoadedRom.GameFamily);
+
+            var (success, exception) = romFileMethods.UnpackNarcs(LoadedRom, narcs, progress);
+            if (!success)
+            {
+                MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                progress?.Report(100);
+                return;
+            }
+            progress?.Report(100);
+        }
+
         public void BeginUnpackRomData()
         {
             var (success, exception) = romFileMethods.ExtractRomContents(LoadedRom.WorkingDirectory, LoadedRom.FileName);
@@ -72,119 +87,7 @@ namespace Main
             RomLoaded = true;
         }
 
-        private void BeginExtractRomData()
-        {
-            OpenLoadingDialog(LoadType.UnpackNarcs);
-        }
-
-        public void BeginUnpackNarcs(IProgress<int> progress)
-        {
-            var narcs = new List<NarcDirectory>();
-            switch (LoadedRom.GameFamily)
-            {
-                case GameFamily.DiamondPearl:
-                    narcs = [
-                        NarcDirectory.PokemonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchive,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
-                        ];
-                    break;
-
-                case GameFamily.Platinum:
-                    narcs = [
-                        NarcDirectory.PokemonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchive,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
-                        ];
-                    break;
-
-                case GameFamily.HeartGoldSoulSilver:
-                    narcs = [
-                        NarcDirectory.BattleStagePokeData,
-                        NarcDirectory.BattleTowerPokeData,
-                        NarcDirectory.BattleTowerTrainerData,
-                        NarcDirectory.PokemonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchive,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
-                       ];
-                    break;
-
-                case GameFamily.HgEngine:
-                    narcs = [
-                       NarcDirectory.BattleStagePokeData,
-                        NarcDirectory.BattleTowerPokeData,
-                        NarcDirectory.BattleTowerTrainerData,
-                        NarcDirectory.PokemonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchive,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
-                      ];
-                    break;
-
-                default:
-                    break;
-            }
-
-            var (success, exception) = romFileMethods.UnpackNarcs(LoadedRom, narcs, progress);
-            if (!success)
-            {
-                MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                progress?.Report(100);
-                return;
-            }
-            progress?.Report(100);
-        }
-
-        private void ClearUnsavedChanges()
-        {
-            ClearUnsavedTrainerChanges();
-        }
-
-        private void CloseProject()
-        {
-            Controls.Clear();
-            FormClosing -= Mainform_FormClosing;
-            InitializeComponent();
-            startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
-            romName_Label.Text = "";
-            CurrentTrainer = new();
-            EditTrainer = new();
-            LoadedRom = new RomFile();
-            IsLoadingData = false;
-            RomLoaded = false;
-            startupTab.SelectedTab = startupPage;
-            EnableDisableMenu(false);
-            ClearUnsavedChanges();
-        }
-
-        private void CreateDirectory(string workingDirectory)
+        private static void CreateDirectory(string workingDirectory)
         {
             if (!Directory.Exists(workingDirectory))
             {
@@ -196,6 +99,40 @@ namespace Main
                     "Contents folder may already exist", "Unable to Extract ROM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+        }
+
+        private static (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
+        {
+            using DSUtils.EasyReader reader = new(filePath, 0xC);
+            string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
+            reader.BaseStream.Position = 0x1E;
+            byte europeByte = reader.ReadByte();
+            reader.Close();
+            return (europeByte, gameCode);
+        }
+
+        private void BeginExtractRomData()
+        {
+            OpenLoadingDialog(LoadType.UnpackNarcs);
+        }
+
+        private void ClearUnsavedChanges()
+        {
+            ClearUnsavedTrainerChanges();
+        }
+
+        private void CloseProject()
+        {
+            romName_Label.Text = "";
+            CurrentTrainer = new();
+            EditTrainer = new();
+            LoadedRom = new RomFile();
+            IsLoadingData = false;
+            RomLoaded = false;
+            startupTab.SelectedTab = startupPage;
+            MainEditorModel = new();
+            EnableDisableMenu(false);
+            ClearUnsavedChanges();
         }
 
         private void EnableDisableMenu(bool enable)
@@ -210,6 +147,8 @@ namespace Main
             menu_Export.Enabled = enable;
             menu_Tools_RomPatcher.Enabled = enable;
             menu_Tools_UnpackNarcs.Enabled = enable;
+            main_OpenPatchesBtn.Enabled = enable;
+            main_UnpackNarcsBtn.Enabled = enable;
         }
 
         private void EndOpenRom()
@@ -217,16 +156,6 @@ namespace Main
             IsLoadingData = false;
             EnableDisableMenu(RomLoaded);
             startupTab.SelectedTab = RomLoaded ? mainPage : startupPage;
-        }
-
-        private (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
-        {
-            using DSUtils.EasyReader reader = new(filePath, 0xC);
-            string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
-            reader.BaseStream.Position = 0x1E;
-            byte europeByte = reader.ReadByte();
-            reader.Close();
-            return (europeByte, gameCode);
         }
 
         private void main_OpenFolderBtn_Click(object sender, EventArgs e)
@@ -241,6 +170,7 @@ namespace Main
                     SelectExtractedRomFolder();
                     if (RomLoaded)
                     {
+                        InitializeTrainerEditor();
                     }
                     EndOpenRom();
                 }
@@ -250,6 +180,7 @@ namespace Main
                 SelectExtractedRomFolder();
                 if (RomLoaded)
                 {
+                    InitializeTrainerEditor();
                 }
                 EndOpenRom();
             }
@@ -272,6 +203,7 @@ namespace Main
                     OpenRom();
                     if (RomLoaded)
                     {
+                        InitializeTrainerEditor();
                     }
                     EndOpenRom();
                 }
@@ -281,6 +213,7 @@ namespace Main
                 OpenRom();
                 if (RomLoaded)
                 {
+                    InitializeTrainerEditor();
                 }
                 EndOpenRom();
             }
@@ -331,6 +264,7 @@ namespace Main
                     SelectExtractedRomFolder();
                     if (RomLoaded)
                     {
+                        InitializeTrainerEditor();
                     }
                     EndOpenRom();
                 }
@@ -340,6 +274,7 @@ namespace Main
                 SelectExtractedRomFolder();
                 if (RomLoaded)
                 {
+                    InitializeTrainerEditor();
                 }
                 EndOpenRom();
             }
@@ -357,6 +292,7 @@ namespace Main
                     OpenRom();
                     if (RomLoaded)
                     {
+                        InitializeTrainerEditor();
                     }
                     EndOpenRom();
                 }
@@ -366,6 +302,7 @@ namespace Main
                 OpenRom();
                 if (RomLoaded)
                 {
+                    InitializeTrainerEditor();
                 }
                 EndOpenRom();
             }
@@ -393,7 +330,7 @@ namespace Main
         {
             OpenFileDialog openRom = new()
             {
-                Filter = NdsRomFilter
+                Filter = Common.NdsRomFilter
             };
 
             if (openRom.ShowDialog(this) == DialogResult.OK)
@@ -426,7 +363,7 @@ namespace Main
                 return false;
             }
 
-            string fileName = Directory.GetFiles(selectedFolder).SingleOrDefault(x => x.Contains(GlobalConstants.HeaderFilePath));
+            string fileName = Directory.GetFiles(selectedFolder).SingleOrDefault(x => x.Contains(Common.HeaderFilePath));
             if (string.IsNullOrEmpty(fileName))
             {
                 MessageBox.Show("Cannot load ROM header.bin." +
@@ -487,7 +424,7 @@ namespace Main
             if (selectFolder.ShowDialog() == DialogResult.OK)
             {
                 CloseProject();
-                string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{GlobalConstants.VsMakerContentsFolder}\\";
+                string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
                 if (Directory.Exists(workingDirectory))
                 {
                     var directoryExists = MessageBox.Show("An extracted contents folder for this ROM has been found." +
@@ -495,7 +432,16 @@ namespace Main
 
                     if (directoryExists == DialogResult.Yes)
                     {
-                        return;
+                        CloseProject();
+                        RomLoaded = ReadRomExtractedFolder(workingDirectory);
+                        if (RomLoaded)
+                        {
+                            BeginExtractRomData();
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
                     else
                     {
@@ -596,6 +542,25 @@ namespace Main
             TrainerPropertyChange = hasChanges;
             main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
             trainer_PropertiesTab.Text = hasChanges ? "Properties *" : "Properties";
+        }
+
+        private void InitializeTrainerEditor()
+        {
+            trainer_UndoAll_Btn.Enabled = false;
+            trainer_SaveBtn.Enabled = false;
+            trainer_List_Buttons.Enabled = false;
+            trainer_TrainersListBox.Enabled = false;
+            trainer_SpriteExportBtn.Enabled = false;
+            trainer_SpriteFrameNum.Enabled = false;
+            trainer_SpriteImportBtn.Enabled = false;
+            trainer_Copy_Btn.Enabled = false;
+            trainer_Paste_Btn.Enabled = false;
+            trainer_Import_Btn.Enabled = false;
+            trainer_Export_Btn.Enabled = false;
+            trainer_ClassListBox.Enabled = false;
+            trainer_ViewClassBtn.Enabled = false;
+            trainer_NameTextBox.Enabled = false;
+            trainer_PropertiesTabControl.Enabled = false;
         }
 
         private void SetupPartyEditor()
