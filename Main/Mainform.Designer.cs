@@ -185,6 +185,7 @@
             toolStripSeparator12 = new ToolStripSeparator();
             trainer_PartyImportBtn = new ToolStripButton();
             trainer_PartyExportBtn = new ToolStripButton();
+            toolStripSeparator10 = new ToolStripSeparator();
             trainer_PropertiesTab = new TabPage();
             trainer_ItemComboBox4 = new ComboBox();
             trainer_ItemComboBox3 = new ComboBox();
@@ -200,29 +201,28 @@
             toolStripButton10 = new ToolStripButton();
             toolStripButton11 = new ToolStripButton();
             trainer_BattleMessageTab = new TabPage();
-            trainer_MessageUpBtn = new Button();
-            trainer_ViewMessageTableBtn = new Button();
-            trainer_Msg_Text_lbl = new Label();
-            trainer_MessaageEditor_Panel = new Panel();
+            label66 = new Label();
+            panel9 = new Panel();
             trainer_MessageTextBox = new RichTextBox();
-            trainer_MessageEditToolstrip = new ToolStrip();
-            trainer_MessageEditSaveBtn = new ToolStripButton();
-            trainer_MessageEditUndoBtn = new ToolStripButton();
-            trainer_MessageEditRedoBtn = new ToolStripButton();
-            trainer_MsgPreview_lbl = new Label();
-            trainer_MessageTrigger_lbl = new Label();
-            trainer_MessageTriggersListBox = new ListBox();
-            trainer_MessageDownBtn = new Button();
+            toolStrip6 = new ToolStrip();
+            toolStripButton5 = new ToolStripButton();
+            toolStripButton6 = new ToolStripButton();
+            toolStripButton7 = new ToolStripButton();
+            button1 = new Button();
+            button2 = new Button();
             trainer_MessagePreviewPicBox = new PictureBox();
-            trainer_Message_Toolstrip = new ToolStrip();
-            trainer_MessageSaveBtn = new ToolStripButton();
-            trainer_MessageUndoBtn = new ToolStripButton();
-            toolStripSeparator10 = new ToolStripSeparator();
-            trainer_MessageCopyBtn = new ToolStripButton();
-            trainer_MessagesPasteBtn = new ToolStripButton();
+            trainer_MessageTriggerListBox = new ListBox();
+            label64 = new Label();
+            label65 = new Label();
+            toolStrip5 = new ToolStrip();
+            toolStripButton13 = new ToolStripButton();
+            toolStripButton12 = new ToolStripButton();
             toolStripSeparator11 = new ToolStripSeparator();
-            traioner_MessagesImportBtn = new ToolStripButton();
-            trainer_MessagesExportBtn = new ToolStripButton();
+            toolStripButton1 = new ToolStripButton();
+            toolStripButton2 = new ToolStripButton();
+            toolStripSeparator4 = new ToolStripSeparator();
+            toolStripButton3 = new ToolStripButton();
+            toolStripButton4 = new ToolStripButton();
             trainer_Toolstrip = new ToolStrip();
             trainer_SaveBtn = new ToolStripButton();
             trainer_UndoAll_Btn = new ToolStripButton();
@@ -380,10 +380,10 @@
             trainer_PropertiesTab.SuspendLayout();
             trainer_properties_toolstrip.SuspendLayout();
             trainer_BattleMessageTab.SuspendLayout();
-            trainer_MessaageEditor_Panel.SuspendLayout();
-            trainer_MessageEditToolstrip.SuspendLayout();
+            panel9.SuspendLayout();
+            toolStrip6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).BeginInit();
-            trainer_Message_Toolstrip.SuspendLayout();
+            toolStrip5.SuspendLayout();
             trainer_Toolstrip.SuspendLayout();
             trainer_Class_Panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_SpriteFrameNum).BeginInit();
@@ -444,6 +444,7 @@
             menu_File_OpenFolder.Name = "menu_File_OpenFolder";
             menu_File_OpenFolder.Size = new Size(191, 22);
             menu_File_OpenFolder.Text = "Open Extracted Folder";
+            menu_File_OpenFolder.Click += menu_File_OpenFolder_Click;
             // 
             // menu_File_OpenRecent
             // 
@@ -1865,7 +1866,7 @@
             // 
             // trainer_Party_Toolstrip
             // 
-            trainer_Party_Toolstrip.Items.AddRange(new ToolStripItem[] { trainer_PartyCopyBtn, trainer_PartyPasteBtn, toolStripSeparator12, trainer_PartyImportBtn, trainer_PartyExportBtn });
+            trainer_Party_Toolstrip.Items.AddRange(new ToolStripItem[] { trainer_PartyCopyBtn, trainer_PartyPasteBtn, toolStripSeparator12, trainer_PartyImportBtn, trainer_PartyExportBtn, toolStripSeparator10 });
             trainer_Party_Toolstrip.Location = new Point(3, 3);
             trainer_Party_Toolstrip.Name = "trainer_Party_Toolstrip";
             trainer_Party_Toolstrip.Size = new Size(813, 25);
@@ -1912,6 +1913,11 @@
             trainer_PartyExportBtn.Name = "trainer_PartyExportBtn";
             trainer_PartyExportBtn.Size = new Size(23, 22);
             trainer_PartyExportBtn.Text = "Export Trainer Party";
+            // 
+            // toolStripSeparator10
+            // 
+            toolStripSeparator10.Name = "toolStripSeparator10";
+            toolStripSeparator10.Size = new Size(6, 25);
             // 
             // trainer_PropertiesTab
             // 
@@ -2043,233 +2049,219 @@
             // 
             // trainer_BattleMessageTab
             // 
-            trainer_BattleMessageTab.Controls.Add(trainer_MessageUpBtn);
-            trainer_BattleMessageTab.Controls.Add(trainer_ViewMessageTableBtn);
-            trainer_BattleMessageTab.Controls.Add(trainer_Msg_Text_lbl);
-            trainer_BattleMessageTab.Controls.Add(trainer_MessaageEditor_Panel);
-            trainer_BattleMessageTab.Controls.Add(trainer_MsgPreview_lbl);
-            trainer_BattleMessageTab.Controls.Add(trainer_MessageTrigger_lbl);
-            trainer_BattleMessageTab.Controls.Add(trainer_MessageTriggersListBox);
-            trainer_BattleMessageTab.Controls.Add(trainer_MessageDownBtn);
+            trainer_BattleMessageTab.Controls.Add(label66);
+            trainer_BattleMessageTab.Controls.Add(panel9);
+            trainer_BattleMessageTab.Controls.Add(button1);
+            trainer_BattleMessageTab.Controls.Add(button2);
             trainer_BattleMessageTab.Controls.Add(trainer_MessagePreviewPicBox);
-            trainer_BattleMessageTab.Controls.Add(trainer_Message_Toolstrip);
+            trainer_BattleMessageTab.Controls.Add(trainer_MessageTriggerListBox);
+            trainer_BattleMessageTab.Controls.Add(label64);
+            trainer_BattleMessageTab.Controls.Add(label65);
+            trainer_BattleMessageTab.Controls.Add(toolStrip5);
             trainer_BattleMessageTab.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             trainer_BattleMessageTab.Location = new Point(4, 24);
             trainer_BattleMessageTab.Name = "trainer_BattleMessageTab";
+            trainer_BattleMessageTab.Padding = new Padding(3);
             trainer_BattleMessageTab.Size = new Size(819, 494);
-            trainer_BattleMessageTab.TabIndex = 2;
+            trainer_BattleMessageTab.TabIndex = 3;
             trainer_BattleMessageTab.Text = "Battle Messages";
             trainer_BattleMessageTab.UseVisualStyleBackColor = true;
             // 
-            // trainer_MessageUpBtn
+            // label66
             // 
-            trainer_MessageUpBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            trainer_MessageUpBtn.Location = new Point(771, 67);
-            trainer_MessageUpBtn.Name = "trainer_MessageUpBtn";
-            trainer_MessageUpBtn.Size = new Size(45, 45);
-            trainer_MessageUpBtn.TabIndex = 11;
-            trainer_MessageUpBtn.Text = "🔼";
-            trainer_MessageUpBtn.UseVisualStyleBackColor = true;
+            label66.AutoSize = true;
+            label66.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label66.Location = new Point(254, 174);
+            label66.Name = "label66";
+            label66.Size = new Size(83, 15);
+            label66.TabIndex = 15;
+            label66.Text = "Message Text";
             // 
-            // trainer_ViewMessageTableBtn
+            // panel9
             // 
-            trainer_ViewMessageTableBtn.Font = new Font("Segoe UI", 9F);
-            trainer_ViewMessageTableBtn.Location = new Point(112, 37);
-            trainer_ViewMessageTableBtn.Name = "trainer_ViewMessageTableBtn";
-            trainer_ViewMessageTableBtn.Size = new Size(130, 23);
-            trainer_ViewMessageTableBtn.TabIndex = 10;
-            trainer_ViewMessageTableBtn.Text = "View Message Table";
-            trainer_ViewMessageTableBtn.UseVisualStyleBackColor = true;
-            // 
-            // trainer_Msg_Text_lbl
-            // 
-            trainer_Msg_Text_lbl.AutoSize = true;
-            trainer_Msg_Text_lbl.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            trainer_Msg_Text_lbl.Location = new Point(253, 180);
-            trainer_Msg_Text_lbl.Name = "trainer_Msg_Text_lbl";
-            trainer_Msg_Text_lbl.Size = new Size(83, 15);
-            trainer_Msg_Text_lbl.TabIndex = 8;
-            trainer_Msg_Text_lbl.Text = "Message Text";
-            // 
-            // trainer_MessaageEditor_Panel
-            // 
-            trainer_MessaageEditor_Panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            trainer_MessaageEditor_Panel.Controls.Add(trainer_MessageTextBox);
-            trainer_MessaageEditor_Panel.Controls.Add(trainer_MessageEditToolstrip);
-            trainer_MessaageEditor_Panel.Location = new Point(253, 202);
-            trainer_MessaageEditor_Panel.Name = "trainer_MessaageEditor_Panel";
-            trainer_MessaageEditor_Panel.Size = new Size(563, 279);
-            trainer_MessaageEditor_Panel.TabIndex = 7;
+            panel9.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel9.Controls.Add(trainer_MessageTextBox);
+            panel9.Controls.Add(toolStrip6);
+            panel9.Location = new Point(254, 192);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(563, 295);
+            panel9.TabIndex = 14;
             // 
             // trainer_MessageTextBox
             // 
-            trainer_MessageTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            trainer_MessageTextBox.Location = new Point(0, 28);
+            trainer_MessageTextBox.Dock = DockStyle.Fill;
+            trainer_MessageTextBox.Location = new Point(0, 25);
             trainer_MessageTextBox.Name = "trainer_MessageTextBox";
-            trainer_MessageTextBox.Size = new Size(563, 247);
+            trainer_MessageTextBox.Size = new Size(563, 270);
             trainer_MessageTextBox.TabIndex = 1;
             trainer_MessageTextBox.Text = "";
             // 
-            // trainer_MessageEditToolstrip
+            // toolStrip6
             // 
-            trainer_MessageEditToolstrip.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            trainer_MessageEditToolstrip.Dock = DockStyle.None;
-            trainer_MessageEditToolstrip.Items.AddRange(new ToolStripItem[] { trainer_MessageEditSaveBtn, trainer_MessageEditUndoBtn, trainer_MessageEditRedoBtn });
-            trainer_MessageEditToolstrip.Location = new Point(0, 0);
-            trainer_MessageEditToolstrip.Name = "trainer_MessageEditToolstrip";
-            trainer_MessageEditToolstrip.Size = new Size(81, 25);
-            trainer_MessageEditToolstrip.TabIndex = 0;
-            trainer_MessageEditToolstrip.Text = "toolStrip1";
+            toolStrip6.Items.AddRange(new ToolStripItem[] { toolStripButton5, toolStripButton6, toolStripButton7 });
+            toolStrip6.Location = new Point(0, 0);
+            toolStrip6.Name = "toolStrip6";
+            toolStrip6.Size = new Size(563, 25);
+            toolStrip6.TabIndex = 0;
+            toolStrip6.Text = "toolStrip1";
             // 
-            // trainer_MessageEditSaveBtn
+            // toolStripButton5
             // 
-            trainer_MessageEditSaveBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageEditSaveBtn.Image = Properties.Resources.save_ico;
-            trainer_MessageEditSaveBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageEditSaveBtn.Name = "trainer_MessageEditSaveBtn";
-            trainer_MessageEditSaveBtn.Size = new Size(23, 22);
-            trainer_MessageEditSaveBtn.Text = "Save Battle Message";
+            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Image = Properties.Resources.save_ico;
+            toolStripButton5.ImageTransparentColor = Color.Magenta;
+            toolStripButton5.Name = "toolStripButton5";
+            toolStripButton5.Size = new Size(23, 22);
+            toolStripButton5.Text = "Save Battle Message";
             // 
-            // trainer_MessageEditUndoBtn
+            // toolStripButton6
             // 
-            trainer_MessageEditUndoBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageEditUndoBtn.Image = Properties.Resources.undo_ico;
-            trainer_MessageEditUndoBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageEditUndoBtn.Name = "trainer_MessageEditUndoBtn";
-            trainer_MessageEditUndoBtn.Size = new Size(23, 22);
-            trainer_MessageEditUndoBtn.Text = "Undo";
+            toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton6.Image = Properties.Resources.undo_ico;
+            toolStripButton6.ImageTransparentColor = Color.Magenta;
+            toolStripButton6.Name = "toolStripButton6";
+            toolStripButton6.Size = new Size(23, 22);
+            toolStripButton6.Text = "Undo";
             // 
-            // trainer_MessageEditRedoBtn
+            // toolStripButton7
             // 
-            trainer_MessageEditRedoBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageEditRedoBtn.Image = Properties.Resources.redo_ico;
-            trainer_MessageEditRedoBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageEditRedoBtn.Name = "trainer_MessageEditRedoBtn";
-            trainer_MessageEditRedoBtn.Size = new Size(23, 22);
-            trainer_MessageEditRedoBtn.Text = "Redo";
+            toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton7.Image = Properties.Resources.redo_ico;
+            toolStripButton7.ImageTransparentColor = Color.Magenta;
+            toolStripButton7.Name = "toolStripButton7";
+            toolStripButton7.Size = new Size(23, 22);
+            toolStripButton7.Text = "Redo";
             // 
-            // trainer_MsgPreview_lbl
+            // button1
             // 
-            trainer_MsgPreview_lbl.AutoSize = true;
-            trainer_MsgPreview_lbl.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            trainer_MsgPreview_lbl.Location = new Point(253, 41);
-            trainer_MsgPreview_lbl.Name = "trainer_MsgPreview_lbl";
-            trainer_MsgPreview_lbl.Size = new Size(104, 15);
-            trainer_MsgPreview_lbl.TabIndex = 6;
-            trainer_MsgPreview_lbl.Text = "Message Preview";
+            button1.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            button1.Location = new Point(768, 62);
+            button1.Name = "button1";
+            button1.Size = new Size(45, 45);
+            button1.TabIndex = 13;
+            button1.Text = "🔼";
+            button1.UseVisualStyleBackColor = true;
             // 
-            // trainer_MessageTrigger_lbl
+            // button2
             // 
-            trainer_MessageTrigger_lbl.AutoSize = true;
-            trainer_MessageTrigger_lbl.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            trainer_MessageTrigger_lbl.Location = new Point(6, 41);
-            trainer_MessageTrigger_lbl.Name = "trainer_MessageTrigger_lbl";
-            trainer_MessageTrigger_lbl.Size = new Size(103, 15);
-            trainer_MessageTrigger_lbl.TabIndex = 5;
-            trainer_MessageTrigger_lbl.Text = "Message Triggers";
-            // 
-            // trainer_MessageTriggersListBox
-            // 
-            trainer_MessageTriggersListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            trainer_MessageTriggersListBox.Font = new Font("Segoe UI", 9F);
-            trainer_MessageTriggersListBox.FormattingEnabled = true;
-            trainer_MessageTriggersListBox.ItemHeight = 15;
-            trainer_MessageTriggersListBox.Location = new Point(3, 68);
-            trainer_MessageTriggersListBox.Name = "trainer_MessageTriggersListBox";
-            trainer_MessageTriggersListBox.Size = new Size(239, 409);
-            trainer_MessageTriggersListBox.TabIndex = 4;
-            // 
-            // trainer_MessageDownBtn
-            // 
-            trainer_MessageDownBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            trainer_MessageDownBtn.Location = new Point(771, 118);
-            trainer_MessageDownBtn.Name = "trainer_MessageDownBtn";
-            trainer_MessageDownBtn.Size = new Size(45, 45);
-            trainer_MessageDownBtn.TabIndex = 3;
-            trainer_MessageDownBtn.Text = "🔽";
-            trainer_MessageDownBtn.UseVisualStyleBackColor = true;
+            button2.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            button2.Location = new Point(768, 113);
+            button2.Name = "button2";
+            button2.Size = new Size(45, 45);
+            button2.TabIndex = 12;
+            button2.Text = "🔽";
+            button2.UseVisualStyleBackColor = true;
             // 
             // trainer_MessagePreviewPicBox
             // 
             trainer_MessagePreviewPicBox.BackColor = Color.White;
-            trainer_MessagePreviewPicBox.Location = new Point(253, 67);
+            trainer_MessagePreviewPicBox.Location = new Point(254, 62);
             trainer_MessagePreviewPicBox.Name = "trainer_MessagePreviewPicBox";
             trainer_MessagePreviewPicBox.Size = new Size(512, 96);
-            trainer_MessagePreviewPicBox.TabIndex = 1;
+            trainer_MessagePreviewPicBox.TabIndex = 6;
             trainer_MessagePreviewPicBox.TabStop = false;
             // 
-            // trainer_Message_Toolstrip
+            // trainer_MessageTriggerListBox
             // 
-            trainer_Message_Toolstrip.Items.AddRange(new ToolStripItem[] { trainer_MessageSaveBtn, trainer_MessageUndoBtn, toolStripSeparator10, trainer_MessageCopyBtn, trainer_MessagesPasteBtn, toolStripSeparator11, traioner_MessagesImportBtn, trainer_MessagesExportBtn });
-            trainer_Message_Toolstrip.Location = new Point(0, 0);
-            trainer_Message_Toolstrip.Name = "trainer_Message_Toolstrip";
-            trainer_Message_Toolstrip.Size = new Size(819, 25);
-            trainer_Message_Toolstrip.TabIndex = 0;
-            trainer_Message_Toolstrip.Text = "toolStrip1";
+            trainer_MessageTriggerListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            trainer_MessageTriggerListBox.Font = new Font("Segoe UI", 9F);
+            trainer_MessageTriggerListBox.FormattingEnabled = true;
+            trainer_MessageTriggerListBox.ItemHeight = 15;
+            trainer_MessageTriggerListBox.Location = new Point(9, 62);
+            trainer_MessageTriggerListBox.Name = "trainer_MessageTriggerListBox";
+            trainer_MessageTriggerListBox.Size = new Size(239, 424);
+            trainer_MessageTriggerListBox.TabIndex = 5;
             // 
-            // trainer_MessageSaveBtn
+            // label64
             // 
-            trainer_MessageSaveBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageSaveBtn.Image = Properties.Resources.save_ico;
-            trainer_MessageSaveBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageSaveBtn.Name = "trainer_MessageSaveBtn";
-            trainer_MessageSaveBtn.Size = new Size(23, 22);
-            trainer_MessageSaveBtn.Text = "Save Trainer Messages";
+            label64.AutoSize = true;
+            label64.Location = new Point(254, 45);
+            label64.Name = "label64";
+            label64.Size = new Size(53, 15);
+            label64.TabIndex = 2;
+            label64.Text = "Preview";
             // 
-            // trainer_MessageUndoBtn
+            // label65
             // 
-            trainer_MessageUndoBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageUndoBtn.Image = Properties.Resources.undo_ico;
-            trainer_MessageUndoBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageUndoBtn.Name = "trainer_MessageUndoBtn";
-            trainer_MessageUndoBtn.Size = new Size(23, 22);
-            trainer_MessageUndoBtn.Text = "Undo changes";
+            label65.AutoSize = true;
+            label65.Location = new Point(9, 44);
+            label65.Name = "label65";
+            label65.Size = new Size(103, 15);
+            label65.TabIndex = 1;
+            label65.Text = "Message Triggers";
             // 
-            // toolStripSeparator10
+            // toolStrip5
             // 
-            toolStripSeparator10.Name = "toolStripSeparator10";
-            toolStripSeparator10.Size = new Size(6, 25);
+            toolStrip5.Items.AddRange(new ToolStripItem[] { toolStripButton13, toolStripButton12, toolStripSeparator11, toolStripButton1, toolStripButton2, toolStripSeparator4, toolStripButton3, toolStripButton4 });
+            toolStrip5.Location = new Point(3, 3);
+            toolStrip5.Name = "toolStrip5";
+            toolStrip5.Size = new Size(813, 25);
+            toolStrip5.TabIndex = 0;
+            toolStrip5.Text = "toolStrip1";
             // 
-            // trainer_MessageCopyBtn
+            // toolStripButton13
             // 
-            trainer_MessageCopyBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessageCopyBtn.Image = Properties.Resources.copy_ico;
-            trainer_MessageCopyBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessageCopyBtn.Name = "trainer_MessageCopyBtn";
-            trainer_MessageCopyBtn.Size = new Size(23, 22);
-            trainer_MessageCopyBtn.Text = "Copy Trainer Messages";
+            toolStripButton13.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton13.Image = Properties.Resources.save_ico;
+            toolStripButton13.ImageTransparentColor = Color.Magenta;
+            toolStripButton13.Name = "toolStripButton13";
+            toolStripButton13.Size = new Size(23, 22);
+            toolStripButton13.Text = "toolStripButton13";
             // 
-            // trainer_MessagesPasteBtn
+            // toolStripButton12
             // 
-            trainer_MessagesPasteBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessagesPasteBtn.Image = Properties.Resources.paste_ico;
-            trainer_MessagesPasteBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessagesPasteBtn.Name = "trainer_MessagesPasteBtn";
-            trainer_MessagesPasteBtn.Size = new Size(23, 22);
-            trainer_MessagesPasteBtn.Text = "Paste Trainer Messages";
+            toolStripButton12.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton12.Image = Properties.Resources.undo_ico;
+            toolStripButton12.ImageTransparentColor = Color.Magenta;
+            toolStripButton12.Name = "toolStripButton12";
+            toolStripButton12.Size = new Size(23, 22);
+            toolStripButton12.Text = "toolStripButton12";
             // 
             // toolStripSeparator11
             // 
             toolStripSeparator11.Name = "toolStripSeparator11";
             toolStripSeparator11.Size = new Size(6, 25);
             // 
-            // traioner_MessagesImportBtn
+            // toolStripButton1
             // 
-            traioner_MessagesImportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            traioner_MessagesImportBtn.Image = Properties.Resources.import_ico;
-            traioner_MessagesImportBtn.ImageTransparentColor = Color.Magenta;
-            traioner_MessagesImportBtn.Name = "traioner_MessagesImportBtn";
-            traioner_MessagesImportBtn.Size = new Size(23, 22);
-            traioner_MessagesImportBtn.Text = "Import Trainer Messages";
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Image = Properties.Resources.copy_ico;
+            toolStripButton1.ImageTransparentColor = Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(23, 22);
+            toolStripButton1.Text = "Copy Trainer Properties";
             // 
-            // trainer_MessagesExportBtn
+            // toolStripButton2
             // 
-            trainer_MessagesExportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            trainer_MessagesExportBtn.Image = Properties.Resources.export_ico;
-            trainer_MessagesExportBtn.ImageTransparentColor = Color.Magenta;
-            trainer_MessagesExportBtn.Name = "trainer_MessagesExportBtn";
-            trainer_MessagesExportBtn.Size = new Size(23, 22);
-            trainer_MessagesExportBtn.Text = "Export Trainer Messages";
+            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton2.Image = Properties.Resources.paste_ico;
+            toolStripButton2.ImageTransparentColor = Color.Magenta;
+            toolStripButton2.Name = "toolStripButton2";
+            toolStripButton2.Size = new Size(23, 22);
+            toolStripButton2.Text = "Paste Trainer Properties";
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(6, 25);
+            // 
+            // toolStripButton3
+            // 
+            toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton3.Image = Properties.Resources.import_ico;
+            toolStripButton3.ImageTransparentColor = Color.Magenta;
+            toolStripButton3.Name = "toolStripButton3";
+            toolStripButton3.Size = new Size(23, 22);
+            toolStripButton3.Text = "Import Trainer Properties";
+            // 
+            // toolStripButton4
+            // 
+            toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton4.Image = Properties.Resources.export_ico;
+            toolStripButton4.ImageTransparentColor = Color.Magenta;
+            toolStripButton4.Name = "toolStripButton4";
+            toolStripButton4.Size = new Size(23, 22);
+            toolStripButton4.Text = "Export Trainer Properties";
             // 
             // trainer_Toolstrip
             // 
@@ -3382,6 +3374,7 @@
             main_OpenFolderBtn.Name = "main_OpenFolderBtn";
             main_OpenFolderBtn.Size = new Size(144, 22);
             main_OpenFolderBtn.Text = "Open Extracted Folder";
+            main_OpenFolderBtn.Click += main_OpenFolderBtn_Click;
             // 
             // toolStripSeparator7
             // 
@@ -3503,13 +3496,13 @@
             trainer_properties_toolstrip.PerformLayout();
             trainer_BattleMessageTab.ResumeLayout(false);
             trainer_BattleMessageTab.PerformLayout();
-            trainer_MessaageEditor_Panel.ResumeLayout(false);
-            trainer_MessaageEditor_Panel.PerformLayout();
-            trainer_MessageEditToolstrip.ResumeLayout(false);
-            trainer_MessageEditToolstrip.PerformLayout();
+            panel9.ResumeLayout(false);
+            panel9.PerformLayout();
+            toolStrip6.ResumeLayout(false);
+            toolStrip6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).EndInit();
-            trainer_Message_Toolstrip.ResumeLayout(false);
-            trainer_Message_Toolstrip.PerformLayout();
+            toolStrip5.ResumeLayout(false);
+            toolStrip5.PerformLayout();
             trainer_Toolstrip.ResumeLayout(false);
             trainer_Toolstrip.PerformLayout();
             trainer_Class_Panel.ResumeLayout(false);
@@ -3657,10 +3650,8 @@
         private ToolStrip trainer_Message_Toolstrip;
         private ToolStripButton trainer_MessageSaveBtn;
         private ToolStripButton trainer_MessageUndoBtn;
-        private ToolStripSeparator toolStripSeparator10;
         private ToolStripButton trainer_MessageCopyBtn;
         private ToolStripButton trainer_MessagesPasteBtn;
-        private ToolStripSeparator toolStripSeparator11;
         private ToolStripButton traioner_MessagesImportBtn;
         private ToolStripButton trainer_MessagesExportBtn;
         private PictureBox trainer_MessagePreviewPicBox;
@@ -3884,5 +3875,26 @@
         private ToolStripButton main_OpenPatchesBtn;
         private ToolStripButton main_UnpackNarcsBtn;
         private ToolStripButton main_SettingsBtn;
+        private Label label64;
+        private Label label65;
+        private ToolStrip toolStrip5;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton toolStripButton2;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripButton toolStripButton3;
+        private ToolStripButton toolStripButton4;
+        private Panel panel9;
+        private ToolStrip toolStrip6;
+        private ToolStripButton toolStripButton5;
+        private ToolStripButton toolStripButton6;
+        private ToolStripButton toolStripButton7;
+        private Button button1;
+        private Button button2;
+        private ListBox trainer_MessageTriggerListBox;
+        private Label label66;
+        private ToolStripSeparator toolStripSeparator10;
+        private ToolStripButton toolStripButton13;
+        private ToolStripButton toolStripButton12;
+        private ToolStripSeparator toolStripSeparator11;
     }
 }

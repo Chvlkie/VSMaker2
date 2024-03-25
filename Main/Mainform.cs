@@ -1,7 +1,9 @@
-using VsMaker2Core.DataModels;
 using Main.Forms;
 using System.Text;
+using VsMaker2Core.DataModels;
+using VsMaker2Core.Glossary;
 using VsMaker2Core.Methods.Rom;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -40,14 +42,10 @@ namespace Main
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (RomLoaded)
+            string closeMessage = RomLoaded ? "Do you wish to close VS-Maker?\n\nAny unsaved changes will be lost." : "Do you wish to close VS-Maker?";
+            if (MessageBox.Show(closeMessage, "Close VS-Maker", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
             {
-                var dialogResult = MessageBox.Show("Are you sure you want to close VS Maker 2?" +
-                    "\n\nAny unsaved changes will be lost.", "Close VS Maker 2", MessageBoxButtons.YesNo);
-                if (dialogResult != DialogResult.Yes)
-                {
-                    e.Cancel = true;
-                }
+                e.Cancel = true;
             }
         }
 
@@ -62,19 +60,147 @@ namespace Main
 
         #region MainMenu
 
+        public void BeginUnpackRomData()
+        {
+            var (success, exception) = romFileMethods.ExtractRomContents(LoadedRom.WorkingDirectory, LoadedRom.FileName);
+            if (!success)
+            {
+                MessageBox.Show($"{exception}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CloseProject();
+                return;
+            }
+            RomLoaded = true;
+        }
+
+        private void BeginExtractRomData()
+        {
+            OpenLoadingDialog(LoadType.UnpackNarcs);
+        }
+
+        public void BeginUnpackNarcs(IProgress<int> progress)
+        {
+            var narcs = new List<NarcDirectory>();
+            switch (LoadedRom.GameFamily)
+            {
+                case GameFamily.DiamondPearl:
+                    narcs = [
+                        NarcDirectory.PokemonIcons,
+                        NarcDirectory.MoveData,
+                        NarcDirectory.PersonalPokeData,
+                        NarcDirectory.SynthOverlay,
+                        NarcDirectory.TextArchive,
+                        NarcDirectory.TrainerGraphics,
+                        NarcDirectory.TrainerParty,
+                        NarcDirectory.TrainerProperties,
+                        NarcDirectory.BattleMessageTable,
+                        NarcDirectory.BattleMessageOffset
+                        ];
+                    break;
+
+                case GameFamily.Platinum:
+                    narcs = [
+                        NarcDirectory.PokemonIcons,
+                        NarcDirectory.MoveData,
+                        NarcDirectory.PersonalPokeData,
+                        NarcDirectory.SynthOverlay,
+                        NarcDirectory.TextArchive,
+                        NarcDirectory.TrainerGraphics,
+                        NarcDirectory.TrainerParty,
+                        NarcDirectory.TrainerProperties,
+                        NarcDirectory.BattleMessageTable,
+                        NarcDirectory.BattleMessageOffset
+                        ];
+                    break;
+
+                case GameFamily.HeartGoldSoulSilver:
+                    narcs = [
+                        NarcDirectory.BattleStagePokeData,
+                        NarcDirectory.BattleTowerPokeData,
+                        NarcDirectory.BattleTowerTrainerData,
+                        NarcDirectory.PokemonIcons,
+                        NarcDirectory.MoveData,
+                        NarcDirectory.PersonalPokeData,
+                        NarcDirectory.SynthOverlay,
+                        NarcDirectory.TextArchive,
+                        NarcDirectory.TrainerGraphics,
+                        NarcDirectory.TrainerParty,
+                        NarcDirectory.TrainerProperties,
+                        NarcDirectory.BattleMessageTable,
+                        NarcDirectory.BattleMessageOffset
+                       ];
+                    break;
+
+                case GameFamily.HgEngine:
+                    narcs = [
+                       NarcDirectory.BattleStagePokeData,
+                        NarcDirectory.BattleTowerPokeData,
+                        NarcDirectory.BattleTowerTrainerData,
+                        NarcDirectory.PokemonIcons,
+                        NarcDirectory.MoveData,
+                        NarcDirectory.PersonalPokeData,
+                        NarcDirectory.SynthOverlay,
+                        NarcDirectory.TextArchive,
+                        NarcDirectory.TrainerGraphics,
+                        NarcDirectory.TrainerParty,
+                        NarcDirectory.TrainerProperties,
+                        NarcDirectory.BattleMessageTable,
+                        NarcDirectory.BattleMessageOffset
+                      ];
+                    break;
+
+                default:
+                    break;
+            }
+
+            var (success, exception) = romFileMethods.UnpackNarcs(LoadedRom, narcs, progress);
+            if (!success)
+            {
+                MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                progress?.Report(100);
+                return;
+            }
+            progress?.Report(100);
+        }
+
+        private void ClearUnsavedChanges()
+        {
+            ClearUnsavedTrainerChanges();
+        }
+
         private void CloseProject()
         {
+            Controls.Clear();
+            FormClosing -= Mainform_FormClosing;
+            InitializeComponent();
+            startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
+            romName_Label.Text = "";
+            CurrentTrainer = new();
+            EditTrainer = new();
             LoadedRom = new RomFile();
             IsLoadingData = false;
             RomLoaded = false;
             startupTab.SelectedTab = startupPage;
             EnableDisableMenu(false);
+            ClearUnsavedChanges();
+        }
+
+        private void CreateDirectory(string workingDirectory)
+        {
+            if (!Directory.Exists(workingDirectory))
+            {
+                Directory.CreateDirectory(workingDirectory);
+            }
+            else
+            {
+                MessageBox.Show("Unable to extract contents.\n\n" +
+                    "Contents folder may already exist", "Unable to Extract ROM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
         }
 
         private void EnableDisableMenu(bool enable)
         {
             main_SaveRomBtn.Enabled = enable;
-            main_OpenRomBtn.Enabled = enable;
             main_UnpackNarcsBtn.Enabled = enable;
 
             menu_File_Save.Enabled = enable;
@@ -84,6 +210,13 @@ namespace Main
             menu_Export.Enabled = enable;
             menu_Tools_RomPatcher.Enabled = enable;
             menu_Tools_UnpackNarcs.Enabled = enable;
+        }
+
+        private void EndOpenRom()
+        {
+            IsLoadingData = false;
+            EnableDisableMenu(RomLoaded);
+            startupTab.SelectedTab = RomLoaded ? mainPage : startupPage;
         }
 
         private (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
@@ -96,6 +229,32 @@ namespace Main
             return (europeByte, gameCode);
         }
 
+        private void main_OpenFolderBtn_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    SelectExtractedRomFolder();
+                    if (RomLoaded)
+                    {
+                    }
+                    EndOpenRom();
+                }
+            }
+            else
+            {
+                SelectExtractedRomFolder();
+                if (RomLoaded)
+                {
+                }
+                EndOpenRom();
+            }
+        }
+
         private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
         {
             OpenRomPatchesWindow();
@@ -103,11 +262,28 @@ namespace Main
 
         private void main_OpenRomBtn_Click(object sender, EventArgs e)
         {
-            OpenRom();
-            EnableDisableMenu(true);
-            IsLoadingData = false;
-            RomLoaded = true;
-            startupTab.SelectedTab = mainPage;
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    OpenRom();
+                    if (RomLoaded)
+                    {
+                    }
+                    EndOpenRom();
+                }
+            }
+            else
+            {
+                OpenRom();
+                if (RomLoaded)
+                {
+                }
+                EndOpenRom();
+            }
         }
 
         private void main_SettingsBtn_Click(object sender, EventArgs e)
@@ -143,6 +319,58 @@ namespace Main
             Application.Exit();
         }
 
+        private void menu_File_OpenFolder_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    SelectExtractedRomFolder();
+                    if (RomLoaded)
+                    {
+                    }
+                    EndOpenRom();
+                }
+            }
+            else
+            {
+                SelectExtractedRomFolder();
+                if (RomLoaded)
+                {
+                }
+                EndOpenRom();
+            }
+        }
+
+        private void menu_File_OpenRom_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    OpenRom();
+                    if (RomLoaded)
+                    {
+                    }
+                    EndOpenRom();
+                }
+            }
+            else
+            {
+                OpenRom();
+                if (RomLoaded)
+                {
+                }
+                EndOpenRom();
+            }
+        }
+
         private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
         {
             OpenRomPatchesWindow();
@@ -153,16 +381,15 @@ namespace Main
             OpenSettingsWindow();
         }
 
-        private void menu_File_OpenRom_Click(object sender, EventArgs e)
+        private void OpenLoadingDialog(LoadType loadType)
         {
-            OpenRom();
-            EnableDisableMenu(true);
-            IsLoadingData = false;
-            RomLoaded = true;
-            startupTab.SelectedTab = mainPage;
+            UseWaitCursor = true;
+            LoadingData = new(this, loadType);
+            LoadingData.ShowDialog();
+            UseWaitCursor = false;
         }
 
-        private async void OpenRom()
+        private void OpenRom()
         {
             OpenFileDialog openRom = new()
             {
@@ -171,18 +398,11 @@ namespace Main
 
             if (openRom.ShowDialog(this) == DialogResult.OK)
             {
-                IsLoadingData = true;
-                var loadedRom = LoadInitialRomData(openRom.FileName);
-                LoadedRom = new RomFile(loadedRom.GameCode, openRom.FileName, loadedRom.EuropeByte);
-                if (LoadedRom.GameVersion == GameVersion.Unknown)
+                SelectWorkingFolderDirectory(openRom.FileName);
+                if (RomLoaded)
                 {
-                    MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
-                        "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Sould Silver version."
-                        , "Unsupported ROM",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    BeginExtractRomData();
                 }
-                LoadedRom.GameFamily = romFileMethods.SetGameFamily(LoadedRom.GameVersion);
             }
         }
 
@@ -194,6 +414,126 @@ namespace Main
         private void OpenSettingsWindow()
         {
             Settings.ShowDialog();
+        }
+
+        private bool ReadRomExtractedFolder(string selectedFolder)
+        {
+            if (string.IsNullOrEmpty(selectedFolder))
+            {
+                MessageBox.Show("Cannot load ROM header.bin." +
+                    "\n\nPlease ensure you select an extracted ROM contents folder" +
+                    "\nand that data is not corrupted.", "Unable to Open Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            string fileName = Directory.GetFiles(selectedFolder).SingleOrDefault(x => x.Contains(GlobalConstants.HeaderFilePath));
+            if (string.IsNullOrEmpty(fileName))
+            {
+                MessageBox.Show("Cannot load ROM header.bin." +
+                    "\n\nPlease ensure you select an extracted ROM contents folder" +
+                    "\nand that data is not corrupted.", "Unable to Open Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return ReadRomFile(selectedFolder + "\\", fileName);
+        }
+
+        private bool ReadRomFile(string workingDirectory, string fileName)
+        {
+            IsLoadingData = true;
+            var loadedRom = LoadInitialRomData(fileName);
+            LoadedRom = new RomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
+            if (LoadedRom.GameVersion == GameVersion.Unknown)
+            {
+                MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
+                    "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Sould Silver version."
+                    , "Unsupported ROM",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            LoadedRom.GameFamily = romFileMethods.SetGameFamily(LoadedRom.GameVersion);
+            LoadedRom.GameLanguage = romFileMethods.SetGameLanguage(LoadedRom.GameCode);
+            LoadedRom.Directories = romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
+            return true;
+        }
+
+        private void SelectExtractedRomFolder()
+        {
+            FolderBrowserDialog selectFolder = new()
+            {
+                Description = "Choose Extracted ROM Contents Folder",
+                UseDescriptionForTitle = true
+            };
+
+            if (selectFolder.ShowDialog() == DialogResult.OK)
+            {
+                CloseProject();
+                RomLoaded = ReadRomExtractedFolder(selectFolder.SelectedPath);
+                if (RomLoaded)
+                {
+                    BeginExtractRomData();
+                }
+            }
+        }
+
+        private void SelectWorkingFolderDirectory(string fileName)
+        {
+            FolderBrowserDialog selectFolder = new()
+            {
+                Description = "Choose Where to Extract ROM Contents",
+                UseDescriptionForTitle = true,
+            };
+
+            if (selectFolder.ShowDialog() == DialogResult.OK)
+            {
+                CloseProject();
+                string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{GlobalConstants.VsMakerContentsFolder}\\";
+                if (Directory.Exists(workingDirectory))
+                {
+                    var directoryExists = MessageBox.Show("An extracted contents folder for this ROM has been found." +
+                        "\n\nDo you wish to open this folder?", "Extracted ROM Data exists", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (directoryExists == DialogResult.Yes)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        var extractContentsAgain = MessageBox.Show("ROM Data will be re-extracted.\nThis will delete all existing data in the old folder." +
+                            "\n\nDo you wish to proceed?", "Re-Extract ROM Data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (extractContentsAgain == DialogResult.Yes)
+                        {
+                            Directory.Delete(workingDirectory, true);
+                            CreateDirectory(workingDirectory);
+                        }
+                        else
+                        {
+                            SelectWorkingFolderDirectory(fileName);
+                        }
+                    }
+                }
+                else
+                {
+                    CreateDirectory(workingDirectory);
+                }
+
+                if (Directory.Exists(workingDirectory))
+                {
+                    if (ReadRomFile(workingDirectory, fileName))
+                    {
+                        OpenLoadingDialog(LoadType.UnpackRom);
+                    }
+                    else
+                    {
+                        CloseProject();
+                    }
+                }
+                else
+                {
+                    CloseProject();
+                }
+            }
         }
 
         #endregion MainMenu
@@ -222,6 +562,14 @@ namespace Main
         private List<Button> pokeMoveButtons;
 
         #endregion PartyEditor
+
+        private void ClearUnsavedTrainerChanges()
+        {
+            EditedTrainerBattleMessages(false);
+            EditedTrainerData(false);
+            EditedTrainerParty(false);
+            EditedTrainerProperty(false);
+        }
 
         private void EditedTrainerBattleMessages(bool hasChanges)
         {

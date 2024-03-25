@@ -8,6 +8,19 @@ namespace VsMaker2Core
 {
     public static class Enums
     {
+        public enum LoadType
+        {
+            UnpackRom = 0,
+            LoadRomData = 1,
+            UnpackNarcs = 2,
+            SetupEditor = 3,
+            SaveRom = 4,
+            SaveTrainerTextTable = 5,
+            RepointTextTable = 6,
+            ImportTextTable = 7,
+            ExportTextTable = 8,
+        }
+
         public enum GameFamily : byte
         {
             Unknown,
@@ -40,9 +53,12 @@ namespace VsMaker2Core
             Chinese
         }
 
-        public enum DirectoryNames : byte
+        public enum NarcDirectory : byte
         {
             Unknown,
+            BattleStagePokeData,
+            BattleTowerPokeData,
+            BattleTowerTrainerData,
             PersonalPokeData,
             SynthOverlay,
             TextArchive,
@@ -54,7 +70,5 @@ namespace VsMaker2Core
             BattleMessageTable,
             BattleMessageOffset
         }
-
-
     }
 }

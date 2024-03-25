@@ -1,4 +1,5 @@
-﻿using static VsMaker2Core.Enums;
+﻿using VsMaker2Core.Glossary;
+using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels
 {
@@ -56,20 +57,20 @@ namespace VsMaker2Core.DataModels
         public GameFamily GameFamily { get; set; }
         public GameVersion GameVersion { get; set; }
         public GameLanguage GameLanguage { get; set; }
-        public Dictionary<DirectoryNames, (string packedDirectory, string unpackedDirectory)> Directories { get; set; }
+        public Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)> Directories { get; set; }
 
         public RomFile()
         {
 
         }
 
-        public RomFile(string romId, string romName, byte europeByte, bool suffix = true)
+        public RomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
         {
-            ExtractedFolderSuffix = suffix ? Common.ExtractedFolderSuffix : "";
-            WorkingDirectory = $"{Path.GetDirectoryName(romName)}\\{Path.GetFileNameWithoutExtension(romName)}{ExtractedFolderSuffix}\\";
-            Arm9Path = WorkingDirectory + "arm9.bin";
-            OverlayTablePath = WorkingDirectory + "y9.bin";
-            OverlayPath = WorkingDirectory + "overlay";
+            ExtractedFolderSuffix = suffix ? GlobalConstants.VsMakerContentsFolder : "";
+            WorkingDirectory = workingDirectory;
+            Arm9Path = WorkingDirectory + GlobalConstants.Arm9FilePath;
+            OverlayTablePath = WorkingDirectory + GlobalConstants.Y9FilePath;
+            OverlayPath = WorkingDirectory + GlobalConstants.OverlayFilePath;
 
             try
             {

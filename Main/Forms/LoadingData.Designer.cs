@@ -28,18 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            progressBar = new ProgressBar();
             SuspendLayout();
+            // 
+            // progressBar
+            // 
+            progressBar.Location = new Point(12, 12);
+            progressBar.Name = "progressBar";
+            progressBar.Size = new Size(400, 23);
+            progressBar.TabIndex = 0;
             // 
             // LoadingData
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(424, 89);
+            ClientSize = new Size(424, 50);
             ControlBox = false;
+            Controls.Add(progressBar);
             MaximizeBox = false;
-            MaximumSize = new Size(440, 128);
+            MaximumSize = new Size(440, 89);
             MinimizeBox = false;
-            MinimumSize = new Size(440, 128);
+            MinimumSize = new Size(440, 89);
             Name = "LoadingData";
             StartPosition = FormStartPosition.CenterParent;
             Text = "LoadingData";
@@ -49,5 +58,7 @@
         }
 
         #endregion
+
+        private ProgressBar progressBar;
     }
 }
