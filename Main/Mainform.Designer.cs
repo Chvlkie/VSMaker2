@@ -250,6 +250,7 @@
             trainer_ImportAllBtn = new Button();
             trainer_AddTrainerBtn = new Button();
             trainer_List_Panel = new Panel();
+            trainer_ClearFilterBtn = new Button();
             label67 = new Label();
             trainer_FilterBox = new TextBox();
             trainer_TrainersListBox = new ListBox();
@@ -351,7 +352,9 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
-            trainer_ClearFilterBtn = new Button();
+            exportAstrainersToolStripMenuItem = new ToolStripMenuItem();
+            exportAsSpreadsheetxcelToolStripMenuItem = new ToolStripMenuItem();
+            exportcsvToolStripMenuItem = new ToolStripMenuItem();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -535,9 +538,11 @@
             // 
             // menu_Export_Trainers
             // 
+            menu_Export_Trainers.DropDownItems.AddRange(new ToolStripItem[] { exportAstrainersToolStripMenuItem, exportAsSpreadsheetxcelToolStripMenuItem, exportcsvToolStripMenuItem });
             menu_Export_Trainers.Name = "menu_Export_Trainers";
             menu_Export_Trainers.Size = new Size(195, 22);
             menu_Export_Trainers.Text = "Export Trainers";
+            menu_Export_Trainers.Click += menu_Export_Trainers_Click;
             // 
             // menu_Export_Classes
             // 
@@ -2520,6 +2525,17 @@
             trainer_List_Panel.Size = new Size(200, 441);
             trainer_List_Panel.TabIndex = 0;
             // 
+            // trainer_ClearFilterBtn
+            // 
+            trainer_ClearFilterBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            trainer_ClearFilterBtn.Location = new Point(174, 409);
+            trainer_ClearFilterBtn.Name = "trainer_ClearFilterBtn";
+            trainer_ClearFilterBtn.Size = new Size(23, 23);
+            trainer_ClearFilterBtn.TabIndex = 4;
+            trainer_ClearFilterBtn.Text = "X";
+            trainer_ClearFilterBtn.UseVisualStyleBackColor = true;
+            trainer_ClearFilterBtn.Click += trainer_ClearFilterBtn_Click;
+            // 
             // label67
             // 
             label67.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -3472,16 +3488,24 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
-            // trainer_ClearFilterBtn
+            // exportAstrainersToolStripMenuItem
             // 
-            trainer_ClearFilterBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            trainer_ClearFilterBtn.Location = new Point(174, 409);
-            trainer_ClearFilterBtn.Name = "trainer_ClearFilterBtn";
-            trainer_ClearFilterBtn.Size = new Size(23, 23);
-            trainer_ClearFilterBtn.TabIndex = 4;
-            trainer_ClearFilterBtn.Text = "X";
-            trainer_ClearFilterBtn.UseVisualStyleBackColor = true;
-            trainer_ClearFilterBtn.Click += trainer_ClearFilterBtn_Click;
+            exportAstrainersToolStripMenuItem.Name = "exportAstrainersToolStripMenuItem";
+            exportAstrainersToolStripMenuItem.Size = new Size(267, 22);
+            exportAstrainersToolStripMenuItem.Text = "Export VS Maker Trainers (.vstrainers)";
+            exportAstrainersToolStripMenuItem.Click += exportAstrainersToolStripMenuItem_Click;
+            // 
+            // exportAsSpreadsheetxcelToolStripMenuItem
+            // 
+            exportAsSpreadsheetxcelToolStripMenuItem.Name = "exportAsSpreadsheetxcelToolStripMenuItem";
+            exportAsSpreadsheetxcelToolStripMenuItem.Size = new Size(209, 22);
+            exportAsSpreadsheetxcelToolStripMenuItem.Text = "Export Spreadsheet (.xlsx)";
+            // 
+            // exportcsvToolStripMenuItem
+            // 
+            exportcsvToolStripMenuItem.Name = "exportcsvToolStripMenuItem";
+            exportcsvToolStripMenuItem.Size = new Size(209, 22);
+            exportcsvToolStripMenuItem.Text = "Export .csv";
             // 
             // Mainform
             // 
@@ -3939,5 +3963,8 @@
         private TextBox trainer_FilterBox;
         private Label label67;
         private Button trainer_ClearFilterBtn;
+        private ToolStripMenuItem exportAstrainersToolStripMenuItem;
+        private ToolStripMenuItem exportAsSpreadsheetxcelToolStripMenuItem;
+        private ToolStripMenuItem exportcsvToolStripMenuItem;
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace VsMaker2Core.DataModels
 {
+    [Serializable]
     public class Trainer
     {
         public uint TrainerId { get; set; }

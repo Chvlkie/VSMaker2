@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace VsMaker2Core.DataModels
 {
+    [Serializable]
     public class MessageArchive
     {
         public int MessageId { get; set; }

@@ -1,5 +1,6 @@
 ﻿namespace VsMaker2Core.DataModels
 {
+    [Serializable]
     public class TrainerParty
     {
         public ushort PartySize { get; set; }

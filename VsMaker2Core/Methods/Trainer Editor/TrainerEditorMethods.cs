@@ -4,7 +4,7 @@ using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using static VsMaker2Core.Enums;
 
-namespace VsMaker2Core.Methods.Rom
+namespace VsMaker2Core.Methods
 {
     public class TrainerEditorMethods : ITrainerEditorMethods
     {
@@ -28,5 +28,6 @@ namespace VsMaker2Core.Methods.Rom
             return trainers;
         }
 
+      
     }
 }

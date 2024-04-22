@@ -3,7 +3,7 @@ using Main.Models;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.Methods.Rom;
+using VsMaker2Core.Methods;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -23,6 +23,7 @@ namespace Main
 
         private IRomFileMethods romFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
+        private IFileSystemMethods fileSystemMethods;
 
         #endregion Methods
 
@@ -59,6 +60,7 @@ namespace Main
             RomPatches = new RomPatches();
             romFileMethods = new RomFileMethods();
             trainerEditorMethods = new TrainerEditorMethods();
+            fileSystemMethods = new FileSystemMethods();
         }
 
         #region MainMenu
@@ -794,5 +796,31 @@ namespace Main
         private bool UnsavedBattleMessageChanges;
 
         #endregion BattleMessageEditor
+
+        private void menu_Export_Trainers_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void exportAstrainersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var save = new SaveFileDialog
+            {
+                Filter = "VS Maker Trainers|*.vstrainers",
+                Title = "Export VS Maker Trainers"
+            };
+            save.ShowDialog();
+            if (!string.IsNullOrEmpty(save.FileName))
+            {
+                var export = fileSystemMethods.ExportTrainers(MainEditorModel.TrainerEditor.Trainers, save.FileName);
+                if (export.Success)
+                {
+                    MessageBox.Show("VS Maker Trainers exported!", "Success");
+                }
+                else
+                {
+                    MessageBox.Show(export.ErrorMessage, "Unable to Export VS Maker Trainers", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
     }
 }
