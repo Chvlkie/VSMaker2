@@ -22,6 +22,7 @@ namespace Main
         #region Methods
 
         private IRomFileMethods romFileMethods;
+        private ITrainerEditorMethods trainerEditorMethods;
 
         #endregion Methods
 
@@ -57,6 +58,7 @@ namespace Main
             LoadingData = new LoadingData();
             RomPatches = new RomPatches();
             romFileMethods = new RomFileMethods();
+            trainerEditorMethods = new TrainerEditorMethods();
         }
 
         #region MainMenu
@@ -65,7 +67,7 @@ namespace Main
         {
             var narcs = GameFamilyNarcs.GetGameFamilyNarcs(LoadedRom.GameFamily);
 
-            var (success, exception) = romFileMethods.UnpackNarcs(LoadedRom, narcs, progress);
+            var (success, exception) = romFileMethods.UnpackNarcs(narcs, progress);
             if (!success)
             {
                 MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -156,6 +158,12 @@ namespace Main
             IsLoadingData = false;
             EnableDisableMenu(RomLoaded);
             startupTab.SelectedTab = RomLoaded ? mainPage : startupPage;
+            if (RomLoaded)
+            {
+                InitializeTrainerEditor();
+                main_MainTab.SelectedTab = main_MainTab_TrainerTab;
+                SetupTrainerEditorData();
+            }
         }
 
         private void main_OpenFolderBtn_Click(object sender, EventArgs e)
@@ -168,20 +176,12 @@ namespace Main
                 if (saveChanges == DialogResult.Yes)
                 {
                     SelectExtractedRomFolder();
-                    if (RomLoaded)
-                    {
-                        InitializeTrainerEditor();
-                    }
                     EndOpenRom();
                 }
             }
             else
             {
                 SelectExtractedRomFolder();
-                if (RomLoaded)
-                {
-                    InitializeTrainerEditor();
-                }
                 EndOpenRom();
             }
         }
@@ -383,14 +383,15 @@ namespace Main
             if (LoadedRom.GameVersion == GameVersion.Unknown)
             {
                 MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
-                    "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Sould Silver version."
+                    "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Soul Silver version."
                     , "Unsupported ROM",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             LoadedRom.GameFamily = romFileMethods.SetGameFamily(LoadedRom.GameVersion);
             LoadedRom.GameLanguage = romFileMethods.SetGameLanguage(LoadedRom.GameCode);
-            LoadedRom.Directories = romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
+            romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
+            LoadedRom.TrainerNamesTextNumber = romFileMethods.SetTrainerNameTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
             return true;
         }
 
@@ -482,6 +483,14 @@ namespace Main
             }
         }
 
+        private void main_MainTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (main_MainTab.SelectedTab == main_MainTab_TrainerTab)
+            {
+                SetupTrainerEditor();
+            }
+        }
+
         #endregion MainMenu
 
         #region TrainerEditor
@@ -515,6 +524,14 @@ namespace Main
             EditedTrainerData(false);
             EditedTrainerParty(false);
             EditedTrainerProperty(false);
+        }
+
+        private void SetupTrainerEditor()
+        {
+            MainEditorModel.TrainerEditor = new TrainerEditorModel()
+            {
+                Trainers = new List<Trainer>() { }
+            };
         }
 
         private void EditedTrainerBattleMessages(bool hasChanges)
@@ -561,6 +578,46 @@ namespace Main
             trainer_ViewClassBtn.Enabled = false;
             trainer_NameTextBox.Enabled = false;
             trainer_PropertiesTabControl.Enabled = false;
+        }
+
+        private void EnableTrainerEditor()
+        {
+            trainer_List_Buttons.Enabled = true;
+            trainer_TrainersListBox.Enabled = true;
+            trainer_SpriteExportBtn.Enabled = true;
+            trainer_SpriteFrameNum.Enabled = true;
+            trainer_SpriteImportBtn.Enabled = true;
+            trainer_Copy_Btn.Enabled = true;
+            trainer_Paste_Btn.Enabled = true;
+            trainer_Import_Btn.Enabled = true;
+            trainer_Export_Btn.Enabled = true;
+            trainer_ClassListBox.Enabled = true;
+            trainer_ViewClassBtn.Enabled = true;
+            trainer_NameTextBox.Enabled = true;
+        }
+
+        private void SetupTrainerEditorData()
+        {
+            IsLoadingData = true;
+
+            var trainers = trainerEditorMethods.GetTrainers(LoadedRom.TrainerNamesTextNumber);
+            var trainerEditorModel = new TrainerEditorModel()
+            {
+                Trainers = trainers
+            };
+
+            MainEditorModel.TrainerEditor = trainerEditorModel;
+            PopulateTrainerList(trainers);
+            EnableTrainerEditor();
+        }
+
+        private void PopulateTrainerList(List<Trainer> trainers)
+        {
+            trainer_TrainersListBox.Items.Clear();
+            foreach (var item in trainers)
+            {
+                trainer_TrainersListBox.Items.Add(item.ListName);
+            }
         }
 
         private void SetupPartyEditor()

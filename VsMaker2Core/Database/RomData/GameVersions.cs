@@ -9,9 +9,9 @@ namespace VsMaker2Core.Database
 {
     public partial class VsMakerDatabase
     {
-        public static class RomData
+        public partial class RomData
         {
-            public static Dictionary<string, GameVersion> GameVersions = new Dictionary<string, GameVersion>()
+            public static Dictionary<string, GameVersion> GameVersions = new()
             {
                 ["ADAE"] = GameVersion.Diamond,
                 ["ADAS"] = GameVersion.Diamond,

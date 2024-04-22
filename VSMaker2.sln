@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Main", "Main\Main.csproj", "{DCCB7524-5FC8-4BA4-87C0-5BF6BB430D38}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VsMaker2Core", "VsMaker2Core", "{FCD39ECD-D451-4101-92E7-2058C539ACA6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Libraries", "Code Libraries", "{FCD39ECD-D451-4101-92E7-2058C539ACA6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{370F0DD8-3022-4A2B-A149-8D84A46DC16B}"
 	ProjectSection(SolutionItems) = preProject

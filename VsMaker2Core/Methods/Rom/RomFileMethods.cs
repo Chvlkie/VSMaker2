@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text;
+using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using static VsMaker2Core.Enums;
 
@@ -6,6 +8,217 @@ namespace VsMaker2Core.Methods.Rom
 {
     public class RomFileMethods : IRomFileMethods
     {
+        private readonly Dictionary<int, string> ReadTextDictionary = VsMakerDatabase.RomData.TextCharacters.ReadTextDictionary;
+
+        public (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName)
+        {
+            Process unpack = new();
+            unpack.StartInfo.FileName = Common.NdsToolsFilePath;
+            unpack.StartInfo.Arguments = "-x " + '"' + fileName + '"'
+                + " -9 " + '"' + workingDirectory + "\\" + Common.Arm9FilePath + '"'
+                + " -7 " + '"' + workingDirectory + "\\" + Common.Arm7FilePath + '"'
+                + " -y9 " + '"' + workingDirectory + "\\" + Common.Y9FilePath + '"'
+                + " -y7 " + '"' + workingDirectory + "\\" + Common.Y7FilePath + '"'
+                + " -d " + '"' + workingDirectory + "\\" + Common.DataFilePath + '"'
+                + " -y " + '"' + workingDirectory + "\\" + Common.OverlayFilePath + '"'
+                + " -t " + '"' + workingDirectory + "\\" + Common.BannerFilePath + '"'
+                + " -h " + '"' + workingDirectory + "\\" + Common.HeaderFilePath + '"';
+            unpack.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            unpack.StartInfo.CreateNoWindow = true;
+            try
+            {
+                unpack.Start();
+                unpack.WaitForExit();
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                return (false, ex.Message);
+            }
+            return (true, "");
+        }
+
+        public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines)
+        {
+            int initialKey = 0;
+            int stringCount = 0;
+            List<string> messages = [];
+            bool success = false;
+
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{messageArchiveId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+            BinaryReader readText = new(fileStream);
+            try
+            {
+                stringCount = readText.ReadUInt16();
+                success = true;
+            }
+            catch (EndOfStreamException)
+            {
+                readText.Close();
+                throw;
+            }
+
+            if (success)
+            {
+                try
+                {
+                    initialKey = readText.ReadUInt16();
+                    if (!discardLines)
+                    {
+                        int key1 = (initialKey * 0x2FD) & 0xFFFF;
+                        int[] currentOffset = new int[stringCount];
+                        int[] currentSize = new int[stringCount];
+
+                        // Get Offset and Sizes
+                        for (int i = 0; i < stringCount; i++)
+                        {
+                            int key2 = (key1 * (i + 1) & 0xFFFF);
+                            int actualKey = key2 | (key2 << 16);
+                            currentOffset[i] = ((int)readText.ReadUInt32()) ^ actualKey;
+                            currentSize[i] = ((int)readText.ReadUInt32()) ^ actualKey;
+                        }
+
+                        // Build String
+                        for (int i = 0; i < stringCount; i++)
+                        {
+                            bool hasSpecialCharacter = false;
+                            bool isCompressed = false;
+                            key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
+                            readText.BaseStream.Position = currentOffset[i];
+                            StringBuilder text = new StringBuilder("");
+
+                            for (int j = 0; j < currentSize[i]; j++)
+                            {
+                                int textChar = (readText.ReadUInt16()) ^ key1;
+
+                                switch (textChar)
+                                {
+                                    case 0xE000:
+                                        text.Append("\\n");
+                                        break;
+
+                                    case 0x25BC:
+                                        text.Append("\\r");
+                                        break;
+
+                                    case 0x25BD:
+                                        text.Append("\\f");
+                                        break;
+
+                                    case 0xF100:
+                                        isCompressed = true;
+                                        break;
+
+                                    case 0xFFFE:
+                                        text.Append(@"\v");
+                                        hasSpecialCharacter = true;
+                                        break;
+
+                                    case 0xFFFF:
+                                        text.Append("");
+                                        break;
+
+                                    default:
+                                        if (hasSpecialCharacter)
+                                        {
+                                            text.Append(textChar.ToString("X4"));
+                                            hasSpecialCharacter = false;
+                                        }
+                                        if (isCompressed)
+                                        {
+                                            int shift = 0;
+                                            int trans = 0;
+                                            while (true)
+                                            {
+                                                int compChar = textChar >> shift;
+                                                if (shift >= 0xF)
+                                                {
+                                                    shift -= 0xF;
+                                                    if (shift > 0)
+                                                    {
+                                                        compChar = (trans | ((textChar << (9 - shift)) & 0x1FF));
+                                                        if ((compChar & 0xFF) == 0xFF)
+                                                        {
+                                                            break;
+                                                        }
+                                                        if (compChar != 0x0 && compChar != 0x1)
+                                                        {
+                                                            text.Append(DecodeCharacter(compChar));
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    compChar = (textChar >> shift) & 0x1FF;
+                                                    if ((compChar & 0xFF) == 0xFF)
+                                                    {
+                                                        break;
+                                                    }
+                                                    if (compChar != 0x0 && compChar != 0x1)
+                                                    {
+                                                        text.Append(DecodeCharacter(compChar));
+                                                    }
+                                                    shift += 9;
+                                                    if (shift < 0xF)
+                                                    {
+                                                        trans = (textChar >> shift) & 0x1FF;
+                                                        shift += 9;
+                                                    }
+                                                    key1 += 0x493D;
+                                                    key1 &= 0xFFFF;
+                                                    textChar = Convert.ToUInt16(readText.ReadUInt16() ^ key1);
+                                                    j++;
+                                                }
+                                            }
+                                            text.Append("");
+                                        }
+                                        else
+                                        {
+                                            text.Append(DecodeCharacter(textChar));
+                                        }
+                                        break;
+                                }
+                                key1 += 0x493D;
+                                key1 &= 0xFFFF;
+                            }
+                            messages.Add(text.ToString());
+                        }
+                    }
+                }
+                catch (EndOfStreamException)
+                {
+                    readText.Close();
+                    throw;
+                }
+            }
+            else
+            {
+                return [];
+            }
+
+            List<MessageArchive> messageArchives = [];
+
+            for (int i = 0; i < messages.Count; i++)
+            {
+                var item = new MessageArchive { MessageId = i, MessageText = messages[i] };
+                messageArchives.Add(item);
+            }
+            readText.Close();
+            readText.Dispose();
+            return messageArchives;
+        }
+
+        public List<string> GetTrainerNames(int trainerNameMessageArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
+            var trainerNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                trainerNames.Add(item.MessageText);
+            }
+            return trainerNames;
+        }
+
         public GameFamily SetGameFamily(GameVersion gameVersion)
         {
             return gameVersion switch
@@ -31,7 +244,7 @@ namespace VsMaker2Core.Methods.Rom
             };
         }
 
-        public Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)> SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
+        public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
         {
             Dictionary<NarcDirectory, string> packedDirectories = null;
             switch (gameFamily)
@@ -92,43 +305,82 @@ namespace VsMaker2Core.Methods.Rom
             var directories = new Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)>();
             foreach (KeyValuePair<NarcDirectory, string> kvp in packedDirectories)
             {
-                directories.Add(kvp.Key, (workingDirectory + kvp.Value, workingDirectory + @"unpacked" + '\\' + kvp.Key.ToString()));
+                directories.Add(kvp.Key, ($"{workingDirectory}{kvp.Value}", $"{workingDirectory}unpacked\\{kvp.Key}"));
             }
-            return directories;
+            VsMakerDatabase.RomData.GameDirectories = directories;
         }
 
-        public (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName)
+        public int SetTrainerNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
         {
-            Process unpack = new();
-            unpack.StartInfo.FileName = Common.NdsToolsFilePath;
-            unpack.StartInfo.Arguments = "-x " + '"' + fileName + '"'
-                + " -9 " + '"' + workingDirectory + "\\" + Common.Arm9FilePath + '"'
-                + " -7 " + '"' + workingDirectory + "\\" + Common.Arm7FilePath + '"'
-                + " -y9 " + '"' + workingDirectory + "\\" + Common.Y9FilePath + '"'
-                + " -y7 " + '"' + workingDirectory + "\\" + Common.Y7FilePath + '"'
-                + " -d " + '"' + workingDirectory + "\\" + Common.DataFilePath + '"'
-                + " -y " + '"' + workingDirectory + "\\" + Common.OverlayFilePath + '"'
-                + " -t " + '"' + workingDirectory + "\\" + Common.BannerFilePath + '"'
-                + " -h " + '"' + workingDirectory + "\\" + Common.HeaderFilePath + '"';
-            unpack.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            unpack.StartInfo.CreateNoWindow = true;
-            try
+            switch (gameFamily)
             {
-                unpack.Start();
-                unpack.WaitForExit();
+                case GameFamily.DiamondPearl:
+                    {
+                        if (gameLanguage.Equals(GameLanguage.Japanese))
+                        {
+                            return 550;
+                        }
+                        else
+                        {
+                            return 559;
+                        }
+                    }
+
+                case GameFamily.Platinum:
+                    return 618;
+
+                case GameFamily.HeartGoldSoulSilver:
+                case GameFamily.HgEngine:
+                    if (gameLanguage == GameLanguage.Japanese)
+                    {
+                        return 719;
+                    }
+                    else
+                    {
+                        return 729;
+                    }
+                default:
+                    return 0;
             }
-            catch (System.ComponentModel.Win32Exception ex)
+        }
+        public (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress)
+        {
+            int progressStep = 100 / narcs.Count;
+            int count = 0;
+
+            foreach (var item in narcs)
             {
-                return (false, ex.Message);
+                var (success, exceptionMessage) = UnpackNarc(item);
+                if (success)
+                {
+                    progress?.Report(count += progressStep);
+                }
+                else
+                {
+                    progress?.Report(100);
+                    return (false, exceptionMessage);
+                }
             }
-            return (true, "");
+            return (true, null);
         }
 
-        private (bool Succes, string ExceptionMessage) UnpackNarc(RomFile romFile, NarcDirectory narcPath)
+        private string DecodeCharacter(int textChar)
+        {
+            if (ReadTextDictionary.TryGetValue(textChar, out var character))
+            {
+                return character;
+            }
+            else
+            {
+                return $"\\x{textChar:X4}";
+            }
+        }
+
+        private (bool Succes, string ExceptionMessage) UnpackNarc(NarcDirectory narcPath)
         {
             try
             {
-                if (romFile.Directories.TryGetValue(narcPath, out (string packedPath, string unpackedPath) paths))
+                if (VsMakerDatabase.RomData.GameDirectories.TryGetValue(narcPath, out (string packedPath, string unpackedPath) paths))
                 {
                     DirectoryInfo directoryInfo = new(paths.unpackedPath);
                     if (!directoryInfo.Exists || directoryInfo.GetFiles().Length == 0)
@@ -151,27 +403,6 @@ namespace VsMaker2Core.Methods.Rom
             {
                 return (false, ex.Message);
             }
-        }
-
-        public (bool Success, string ExceptionMessage) UnpackNarcs(RomFile romFile, List<NarcDirectory> narcs, IProgress<int> progress)
-        {
-            int progressStep = 100 / narcs.Count;
-            int count = 0;
-
-            foreach (var item in narcs)
-            {
-                var (success, exceptionMessage) = UnpackNarc(romFile, item);
-                if (success)
-                {
-                    progress?.Report(count += progressStep);
-                }
-                else
-                {
-                    progress?.Report(100);
-                    return (false, exceptionMessage);
-                }
-            }
-            return (true, null);
         }
     }
 }

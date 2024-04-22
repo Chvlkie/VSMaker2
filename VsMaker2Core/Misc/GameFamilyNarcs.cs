@@ -19,7 +19,7 @@ namespace VsMaker2Core
                         ];
 
         public static List<NarcDirectory> Platinum = [
-                      NarcDirectory.PokemonIcons,
+                        NarcDirectory.PokemonIcons,
                         NarcDirectory.MoveData,
                         NarcDirectory.PersonalPokeData,
                         NarcDirectory.SynthOverlay,

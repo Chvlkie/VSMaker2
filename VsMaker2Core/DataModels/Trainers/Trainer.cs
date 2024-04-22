@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VsMaker2Core.DataModels
+﻿namespace VsMaker2Core.DataModels
 {
     public class Trainer
     {
@@ -12,6 +6,8 @@ namespace VsMaker2Core.DataModels
         public string TrainerName { get; set; }
         public TrainerProperty TrainerProperties { get; set; }
         public TrainerParty TrainerParty { get; set; }
+
+        public string ListName => $"[{TrainerId:D3}] {TrainerName}";
 
         public Trainer()
         {

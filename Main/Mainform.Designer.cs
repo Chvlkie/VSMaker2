@@ -667,6 +667,7 @@
             main_MainTab.SelectedIndex = 0;
             main_MainTab.Size = new Size(1250, 570);
             main_MainTab.TabIndex = 0;
+            main_MainTab.SelectedIndexChanged += main_MainTab_SelectedIndexChanged;
             // 
             // main_MainTab_TrainerTab
             // 

@@ -56,7 +56,6 @@ namespace VsMaker2Core.DataModels
         public GameFamily GameFamily { get; set; }
         public GameVersion GameVersion { get; set; }
         public GameLanguage GameLanguage { get; set; }
-        public Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)> Directories { get; set; }
 
         public RomFile()
         {
