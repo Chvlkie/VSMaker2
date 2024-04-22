@@ -9,6 +9,8 @@
 
         public string ListName => $"[{TrainerId:D3}] {TrainerName}";
 
+        public static int ListNameToTrainerId(string listName) => int.Parse(listName.Substring(1, 3));
+
         public Trainer()
         {
             TrainerProperties = new();

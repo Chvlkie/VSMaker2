@@ -250,6 +250,8 @@
             trainer_ImportAllBtn = new Button();
             trainer_AddTrainerBtn = new Button();
             trainer_List_Panel = new Panel();
+            label67 = new Label();
+            trainer_FilterBox = new TextBox();
             trainer_TrainersListBox = new ListBox();
             trainer_Trainer_Lbl = new Label();
             classTab = new TabPage();
@@ -349,6 +351,7 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
+            trainer_ClearFilterBtn = new Button();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -2474,6 +2477,7 @@
             trainer_RemoveBtn.TabIndex = 1;
             trainer_RemoveBtn.Text = "Remove";
             trainer_RemoveBtn.UseVisualStyleBackColor = true;
+            trainer_RemoveBtn.Click += trainer_RemoveBtn_Click;
             // 
             // trainer_ExportAllBtn
             // 
@@ -2506,12 +2510,35 @@
             // 
             trainer_List_Panel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             trainer_List_Panel.BackColor = Color.Transparent;
+            trainer_List_Panel.Controls.Add(trainer_ClearFilterBtn);
+            trainer_List_Panel.Controls.Add(label67);
+            trainer_List_Panel.Controls.Add(trainer_FilterBox);
             trainer_List_Panel.Controls.Add(trainer_TrainersListBox);
             trainer_List_Panel.Controls.Add(trainer_Trainer_Lbl);
             trainer_List_Panel.Location = new Point(6, 31);
             trainer_List_Panel.Name = "trainer_List_Panel";
             trainer_List_Panel.Size = new Size(200, 441);
             trainer_List_Panel.TabIndex = 0;
+            // 
+            // label67
+            // 
+            label67.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label67.AutoSize = true;
+            label67.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label67.Location = new Point(3, 391);
+            label67.Name = "label67";
+            label67.Size = new Size(36, 15);
+            label67.TabIndex = 3;
+            label67.Text = "Filter";
+            // 
+            // trainer_FilterBox
+            // 
+            trainer_FilterBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            trainer_FilterBox.Location = new Point(3, 409);
+            trainer_FilterBox.Name = "trainer_FilterBox";
+            trainer_FilterBox.Size = new Size(160, 23);
+            trainer_FilterBox.TabIndex = 2;
+            trainer_FilterBox.TextChanged += trainer_FilterBox_TextChanged;
             // 
             // trainer_TrainersListBox
             // 
@@ -2520,8 +2547,9 @@
             trainer_TrainersListBox.ItemHeight = 15;
             trainer_TrainersListBox.Location = new Point(3, 21);
             trainer_TrainersListBox.Name = "trainer_TrainersListBox";
-            trainer_TrainersListBox.Size = new Size(197, 409);
+            trainer_TrainersListBox.Size = new Size(197, 364);
             trainer_TrainersListBox.TabIndex = 1;
+            trainer_TrainersListBox.SelectedIndexChanged += trainer_TrainersListBox_SelectedIndexChanged;
             // 
             // trainer_Trainer_Lbl
             // 
@@ -3444,6 +3472,17 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
+            // trainer_ClearFilterBtn
+            // 
+            trainer_ClearFilterBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            trainer_ClearFilterBtn.Location = new Point(174, 409);
+            trainer_ClearFilterBtn.Name = "trainer_ClearFilterBtn";
+            trainer_ClearFilterBtn.Size = new Size(23, 23);
+            trainer_ClearFilterBtn.TabIndex = 4;
+            trainer_ClearFilterBtn.Text = "X";
+            trainer_ClearFilterBtn.UseVisualStyleBackColor = true;
+            trainer_ClearFilterBtn.Click += trainer_ClearFilterBtn_Click;
+            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -3897,5 +3936,8 @@
         private ToolStripButton toolStripButton13;
         private ToolStripButton toolStripButton12;
         private ToolStripSeparator toolStripSeparator11;
+        private TextBox trainer_FilterBox;
+        private Label label67;
+        private Button trainer_ClearFilterBtn;
     }
 }

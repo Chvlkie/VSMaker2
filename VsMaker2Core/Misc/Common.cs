@@ -26,5 +26,9 @@ namespace VsMaker2Core
         public const string OverlayFilePath = "overlay";
         public const string BannerFilePath = "banner.bin";
         public const string HeaderFilePath = "header.bin";
+
+        public const int DiamondPearlTotalTrainers = 850;
+        public const int PlatinumTotalTrainers = 928;
+        public const int HeartGoldSoulSilverTotalTrainers = 738;
     }
 }

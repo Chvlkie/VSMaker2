@@ -48,6 +48,14 @@ namespace VsMaker2Core.DataModels
         public int BattleMessageTextNumber { get; set; }
         public int MoveInfoTextNumber { get; set; }
 
+        public int VanillaTotalTrainers => GameFamily switch
+        {
+            GameFamily.DiamondPearl => Common.DiamondPearlTotalTrainers,
+            GameFamily.Platinum  => Common.PlatinumTotalTrainers,
+            GameFamily.HeartGoldSoulSilver => Common.HeartGoldSoulSilverTotalTrainers,
+            _ => 0,
+        };
+
         #endregion RomInfo
 
         public string ExtractedFolderSuffix { get; set; }

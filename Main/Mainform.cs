@@ -126,7 +126,6 @@ namespace Main
         private void CloseProject()
         {
             romName_Label.Text = "";
-            CurrentTrainer = new();
             EditTrainer = new();
             LoadedRom = new RomFile();
             IsLoadingData = false;
@@ -162,7 +161,7 @@ namespace Main
             {
                 InitializeTrainerEditor();
                 main_MainTab.SelectedTab = main_MainTab_TrainerTab;
-                SetupTrainerEditorData();
+                SetupTrainerEditor();
             }
         }
 
@@ -491,16 +490,36 @@ namespace Main
             }
         }
 
+        private void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
+        {
+            List<string> filteredList = [];
+            foreach (string item in unfiltered)
+            {
+                string name = item.ToLower();
+                if (name.Contains(filter.ToLower()))
+                {
+                    filteredList.Add(item);
+                }
+            }
+
+            listBox.Items.Clear();
+            foreach (string item in filteredList)
+            {
+                listBox.Items.Add(item);
+            }
+        }
+
         #endregion MainMenu
 
         #region TrainerEditor
 
-        private Trainer CurrentTrainer = new();
+        private bool ShowPlayerWarning = true;
         private Trainer EditTrainer = new();
         private bool TrainerBattleMessagesChange;
         private bool TrainerDataChange;
         private bool TrainerPartyChange;
         private bool TrainerPropertyChange;
+        private List<string> UnfilteredTrainers = [];
         private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
 
         #region PartyEditor
@@ -524,14 +543,6 @@ namespace Main
             EditedTrainerData(false);
             EditedTrainerParty(false);
             EditedTrainerProperty(false);
-        }
-
-        private void SetupTrainerEditor()
-        {
-            MainEditorModel.TrainerEditor = new TrainerEditorModel()
-            {
-                Trainers = new List<Trainer>() { }
-            };
         }
 
         private void EditedTrainerBattleMessages(bool hasChanges)
@@ -565,7 +576,12 @@ namespace Main
         {
             trainer_UndoAll_Btn.Enabled = false;
             trainer_SaveBtn.Enabled = false;
-            trainer_List_Buttons.Enabled = false;
+            trainer_AddTrainerBtn.Enabled = false;
+            trainer_RemoveBtn.Enabled = false;
+            trainer_ImportAllBtn.Enabled = false;
+            trainer_ExportAllBtn.Enabled = false;
+            trainer_FilterBox.Enabled = false;
+            trainer_ClearFilterBtn.Enabled = false;
             trainer_TrainersListBox.Enabled = false;
             trainer_SpriteExportBtn.Enabled = false;
             trainer_SpriteFrameNum.Enabled = false;
@@ -582,8 +598,7 @@ namespace Main
 
         private void EnableTrainerEditor()
         {
-            trainer_List_Buttons.Enabled = true;
-            trainer_TrainersListBox.Enabled = true;
+            trainer_RemoveBtn.Enabled = true;
             trainer_SpriteExportBtn.Enabled = true;
             trainer_SpriteFrameNum.Enabled = true;
             trainer_SpriteImportBtn.Enabled = true;
@@ -594,9 +609,10 @@ namespace Main
             trainer_ClassListBox.Enabled = true;
             trainer_ViewClassBtn.Enabled = true;
             trainer_NameTextBox.Enabled = true;
+            trainer_PropertiesTabControl.Enabled = true;
         }
 
-        private void SetupTrainerEditorData()
+        private void SetupTrainerEditor()
         {
             IsLoadingData = true;
 
@@ -608,16 +624,24 @@ namespace Main
 
             MainEditorModel.TrainerEditor = trainerEditorModel;
             PopulateTrainerList(trainers);
-            EnableTrainerEditor();
+            IsLoadingData = false;
         }
 
         private void PopulateTrainerList(List<Trainer> trainers)
         {
             trainer_TrainersListBox.Items.Clear();
+            UnfilteredTrainers = [];
             foreach (var item in trainers)
             {
                 trainer_TrainersListBox.Items.Add(item.ListName);
+                UnfilteredTrainers.Add(item.ListName);
             }
+
+            trainer_AddTrainerBtn.Enabled = true;
+            trainer_ImportAllBtn.Enabled = true;
+            trainer_ExportAllBtn.Enabled = true;
+            trainer_FilterBox.Enabled = true;
+            trainer_TrainersListBox.Enabled = true;
         }
 
         private void SetupPartyEditor()
@@ -675,14 +699,86 @@ namespace Main
 
         private void trainer_NameTextBox_TextChanged(object sender, EventArgs e)
         {
-            EditTrainer.TrainerName = trainer_NameTextBox.Text;
-            EditedTrainerData(EditTrainer.TrainerName != CurrentTrainer.TrainerName);
+            if (!IsLoadingData)
+            {
+                EditTrainer.TrainerName = trainer_NameTextBox.Text;
+                EditedTrainerData(EditTrainer.TrainerName != MainEditorModel.TrainerEditor.TrainerData.SelectedTrainer.TrainerName);
+            }
         }
 
         private void trainer_TeamSizeNum_ValueChanged(object sender, EventArgs e)
         {
-            EditTrainer.TrainerParty.PartySize = (ushort)trainer_TeamSizeNum.Value;
-            EditedTrainerParty(EditTrainer.TrainerParty.PartySize != CurrentTrainer.TrainerParty.PartySize);
+            if (!IsLoadingData)
+            {
+                EditTrainer.TrainerParty.PartySize = (ushort)trainer_TeamSizeNum.Value;
+                EditedTrainerParty(EditTrainer.TrainerParty.PartySize != MainEditorModel.TrainerEditor.TrainerData.SelectedTrainer.TrainerParty.PartySize);
+            }
+        }
+
+        private void trainer_FilterBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (string.IsNullOrEmpty(trainer_FilterBox.Text))
+                {
+                    PopulateTrainerList(MainEditorModel.TrainerEditor.Trainers);
+                    trainer_ClearFilterBtn.Enabled = false;
+                }
+                else
+                {
+                    FilterListBox(trainer_TrainersListBox, trainer_FilterBox.Text, UnfilteredTrainers);
+                    trainer_ClearFilterBtn.Enabled = true;
+                }
+            }
+        }
+
+        private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                string selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
+                MainEditorModel.TrainerEditor.SelectedTrainerId = Trainer.ListNameToTrainerId(selectedTrainer);
+
+                if (MainEditorModel.TrainerEditor.SelectedTrainerId > 0)
+                {
+                    PopulateTrainerData();
+                    EnableTrainerEditor();
+                }
+            }
+        }
+
+        private void trainer_RemoveBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (MainEditorModel.TrainerEditor.SelectedTrainerId <= LoadedRom.VanillaTotalTrainers)
+                {
+                    MessageBox.Show("This is one of the game's core Trainers.\nYou cannot remove this file as it will cause issues.", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+        }
+
+        private ViewTrainerDataModel GetTrainerData(int trainerId)
+        {
+            return new ViewTrainerDataModel
+            {
+                SelectedTrainer = MainEditorModel.TrainerEditor.Trainers.SingleOrDefault(x => x.TrainerId == trainerId)
+            };
+        }
+
+        private void PopulateTrainerData()
+        {
+            IsLoadingData = true;
+            MainEditorModel.TrainerEditor.TrainerData = GetTrainerData(MainEditorModel.TrainerEditor.SelectedTrainerId);
+            var selectedTrainer = MainEditorModel.TrainerEditor.TrainerData.SelectedTrainer;
+            trainer_NameTextBox.Text = selectedTrainer.TrainerName;
+            IsLoadingData = false;
+        }
+
+        private void trainer_ClearFilterBtn_Click(object sender, EventArgs e)
+        {
+            trainer_FilterBox.Text = "";
         }
 
         #endregion TrainerEditor
