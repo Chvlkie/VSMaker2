@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
@@ -35,6 +36,17 @@ namespace VsMaker2Core.Methods
                 return (false, ex.Message);
             }
             return (true, "");
+        }
+
+        public List<string> GetClassNames(int classNamesArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(classNamesArchive, false);
+            var classNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                classNames.Add(item.MessageText);
+            }
+            return classNames;
         }
 
         public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines)
@@ -85,7 +97,7 @@ namespace VsMaker2Core.Methods
                             bool isCompressed = false;
                             key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
                             readText.BaseStream.Position = currentOffset[i];
-                            StringBuilder text = new StringBuilder("");
+                            StringBuilder text = new("");
 
                             for (int j = 0; j < currentSize[i]; j++)
                             {
@@ -208,6 +220,64 @@ namespace VsMaker2Core.Methods
             return messageArchives;
         }
 
+        public List<Species> GetSpecies()
+        {
+            List<Species> allSpecies = [];
+            int numberOfSpecies = Directory.GetFiles(VsMakerDatabase.RomData.GameDirectories[NarcDirectory.PersonalPokeData].unpackedDirectory, "*").Length;
+
+            for (int i = 0; i < numberOfSpecies; i++)
+            {
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.PersonalPokeData].unpackedDirectory}\\{i:D4}";
+
+                var species = new Species { SpeciesId = (ushort)i };
+                var fileStream = new FileStream(directory, FileMode.Open);
+                using BinaryReader reader = new(fileStream);
+                try
+                {
+                    reader.BaseStream.Position = Species.Constants.GenderRatioByteOffset;
+                    species.GenderRatio = reader.ReadByte();
+                    reader.BaseStream.Position = Species.Constants.AbilitySlot1ByteOffset;
+                    species.Ability1 = reader.ReadByte();
+                    species.Ability2 = reader.ReadByte();
+                    allSpecies.Add(species);
+                }
+                catch (EndOfStreamException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    reader.Close();
+                    fileStream.Close();
+                    throw;
+                }
+                reader.Close();
+                fileStream.Close();
+            }
+            return allSpecies;
+        }
+
+        public List<string> GetMoveNames(int moveTextArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(moveTextArchive, false);
+            var moveNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                moveNames.Add(item.MessageText);
+            }
+            return moveNames;
+        }
+
+        public Trainer GetTrainerDataByTrainerId(int trainerId, string trainerName, GameFamily gameFamily, bool partyReadFirstByte = false)
+        {
+            var trainer = new Trainer
+            {
+                TrainerId = (ushort)trainerId,
+                TrainerName = trainerName,
+                TrainerProperties = GetTrainerProperty(trainerId),
+            };
+
+            trainer.TrainerParty = GetTrainerParty(trainerId, trainer.TrainerProperties, gameFamily, partyReadFirstByte);
+            return trainer;
+        }
+
         public List<string> GetTrainerNames(int trainerNameMessageArchive)
         {
             var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
@@ -217,6 +287,144 @@ namespace VsMaker2Core.Methods
                 trainerNames.Add(item.MessageText);
             }
             return trainerNames;
+        }
+
+        public List<string> GetPokemonNames(int pokemonNameArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(pokemonNameArchive, false);
+            var pokemonNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                pokemonNames.Add(item.MessageText);
+            }
+            return pokemonNames;
+        }
+
+        public TrainerParty GetTrainerParty(int trainerId, TrainerProperty trainerProperties, GameFamily gameFamily, bool readFirstByte = false)
+        {
+            var trainerParty = new TrainerParty();
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+
+            using var reader = new BinaryReader(fileStream);
+            try
+            {
+                if (readFirstByte)
+                {
+                    byte flags = reader.ReadByte();
+                    trainerProperties.ChooseMoves = (flags & 1) != 0;
+                    trainerProperties.ChooseItems = (flags & 2) != 0;
+                    trainerProperties.TeamSize = (byte)((flags & 27) >> 2);
+                }
+
+                int dividend = 8;
+                if (trainerProperties.ChooseMoves)
+                {
+                    dividend += 4 * sizeof(ushort);
+                }
+                if (trainerProperties.ChooseItems)
+                {
+                    dividend += sizeof(ushort);
+                }
+
+                int endValue = Math.Min((int)(fileStream.Length - 1 / dividend), trainerProperties.TeamSize);
+
+                for (int i = 0; i < endValue; i++)
+                {
+                    var pokemon = new Pokemon();
+                    pokemon.DifficultyValue = reader.ReadByte();
+                    pokemon.GenderAbilityFlags = (GenderAbilityFlags)reader.ReadByte();
+                    pokemon.Level = reader.ReadUInt16();
+                    ushort pokemonFullId = reader.ReadUInt16();
+                    pokemon.PokemonId = (ushort)(pokemonFullId & Pokemon.Constants.PokemonNumberBitMask);
+                    pokemon.FormId = (ushort)((pokemonFullId & Pokemon.Constants.PokemonFormBitMask) >> Pokemon.Constants.PokemonNumberBitSize);
+                    pokemon.HeldItemId = trainerProperties.ChooseItems ? reader.ReadUInt16() : null;
+                    if (trainerProperties.ChooseMoves)
+                    {
+                        pokemon.Moves = new ushort[4];
+                        for (int j = 0; j < pokemon.Moves.Length; j++)
+                        {
+                            ushort moveId = reader.ReadUInt16();
+                            pokemon.Moves[j] = (ushort)(moveId == ushort.MaxValue ? 0 : moveId);
+                        }
+                    }
+                    pokemon.BallSealId = gameFamily == GameFamily.DiamondPearl ? null : reader.ReadUInt16();
+                    trainerParty.Pokemons.Add(pokemon);
+                }
+            }
+            catch (EndOfStreamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                fileStream.Close();
+                throw;
+            }
+            reader.Close();
+            fileStream.Close();
+            return trainerParty;
+        }
+
+        public TrainerProperty GetTrainerProperty(int trainerId)
+        {
+            var trainerProperty = new TrainerProperty()
+            {
+                Items = new ushort[4],
+                AIFlagsBitArray = new BitArray(new bool[11] { true, false, false, false, false, false, false, false, false, false, false })
+            };
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+            using BinaryReader reader = new(fileStream);
+            try
+            {
+                byte flags = reader.ReadByte();
+                trainerProperty.ChooseMoves = (flags & 1) != 0;
+                trainerProperty.ChooseItems = (flags & 2) != 0;
+                trainerProperty.TrainerClassId = reader.ReadByte();
+                trainerProperty.UnknownByte = reader.ReadByte();
+                trainerProperty.TeamSize = reader.ReadByte();
+                for (int i = 0; i < trainerProperty.Items.Length; i++)
+                {
+                    trainerProperty.Items[i] = reader.ReadUInt16();
+                }
+
+                trainerProperty.AIFlagsBitArray = new BitArray(BitConverter.GetBytes(reader.ReadUInt32()));
+                trainerProperty.DoubleBattle = reader.ReadUInt32() == 2;
+                reader.Close();
+                fileStream.Close();
+            }
+            catch (EndOfStreamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                fileStream.Close();
+                throw;
+            }
+            for (int i = 0; i < Trainer.Constants.NumberOfTrainerAIFlags; i++)
+            {
+                trainerProperty.AIFlags.Add(trainerProperty.AIFlagsBitArray[i]);
+            }
+
+            return trainerProperty;
+        }
+
+        public int SetMoveNameTextArchiveNumber(GameFamily game, GameLanguage gameLanguage)
+        {
+            return 750;
+        }
+
+        public int SetBattleMessageTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
+        {
+            return 728;
+        }
+
+        public int SetClassDescriptionTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
+        {
+            return 731;
+        }
+
+        public int SetClassNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
+        {
+            return 730;
         }
 
         public GameFamily SetGameFamily(GameVersion gameVersion)
@@ -310,6 +518,11 @@ namespace VsMaker2Core.Methods
             VsMakerDatabase.RomData.GameDirectories = directories;
         }
 
+        public int SetPokemonNameArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
+        {
+            return 237;
+        }
+
         public int SetTrainerNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
         {
             switch (gameFamily)
@@ -343,6 +556,7 @@ namespace VsMaker2Core.Methods
                     return 0;
             }
         }
+
         public (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress)
         {
             int progressStep = 100 / narcs.Count;

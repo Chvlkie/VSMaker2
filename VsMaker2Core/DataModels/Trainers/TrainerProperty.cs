@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,20 @@ namespace VsMaker2Core.DataModels
     public class TrainerProperty
     {
         public List<bool> AIFlags { get; set; }
-        public uint? Item1Id { get; set; }
-        public uint? Item2Id { get; set; }
-        public uint? Item3Id { get; set; }
-        public uint? Item4Id { get; set; }
+
+        public bool ChooseMoves { get; set; }
+        public bool ChooseItems { get; set; }
+
+        public byte TrainerClassId { get; set; }
+
+        public byte UnknownByte { get; set; } // To Investigate
+
+        public ushort[] Items { get; set; }
+
+        public BitArray AIFlagsBitArray { get; set; }
+        public bool DoubleBattle { get; set; }
+
+        public byte TeamSize { get; set; }
 
         public TrainerProperty()
         {

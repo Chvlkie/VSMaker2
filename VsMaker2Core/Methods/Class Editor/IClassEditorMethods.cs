@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using VsMaker2Core.DataModels;
 
-namespace Main.Models
+namespace VsMaker2Core.Methods
 {
-    public class TrainerEditorModel
+    public interface IClassEditorMethods
     {
-        public Trainer SelectedTrainer { get; set; }
+        List<TrainerClass> GetTrainerClasses(int classMessageArchive);
     }
 }

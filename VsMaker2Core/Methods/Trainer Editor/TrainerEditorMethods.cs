@@ -15,19 +15,21 @@ namespace VsMaker2Core.Methods
             romFileMethods = new RomFileMethods();
         }
 
-        public List<Trainer> GetTrainers(int trainerMessageArchive)
+        public List<Trainer> GetTrainers(int trainerMessageArchive, GameFamily gameFamily, bool partyReadFirstByte = false)
         {
             var trainerNames = romFileMethods.GetTrainerNames(trainerMessageArchive);
             List<Trainer> trainers = [];
             // Start from i 1 to skip player trainer file
             for (int i = 1; i < trainerNames.Count; i++)
             {
-                var trainer = new Trainer { TrainerId = (uint)i, TrainerName = trainerNames[i] };
-                trainers.Add(trainer);
+                trainers.Add(romFileMethods.GetTrainerDataByTrainerId(i, trainerNames[i], gameFamily, partyReadFirstByte));
             }
             return trainers;
         }
 
-      
+        public Trainer GetTrainer(List<Trainer> trainers, int trainerId)
+        {
+            return trainers.SingleOrDefault(x => x.TrainerId == trainerId);
+        }
     }
 }

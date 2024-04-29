@@ -1,16 +1,24 @@
-﻿namespace Main.Models
+﻿using VsMaker2Core.DataModels;
+
+namespace Main.Models
 {
     public class MainEditorModel
     {
-        public TrainerEditorModel TrainerEditor { get; set; }
-        public ClassEditorModel ClassEditor { get; set; }
-        public BattleMessageEditorModel BattleMessageEditor { get; set; }
+        public List<string> PokemonNames { get; set; }
+        public List<string> MoveNames { get; set; }
+        public List<Species> PokemonSpecies { get; set; }
+        public List<Trainer> Trainers { get; set; }
+        public List<TrainerClass> Classes { get; set; }
+        public List<BattleMessage> BattleMessages { get; set; }
 
         public MainEditorModel()
         {
-            TrainerEditor = new TrainerEditorModel();
-            ClassEditor = new ClassEditorModel();
-            BattleMessageEditor = new BattleMessageEditorModel();
+            PokemonNames = [];
+            MoveNames = [];
+            PokemonSpecies = [];
+            Trainers = [];
+            Classes = [];
+            BattleMessages = [];
         }
     }
 }
