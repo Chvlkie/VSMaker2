@@ -17,5 +17,17 @@ namespace VsMaker2Core.DataModels
         public ushort? HeldItemId { get; set; }
         public ushort[]? Moves { get; set; }
         public ushort? BallSealId { get; set; }
+
+        public Pokemon()
+        {
+            DifficultyValue = 0;
+            GenderAbilityOverride = 0;
+            Level = 1;
+            PokemonId = 0;
+            FormId = 0;
+            HeldItemId = 0;
+            Moves = null;
+            BallSealId = 0;
+        }
     }
 }

@@ -49,6 +49,15 @@ namespace VsMaker2Core.Methods
                 };
                 trainerParty.Pokemons.Add(pokemon);
             }
+
+            // Create Dummy Mons
+            if (teamSize < 6)
+            {
+                for (int i = 0;i < 6 - teamSize;i++)
+                {
+                    trainerParty.Pokemons.Add(new Pokemon());
+                }
+            }
             return trainerParty;
         }
 
@@ -56,7 +65,7 @@ namespace VsMaker2Core.Methods
         {
             var trainerProperty = new TrainerProperty()
             {
-                Items = new ushort[4],
+                Items = trainerData.Items,
                 ChooseMoves = (trainerData.TrainerType & 1) != 0,
                 ChooseItems = (trainerData.TrainerType & 2) != 0,
                 TrainerClassId = trainerData.TrainerClassId,

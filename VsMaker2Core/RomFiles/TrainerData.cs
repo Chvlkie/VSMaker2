@@ -24,7 +24,7 @@ namespace VsMaker2Core.RomFiles
 
         public TrainerData()
         {
-            Padding = 0x0;
+            Padding = 0;
         }
     }
 }

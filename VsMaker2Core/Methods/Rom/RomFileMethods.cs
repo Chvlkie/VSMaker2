@@ -255,6 +255,17 @@ namespace VsMaker2Core.Methods
             return allSpecies;
         }
 
+        public List<string> GetItemNames(int itemNameArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(itemNameArchive, false);
+            var itemNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                itemNames.Add(item.MessageText);
+            }
+            return itemNames;
+        }
+
         public List<string> GetAbilityNames(int abiltyNameArchive)
         {
             var messageArchives = GetMessageArchiveContents(abiltyNameArchive, false);
@@ -265,6 +276,7 @@ namespace VsMaker2Core.Methods
             }
             return abilityNames;
         }
+
         public List<string> GetMoveNames(int moveTextArchive)
         {
             var messageArchives = GetMessageArchiveContents(moveTextArchive, false);

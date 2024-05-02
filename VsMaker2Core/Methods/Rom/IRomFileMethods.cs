@@ -69,5 +69,6 @@ namespace VsMaker2Core.Methods
         /// <param name="progress"></param>
         /// <returns></returns>
         (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress);
+        List<string> GetItemNames(int itemNameArchive);
     }
 }
