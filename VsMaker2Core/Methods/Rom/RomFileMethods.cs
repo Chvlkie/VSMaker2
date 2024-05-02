@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DataModels.Trainers;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -254,6 +255,16 @@ namespace VsMaker2Core.Methods
             return allSpecies;
         }
 
+        public List<string> GetAbilityNames(int abiltyNameArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(abiltyNameArchive, false);
+            var abilityNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                abilityNames.Add(item.MessageText);
+            }
+            return abilityNames;
+        }
         public List<string> GetMoveNames(int moveTextArchive)
         {
             var messageArchives = GetMessageArchiveContents(moveTextArchive, false);
@@ -263,19 +274,6 @@ namespace VsMaker2Core.Methods
                 moveNames.Add(item.MessageText);
             }
             return moveNames;
-        }
-
-        public Trainer GetTrainerDataByTrainerId(int trainerId, string trainerName, GameFamily gameFamily, bool partyReadFirstByte = false)
-        {
-            var trainer = new Trainer
-            {
-                TrainerId = (ushort)trainerId,
-                TrainerName = trainerName,
-                TrainerProperties = GetTrainerProperty(trainerId),
-            };
-
-            trainer.TrainerParty = GetTrainerParty(trainerId, trainer.TrainerProperties, gameFamily, partyReadFirstByte);
-            return trainer;
         }
 
         public List<string> GetTrainerNames(int trainerNameMessageArchive)
@@ -298,158 +296,6 @@ namespace VsMaker2Core.Methods
                 pokemonNames.Add(item.MessageText);
             }
             return pokemonNames;
-        }
-
-        public TrainerParty GetTrainerParty(int trainerId, TrainerProperty trainerProperties, GameFamily gameFamily, bool readFirstByte = false)
-        {
-            var trainerParty = new TrainerParty();
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
-            var fileStream = new FileStream(directory, FileMode.Open);
-
-            using var reader = new BinaryReader(fileStream);
-            try
-            {
-                if (readFirstByte)
-                {
-                    byte flags = reader.ReadByte();
-                    trainerProperties.ChooseMoves = (flags & 1) != 0;
-                    trainerProperties.ChooseItems = (flags & 2) != 0;
-                    trainerProperties.TeamSize = (byte)((flags & 27) >> 2);
-                }
-
-                int dividend = 8;
-                if (trainerProperties.ChooseMoves)
-                {
-                    dividend += 4 * sizeof(ushort);
-                }
-                if (trainerProperties.ChooseItems)
-                {
-                    dividend += sizeof(ushort);
-                }
-
-                int endValue = Math.Min((int)(fileStream.Length - 1 / dividend), trainerProperties.TeamSize);
-
-                for (int i = 0; i < endValue; i++)
-                {
-                    var pokemon = new Pokemon();
-                    pokemon.DifficultyValue = reader.ReadByte();
-                    pokemon.GenderAbilityFlags = (GenderAbilityFlags)reader.ReadByte();
-                    pokemon.Level = reader.ReadUInt16();
-                    ushort pokemonFullId = reader.ReadUInt16();
-                    pokemon.PokemonId = (ushort)(pokemonFullId & Pokemon.Constants.PokemonNumberBitMask);
-                    pokemon.FormId = (ushort)((pokemonFullId & Pokemon.Constants.PokemonFormBitMask) >> Pokemon.Constants.PokemonNumberBitSize);
-                    pokemon.HeldItemId = trainerProperties.ChooseItems ? reader.ReadUInt16() : null;
-                    if (trainerProperties.ChooseMoves)
-                    {
-                        pokemon.Moves = new ushort[4];
-                        for (int j = 0; j < pokemon.Moves.Length; j++)
-                        {
-                            ushort moveId = reader.ReadUInt16();
-                            pokemon.Moves[j] = (ushort)(moveId == ushort.MaxValue ? 0 : moveId);
-                        }
-                    }
-                    pokemon.BallSealId = gameFamily == GameFamily.DiamondPearl ? null : reader.ReadUInt16();
-                    trainerParty.Pokemons.Add(pokemon);
-                }
-            }
-            catch (EndOfStreamException ex)
-            {
-                Console.WriteLine(ex.Message);
-                reader.Close();
-                fileStream.Close();
-                throw;
-            }
-            reader.Close();
-            fileStream.Close();
-            return trainerParty;
-        }
-
-        public TrainerProperty GetTrainerProperty(int trainerId)
-        {
-            var trainerProperty = new TrainerProperty()
-            {
-                Items = new ushort[4],
-                AIFlagsBitArray = new BitArray(new bool[11] { true, false, false, false, false, false, false, false, false, false, false })
-            };
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
-            var fileStream = new FileStream(directory, FileMode.Open);
-            using BinaryReader reader = new(fileStream);
-            try
-            {
-                byte flags = reader.ReadByte();
-                trainerProperty.ChooseMoves = (flags & 1) != 0;
-                trainerProperty.ChooseItems = (flags & 2) != 0;
-                trainerProperty.TrainerClassId = reader.ReadByte();
-                trainerProperty.UnknownByte = reader.ReadByte();
-                trainerProperty.TeamSize = reader.ReadByte();
-                for (int i = 0; i < trainerProperty.Items.Length; i++)
-                {
-                    trainerProperty.Items[i] = reader.ReadUInt16();
-                }
-
-                trainerProperty.AIFlagsBitArray = new BitArray(BitConverter.GetBytes(reader.ReadUInt32()));
-                trainerProperty.DoubleBattle = reader.ReadUInt32() == 2;
-                reader.Close();
-                fileStream.Close();
-            }
-            catch (EndOfStreamException ex)
-            {
-                Console.WriteLine(ex.Message);
-                reader.Close();
-                fileStream.Close();
-                throw;
-            }
-            for (int i = 0; i < Trainer.Constants.NumberOfTrainerAIFlags; i++)
-            {
-                trainerProperty.AIFlags.Add(trainerProperty.AIFlagsBitArray[i]);
-            }
-
-            return trainerProperty;
-        }
-
-        public int SetMoveNameTextArchiveNumber(GameFamily game, GameLanguage gameLanguage)
-        {
-            return 750;
-        }
-
-        public int SetBattleMessageTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
-        {
-            return 728;
-        }
-
-        public int SetClassDescriptionTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
-        {
-            return 731;
-        }
-
-        public int SetClassNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
-        {
-            return 730;
-        }
-
-        public GameFamily SetGameFamily(GameVersion gameVersion)
-        {
-            return gameVersion switch
-            {
-                GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
-                GameVersion.Platinum => GameFamily.Platinum,
-                GameVersion.HeartGold or GameVersion.SoulSilver => GameFamily.HeartGoldSoulSilver,
-                GameVersion.HgEngine => GameFamily.HgEngine,
-                _ => GameFamily.Unknown,
-            };
-        }
-
-        public GameLanguage SetGameLanguage(string romId)
-        {
-            return romId switch
-            {
-                "ADAE" or "APAE" or "CPUE" or "IPKE" or "IPGE" => GameLanguage.English,
-                "ADAS" or "APAS" or "CPUS" or "IPKS" or "IPGS" or "LATA" => GameLanguage.Spanish,
-                "ADAI" or "APAI" or "CPUI" or "IPKI" or "IPGI" => GameLanguage.Italian,
-                "ADAF" or "APAF" or "CPUF" or "IPKF" or "IPGF" => GameLanguage.French,
-                "ADAD" or "APAD" or "CPUD" or "IPKD" or "IPGD" => GameLanguage.German,
-                _ => GameLanguage.Japanese,
-            };
         }
 
         public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
@@ -518,45 +364,6 @@ namespace VsMaker2Core.Methods
             VsMakerDatabase.RomData.GameDirectories = directories;
         }
 
-        public int SetPokemonNameArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
-        {
-            return 237;
-        }
-
-        public int SetTrainerNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage)
-        {
-            switch (gameFamily)
-            {
-                case GameFamily.DiamondPearl:
-                    {
-                        if (gameLanguage.Equals(GameLanguage.Japanese))
-                        {
-                            return 550;
-                        }
-                        else
-                        {
-                            return 559;
-                        }
-                    }
-
-                case GameFamily.Platinum:
-                    return 618;
-
-                case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
-                    if (gameLanguage == GameLanguage.Japanese)
-                    {
-                        return 719;
-                    }
-                    else
-                    {
-                        return 729;
-                    }
-                default:
-                    return 0;
-            }
-        }
-
         public (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress)
         {
             int progressStep = 100 / narcs.Count;
@@ -617,6 +424,122 @@ namespace VsMaker2Core.Methods
             {
                 return (false, ex.Message);
             }
+        }
+
+        public int GetTotalNumberOfTrainers(int trainerNameArchive)
+        {
+            return GetMessageArchiveContents(trainerNameArchive, false).Count;
+        }
+
+        public List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
+        {
+            var trainersPartyData = new List<TrainerPartyData>();
+            for (int i = 0; i < numberOfTrainers; i++)
+            {
+                trainersPartyData.Add(ReadTrainerPartyData(i, trainerData[i].TeamSize, trainerData[i].TrainerType, gameFamily != GameFamily.DiamondPearl));
+            }
+            return trainersPartyData;
+        }
+
+        public TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule)
+        {
+            var trainerPartyData = new TrainerPartyData
+            {
+                TrainerType = trainerType,
+                PokemonData = new TrainerPartyPokemonData[teamSize],
+            };
+
+            bool hasMoves = (trainerType & 1) != 0;
+            bool heldItems = (trainerType & 2) != 0;
+
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+            using var reader = new BinaryReader(fileStream);
+            try
+            {
+                for (int i = 0; i < teamSize; i++)
+                {
+                    var trainerPartyPokemonData = new TrainerPartyPokemonData
+                    {
+                        Difficulty = reader.ReadByte(),
+                        GenderAbilityOverride = reader.ReadByte(),
+                        Level = reader.ReadUInt16(),
+                        Species = reader.ReadUInt16()
+                    };
+                    if (heldItems)
+                    {
+                        trainerPartyPokemonData.ItemId = reader.ReadUInt16();
+                    }
+                    if (hasMoves)
+                    {
+                        trainerPartyPokemonData.MoveIds =
+                        [
+                            reader.ReadUInt16(),
+                            reader.ReadUInt16(),
+                            reader.ReadUInt16(),
+                            reader.ReadUInt16(),
+                        ];
+                    }
+                    if (hasBallCapsule)
+                    {
+                        trainerPartyPokemonData.BallCapsule = reader.ReadUInt16();
+                    }
+                    trainerPartyData.PokemonData[i] = trainerPartyPokemonData;
+                }
+            }
+            catch (EndOfStreamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                fileStream.Close();
+                throw;
+            }
+            reader.Close();
+            fileStream.Close();
+            return trainerPartyData;
+        }
+
+        public List<TrainerData> GetTrainersData(int numberOfTrainers)
+        {
+            var trainersData = new List<TrainerData>();
+            for (int i = 0; i < numberOfTrainers; i++)
+            {
+                trainersData.Add(ReadTrainerData(i));
+            }
+            return trainersData;
+        }
+
+        public TrainerData ReadTrainerData(int trainerId)
+        {
+            var trainerData = new TrainerData();
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+            using BinaryReader reader = new(fileStream);
+            try
+            {
+                trainerData.TrainerType = reader.ReadByte();
+                trainerData.TrainerClassId = reader.ReadByte();
+                trainerData.Padding = reader.ReadByte();
+                trainerData.TeamSize = reader.ReadByte();
+                trainerData.Items = new ushort[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    trainerData.Items[i] = reader.ReadUInt16();
+                }
+                trainerData.AIFlags = reader.ReadUInt32();
+                trainerData.IsDoubleBattle = reader.ReadUInt32();
+                reader.Close();
+                fileStream.Close();
+            }
+            catch (EndOfStreamException ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                fileStream.Close();
+                throw;
+            }
+
+            return trainerData;
         }
     }
 }

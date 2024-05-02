@@ -283,6 +283,33 @@ namespace Main
             RomLoaded = false;
             startupTab.SelectedTab = startupPage;
             MainEditorModel = new();
+            trainer_ClassListBox.Items.Clear();
+            if (pokeComboBoxes != null)
+            {
+                pokeComboBoxes.ForEach(x => x.Items.Clear());
+            }
+            if (pokeAbilityComboBoxes != null)
+            {
+                pokeAbilityComboBoxes.ForEach(x => x.Items.Clear());
+            }
+            if (pokeBallSealComboBoxes != null)
+            {
+                pokeBallSealComboBoxes.ForEach(x => x.Items.Clear());
+            }
+            if (pokeFormsComboBoxes != null)
+            {
+                pokeFormsComboBoxes.ForEach(x => x.Items.Clear());
+            }
+            if (pokeHeldItemComboBoxes != null)
+            {
+                pokeHeldItemComboBoxes.ForEach(x => x.Items.Clear());
+            }
+            trainer_ItemComboBox1.Items.Clear();
+            trainer_ItemComboBox2.Items.Clear();
+            trainer_ItemComboBox3.Items.Clear();
+            trainer_ItemComboBox4.Items.Clear();
+            trainer_TrainersListBox.Items.Clear();
+            class_ClassListBox.Items.Clear();
             EnableDisableMenu(false);
             ClearUnsavedChanges();
         }
@@ -337,10 +364,11 @@ namespace Main
         {
             IsLoadingData = true;
             MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
-            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(LoadedRom.TrainerNamesTextNumber, LoadedRom.GameFamily);
+            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(LoadedRom);
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(LoadedRom.ClassNamesTextNumber);
             MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
+            MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
             IsLoadingData = false;
         }
 
@@ -578,15 +606,10 @@ namespace Main
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            LoadedRom.GameFamily = romFileMethods.SetGameFamily(LoadedRom.GameVersion);
-            LoadedRom.GameLanguage = romFileMethods.SetGameLanguage(LoadedRom.GameCode);
             romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.PokemonNamesTextNumber = romFileMethods.SetPokemonNameArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.TrainerNamesTextNumber = romFileMethods.SetTrainerNameTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.ClassNamesTextNumber = romFileMethods.SetClassNameTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.ClassDescriptionMessageNumber = romFileMethods.SetClassDescriptionTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.BattleMessageTextNumber = romFileMethods.SetBattleMessageTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
-            LoadedRom.MoveNameTextNumber = romFileMethods.SetMoveNameTextArchiveNumber(LoadedRom.GameFamily, LoadedRom.GameLanguage);
+            LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
+            LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
+            LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
             return true;
         }
 
@@ -726,7 +749,7 @@ namespace Main
         {
             TrainerBattleMessagesChange = hasChanges;
             main_MainTab_TrainerTab.Text = hasChanges ? "Trainers *" : "Trainers";
-            trainer_BattleMessageTab.Text = hasChanges ? "Battle Messages *" : "Battle";
+            trainer_BattleMessageTab.Text = hasChanges ? "Battle Messages *" : "Battle Messages";
         }
 
         private void EditedTrainerData(bool hasChanges)
@@ -757,25 +780,26 @@ namespace Main
             pokeLevelNums.ForEach(x => x.Enabled = false);
             pokeDVNums.ForEach(x => x.Enabled = false);
             pokeBallSealComboBoxes.ForEach(x => x.Enabled = false);
-            pokeAbilityComboBoxes.ForEach(x => x.Enabled = false);
             pokeFormsComboBoxes.ForEach(x => x.Enabled = false);
             pokeHeldItemComboBoxes.ForEach(x => x.Enabled = false);
             pokeMoveButtons.ForEach(x => x.Enabled = false);
             pokeGenderComboBoxes.ForEach(x => x.Enabled = false);
+            pokeAbilityComboBoxes.ForEach(x => x.Enabled = false);
             // Enable by Party Size
             for (int i = 0; i < partySize; i++)
             {
+                var species = GetSpeciesBySpeciesId(SelectedTrainer.TrainerParty.Pokemons[i].SpeciesId);
                 pokeComboBoxes[i].Enabled = true;
                 pokeIconsPictureBoxes[i].Enabled = true;
                 pokeLevelNums[i].Enabled = true;
                 pokeDVNums[i].Enabled = true;
                 pokeBallSealComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl;
-                pokeAbilityComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl;
+                pokeAbilityComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneAbility;
                 pokeFormsComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl;
                 pokeHeldItemComboBoxes[i].Enabled = chooseItems;
                 pokeMoveButtons[i].Enabled = chooseMoves;
                 pokeGenderComboBoxes[i].Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver
-                    && GetSpeciesBySpeciesId(SelectedTrainer.TrainerParty.Pokemons[i].SpeciesId).HasMoreThanOneGender;
+                    && species.HasMoreThanOneGender;
             }
         }
 
@@ -851,6 +875,45 @@ namespace Main
             trainer_TrainersListBox.Enabled = true;
         }
 
+        private void PopulateTrainerClassList(List<TrainerClass> classes)
+        {
+            trainer_ClassListBox.Items.Clear();
+            foreach (var item in classes)
+            {
+                trainer_ClassListBox.Items.Add(item.ListName);
+            }
+        }
+
+        private void SetPokemonSpecialData(int partyIndex)
+        {
+            // ushort speciesId = Species.GetSpecialSpecies((ushort)pokeComboBoxes[partyIndex].SelectedIndex, (ushort)pokeFormsComboBoxes[partyIndex].SelectedIndex);
+            ushort speciesId = Species.GetSpecialSpecies((ushort)pokeComboBoxes[partyIndex].SelectedIndex, 0);
+            var species = GetSpeciesBySpeciesId(speciesId);
+
+            if (LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
+            {
+                pokeGenderComboBoxes[partyIndex].SelectedIndex = species.GenderRatio switch
+                {
+                    Species.Constants.GenderRatioGenderless => 0,
+                    Species.Constants.GenderRatioMale => 1,
+                    Species.Constants.GenderRatioFemale => 2,
+                    _ => 0,
+                };
+                pokeGenderComboBoxes[partyIndex].Enabled = species.HasMoreThanOneGender;
+            }
+
+            if (species.Ability1 > 0)
+            {
+                pokeAbilityComboBoxes[partyIndex].Items.Add(species.Ability1.ToString());
+            }
+            if (species.Ability2 > 0)
+            {
+                pokeAbilityComboBoxes[partyIndex].Items.Add(species.Ability2.ToString());
+            }
+            pokeAbilityComboBoxes[partyIndex].SelectedIndex = 0;
+            pokeAbilityComboBoxes[partyIndex].Enabled = species.HasMoreThanOneAbility;
+        }
+
         private void PopulatePartyData()
         {
             IsLoadingData = true;
@@ -874,6 +937,7 @@ namespace Main
                 pokeComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].PokemonId;
                 pokeLevelNums[i].Value = SelectedTrainer.TrainerParty.Pokemons[i].Level;
                 pokeDVNums[i].Value = SelectedTrainer.TrainerParty.Pokemons[i].DifficultyValue;
+                pokeAbilityComboBoxes[i].Items.Clear();
 
                 if (SelectedTrainer.TrainerProperties.ChooseMoves)
                 {
@@ -895,18 +959,35 @@ namespace Main
                         case Species.Constants.GenderRatioFemale:
                             pokeGenderComboBoxes[i].SelectedIndex = 2; break;
                         default:
-                            switch (SelectedTrainer.TrainerParty.Pokemons[i].GenderAbilityFlags)
+                            switch (SelectedTrainer.TrainerParty.Pokemons[i].GenderOverride)
                             {
-                                case GenderAbilityFlags.None:
+                                case GenderOverride.None:
                                     pokeGenderComboBoxes[i].SelectedIndex = 0; break;
-                                case GenderAbilityFlags.IsMale:
+                                case GenderOverride.IsMale:
                                     pokeGenderComboBoxes[i].SelectedIndex = 1; break;
-                                case GenderAbilityFlags.IsFemale:
+                                case GenderOverride.IsFemale:
                                     pokeGenderComboBoxes[i].SelectedIndex = 2; break;
                             }
                             break;
                     }
                 }
+
+                if (species.Ability1 > 0)
+                {
+                    pokeAbilityComboBoxes[i].Items.Add(species.Ability1.ToString());
+                }
+                if (species.Ability2 > 0)
+                {
+                    pokeAbilityComboBoxes[i].Items.Add(species.Ability2.ToString());
+                }
+                pokeAbilityComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].AbilityOverride
+                    switch
+                {
+                    AbilityOverride.None => 0,
+                    AbilityOverride.Ability1 => 0,
+                    AbilityOverride.Ability2 => 1,
+                    _ => 0
+                };
             }
             IsLoadingData = false;
         }
@@ -944,6 +1025,8 @@ namespace Main
         private void PopulateTrainerData()
         {
             IsLoadingData = true;
+            var trainerClass = GetTrainerClassByTrainerClassId(SelectedTrainer.TrainerProperties.TrainerClassId);
+
             trainer_TeamSizeNum.Maximum = 6;
             trainer_DblBattleCheckBox.Checked = SelectedTrainer.TrainerProperties.DoubleBattle;
             trainer_NameTextBox.Text = SelectedTrainer.TrainerName;
@@ -955,7 +1038,13 @@ namespace Main
                 trainer_AiFlags_listbox.SetItemChecked(i, SelectedTrainer.TrainerProperties.AIFlags[i]);
             }
             trainer_TeamSizeNum.Maximum = trainer_DblBattleCheckBox.Checked ? 3 : 6;
+            trainer_ClassListBox.SelectedIndex = trainer_ClassListBox.Items.IndexOf(trainerClass.ListName);
             IsLoadingData = false;
+        }
+
+        private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId)
+        {
+            return MainEditorModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
         }
 
         private void PopulateTrainerList(List<Trainer> trainers)
@@ -1095,6 +1184,10 @@ namespace Main
             {
                 PopulateTrainerList(MainEditorModel.Trainers);
             }
+            if (trainer_ClassListBox.Items.Count == 0)
+            {
+                PopulateTrainerClassList(MainEditorModel.Classes);
+            }
             if (trainer_AiFlags_listbox.Items.Count == 0)
             {
                 InitializeAiFlags();
@@ -1186,8 +1279,7 @@ namespace Main
                         else
                         {
                             InhibitTrainerChange = true;
-                            int index = trainer_TrainersListBox.Items.IndexOf(SelectedTrainer.ListName);
-                            trainer_TrainersListBox.SelectedIndex = index;
+                            trainer_TrainersListBox.SelectedIndex = trainer_TrainersListBox.Items.IndexOf(SelectedTrainer.ListName);
                         }
                     }
 
@@ -1372,10 +1464,9 @@ namespace Main
             {
                 var trainers = MainEditorModel.Trainers;
                 var gameFamily = LoadedRom.GameFamily;
-                int trainerNamesArchive = LoadedRom.TrainerNamesTextNumber;
                 int classesCount = 100;
                 int battleMessagesCount = 200;
-                var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, trainerNamesArchive, classesCount, battleMessagesCount);
+                var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, LoadedRom.TrainerNamesTextNumber, classesCount, battleMessagesCount);
                 var exportData = new ViewVsTrainerFile(vsTrainersFile, ViewVsMakerFileType.Export);
                 exportData.ShowDialog();
             }
@@ -1392,6 +1483,54 @@ namespace Main
 
         private void ProcessImportTrainers(List<Trainer> newTrainers, List<Trainer> oldTrainers)
         {
+        }
+
+        private void poke1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke1ComboBox.SelectedIndex);
+            }
+        }
+
+        private void poke2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke2ComboBox.SelectedIndex);
+            }
+        }
+
+        private void poke3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke3ComboBox.SelectedIndex);
+            }
+        }
+
+        private void poke4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke4ComboBox.SelectedIndex);
+            }
+        }
+
+        private void poke5ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke5ComboBox.SelectedIndex);
+            }
+        }
+
+        private void poke6ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(poke6ComboBox.SelectedIndex);
+            }
         }
     }
 }

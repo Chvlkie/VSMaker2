@@ -17,11 +17,9 @@ namespace VsMaker2Core.DataModels
 
         public byte TrainerClassId { get; set; }
 
-        public byte UnknownByte { get; set; } // To Investigate
 
         public ushort[] Items { get; set; }
 
-        public BitArray AIFlagsBitArray { get; set; }
         public bool DoubleBattle { get; set; }
 
         public byte TeamSize { get; set; }

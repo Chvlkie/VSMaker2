@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VsMaker2Core.DataModels;
+﻿using VsMaker2Core.DataModels;
+using VsMaker2Core.DataModels.Trainers;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -28,21 +25,18 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines);
 
+        List<string> GetMoveNames(int moveTextArchive);
+        List<string> GetAbilityNames(int abilityNameArchive);
+
+        List<string> GetPokemonNames(int pokemonNameArchive);
+
         /// <summary>
         /// Get all Pokemon Species data from extracted ROM Files.
         /// </summary>
         /// <returns></returns>
         List<Species> GetSpecies();
 
-        /// <summary>
-        /// Get Trainer Data from extracted ROM Files.
-        /// </summary>
-        /// <param name="trainerId"></param>
-        /// <param name="trainerName"></param>
-        /// <param name="gameFamily"></param>
-        /// <param name="partyReadFirstByte"></param>
-        /// <returns></returns>
-        Trainer GetTrainerDataByTrainerId(int trainerId, string trainerName, GameFamily gameFamily, bool partyReadFirstByte = false);
+        int GetTotalNumberOfTrainers(int trainerNameArchive);
 
         /// <summary>
         /// Get the TrainerNames from the trainerNameMessageArchive.
@@ -51,60 +45,13 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         List<string> GetTrainerNames(int trainerNameMessageArchive);
 
-        /// <summary>
-        /// Get a Trainer's Party data from ROM files.
-        /// </summary>
-        /// <param name="trainerId"></param>
-        /// <param name="trainerProperties"></param>
-        /// <param name="gameFamily"></param>
-        /// <param name="readFirstByte"></param>
-        /// <returns></returns>
-        TrainerParty GetTrainerParty(int trainerId, TrainerProperty trainerProperties, GameFamily gameFamily, bool readFirstByte = false);
+        List<TrainerData> GetTrainersData(int numberOfTrainers);
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="trainerId"></param>
-        /// <returns></returns>
-        TrainerProperty GetTrainerProperty(int trainerId);
+        List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily);
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="gameFamily"></param>
-        /// <param name="gameLanguage"></param>
-        /// <returns></returns>
-        int SetBattleMessageTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage);
+        TrainerData ReadTrainerData(int trainerId);
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="gameFamily"></param>
-        /// <param name="gameLanguage"></param>
-        /// <returns></returns>
-        int SetClassDescriptionTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage);
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="gameFamily"></param>
-        /// <param name="gameLanguage"></param>
-        /// <returns></returns>
-        int SetClassNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage);
-
-        /// <summary>
-        /// Set the GameFamily of opened ROM File.
-        /// </summary>
-        /// <param name="gameVersion"></param>
-        /// <returns></returns>
-        GameFamily SetGameFamily(GameVersion gameVersion);
-
-        /// <summary>
-        /// Set the GameLanguage of opened ROM File.
-        /// </summary>
-        /// <param name="romId"></param>
-        /// <returns></returns>
-        GameLanguage SetGameLanguage(string romId);
+        TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
 
         /// <summary>
         /// Setup the required NarcDirectory paths for opened ROM File.
@@ -116,23 +63,11 @@ namespace VsMaker2Core.Methods
         void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage);
 
         /// <summary>
-        /// Set the MessageArchiveId for the TrainerName archive for opened ROM File.
-        /// </summary>
-        /// <param name="gameFamily"></param>
-        /// <param name="gameLanguage"></param>
-        /// <returns></returns>
-        int SetTrainerNameTextArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage);
-
-        /// <summary>
         /// Unpack required NARCs from a ROM's Extracted data.
         /// </summary>
         /// <param name="narcs"></param>
         /// <param name="progress"></param>
         /// <returns></returns>
         (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress);
-        List<string> GetPokemonNames(int pokemonNameArchive);
-        int SetPokemonNameArchiveNumber(GameFamily gameFamily, GameLanguage gameLanguage);
-        List<string> GetMoveNames(int moveTextArchive);
-        int SetMoveNameTextArchiveNumber(GameFamily game, GameLanguage gameLanguage);
     }
 }

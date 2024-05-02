@@ -6,6 +6,7 @@ namespace Main.Models
     {
         public List<string> PokemonNames { get; set; }
         public List<string> MoveNames { get; set; }
+        public List<string> AbilityNames { get; set; }
         public List<Species> PokemonSpecies { get; set; }
         public List<Trainer> Trainers { get; set; }
         public List<TrainerClass> Classes { get; set; }

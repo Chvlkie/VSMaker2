@@ -7,6 +7,12 @@
         public byte Ability1 { get; set; }
         public byte Ability2 { get; set; }
 
-        public bool HasMoreThanOneGender => CheckMoreThanOneGender(GenderRatio);
+        public bool HasMoreThanOneGender => GenderRatio switch
+        {
+            Constants.GenderRatioMale or Constants.GenderRatioFemale or Constants.GenderRatioGenderless => false,
+            _ => true,
+        };
+
+        public bool HasMoreThanOneAbility => Ability2 > 0;
     }
 }

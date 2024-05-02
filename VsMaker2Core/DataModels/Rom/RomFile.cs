@@ -1,40 +1,44 @@
 ﻿using System.Runtime.CompilerServices;
+using VsMaker2Core.DataModels.Trainers;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels
 {
-    public class RomFile
+    public partial class RomFile
     {
         #region RomInfo
 
-        public const uint SynthOverlayLoadAddress = 0x023C8000;
-        public static string Arm9Path { get; set; }
-        public int AbilityNamesTextNumber { get; set; }
-        public uint Arm9SpwanOffset { get; set; }
-        public int AttackNamesTextNumber { get; set; }
-        public int BattleMessageTextNumber { get; set; }
-        public int ClassDescriptionMessageNumber { get; set; }
-        public uint ClassGenderOffsetToRamAddress { get; set; }
-        public int ClassNamesTextNumber { get; set; }
-        public uint EffectsComboTableOffsetToRamAddress { get; set; }
-        public uint EffectsComboTableOffsetToSizeLimiter { get; set; }
-        public uint EncounterMusicTableOffsetToRamAddress { get; set; }
         public byte EuropeByte { get; set; }
+        public string ExtractedFolderSuffix { get; set; }
+        public string FileName { get; set; }
         public string GameCode { get; set; }
 
-        public int ItemNamesTextNumber { get; set; }
-        public int MoveNameTextNumber { get; set; }
-        public string MoveTablePath { get; set; }
-        public string OverlayPath { get; set; }
-        public string OverlayTablePath { get; set; }
-        public uint PokemonIconPalTableAddress { get; set; }
-        public int PokemonNamesTextNumber { get; set; }
-        public uint PrizeMoneyTableOffset { get; set; }
-        public int PrizeMoneyTableOverlayNumber { get; set; }
-        public int PrizeMoneyTableSize { get; set; }
-        public int TrainerNamesTextNumber { get; set; }
-        public string TrainerTablePath { get; set; }
-        public int TypeNamesTextNumber { get; set; }
+        public GameFamily GameFamily => GameVersion switch
+        {
+            GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
+            GameVersion.Platinum => GameFamily.Platinum,
+            GameVersion.HeartGold or GameVersion.SoulSilver => GameFamily.HeartGoldSoulSilver,
+            GameVersion.HgEngine => GameFamily.HgEngine,
+            _ => GameFamily.Unknown,
+        };
+
+        public GameLanguage GameLanguage => GameCode switch
+        {
+            "ADAE" or "APAE" or "CPUE" or "IPKE" or "IPGE" => GameLanguage.English,
+            "ADAS" or "APAS" or "CPUS" or "IPKS" or "IPGS" or "LATA" => GameLanguage.Spanish,
+            "ADAI" or "APAI" or "CPUI" or "IPKI" or "IPGI" => GameLanguage.Italian,
+            "ADAF" or "APAF" or "CPUF" or "IPKF" or "IPGF" => GameLanguage.French,
+            "ADAD" or "APAD" or "CPUD" or "IPKD" or "IPGD" => GameLanguage.German,
+            _ => GameLanguage.Japanese,
+        };
+
+        public GameVersion GameVersion { get; set; }
+        public int TotalNumberOfTrainerClasses { get; set; }
+        public int TotalNumberOfTrainers { get; set; }
+        public List<TrainerData> TrainersData { get; set; }
+        public List<TrainerPartyData> TrainersPartyData { get; set; }
+
         public int VanillaTotalTrainers => GameFamily switch
         {
             GameFamily.DiamondPearl => Trainer.Constants.DefaultTotalTrainers.DiamondPearlTotalTrainers,
@@ -43,11 +47,8 @@ namespace VsMaker2Core.DataModels
             _ => 0,
         };
 
-        public uint VsPokemonEntryTableOffsetToRamAddress { get; set; }
-        public uint VsPokemonEntryTableOffsetToSizeLimiter { get; set; }
-        public uint VsTrainerEntryTableOffsetToRamAddress { get; set; }
-        public uint VsTrainerEntryTableOffsetToSizeLimiter { get; set; }
         public string WorkingDirectory { get; set; }
+
         #endregion RomInfo
 
         public RomFile()
@@ -76,12 +77,5 @@ namespace VsMaker2Core.DataModels
             FileName = romName;
             EuropeByte = europeByte;
         }
-
-        public string ExtractedFolderSuffix { get; set; }
-        public string FileName { get; set; }
-
-        public GameFamily GameFamily { get; set; }
-        public GameLanguage GameLanguage { get; set; }
-        public GameVersion GameVersion { get; set; }
     }
 }

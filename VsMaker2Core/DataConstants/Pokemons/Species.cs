@@ -30,13 +30,7 @@ namespace VsMaker2Core.DataModels
 
             public static ushort WormadamAltForms(ushort formId) => (ushort)(498 + formId);
         }
-
-        public static bool CheckMoreThanOneGender(byte genderRatio) => genderRatio switch
-        {
-            Constants.GenderRatioMale or Constants.GenderRatioFemale or Constants.GenderRatioGenderless => false,
-            _ => true,
-        };
-
+           
         public static class Constants
         {
             public const int AbilitySlot1ByteOffset = 22;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DataModels.Trainers;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -13,11 +15,9 @@ namespace VsMaker2Core.Methods
         /// <summary>
         /// Get a list of Trainer Data from Extracted ROM files.
         /// </summary>
-        /// <param name="trainerMessageArchive"></param>
-        /// <param name="gameFamily"></param>
-        /// <param name="partyReadFirstByte"></param>
+        /// <param name="loadedRom"></param>
         /// <returns></returns>
-        List<Trainer> GetTrainers(int trainerMessageArchive, GameFamily gameFamily, bool partyReadFirstByte = false);
+        List<Trainer> GetTrainers(RomFile loadedRom);
 
         /// <summary>
         /// Get Data from a specific Trainer from given trainerId.
@@ -26,5 +26,9 @@ namespace VsMaker2Core.Methods
         /// <param name="trainerId"></param>
         /// <returns></returns>
         Trainer GetTrainer(List<Trainer> trainers, int trainerId);
+
+        TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasItems, bool chooseMoves, bool hasBallCapsule);
+        TrainerProperty BuildTrainerPropertyFromRomData(TrainerData trainerData);
+        Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule);
     }
 }

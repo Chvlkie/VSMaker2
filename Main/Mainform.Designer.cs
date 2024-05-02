@@ -1006,6 +1006,7 @@
             poke6ComboBox.Name = "poke6ComboBox";
             poke6ComboBox.Size = new Size(169, 23);
             poke6ComboBox.TabIndex = 136;
+            poke6ComboBox.SelectedIndexChanged += poke6ComboBox_SelectedIndexChanged;
             // 
             // label32
             // 
@@ -1180,6 +1181,7 @@
             poke5ComboBox.Name = "poke5ComboBox";
             poke5ComboBox.Size = new Size(169, 23);
             poke5ComboBox.TabIndex = 118;
+            poke5ComboBox.SelectedIndexChanged += poke5ComboBox_SelectedIndexChanged;
             // 
             // label24
             // 
@@ -1354,6 +1356,7 @@
             poke4ComboBox.Name = "poke4ComboBox";
             poke4ComboBox.Size = new Size(169, 23);
             poke4ComboBox.TabIndex = 100;
+            poke4ComboBox.SelectedIndexChanged += poke4ComboBox_SelectedIndexChanged;
             // 
             // label16
             // 
@@ -1528,6 +1531,7 @@
             poke3ComboBox.Name = "poke3ComboBox";
             poke3ComboBox.Size = new Size(169, 23);
             poke3ComboBox.TabIndex = 82;
+            poke3ComboBox.SelectedIndexChanged += poke3ComboBox_SelectedIndexChanged;
             // 
             // label6
             // 
@@ -1702,6 +1706,7 @@
             poke2ComboBox.Name = "poke2ComboBox";
             poke2ComboBox.Size = new Size(169, 23);
             poke2ComboBox.TabIndex = 64;
+            poke2ComboBox.SelectedIndexChanged += poke2ComboBox_SelectedIndexChanged;
             // 
             // label5
             // 
@@ -1876,6 +1881,7 @@
             poke1ComboBox.Name = "poke1ComboBox";
             poke1ComboBox.Size = new Size(169, 23);
             poke1ComboBox.TabIndex = 5;
+            poke1ComboBox.SelectedIndexChanged += poke1ComboBox_SelectedIndexChanged;
             // 
             // trainer_ChooseMovesCheckbox
             // 
@@ -2033,8 +2039,10 @@
             // trainer_AiFlags_listbox
             // 
             trainer_AiFlags_listbox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            trainer_AiFlags_listbox.CheckOnClick = true;
+            trainer_AiFlags_listbox.Font = new Font("Segoe UI", 9F);
             trainer_AiFlags_listbox.FormattingEnabled = true;
-            trainer_AiFlags_listbox.Location = new Point(3, 59);
+            trainer_AiFlags_listbox.Location = new Point(9, 59);
             trainer_AiFlags_listbox.Name = "trainer_AiFlags_listbox";
             trainer_AiFlags_listbox.Size = new Size(168, 418);
             trainer_AiFlags_listbox.TabIndex = 3;

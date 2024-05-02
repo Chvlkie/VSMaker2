@@ -78,13 +78,27 @@ namespace VsMaker2Core
             Export
         }
 
-        public enum GenderAbilityFlags
+        public enum GenderAbilityOverride
         {
             None = 0,
             IsMale = 0x1,
             IsFemale = 0x2,
             Ability1 = 0x10,
             Ability2 = 0x20,
+        }
+
+        public enum GenderOverride
+        {
+            None = 0,
+            IsMale = 1,
+            IsFemale = 2,
+        }
+
+        public enum AbilityOverride
+        {
+            None = 0,
+            Ability1 = 1,
+            Ability2 = 2,
         }
     }
 }
