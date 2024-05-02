@@ -1,5 +1,6 @@
 ﻿using MsgPack.Serialization;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -103,6 +104,38 @@ namespace VsMaker2Core.Methods
             using var stream = new MemoryStream();
             fileStream.CopyTo(stream);
             return stream.ToArray();
+        }
+
+        public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
+        {
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            var stream = new MemoryStream();
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                writer.Write(trainerData.TrainerType);
+                writer.Write(trainerData.TrainerClassId);
+                writer.Write(trainerData.Padding);
+                writer.Write(trainerData.TeamSize);
+                foreach (var item in trainerData.Items)
+                {
+                    writer.Write(item);
+                }
+                writer.Write(trainerData.AIFlags);
+                writer.Write(trainerData.IsDoubleBattle);
+            }
+            try
+            {
+                File.WriteAllBytes(directory, stream.ToArray());
+                stream.Close();
+                return (true,"");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                stream.Close();
+                return (false, ex.Message);
+            }
+
         }
     }
 }

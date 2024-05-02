@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Net;
-using VsMaker2Core.Database;
+using System.Security.AccessControl;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DataModels.Trainers;
 using VsMaker2Core.RomFiles;
@@ -93,6 +90,52 @@ namespace VsMaker2Core.Methods
         public Trainer GetTrainer(List<Trainer> trainers, int trainerId)
         {
             return trainers.SingleOrDefault(x => x.TrainerId == trainerId);
+        }
+
+        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags)
+        {
+            return new TrainerProperty
+            {
+                DoubleBattle = isDouble,
+                ChooseItems = chooseItems,
+                ChooseMoves = chooseMoves,
+                TeamSize = teamSize,
+                Items = [item1, item2, item3, item4],
+                TrainerClassId = trainerClassId,
+                AIFlags = aiFlags
+            };
+        }
+
+        public TrainerData NewTrainerData(TrainerProperty trainerProperties)
+        {
+            byte trainerType = 0;
+            trainerType |= (byte)(trainerProperties.ChooseMoves ? 1 : 0);
+            trainerType |= (byte)(trainerProperties.ChooseItems ? 2 : 0);
+
+            BitArray aiFlagsArray = new BitArray(new bool[32] { true, false, false, false, false, false, false, false, false, false, false,
+            false, false, false, false, false, false, false, false, false, false,false, false, false, false, false, false, false, false, false,false,false });
+            for (int i = 0; i < trainerProperties.AIFlags.Count; i++)
+            {
+                aiFlagsArray[i] = trainerProperties.AIFlags[i];
+            }
+            uint aiFlags = 0;
+            for (int i = 0; i < aiFlagsArray.Length; i++)
+            {
+                if (aiFlagsArray[i])
+                {
+                    aiFlags |= (uint)1 << i;
+                }
+            }
+
+            return new TrainerData
+            {
+                TrainerType = trainerType,
+                TrainerClassId = trainerProperties.TrainerClassId,
+                TeamSize = trainerProperties.TeamSize,
+                AIFlags = aiFlags,
+                Items = trainerProperties.Items,
+                IsDoubleBattle = (uint)(trainerProperties.DoubleBattle ? 2 : 0)
+            };
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace VsMaker2Core.DataModels
+﻿using static VsMaker2Core.DataModels.Pokemon;
+
+namespace VsMaker2Core.DataModels
 {
     public partial class Species
     {
@@ -14,5 +16,21 @@
         };
 
         public bool HasMoreThanOneAbility => Ability2 > 0;
+
+        public static bool HasMoreThanOneForm(int pokemonId) => pokemonId switch
+        {
+            Pokedex.PichuId => true,
+            Pokedex.UnownId => true,
+            Pokedex.CastformId => true,
+            Pokedex.DeoxysId => true,
+            Pokedex.BurmyId => true,
+            Pokedex.WormadamId => true,
+            Pokedex.ShellosId => true,
+            Pokedex.GastrodonId => true,
+            Pokedex.RotomId => true,
+            Pokedex.GiratinaId => true,
+            Pokedex.ShayminId => true,
+            _ => false,
+        };
     }
 }

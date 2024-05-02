@@ -29,8 +29,42 @@ namespace VsMaker2Core.DataModels
             public static ushort RotomAltForms(ushort formId) => (ushort)(502 + formId);
 
             public static ushort WormadamAltForms(ushort formId) => (ushort)(498 + formId);
+
+            public static class FormNames
+            {
+                public const string Default = "-";
+
+                public static List<string> BurmyWormadam => ["Plant", "Sand", "Trash"];
+                public static List<string> Castform => [Default, "Rainy", "Sunny", "Snowy",];
+
+                public static List<string> Deoxys => [Default, "Attack", "Defense", "Speed",];
+
+                public static List<string> GiratinaForms => [Default, "Origin"];
+
+                public static List<string> Pichu => [Default, "Spiky-Ear"];
+
+                public static List<string> Rotom => [Default, "Heat", "Wash", "Frost", "Fan", "Mow"];
+                public static List<string> ShayminForms => ["Land", "Sky"];
+                public static List<string> ShellosGastrodon => ["West", "East"];
+
+                public static List<string> Unown
+                {
+                    get
+                    {
+                        List<string> forms = [];
+                        for (char c = 'A'; c <= 'Z'; c++)
+                        {
+                            forms.Add(c.ToString());
+                        }
+                        forms.Add("!");
+                        forms.Add("?");
+
+                        return forms;
+                    }
+                }
+            }
         }
-           
+
         public static class Constants
         {
             public const int AbilitySlot1ByteOffset = 22;

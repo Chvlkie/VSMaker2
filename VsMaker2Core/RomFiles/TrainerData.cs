@@ -21,5 +21,10 @@ namespace VsMaker2Core.RomFiles
         public ushort[] Items { get; set; }
         public uint AIFlags { get; set; }
         public uint IsDoubleBattle { get; set; }
+
+        public TrainerData()
+        {
+            Padding = 0x0;
+        }
     }
 }

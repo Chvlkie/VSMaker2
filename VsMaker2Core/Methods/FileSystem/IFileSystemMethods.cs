@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -35,5 +36,6 @@ namespace VsMaker2Core.Methods
         /// <param name="filePath"></param>
         /// <returns></returns>
         (VsTrainersFile VsTrainersFile, bool Success, string ErrorMessage) ImportTrainers(string filePath);
+        (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId);
     }
 }

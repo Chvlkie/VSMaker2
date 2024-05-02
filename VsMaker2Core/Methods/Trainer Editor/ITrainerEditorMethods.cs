@@ -30,5 +30,7 @@ namespace VsMaker2Core.Methods
         TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasItems, bool chooseMoves, bool hasBallCapsule);
         TrainerProperty BuildTrainerPropertyFromRomData(TrainerData trainerData);
         Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule);
+        TrainerData NewTrainerData(TrainerProperty trainerProperties);
+        TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags);
     }
 }
