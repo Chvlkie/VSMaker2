@@ -16,7 +16,7 @@ namespace VsMaker2Core.DataModels
         public ushort FormId { get; set; }
         public ushort? HeldItemId { get; set; }
         public ushort[]? Moves { get; set; }
-        public ushort? BallSealId { get; set; }
+        public ushort? BallCapsuleId { get; set; }
 
         public Pokemon()
         {
@@ -27,7 +27,7 @@ namespace VsMaker2Core.DataModels
             FormId = 0;
             HeldItemId = 0;
             Moves = null;
-            BallSealId = 0;
+            BallCapsuleId = 0;
         }
     }
 }

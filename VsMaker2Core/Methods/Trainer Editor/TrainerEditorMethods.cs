@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Security.AccessControl;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.DataModels.Trainers;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -45,7 +43,7 @@ namespace VsMaker2Core.Methods
                     FormId = (ushort)((trainerPartyPokemon.Species & Pokemon.Constants.PokemonFormBitMask) >> Pokemon.Constants.PokemonNumberBitSize),
                     HeldItemId = hasItems ? trainerPartyPokemon.ItemId : null,
                     Moves = chooseMoves ? trainerPartyPokemon.MoveIds : null,
-                    BallSealId = hasBallCapsule ? trainerPartyPokemon.BallCapsule : null
+                    BallCapsuleId = hasBallCapsule ? trainerPartyPokemon.BallCapsule : null
                 };
                 trainerParty.Pokemons.Add(pokemon);
             }
@@ -53,7 +51,7 @@ namespace VsMaker2Core.Methods
             // Create Dummy Mons
             if (teamSize < 6)
             {
-                for (int i = 0;i < 6 - teamSize;i++)
+                for (int i = 0; i < 6 - teamSize; i++)
                 {
                     trainerParty.Pokemons.Add(new Pokemon());
                 }
@@ -101,6 +99,23 @@ namespace VsMaker2Core.Methods
             return trainers.SingleOrDefault(x => x.TrainerId == trainerId);
         }
 
+        public Pokemon NewPartyPokemon(ushort pokemonId, ushort level, byte difficulty, byte genderAbilityOverride, ushort formId, ushort? ballCapsule = null, ushort? heldItem = null, ushort[] moves = null)
+        {
+            var pokemon = new Pokemon
+            {
+                PokemonId = pokemonId,
+                Level = level,
+                DifficultyValue = difficulty,
+                GenderAbilityOverride = genderAbilityOverride,
+                FormId = formId,
+                BallCapsuleId = ballCapsule,
+                HeldItemId = heldItem,
+                Moves = moves
+            };
+
+            return pokemon;
+        }
+
         public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags)
         {
             return new TrainerProperty
@@ -145,6 +160,29 @@ namespace VsMaker2Core.Methods
                 Items = trainerProperties.Items,
                 IsDoubleBattle = (uint)(trainerProperties.DoubleBattle ? 2 : 0)
             };
+        }
+
+        public TrainerPartyData NewTrainerPartyData(TrainerPartyPokemonData[] pokemonDatas)
+        {
+             return new TrainerPartyData
+            {
+                  PokemonData = pokemonDatas
+            };
+        }
+        public TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule)
+        {
+            var newPokemonData = new TrainerPartyPokemonData
+            {
+                Difficulty = pokemon.DifficultyValue,
+                GenderAbilityOverride = pokemon.GenderAbilityOverride,
+                Species = (ushort)(pokemon.PokemonId + (pokemon.FormId << Pokemon.Constants.PokemonNumberBitSize)),
+                Level = pokemon.Level,
+            };
+            if (chooseItems) { newPokemonData.ItemId = pokemon.HeldItemId.Value; }
+            if (chooseMoves) { newPokemonData.MoveIds = pokemon.Moves; }
+            if (hasBallCapsule) { newPokemonData.BallCapsule = pokemon.BallCapsuleId.Value; }
+
+            return newPokemonData;
         }
     }
 }

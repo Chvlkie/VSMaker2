@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using VsMaker2Core.DataModels.Trainers;
-using VsMaker2Core.RomFiles;
+﻿using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels

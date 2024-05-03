@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VsMaker2Core.RomFiles;
 
-namespace VsMaker2Core.DataModels.Trainers
+namespace VsMaker2Core.RomFiles
 {
     public class TrainerPartyData
     {

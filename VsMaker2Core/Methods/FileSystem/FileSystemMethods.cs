@@ -106,6 +106,44 @@ namespace VsMaker2Core.Methods
             return stream.ToArray();
         }
 
+        public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
+        {
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            var stream = new MemoryStream();
+            using (BinaryWriter writer = new(stream))
+            {
+                 for (int i = 0; i < partyData.PokemonData.Length; i++)
+                {
+                    TrainerPartyPokemonData pokemon = partyData.PokemonData[i];
+                    writer.Write(pokemon.Difficulty);
+                    writer.Write(pokemon.GenderAbilityOverride);
+                    writer.Write(pokemon.Level);
+                    writer.Write(pokemon.Species);
+                    if (chooseItems) { writer.Write(pokemon.ItemId); }
+                    if (chooseMoves)
+                    {
+                        writer.Write(pokemon.MoveIds[0]);
+                        writer.Write(pokemon.MoveIds[1]);
+                        writer.Write(pokemon.MoveIds[2]);
+                        writer.Write(pokemon.MoveIds[3]);
+                    }
+                    if (hasBallCapsule) { writer.Write(pokemon.BallCapsule); }
+                }
+            }
+            try
+            {
+                File.WriteAllBytes(directory, stream.ToArray());
+                stream.Close();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                stream.Close();
+                return (false, ex.Message);
+            }
+        }
+
         public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
         {
             string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
@@ -127,7 +165,7 @@ namespace VsMaker2Core.Methods
             {
                 File.WriteAllBytes(directory, stream.ToArray());
                 stream.Close();
-                return (true,"");
+                return (true, "");
             }
             catch (Exception ex)
             {
@@ -135,7 +173,6 @@ namespace VsMaker2Core.Methods
                 stream.Close();
                 return (false, ex.Message);
             }
-
         }
     }
 }

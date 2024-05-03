@@ -1,5 +1,4 @@
 ﻿using VsMaker2Core.DataModels;
-using VsMaker2Core.DataModels.Trainers;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 

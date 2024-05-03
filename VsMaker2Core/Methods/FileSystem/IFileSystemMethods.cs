@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VsMaker2Core.DataModels;
+﻿using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -37,5 +32,6 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         (VsTrainersFile VsTrainersFile, bool Success, string ErrorMessage) ImportTrainers(string filePath);
         (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId);
+        (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
     }
 }
