@@ -12,9 +12,9 @@ namespace VsMaker2Core.RomFiles
         public byte GenderAbilityOverride { get; set; }
         public ushort Level { get; set; }
         public ushort Species { get; set; }
-        public ushort BallCapsule { get; set; }
+        public ushort? BallCapsule { get; set; }
 
-        public ushort ItemId { get; set; }
-        public ushort[] MoveIds { get; set; }
+        public ushort? ItemId { get; set; }
+        public ushort[]? MoveIds { get; set; }
     }
 }

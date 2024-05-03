@@ -1,6 +1,5 @@
 ﻿namespace VsMaker2Core.DataModels
 {
-    [Serializable]
     public partial class Trainer
     {
         public ushort TrainerId { get; set; }

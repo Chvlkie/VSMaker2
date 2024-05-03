@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace VsMaker2Core.DataModels
 {
-    [Serializable]
     public class TrainerProperty
     {
         public List<bool> AIFlags { get; set; }

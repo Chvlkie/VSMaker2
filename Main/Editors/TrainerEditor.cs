@@ -1,5 +1,7 @@
 ﻿using Main.Forms;
 using Main.Models;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -284,6 +286,7 @@ namespace Main
 
         private void poke1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(0);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(0);
@@ -318,6 +321,7 @@ namespace Main
 
         private void poke2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(1);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(1);
@@ -352,6 +356,7 @@ namespace Main
 
         private void poke3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(2);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(2);
@@ -386,6 +391,7 @@ namespace Main
 
         private void poke4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(3);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(3);
@@ -420,6 +426,7 @@ namespace Main
 
         private void poke5ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(4);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(4);
@@ -450,6 +457,7 @@ namespace Main
 
         private void poke6ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetPokeComboBoxValidation(5);
             if (!IsLoadingData)
             {
                 SetPokemonSpecialData(5);
@@ -545,6 +553,32 @@ namespace Main
             trainer_TrainersListBox.Enabled = true;
         }
 
+        private void ResetPokeComboBoxValidation(int partyIndex)
+        {
+            if (pokeComboBoxes[partyIndex].BackColor == Color.PaleVioletRed)
+            {
+                pokeComboBoxes[partyIndex].BackColor = Color.White;
+            }
+        }
+        private bool SaveTrainerName(int trainerId)
+        {
+          
+        }
+
+        private bool ValidateTrainerName()
+        {
+            if (string.IsNullOrEmpty(trainer_NameTextBox.Text))
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
             List<Pokemon> newPokemons = [];
@@ -624,7 +658,7 @@ namespace Main
             }
             else
             {
-                MessageBox.Show(writeFile.ErrorMessage, "Unable to Save Trainer Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(writeFile.ErrorMessage, "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return writeFile.Success;
         }
@@ -1082,6 +1116,10 @@ namespace Main
 
         private void trainer_NameTextBox_TextChanged(object sender, EventArgs e)
         {
+            if (trainer_NameTextBox.BackColor == Color.PaleVioletRed)
+            {
+                trainer_NameTextBox.BackColor = Color.White;
+            }
             if (!IsLoadingData)
             {
                 EditedTrainerData(true);
@@ -1102,18 +1140,15 @@ namespace Main
 
         private void trainer_SaveBtn_Click(object sender, EventArgs e)
         {
-            if (ValidatePokemonMoves() && SaveTrainerProperties(SelectedTrainer.TrainerId))
+            if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(SelectedTrainer.TrainerId) && SaveTrainerProperties(SelectedTrainer.TrainerId) && SaveTrainerParty(SelectedTrainer.TrainerId))
             {
-                if (SaveTrainerParty(SelectedTrainer.TrainerId))
-                {
-                    MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void trainer_SaveParty_btn_Click(object sender, EventArgs e)
         {
-            if (ValidatePokemonMoves())
+            if (ValidatePokemon() && ValidatePokemonMoves())
             {
                 if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked
                     && SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
@@ -1163,7 +1198,7 @@ namespace Main
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerParty(SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
                         SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
@@ -1173,7 +1208,7 @@ namespace Main
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerParty(SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
                         SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
@@ -1183,7 +1218,7 @@ namespace Main
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerParty(SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
                         SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
@@ -1296,6 +1331,24 @@ namespace Main
             EditedTrainerParty(true);
         }
 
+        private bool ValidatePokemon()
+        {
+            bool valid = true;
+            for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
+            {
+                if (pokeComboBoxes[i].SelectedIndex <= 0)
+                {
+                    pokeComboBoxes[i].BackColor = Color.PaleVioletRed;
+                    valid = false;
+                }
+            }
+            if (!valid)
+            {
+                MessageBox.Show("You must select a Pokemon", "Unable to Save Trainer Party", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            return valid;
+        }
+
         private bool ValidatePokemonMoves()
         {
             if (trainer_ChooseMovesCheckbox.Checked)
@@ -1317,7 +1370,10 @@ namespace Main
 
                     for (int i = 0; i < 4; i++)
                     {
-                        if (moveArray[i] > 0) { movesSelected++; }
+                        if (moveArray[i] > 0)
+                        {
+                            movesSelected++;
+                        }
                     }
 
                     if (movesSelected == 0)

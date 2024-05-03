@@ -433,8 +433,6 @@ namespace Main
                 int classesCount = 100;
                 int battleMessagesCount = 200;
                 var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, LoadedRom.TrainerNamesTextNumber, classesCount, battleMessagesCount);
-                var exportData = new ViewVsTrainerFile(vsTrainersFile, ViewVsMakerFileType.Export);
-                exportData.ShowDialog();
             }
         }
 
@@ -526,8 +524,7 @@ namespace Main
         {
             if (!IsLoadingData)
             {
-                var importData = new ViewVsTrainerFile(new VsTrainersFile(), ViewVsMakerFileType.Import);
-                importData.ShowDialog();
+              
             }
         }
 

@@ -20,6 +20,16 @@ namespace VsMaker2Core.Methods
                 TrainerPropertyFiles = GetAllTrainerPropertyFiles(trainers.Count)
             };
         }
+
+        public (bool Success, string ErrorMessage) SaveTrainerName(int trainerId, string trainerName, int trainerNamesArchive)
+        {
+
+        }
+
+        public (bool Success, string ErrorMessage) SaveMessageText(int index, string messageText, int messageArchive)
+        {
+
+        }
         public (bool Success, string ErrorMessage) ExportTrainers(VsTrainersFile export, string filePath)
         {
             try
@@ -119,7 +129,7 @@ namespace VsMaker2Core.Methods
                     writer.Write(pokemon.GenderAbilityOverride);
                     writer.Write(pokemon.Level);
                     writer.Write(pokemon.Species);
-                    if (chooseItems) { writer.Write(pokemon.ItemId); }
+                    if (chooseItems) { writer.Write(pokemon.ItemId ?? 0); }
                     if (chooseMoves)
                     {
                         writer.Write(pokemon.MoveIds[0]);
@@ -127,7 +137,7 @@ namespace VsMaker2Core.Methods
                         writer.Write(pokemon.MoveIds[2]);
                         writer.Write(pokemon.MoveIds[3]);
                     }
-                    if (hasBallCapsule) { writer.Write(pokemon.BallCapsule); }
+                    if (hasBallCapsule) { writer.Write(pokemon.BallCapsule ?? 0); }
                 }
             }
             try

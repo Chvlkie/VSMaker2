@@ -2,7 +2,6 @@
 
 namespace VsMaker2Core.DataModels
 {
-    [Serializable]
     public partial class Pokemon
     {
         public byte DifficultyValue { get; set; }
