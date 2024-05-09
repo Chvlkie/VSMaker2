@@ -560,9 +560,16 @@ namespace Main
                 pokeComboBoxes[partyIndex].BackColor = Color.White;
             }
         }
+
         private bool SaveTrainerName(int trainerId)
         {
-          
+            var saveTrainerName = fileSystemMethods.SaveTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
+           // var saveTrainerName = fileSystemMethods.SaveTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
+            if (!saveTrainerName.Success)
+            {
+                MessageBox.Show(saveTrainerName.ErrorMessage, "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            return saveTrainerName.Success;
         }
 
         private bool ValidateTrainerName()
@@ -1143,6 +1150,9 @@ namespace Main
             if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(SelectedTrainer.TrainerId) && SaveTrainerProperties(SelectedTrainer.TrainerId) && SaveTrainerParty(SelectedTrainer.TrainerId))
             {
                 MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EditedTrainerParty(false);
+                EditedTrainerData(false);
+                EditedTrainerProperty(false);
             }
         }
 

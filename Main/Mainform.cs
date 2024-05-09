@@ -274,7 +274,8 @@ namespace Main
         {
             IsLoadingData = true;
             MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
-            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(LoadedRom);
+            MainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(LoadedRom.TrainerNamesTextNumber);
+            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames, LoadedRom);
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(LoadedRom.ClassNamesTextNumber);
             MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);

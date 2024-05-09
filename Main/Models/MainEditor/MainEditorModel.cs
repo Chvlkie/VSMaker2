@@ -4,6 +4,8 @@ namespace Main.Models
 {
     public class MainEditorModel
     {
+        public List<string> TrainerNames { get; set; }
+        public List<string> ClassNames { get; set; }
         public List<string> PokemonNames { get; set; }
         public List<string> MoveNames { get; set; }
         public List<string> AbilityNames { get; set; }
@@ -15,6 +17,8 @@ namespace Main.Models
 
         public MainEditorModel()
         {
+            TrainerNames = [];
+            ClassNames = [];
             PokemonNames = [];
             MoveNames = [];
             ItemNames = [];

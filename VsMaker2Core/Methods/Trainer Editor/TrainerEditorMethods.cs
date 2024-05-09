@@ -14,9 +14,8 @@ namespace VsMaker2Core.Methods
             romFileMethods = new RomFileMethods();
         }
 
-        public List<Trainer> GetTrainers(RomFile loadedRom)
+        public List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom )
         {
-            var trainerNames = romFileMethods.GetTrainerNames(loadedRom.TrainerNamesTextNumber);
             List<Trainer> trainers = [];
             // Start from i 1 to skip player trainer file
             for (int i = 1; i < trainerNames.Count; i++)

@@ -1,4 +1,5 @@
 ﻿using MsgPack.Serialization;
+using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
@@ -7,6 +8,14 @@ namespace VsMaker2Core.Methods
 {
     public class FileSystemMethods : IFileSystemMethods
     {
+        private readonly Dictionary<int, int> WriteTextDictionary = VsMakerDatabase.RomData.TextCharacters.WriteTextDictionary;
+        private IRomFileMethods romFileMethods;
+
+        public FileSystemMethods()
+        {
+            romFileMethods = new RomFileMethods();
+        }
+
         public VsTrainersFile BuildVsTrainersFile(List<Trainer> trainers, GameFamily gameFamily, int trainerNameTextArchiveId, int classesCount, int battleMessagesCount)
         {
             return new VsTrainersFile
@@ -21,15 +30,81 @@ namespace VsMaker2Core.Methods
             };
         }
 
-        public (bool Success, string ErrorMessage) SaveTrainerName(int trainerId, string trainerName, int trainerNamesArchive)
-        {
+        #region Save
 
+        public (bool Success, string ErrorMessage) SaveTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
+        {
+            if (trainerId > trainerNames.Count)
+            {
+                trainerNames.Add(newName);
+            }
+            else
+            {
+                trainerNames[trainerId] = newName;
+            }
+            for (int i = 0; i < trainerNames.Count; i++)
+            {
+                trainerNames[i] = "{TRNNAME}" + trainerNames[i];
+            }
+            return WriteMessage(trainerNames, trainerNamesArchive);
         }
 
-        public (bool Success, string ErrorMessage) SaveMessageText(int index, string messageText, int messageArchive)
+        #endregion Save  
+        
+        public (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive)
         {
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{messageArchive:D4}";
+            int initialKey = romFileMethods.GetMessageInitialKey(messageArchive);
 
+            var stream = new MemoryStream();
+            using BinaryWriter writer = new(stream);
+            try
+            {
+                var encoded = EncodeMessages(messages);
+                writer.Write((ushort)encoded.Count);
+                writer.Write((ushort)initialKey);
+                int key = (initialKey * 0x2FD) & 0xFFFF;
+                int key2 = 0;
+                int realKey = 0;
+                int offset = 0x4 + (encoded.Count * 8);
+                int[] stringLengths = new int[encoded.Count];
+
+                for (int i = 0; i < encoded.Count; i++)
+                { // Reads and stores string offsets and sizes
+                    key2 = (key * (i + 1) & 0xFFFF);
+                    realKey = key2 | (key2 << 16);
+                    writer.Write(offset ^ realKey);
+                    int[] currentString = encoded[i];
+                    int length = encoded[i].Length + 1;
+                    stringLengths[i] = length;
+                    writer.Write(length ^ realKey);
+                    offset += length * 2;
+                }
+
+                for (int i = 0; i < encoded.Count; i++)
+                { // Encodes strings and writes them to file
+                    key = (0x91BD3 * (i + 1)) & 0xFFFF;
+                    int[] currentString = encoded[i];
+                    for (int j = 0; j < stringLengths[i] - 1; j++)
+                    {
+                        writer.Write((ushort)(currentString[j] ^ key));
+                        key += 0x493D;
+                        key &= 0xFFFF;
+                    }
+                    writer.Write((ushort)(0xFFFF ^ key));
+                }
+                File.WriteAllBytes(directory, stream.ToArray());
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                stream.Close();
+                Console.WriteLine(ex.Message);
+                return (false, ex.Message);
+            }
+            return (true, "");
         }
+
         public (bool Success, string ErrorMessage) ExportTrainers(VsTrainersFile export, string filePath)
         {
             try
@@ -118,11 +193,11 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
             var stream = new MemoryStream();
             using (BinaryWriter writer = new(stream))
             {
-                 for (int i = 0; i < partyData.PokemonData.Length; i++)
+                for (int i = 0; i < partyData.PokemonData.Length; i++)
                 {
                     TrainerPartyPokemonData pokemon = partyData.PokemonData[i];
                     writer.Write(pokemon.Difficulty);
@@ -183,6 +258,131 @@ namespace VsMaker2Core.Methods
                 stream.Close();
                 return (false, ex.Message);
             }
+        }
+
+        private List<int[]> EncodeMessages(List<string> messages)
+        {
+            List<int[]> messagesArray = [];
+            foreach (var message in messages)
+            {
+                messagesArray.Add(EncodeMessage(message));
+            }
+            return messagesArray;
+        }
+
+        private int[] EncodeMessage(string message)
+        {
+            List<int> encoded = [];
+            int compressionBuffer = 0;
+            int bit = 0;
+            string checkIsName = message.Substring(0, 9);
+            bool isTrainerName = checkIsName == "{TRNNAME}";
+            bool compressed = false;
+            if (isTrainerName)
+            {
+                message = message.Substring(9);
+                if (message.Length > 7)
+                {
+                    encoded.Add(0xF100);
+                    compressed = true;
+                }
+            }
+            var charArray = message.ToCharArray();
+            string characterId;
+            for (int i = 0; i < charArray.Length; i++)
+            {
+                switch (charArray[i])
+                {
+                    case '\\':
+                        switch (charArray[i + 1])
+                        {
+                            case 'r':
+                                encoded.Add(0x25BC);
+                                i++;
+                                break;
+
+                            case 'n':
+                                encoded.Add(0xE000);
+                                i++;
+                                break;
+
+                            case 'f':
+                                encoded.Add(0x25BD);
+                                i++;
+                                break;
+
+                            case 'v':
+                                encoded.Add(0xFFFE);
+                                characterId = $"{charArray[i + 2]}{charArray[i + 3]}{charArray[i + 4]}{charArray[i + 5]}";
+                                encoded.Add((int)Convert.ToUInt32(characterId, 16));
+                                i += 5;
+                                break;
+
+                            case 'x':
+                                if (charArray[i + 2] == '0' && charArray[i + 3] == '0' && charArray[i + 4] == '0' && charArray[i + 5] == '0')
+                                {
+                                    encoded.Add(0x0000);
+                                    i += 5;
+                                    break;
+                                }
+                                else if (charArray[i + 2] == '0' && charArray[i + 3] == '0' && charArray[i + 4] == '0' && charArray[i + 5] == '1')
+                                {
+                                    encoded.Add(0x0001);
+                                    i += 5;
+                                    break;
+                                }
+                                else
+                                {
+                                    characterId = $"{charArray[i + 2]}{charArray[i + 3]}{charArray[i + 4]}{charArray[i + 5]}";
+                                    encoded.Add((int)Convert.ToUInt32(characterId, 16));
+                                    i += 5;
+                                    break;
+                                }
+                        }
+                        break;
+
+                    case '[':
+                        switch (charArray[i + 1])
+                        {
+                            case 'P':
+                                encoded.Add(0x01E0);
+                                i += 3;
+                                break;
+
+                            case 'M':
+                                encoded.Add(0x01E1);
+                                i += 3;
+                                break;
+                        }
+                        break;
+
+                    default:
+
+                        WriteTextDictionary.TryGetValue(charArray[i], out int code);
+                        if (compressed)
+                        {
+                            compressionBuffer |= code << bit;
+                            bit += 9;
+                            if (bit >= 15)
+                            {
+                                bit -= 15;
+                                encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
+                                compressionBuffer >>= 15;
+                            }
+                        }
+                        else
+                        {
+                            encoded.Add(code);
+                        }
+                        break;
+                }
+            }
+            if (compressed && bit > 1)
+            {
+                compressionBuffer |= (0xFFFF << bit);
+                encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
+            }
+            return [.. encoded];
         }
     }
 }

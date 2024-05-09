@@ -10,7 +10,7 @@ namespace VsMaker2Core.Methods
         /// </summary>
         /// <param name="loadedRom"></param>
         /// <returns></returns>
-        List<Trainer> GetTrainers(RomFile loadedRom);
+        List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom);
 
         /// <summary>
         /// Get Data from a specific Trainer from given trainerId.
