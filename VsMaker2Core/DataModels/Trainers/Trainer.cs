@@ -24,5 +24,14 @@
             TrainerProperties = trainer.TrainerProperties;
             TrainerParty = trainer.TrainerParty;
         }
+
+        // Default New Trainer
+        public Trainer(int trainerId)
+        {
+            TrainerId = (ushort)trainerId;
+            TrainerName = "-";
+            TrainerProperties = new();
+            TrainerParty = new();
+        }
     }
 }

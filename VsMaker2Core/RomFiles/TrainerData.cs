@@ -25,6 +25,12 @@ namespace VsMaker2Core.RomFiles
         public TrainerData()
         {
             Padding = 0;
+            TrainerType = 0;
+            TeamSize = 0;
+            Items = [0, 0, 0, 0];
+            AIFlags = 0;
+            IsDoubleBattle = 0;
+            TrainerClassId = 2;
         }
     }
 }

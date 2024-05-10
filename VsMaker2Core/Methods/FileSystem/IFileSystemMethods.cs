@@ -33,7 +33,7 @@ namespace VsMaker2Core.Methods
         (VsTrainersFile VsTrainersFile, bool Success, string ErrorMessage) ImportTrainers(string filePath);
         (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId);
         (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
-        (bool Success, string ErrorMessage) SaveTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
+        (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
         (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive);
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Main.Forms;
 using Main.Models;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -561,13 +559,67 @@ namespace Main
             }
         }
 
+        private void trainer_AddTrainerBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (UnsavedTrainerEditorChanges && ConfirmUnsavedChanges())
+                {
+                    ClearUnsavedTrainerChanges();
+                    AddNewTrainer();
+                }
+                else
+                {
+                    AddNewTrainer();
+                }
+            }
+        }
+
+        private void AddNewTrainer()
+        {
+            IsLoadingData = true;
+            trainer_FilterBox.Text = "";
+            trainer_TrainersListBox.SelectedIndex = -1;
+            int newTrainerId = LoadedRom.TotalNumberOfTrainers;
+            // Add new name to trainers
+            MainEditorModel.TrainerNames.Add("-");
+            // Add new trainer
+            MainEditorModel.Trainers.Add(new Trainer(newTrainerId));
+
+            // New TrainerProperties
+            fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
+            fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
+            fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, LoadedRom.GameFamily != GameFamily.DiamondPearl);
+            UnfilteredTrainers.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
+            trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
+            LoadedRom.TotalNumberOfTrainers++;
+            IsLoadingData = false;
+            trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
+            EditedTrainerData(true);
+            EditedTrainerParty(true);
+            EditedTrainerProperty(true);
+        }
+
         private bool SaveTrainerName(int trainerId)
         {
-            var saveTrainerName = fileSystemMethods.SaveTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
-           // var saveTrainerName = fileSystemMethods.SaveTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
+            var saveTrainerName = fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
             if (!saveTrainerName.Success)
             {
                 MessageBox.Show(saveTrainerName.ErrorMessage, "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                EditedTrainerData(false);
+                trainer_NameTextBox.BackColor = Color.White;
+                MainEditorModel.TrainerNames[trainerId] = trainer_NameTextBox.Text;
+                MainEditorModel.Trainers[trainerId - 1].TrainerName = trainer_NameTextBox.Text;
+                var index = trainer_TrainersListBox.FindString(UnfilteredTrainers[trainerId - 1]);
+                if (index > -1)
+                {
+                    trainer_TrainersListBox.Items[index] = MainEditorModel.Trainers[trainerId - 1].ListName;
+                    trainer_TrainersListBox.SelectedIndex = index;
+                }
+                UnfilteredTrainers[trainerId - 1] = MainEditorModel.Trainers[trainerId - 1].ListName;
             }
             return saveTrainerName.Success;
         }
@@ -578,6 +630,26 @@ namespace Main
             {
                 trainer_NameTextBox.BackColor = Color.PaleVioletRed;
                 MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else if (trainer_NameTextBox.Text.Length > 10 && !LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 10 characters.\n\nYou can expand this to 16 characters by applying the Trainer Names Expansion patch.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmPatch == DialogResult.Yes)
+                {
+                    return RomPatches.ExpandTrainerNames(LoadedRom);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (trainer_NameTextBox.Text.Length > 16 && LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 16 characters.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return false;
             }
             else
@@ -840,7 +912,8 @@ namespace Main
         private void SetTrainerProperties()
         {
             trainer_TeamSizeNum.Maximum = SelectedTrainer.TrainerProperties.DoubleBattle ? 3 : 6;
-            trainer_TeamSizeNum.Value = SelectedTrainer.TrainerProperties.TeamSize;
+            trainer_TeamSizeNum.Value = SelectedTrainer.TrainerProperties.TeamSize == 0 ? 1 : SelectedTrainer.TrainerProperties.TeamSize;
+
             trainer_DblBattleCheckBox.Checked = SelectedTrainer.TrainerProperties.DoubleBattle;
             trainer_HeldItemsCheckbox.Checked = SelectedTrainer.TrainerProperties.ChooseItems;
             trainer_ChooseMovesCheckbox.Checked = SelectedTrainer.TrainerProperties.ChooseMoves;
@@ -854,6 +927,10 @@ namespace Main
             for (int i = 0; i < SelectedTrainer.TrainerProperties.AIFlags.Count; i++)
             {
                 trainer_AiFlags_listbox.SetItemChecked(i, SelectedTrainer.TrainerProperties.AIFlags[i]);
+            }
+            if (SelectedTrainer.TrainerProperties.TeamSize < 1)
+            {
+                MessageBox.Show("This trainer does not currently have any Pokemon set.\nYou must set at least one Pokemon before use in-game", "Set a Party Pokemon", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1147,13 +1224,12 @@ namespace Main
 
         private void trainer_SaveBtn_Click(object sender, EventArgs e)
         {
+            IsLoadingData = true;
             if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(SelectedTrainer.TrainerId) && SaveTrainerProperties(SelectedTrainer.TrainerId) && SaveTrainerParty(SelectedTrainer.TrainerId))
             {
                 MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                EditedTrainerParty(false);
-                EditedTrainerData(false);
-                EditedTrainerProperty(false);
             }
+            IsLoadingData = false;
         }
 
         private void trainer_SaveParty_btn_Click(object sender, EventArgs e)
@@ -1244,6 +1320,10 @@ namespace Main
         {
             if (!IsLoadingData)
             {
+                if (trainer_TeamSizeNum.Minimum == 0)
+                {
+                    trainer_TeamSizeNum.Minimum = 1;
+                }
                 EditedTrainerProperty(true);
                 EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
             }

@@ -2,6 +2,7 @@
 using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DSUtils;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -12,6 +13,7 @@ namespace VsMaker2Core.Methods
         private readonly Dictionary<int, string> ReadTextDictionary = VsMakerDatabase.RomData.TextCharacters.ReadTextDictionary;
 
         #region Extract
+
         public (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName)
         {
             Process unpack = new();
@@ -38,8 +40,11 @@ namespace VsMaker2Core.Methods
             }
             return (true, "");
         }
+
         #endregion Extract
+
         #region Get
+
         public List<string> GetAbilityNames(int abiltyNameArchive)
         {
             var messageArchives = GetMessageArchiveContents(abiltyNameArchive, false);
@@ -73,14 +78,30 @@ namespace VsMaker2Core.Methods
             return itemNames;
         }
 
+        public int SetTrainerNameMax(int trainerNameOffset)
+        {
+            if (trainerNameOffset > 0)
+            {
+                using Arm9.Arm9Reader ar = new(trainerNameOffset);
+                int trainerNameLength = ar.ReadByte();
+                ar.Close();
+                return trainerNameLength;
+            }
+            else
+            {
+                return 7;
+            }
+        }
+
         public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines)
         {
             int initialKey = 0;
             int stringCount = 0;
             List<string> messages = [];
+            List<int[]> testArrays = [];
             bool success = false;
 
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{messageArchiveId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchiveId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             BinaryReader readText = new(fileStream);
             try
@@ -104,7 +125,6 @@ namespace VsMaker2Core.Methods
                         int key1 = (initialKey * 0x2FD) & 0xFFFF;
                         int[] currentOffset = new int[stringCount];
                         int[] currentSize = new int[stringCount];
-
                         // Get Offset and Sizes
                         for (int i = 0; i < stringCount; i++)
                         {
@@ -113,23 +133,29 @@ namespace VsMaker2Core.Methods
                             currentOffset[i] = ((int)readText.ReadUInt32()) ^ actualKey;
                             currentSize[i] = ((int)readText.ReadUInt32()) ^ actualKey;
                         }
-
                         // Build String
                         for (int i = 0; i < stringCount; i++)
                         {
+                            List<int> testInts = [];
+                            key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
+                            readText.BaseStream.Position = currentOffset[i];
+                            for (int t = 0; t < currentSize[i] - 1; t++)
+                            {
+                                testInts.Add((readText.ReadUInt16()) ^ key1);
+                                key1 += 0x493D;
+                                key1 &= 0xFFFF;
+                            }
+                            testInts.Add((readText.ReadUInt16()) ^ key1);
+
                             bool hasSpecialCharacter = false;
                             bool isCompressed = false;
                             key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
                             readText.BaseStream.Position = currentOffset[i];
                             StringBuilder text = new("");
-                            if (i == 11)
-                            {
-                                bool test = false;
-                            }
+                          
                             for (int j = 0; j < currentSize[i]; j++)
                             {
                                 int textChar = (readText.ReadUInt16()) ^ key1;
-
                                 switch (textChar)
                                 {
                                     case 0xE000:
@@ -221,6 +247,8 @@ namespace VsMaker2Core.Methods
                                 key1 &= 0xFFFF;
                             }
                             messages.Add(text.ToString());
+
+                            testArrays.Add(testInts.ToArray());
                         }
                     }
                 }
@@ -244,12 +272,13 @@ namespace VsMaker2Core.Methods
             }
             readText.Close();
             readText.Dispose();
+            var test = testArrays;
             return messageArchives;
         }
 
         public int GetMessageInitialKey(int messageArchive)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{messageArchive:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchive:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             BinaryReader readText = new(fileStream);
             try
@@ -322,6 +351,7 @@ namespace VsMaker2Core.Methods
             }
             return allSpecies;
         }
+
         public int GetTotalNumberOfTrainers(int trainerNameArchive)
         {
             return GetMessageArchiveContents(trainerNameArchive, false).Count;
@@ -337,6 +367,7 @@ namespace VsMaker2Core.Methods
             }
             return trainerNames;
         }
+
         public List<TrainerData> GetTrainersData(int numberOfTrainers)
         {
             var trainersData = new List<TrainerData>();
@@ -360,6 +391,7 @@ namespace VsMaker2Core.Methods
         #endregion Get
 
         #region Read
+
         public TrainerData ReadTrainerData(int trainerId)
         {
             var trainerData = new TrainerData();
@@ -454,6 +486,7 @@ namespace VsMaker2Core.Methods
         #endregion Read
 
         #region Set
+
         public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
         {
             Dictionary<NarcDirectory, string> packedDirectories = null;
@@ -464,13 +497,13 @@ namespace VsMaker2Core.Methods
                     {
                         [NarcDirectory.PersonalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
                         [NarcDirectory.SynthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.TextArchive] = @"data\msgdata\msg.narc",
+                        [NarcDirectory.TextArchives] = @"data\msgdata\msg.narc",
                         [NarcDirectory.TrainerProperties] = @"data\poketool\trainer\trdata.narc",
                         [NarcDirectory.TrainerParty] = @"data\poketool\trainer\trpoke.narc",
                         [NarcDirectory.TrainerGraphics] = @"data\poketool\trgra\trfgra.narc",
                         [NarcDirectory.BattleMessageTable] = @"data\poketool\trmsg\trtbl.narc",
                         [NarcDirectory.BattleMessageOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.PokemonIcons] = @"data\poketool\icongra\poke_icon.narc",
+                        [NarcDirectory.MonIcons] = @"data\poketool\icongra\poke_icon.narc",
                         [NarcDirectory.MoveData] = @"data\poketool\waza\waza_tbl.narc",
                     };
                     break;
@@ -481,13 +514,13 @@ namespace VsMaker2Core.Methods
                         [NarcDirectory.PersonalPokeData] = @"data\poketool\personal\pl_personal.narc",
                         [NarcDirectory.PersonalPokeData] = @"data\poketool\personal\pl_personal.narc",
                         [NarcDirectory.SynthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.TextArchive] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
+                        [NarcDirectory.TextArchives] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
                         [NarcDirectory.TrainerProperties] = @"data\poketool\trainer\trdata.narc",
                         [NarcDirectory.TrainerParty] = @"data\poketool\trainer\trpoke.narc",
                         [NarcDirectory.TrainerGraphics] = @"data\poketool\trgra\trfgra.narc",
                         [NarcDirectory.BattleMessageTable] = @"data\poketool\trmsg\trtbl.narc",
                         [NarcDirectory.BattleMessageOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.PokemonIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
+                        [NarcDirectory.MonIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
                         [NarcDirectory.MoveData] = @"data\poketool\waza\pl_waza_tbl.narc",
                     };
                     break;
@@ -500,13 +533,13 @@ namespace VsMaker2Core.Methods
                         [NarcDirectory.BattleTowerTrainerData] = @"data\a\2\0\2",
                         [NarcDirectory.PersonalPokeData] = @"data\a\0\0\2",
                         [NarcDirectory.SynthOverlay] = @"data\a\0\2\8",
-                        [NarcDirectory.TextArchive] = @"data\a\0\2\7",
+                        [NarcDirectory.TextArchives] = @"data\a\0\2\7",
                         [NarcDirectory.TrainerProperties] = @"data\a\0\5\5",
                         [NarcDirectory.TrainerParty] = @"data\a\0\5\6",
                         [NarcDirectory.TrainerGraphics] = @"data\a\0\5\8",
                         [NarcDirectory.BattleMessageTable] = @"data\a\0\5\7",
                         [NarcDirectory.BattleMessageOffset] = @"data\a\1\3\1",
-                        [NarcDirectory.PokemonIcons] = @"data\a\0\2\0",
+                        [NarcDirectory.MonIcons] = @"data\a\0\2\0",
                         [NarcDirectory.MoveData] = @"data\a\0\1\1",
                     };
                     break;
@@ -523,6 +556,7 @@ namespace VsMaker2Core.Methods
         #endregion Set
 
         #region Unpack
+
         public (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress)
         {
             int progressStep = 100 / narcs.Count;
@@ -543,6 +577,7 @@ namespace VsMaker2Core.Methods
             }
             return (true, null);
         }
+
         private (bool Succes, string ExceptionMessage) UnpackNarc(NarcDirectory narcPath)
         {
             try
@@ -585,6 +620,5 @@ namespace VsMaker2Core.Methods
                 return $"\\x{textChar:X4}";
             }
         }
-
     }
 }

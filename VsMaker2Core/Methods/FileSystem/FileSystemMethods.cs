@@ -30,30 +30,22 @@ namespace VsMaker2Core.Methods
             };
         }
 
-        #region Save
+        #region Write
 
-        public (bool Success, string ErrorMessage) SaveTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
+        public (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
         {
-            if (trainerId > trainerNames.Count)
+            trainerNames[trainerId] = newName;
+            List<string> writeMessages = [];
+            foreach (string message in trainerNames)
             {
-                trainerNames.Add(newName);
+                writeMessages.Add($"{{TRNNAME}}{message}");
             }
-            else
-            {
-                trainerNames[trainerId] = newName;
-            }
-            for (int i = 0; i < trainerNames.Count; i++)
-            {
-                trainerNames[i] = "{TRNNAME}" + trainerNames[i];
-            }
-            return WriteMessage(trainerNames, trainerNamesArchive);
+            return WriteMessage(writeMessages, trainerNamesArchive);
         }
 
-        #endregion Save  
-        
         public (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{messageArchive:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchive:D4}";
             int initialKey = romFileMethods.GetMessageInitialKey(messageArchive);
 
             var stream = new MemoryStream();
@@ -75,7 +67,7 @@ namespace VsMaker2Core.Methods
                     realKey = key2 | (key2 << 16);
                     writer.Write(offset ^ realKey);
                     int[] currentString = encoded[i];
-                    int length = encoded[i].Length + 1;
+                    int length = encoded[i].Length;
                     stringLengths[i] = length;
                     writer.Write(length ^ realKey);
                     offset += length * 2;
@@ -104,6 +96,77 @@ namespace VsMaker2Core.Methods
             }
             return (true, "");
         }
+
+        public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
+        {
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            var stream = new MemoryStream();
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                writer.Write(trainerData.TrainerType);
+                writer.Write(trainerData.TrainerClassId);
+                writer.Write(trainerData.Padding);
+                writer.Write(trainerData.TeamSize);
+                foreach (var item in trainerData.Items)
+                {
+                    writer.Write(item);
+                }
+                writer.Write(trainerData.AIFlags);
+                writer.Write(trainerData.IsDoubleBattle);
+            }
+            try
+            {
+                File.WriteAllBytes(directory, stream.ToArray());
+                stream.Close();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                stream.Close();
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
+        {
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            var stream = new MemoryStream();
+            using (BinaryWriter writer = new(stream))
+            {
+                for (int i = 0; i < partyData.PokemonData.Length; i++)
+                {
+                    TrainerPartyPokemonData pokemon = partyData.PokemonData[i];
+                    writer.Write(pokemon.Difficulty);
+                    writer.Write(pokemon.GenderAbilityOverride);
+                    writer.Write(pokemon.Level);
+                    writer.Write(pokemon.Species);
+                    if (chooseItems) { writer.Write(pokemon.ItemId ?? 0); }
+                    if (chooseMoves)
+                    {
+                        writer.Write(pokemon.MoveIds[0]);
+                        writer.Write(pokemon.MoveIds[1]);
+                        writer.Write(pokemon.MoveIds[2]);
+                        writer.Write(pokemon.MoveIds[3]);
+                    }
+                    if (hasBallCapsule) { writer.Write(pokemon.BallCapsule ?? 0); }
+                }
+            }
+            try
+            {
+                File.WriteAllBytes(directory, stream.ToArray());
+                stream.Close();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                stream.Close();
+                return (false, ex.Message);
+            }
+        }
+
+        #endregion Write
 
         public (bool Success, string ErrorMessage) ExportTrainers(VsTrainersFile export, string filePath)
         {
@@ -150,126 +213,6 @@ namespace VsMaker2Core.Methods
             return (vsTrainersFile, true, string.Empty);
         }
 
-        private List<byte[]> GetAllTrainerPropertyFiles(int trainerCount)
-        {
-            List<byte[]> trainerFiles = [];
-
-            for (int i = 0; i < trainerCount; i++)
-            {
-                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{i:D4}";
-                var fileStream = new FileStream(directory, FileMode.Open);
-                using var stream = new MemoryStream();
-                fileStream.CopyTo(stream);
-                trainerFiles.Add(stream.ToArray());
-            }
-
-            return trainerFiles;
-        }
-
-        private List<byte[]> GetAllTrainerPartyFiles(int trainerCount)
-        {
-            List<byte[]> trainerFiles = [];
-
-            for (int i = 0; i < trainerCount; i++)
-            {
-                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{i:D4}";
-                var fileStream = new FileStream(directory, FileMode.Open);
-                using var stream = new MemoryStream();
-                fileStream.CopyTo(stream);
-                trainerFiles.Add(stream.ToArray());
-            }
-
-            return trainerFiles;
-        }
-
-        private byte[] GetTrainerNamesFile(int trainerNameTextArchiveId)
-        {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchive].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
-            var fileStream = new FileStream(directory, FileMode.Open);
-            using var stream = new MemoryStream();
-            fileStream.CopyTo(stream);
-            return stream.ToArray();
-        }
-
-        public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
-        {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
-            var stream = new MemoryStream();
-            using (BinaryWriter writer = new(stream))
-            {
-                for (int i = 0; i < partyData.PokemonData.Length; i++)
-                {
-                    TrainerPartyPokemonData pokemon = partyData.PokemonData[i];
-                    writer.Write(pokemon.Difficulty);
-                    writer.Write(pokemon.GenderAbilityOverride);
-                    writer.Write(pokemon.Level);
-                    writer.Write(pokemon.Species);
-                    if (chooseItems) { writer.Write(pokemon.ItemId ?? 0); }
-                    if (chooseMoves)
-                    {
-                        writer.Write(pokemon.MoveIds[0]);
-                        writer.Write(pokemon.MoveIds[1]);
-                        writer.Write(pokemon.MoveIds[2]);
-                        writer.Write(pokemon.MoveIds[3]);
-                    }
-                    if (hasBallCapsule) { writer.Write(pokemon.BallCapsule ?? 0); }
-                }
-            }
-            try
-            {
-                File.WriteAllBytes(directory, stream.ToArray());
-                stream.Close();
-                return (true, "");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                stream.Close();
-                return (false, ex.Message);
-            }
-        }
-
-        public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
-        {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
-            var stream = new MemoryStream();
-            using (BinaryWriter writer = new BinaryWriter(stream))
-            {
-                writer.Write(trainerData.TrainerType);
-                writer.Write(trainerData.TrainerClassId);
-                writer.Write(trainerData.Padding);
-                writer.Write(trainerData.TeamSize);
-                foreach (var item in trainerData.Items)
-                {
-                    writer.Write(item);
-                }
-                writer.Write(trainerData.AIFlags);
-                writer.Write(trainerData.IsDoubleBattle);
-            }
-            try
-            {
-                File.WriteAllBytes(directory, stream.ToArray());
-                stream.Close();
-                return (true, "");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                stream.Close();
-                return (false, ex.Message);
-            }
-        }
-
-        private List<int[]> EncodeMessages(List<string> messages)
-        {
-            List<int[]> messagesArray = [];
-            foreach (var message in messages)
-            {
-                messagesArray.Add(EncodeMessage(message));
-            }
-            return messagesArray;
-        }
-
         private int[] EncodeMessage(string message)
         {
             List<int> encoded = [];
@@ -277,15 +220,10 @@ namespace VsMaker2Core.Methods
             int bit = 0;
             string checkIsName = message.Substring(0, 9);
             bool isTrainerName = checkIsName == "{TRNNAME}";
-            bool compressed = false;
             if (isTrainerName)
             {
                 message = message.Substring(9);
-                if (message.Length > 7)
-                {
-                    encoded.Add(0xF100);
-                    compressed = true;
-                }
+                encoded.Add(0xF100);
             }
             var charArray = message.ToCharArray();
             string characterId;
@@ -359,7 +297,7 @@ namespace VsMaker2Core.Methods
                     default:
 
                         WriteTextDictionary.TryGetValue(charArray[i], out int code);
-                        if (compressed)
+                        if (isTrainerName)
                         {
                             compressionBuffer |= code << bit;
                             bit += 9;
@@ -377,12 +315,64 @@ namespace VsMaker2Core.Methods
                         break;
                 }
             }
-            if (compressed && bit > 1)
+            if (isTrainerName && bit > 1)
             {
                 compressionBuffer |= (0xFFFF << bit);
                 encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
             }
+            encoded.Add(0xFFFF);
             return [.. encoded];
+        }
+
+        private List<int[]> EncodeMessages(List<string> messages)
+        {
+            List<int[]> messagesArray = [];
+            foreach (var message in messages)
+            {
+                messagesArray.Add(EncodeMessage(message));
+            }
+            return messagesArray;
+        }
+
+        private List<byte[]> GetAllTrainerPartyFiles(int trainerCount)
+        {
+            List<byte[]> trainerFiles = [];
+
+            for (int i = 0; i < trainerCount; i++)
+            {
+                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{i:D4}";
+                var fileStream = new FileStream(directory, FileMode.Open);
+                using var stream = new MemoryStream();
+                fileStream.CopyTo(stream);
+                trainerFiles.Add(stream.ToArray());
+            }
+
+            return trainerFiles;
+        }
+
+        private List<byte[]> GetAllTrainerPropertyFiles(int trainerCount)
+        {
+            List<byte[]> trainerFiles = [];
+
+            for (int i = 0; i < trainerCount; i++)
+            {
+                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{i:D4}";
+                var fileStream = new FileStream(directory, FileMode.Open);
+                using var stream = new MemoryStream();
+                fileStream.CopyTo(stream);
+                trainerFiles.Add(stream.ToArray());
+            }
+
+            return trainerFiles;
+        }
+
+        private byte[] GetTrainerNamesFile(int trainerNameTextArchiveId)
+        {
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
+            var fileStream = new FileStream(directory, FileMode.Open);
+            using var stream = new MemoryStream();
+            fileStream.CopyTo(stream);
+            return stream.ToArray();
         }
     }
 }

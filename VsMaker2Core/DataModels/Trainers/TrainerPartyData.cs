@@ -11,5 +11,11 @@ namespace VsMaker2Core.RomFiles
     {
         public byte TrainerType { get; set; }
         public TrainerPartyPokemonData[] PokemonData { get; set; }
+
+        public TrainerPartyData()
+        {
+            TrainerType = 0;
+            PokemonData = [];
+        }
     }
 }

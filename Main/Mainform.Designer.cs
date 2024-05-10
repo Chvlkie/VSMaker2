@@ -1033,7 +1033,7 @@
             poke1BallCapsuleComboBox.Name = "poke1BallCapsuleComboBox";
             poke1BallCapsuleComboBox.Size = new Size(93, 21);
             poke1BallCapsuleComboBox.TabIndex = 39;
-            poke1BallCapsuleComboBox.SelectedIndexChanged += this.poke1BallCapsuleComboBox_SelectedIndexChanged;
+            poke1BallCapsuleComboBox.SelectedIndexChanged += poke1BallCapsuleComboBox_SelectedIndexChanged;
             // 
             // poke1HeldItemComboBox
             // 
@@ -1168,7 +1168,7 @@
             poke6BallCapsuleComboBox.Name = "poke6BallCapsuleComboBox";
             poke6BallCapsuleComboBox.Size = new Size(93, 21);
             poke6BallCapsuleComboBox.TabIndex = 142;
-            poke6BallCapsuleComboBox.SelectedIndexChanged += this.poke6BallCapsuleComboBox_SelectedIndexChanged;
+            poke6BallCapsuleComboBox.SelectedIndexChanged += poke6BallCapsuleComboBox_SelectedIndexChanged;
             // 
             // poke1FormComboBox
             // 
@@ -1406,7 +1406,7 @@
             poke2BallCapsuleComboBox.Name = "poke2BallCapsuleComboBox";
             poke2BallCapsuleComboBox.Size = new Size(93, 21);
             poke2BallCapsuleComboBox.TabIndex = 70;
-            poke2BallCapsuleComboBox.SelectedIndexChanged += this.poke2BallCapsuleComboBox_SelectedIndexChanged;
+            poke2BallCapsuleComboBox.SelectedIndexChanged += poke2BallCapsuleComboBox_SelectedIndexChanged;
             // 
             // label35
             // 
@@ -1541,7 +1541,7 @@
             poke5BallCapsuleComboBox.Name = "poke5BallCapsuleComboBox";
             poke5BallCapsuleComboBox.Size = new Size(93, 21);
             poke5BallCapsuleComboBox.TabIndex = 124;
-            poke5BallCapsuleComboBox.SelectedIndexChanged += this.poke5BallCapsuleComboBox_SelectedIndexChanged;
+            poke5BallCapsuleComboBox.SelectedIndexChanged += poke5BallCapsuleComboBox_SelectedIndexChanged;
             // 
             // poke2FormComboBox
             // 
@@ -1779,7 +1779,7 @@
             poke3BallCapsuleComboBox.Name = "poke3BallCapsuleComboBox";
             poke3BallCapsuleComboBox.Size = new Size(93, 21);
             poke3BallCapsuleComboBox.TabIndex = 88;
-            poke3BallCapsuleComboBox.SelectedIndexChanged += this.poke3BallCapsuleComboBox_SelectedIndexChanged;
+            poke3BallCapsuleComboBox.SelectedIndexChanged += poke3BallCapsuleComboBox_SelectedIndexChanged;
             // 
             // label27
             // 
@@ -2721,6 +2721,7 @@
             trainer_AddTrainerBtn.TabIndex = 0;
             trainer_AddTrainerBtn.Text = "New Trainer";
             trainer_AddTrainerBtn.UseVisualStyleBackColor = true;
+            trainer_AddTrainerBtn.Click += trainer_AddTrainerBtn_Click;
             // 
             // trainer_List_Panel
             // 

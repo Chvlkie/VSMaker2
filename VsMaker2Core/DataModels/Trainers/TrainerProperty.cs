@@ -26,6 +26,8 @@ namespace VsMaker2Core.DataModels
         public TrainerProperty()
         {
             AIFlags = [];
+            Items = [0, 0, 0, 0];
+            TrainerClassId = 2;
         }
     }
 }

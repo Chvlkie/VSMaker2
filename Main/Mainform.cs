@@ -60,10 +60,10 @@ namespace Main
 
         public void BeginUnpackRomData()
         {
-            var (success, exception) = romFileMethods.ExtractRomContents(LoadedRom.WorkingDirectory, LoadedRom.FileName);
-            if (!success)
+            var unpack = romFileMethods.ExtractRomContents(LoadedRom.WorkingDirectory, LoadedRom.FileName);
+            if (!unpack.Success)
             {
-                MessageBox.Show($"{exception}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{unpack.ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 CloseProject();
                 return;
             }
@@ -86,7 +86,7 @@ namespace Main
 
         private static (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
         {
-            using DSUtils.EasyReader reader = new(filePath, 0xC);
+            using EasyReader reader = new(filePath, 0xC);
             string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
             reader.BaseStream.Position = 0x1E;
             byte europeByte = reader.ReadByte();
@@ -221,6 +221,7 @@ namespace Main
                 LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
                 LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
                 LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
+                LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
                 InitializeTrainerEditor();
                 GetInitialData();
                 main_MainTab.SelectedTab = main_MainTab_TrainerTab;
@@ -419,7 +420,6 @@ namespace Main
         {
             Settings = new Settings();
             LoadingData = new LoadingData();
-            RomPatches = new RomPatches();
             romFileMethods = new RomFileMethods();
             trainerEditorMethods = new TrainerEditorMethods();
             classEditorMethods = new ClassEditorMethods();
@@ -525,7 +525,7 @@ namespace Main
         {
             if (!IsLoadingData)
             {
-              
+
             }
         }
 
@@ -566,6 +566,7 @@ namespace Main
 
         private void OpenRomPatchesWindow()
         {
+            RomPatches = new RomPatches(LoadedRom);
             RomPatches.ShowDialog();
         }
 
@@ -753,5 +754,7 @@ namespace Main
                 }
             }
         }
+
+
     }
 }

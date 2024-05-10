@@ -2,7 +2,7 @@
 using VsMaker2Core.Database;
 using static VsMaker2Core.Enums;
 
-namespace DSUtils
+namespace VsMaker2Core
 {
     public class Encrypt
     {

@@ -3,16 +3,16 @@ using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using static VsMaker2Core.Enums;
 
-namespace DSUtils
+namespace VsMaker2Core.DSUtils
 {
     public class Arm9 : IArm9
     {
         public readonly uint Address = 0x02000000;
-        private readonly IMethods methods;
+        private readonly IDSUtilsMethods methods;
 
         public Arm9()
         {
-            methods = new Methods();
+            methods = new DSUtilsMethods();
         }
 
         public bool Arm9Compress(string path)

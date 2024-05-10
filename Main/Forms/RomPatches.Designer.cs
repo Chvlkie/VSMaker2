@@ -35,8 +35,8 @@
             arm9PatchCheckBox = new CheckBox();
             label3 = new Label();
             label4 = new Label();
-            button1 = new Button();
-            checkBox1 = new CheckBox();
+            btn_TrainerName = new Button();
+            checkBox_TrainerNames = new CheckBox();
             label5 = new Label();
             label6 = new Label();
             button2 = new Button();
@@ -107,25 +107,26 @@
             label4.TabIndex = 5;
             label4.Text = "This patch expands the character limit for Trainer Names from 7 to 12. This is required after making edits to Trainer names that are originally compressed or you want a longer name.";
             // 
-            // button1
+            // btn_TrainerName
             // 
-            button1.Location = new Point(277, 132);
-            button1.Name = "button1";
-            button1.Size = new Size(108, 44);
-            button1.TabIndex = 6;
-            button1.Text = "Patch";
-            button1.UseVisualStyleBackColor = true;
+            btn_TrainerName.Location = new Point(277, 132);
+            btn_TrainerName.Name = "btn_TrainerName";
+            btn_TrainerName.Size = new Size(108, 44);
+            btn_TrainerName.TabIndex = 6;
+            btn_TrainerName.Text = "Patch";
+            btn_TrainerName.UseVisualStyleBackColor = true;
+            btn_TrainerName.Click += btn_TrainerName_Click;
             // 
-            // checkBox1
+            // checkBox_TrainerNames
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.Enabled = false;
-            checkBox1.Location = new Point(401, 146);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(67, 19);
-            checkBox1.TabIndex = 7;
-            checkBox1.Text = "Applied";
-            checkBox1.UseVisualStyleBackColor = true;
+            checkBox_TrainerNames.AutoSize = true;
+            checkBox_TrainerNames.Enabled = false;
+            checkBox_TrainerNames.Location = new Point(401, 146);
+            checkBox_TrainerNames.Name = "checkBox_TrainerNames";
+            checkBox_TrainerNames.Size = new Size(67, 19);
+            checkBox_TrainerNames.TabIndex = 7;
+            checkBox_TrainerNames.Text = "Applied";
+            checkBox_TrainerNames.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -258,8 +259,8 @@
             Controls.Add(button2);
             Controls.Add(label6);
             Controls.Add(label5);
-            Controls.Add(checkBox1);
-            Controls.Add(button1);
+            Controls.Add(checkBox_TrainerNames);
+            Controls.Add(btn_TrainerName);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(arm9PatchCheckBox);
@@ -286,8 +287,8 @@
         private CheckBox arm9PatchCheckBox;
         private Label label3;
         private Label label4;
-        private Button button1;
-        private CheckBox checkBox1;
+        private Button btn_TrainerName;
+        private CheckBox checkBox_TrainerNames;
         private Label label5;
         private Label label6;
         private Button button2;

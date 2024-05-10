@@ -61,11 +61,11 @@ namespace VsMaker2Core
             BattleTowerTrainerData,
             PersonalPokeData,
             SynthOverlay,
-            TextArchive,
+            TextArchives,
             TrainerProperties,
             TrainerParty,
             TrainerGraphics,
-            PokemonIcons,
+            MonIcons,
             MoveData,
             BattleMessageTable,
             BattleMessageOffset
