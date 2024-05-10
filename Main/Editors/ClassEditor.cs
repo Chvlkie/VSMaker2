@@ -13,6 +13,7 @@ namespace Main
         private TrainerClass SelectedClass = new();
         private List<string> UnfilteredClasses = [];
         private bool UnsavedClassChanges;
+
         private void class_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && class_ClassListBox.SelectedIndex > -1)
@@ -42,6 +43,7 @@ namespace Main
                         if (SelectedClass.TrainerClassId > 0)
                         {
                             PopulateTrainerClassData();
+                            PopulateUsedByTrainers(SelectedClass.UsedByTrainers);
                             EnableClassEditor();
                         }
                     }
@@ -52,29 +54,42 @@ namespace Main
                 }
             }
         }
+
+        private void class_NameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+            }
+        }
+
         private void PopulateTrainerClassData()
         {
             if (!IsLoadingData)
             {
                 class_NameTextBox.Text = SelectedClass.TrainerClassName;
                 class_PrizeMoneyNum.Value = SelectedClass.PrizeMoneyMultiplier;
-               // class_EyeContactDayComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusic;
+                class_DescriptionTextBox.Text = SelectedClass.Description;
+                // class_EyeContactDayComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusic;
                 if (LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
                 {
-                //    class_EyeContactNightComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusicNight.Value;
+                    //    class_EyeContactNightComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusicNight.Value;
                 }
-               // class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
+                // class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
             }
         }
+
         private void EnableClassEditor()
         {
             class_EyeContactNightComboBox.Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
             class_EyeContactNightComboBox.Visible = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
             class_PrizeMoneyNum.Enabled = true;
+            class_TrainersListBox.Enabled = true;
             class_NameTextBox.Enabled = true;
             class_EyeContactDayComboBox.Enabled = true;
             class_SaveClassBtn.Enabled = true;
+            class_DescriptionTextBox.Enabled = true;
         }
+
         private void class_ClearFilterBtn_Click(object sender, EventArgs e)
         {
             class_FilterTextBox.Text = "";
@@ -140,6 +155,15 @@ namespace Main
             {
                 class_ClassListBox.Items.Add(item.ListName);
                 UnfilteredClasses.Add(item.ListName);
+            }
+        }
+
+        private void PopulateUsedByTrainers(List<Trainer> usedByTrainers)
+        {
+            class_TrainersListBox.Items.Clear();
+            foreach (var trainer in usedByTrainers)
+            {
+                class_TrainersListBox.Items.Add(trainer.ListName);
             }
         }
         private void SetupClassEditor()

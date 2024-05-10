@@ -15,6 +15,7 @@ namespace VsMaker2Core.Methods
         (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName);
 
         List<string> GetClassNames(int classNamesArchive);
+        List<string> GetClassDescriptions(int classDescriptionsArchive);
 
         /// <summary>
         /// Get the contents of a Message Archive for given messageArchiveId.

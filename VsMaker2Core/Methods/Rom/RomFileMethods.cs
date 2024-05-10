@@ -56,6 +56,16 @@ namespace VsMaker2Core.Methods
             return abilityNames;
         }
 
+        public List<string> GetClassDescriptions(int classDescriptionsArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(classDescriptionsArchive, false);
+            var classDescriptions = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                classDescriptions.Add(item.MessageText);
+            }
+            return classDescriptions;
+        }
         public List<string> GetClassNames(int classNamesArchive)
         {
             var messageArchives = GetMessageArchiveContents(classNamesArchive, false);

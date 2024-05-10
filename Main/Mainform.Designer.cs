@@ -262,12 +262,15 @@
             trainer_Trainer_Lbl = new Label();
             main_MainTab_ClassTab = new TabPage();
             panel4 = new Panel();
+            label71 = new Label();
+            class_InBattleMusicPlayBtn = new Button();
+            class_InBattleMusicTextBox = new TextBox();
+            class_EyeContactNightPlayBtn = new Button();
             class_EyeContactDaySoundBtn = new Button();
             label70 = new Label();
             label69 = new Label();
             class_VsEffectsPictureBox = new PictureBox();
             class_VSEffectsListBox = new ListBox();
-            class_DescriptionShowNameTextLbl = new Label();
             class_DescriptionLbl = new Label();
             class_DescriptionTextBox = new TextBox();
             class_EyeContactHelpBtn = new Button();
@@ -2814,12 +2817,16 @@
             // 
             // panel4
             // 
+            panel4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel4.Controls.Add(label71);
+            panel4.Controls.Add(class_InBattleMusicPlayBtn);
+            panel4.Controls.Add(class_InBattleMusicTextBox);
+            panel4.Controls.Add(class_EyeContactNightPlayBtn);
             panel4.Controls.Add(class_EyeContactDaySoundBtn);
             panel4.Controls.Add(label70);
             panel4.Controls.Add(label69);
             panel4.Controls.Add(class_VsEffectsPictureBox);
             panel4.Controls.Add(class_VSEffectsListBox);
-            panel4.Controls.Add(class_DescriptionShowNameTextLbl);
             panel4.Controls.Add(class_DescriptionLbl);
             panel4.Controls.Add(class_DescriptionTextBox);
             panel4.Controls.Add(class_EyeContactHelpBtn);
@@ -2837,6 +2844,49 @@
             panel4.Name = "panel4";
             panel4.Size = new Size(821, 505);
             panel4.TabIndex = 5;
+            // 
+            // label71
+            // 
+            label71.AutoSize = true;
+            label71.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label71.Location = new Point(236, 426);
+            label71.Name = "label71";
+            label71.Size = new Size(92, 15);
+            label71.TabIndex = 26;
+            label71.Text = "In-Battle Music";
+            // 
+            // class_InBattleMusicPlayBtn
+            // 
+            class_InBattleMusicPlayBtn.BackgroundImage = Properties.Resources.playSound_ico;
+            class_InBattleMusicPlayBtn.BackgroundImageLayout = ImageLayout.Stretch;
+            class_InBattleMusicPlayBtn.ForeColor = SystemColors.Control;
+            class_InBattleMusicPlayBtn.Location = new Point(447, 443);
+            class_InBattleMusicPlayBtn.Name = "class_InBattleMusicPlayBtn";
+            class_InBattleMusicPlayBtn.Size = new Size(23, 23);
+            class_InBattleMusicPlayBtn.TabIndex = 25;
+            class_InBattleMusicPlayBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            class_InBattleMusicPlayBtn.UseVisualStyleBackColor = true;
+            // 
+            // class_InBattleMusicTextBox
+            // 
+            class_InBattleMusicTextBox.Enabled = false;
+            class_InBattleMusicTextBox.Location = new Point(236, 444);
+            class_InBattleMusicTextBox.Name = "class_InBattleMusicTextBox";
+            class_InBattleMusicTextBox.ReadOnly = true;
+            class_InBattleMusicTextBox.Size = new Size(205, 23);
+            class_InBattleMusicTextBox.TabIndex = 24;
+            // 
+            // class_EyeContactNightPlayBtn
+            // 
+            class_EyeContactNightPlayBtn.BackgroundImage = Properties.Resources.playSound_ico;
+            class_EyeContactNightPlayBtn.BackgroundImageLayout = ImageLayout.Stretch;
+            class_EyeContactNightPlayBtn.ForeColor = SystemColors.Control;
+            class_EyeContactNightPlayBtn.Location = new Point(339, 125);
+            class_EyeContactNightPlayBtn.Name = "class_EyeContactNightPlayBtn";
+            class_EyeContactNightPlayBtn.Size = new Size(23, 23);
+            class_EyeContactNightPlayBtn.TabIndex = 23;
+            class_EyeContactNightPlayBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            class_EyeContactNightPlayBtn.UseVisualStyleBackColor = true;
             // 
             // class_EyeContactDaySoundBtn
             // 
@@ -2888,21 +2938,11 @@
             class_VSEffectsListBox.Size = new Size(224, 274);
             class_VSEffectsListBox.TabIndex = 18;
             // 
-            // class_DescriptionShowNameTextLbl
-            // 
-            class_DescriptionShowNameTextLbl.AutoSize = true;
-            class_DescriptionShowNameTextLbl.Font = new Font("Segoe UI", 9F);
-            class_DescriptionShowNameTextLbl.Location = new Point(283, 72);
-            class_DescriptionShowNameTextLbl.Name = "class_DescriptionShowNameTextLbl";
-            class_DescriptionShowNameTextLbl.Size = new Size(12, 15);
-            class_DescriptionShowNameTextLbl.TabIndex = 17;
-            class_DescriptionShowNameTextLbl.Text = "-";
-            // 
             // class_DescriptionLbl
             // 
             class_DescriptionLbl.AutoSize = true;
             class_DescriptionLbl.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            class_DescriptionLbl.Location = new Point(201, 47);
+            class_DescriptionLbl.Location = new Point(187, 47);
             class_DescriptionLbl.Name = "class_DescriptionLbl";
             class_DescriptionLbl.Size = new Size(71, 15);
             class_DescriptionLbl.TabIndex = 16;
@@ -2911,9 +2951,9 @@
             // class_DescriptionTextBox
             // 
             class_DescriptionTextBox.Enabled = false;
-            class_DescriptionTextBox.Location = new Point(201, 70);
+            class_DescriptionTextBox.Location = new Point(187, 70);
             class_DescriptionTextBox.Name = "class_DescriptionTextBox";
-            class_DescriptionTextBox.Size = new Size(76, 23);
+            class_DescriptionTextBox.Size = new Size(146, 23);
             class_DescriptionTextBox.TabIndex = 15;
             // 
             // class_EyeContactHelpBtn
@@ -2939,7 +2979,7 @@
             // 
             class_EyeContactNightComboBox.Enabled = false;
             class_EyeContactNightComboBox.FormattingEnabled = true;
-            class_EyeContactNightComboBox.Location = new Point(201, 125);
+            class_EyeContactNightComboBox.Location = new Point(187, 125);
             class_EyeContactNightComboBox.Name = "class_EyeContactNightComboBox";
             class_EyeContactNightComboBox.Size = new Size(146, 23);
             class_EyeContactNightComboBox.TabIndex = 7;
@@ -2958,7 +2998,7 @@
             // 
             label57.AutoSize = true;
             label57.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label57.Location = new Point(201, 102);
+            label57.Location = new Point(187, 102);
             label57.Name = "label57";
             label57.Size = new Size(151, 15);
             label57.TabIndex = 8;
@@ -3264,7 +3304,7 @@
             class_AddClassBtn.Name = "class_AddClassBtn";
             class_AddClassBtn.Size = new Size(96, 23);
             class_AddClassBtn.TabIndex = 0;
-            class_AddClassBtn.Text = "New Trainer";
+            class_AddClassBtn.Text = "New Class";
             class_AddClassBtn.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -4162,7 +4202,6 @@
         private TextBox class_FilterTextBox;
         private Label class_DescriptionLbl;
         private TextBox class_DescriptionTextBox;
-        private Label class_DescriptionShowNameTextLbl;
         private TabControl trainer_PropertiesTabControl;
         private TabPage trainer_TrainerData_tab;
         private Panel panel11;
@@ -4337,5 +4376,9 @@
         private Label label69;
         private PictureBox class_VsEffectsPictureBox;
         private Button class_EyeContactDaySoundBtn;
+        private Label label71;
+        private Button class_InBattleMusicPlayBtn;
+        private TextBox class_InBattleMusicTextBox;
+        private Button class_EyeContactNightPlayBtn;
     }
 }

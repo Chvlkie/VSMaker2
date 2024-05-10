@@ -6,6 +6,7 @@ namespace Main.Models
     {
         public List<string> TrainerNames { get; set; }
         public List<string> ClassNames { get; set; }
+        public List<string> ClassDescriptions { get; set; }
         public List<string> PokemonNames { get; set; }
         public List<string> MoveNames { get; set; }
         public List<string> AbilityNames { get; set; }
@@ -19,6 +20,7 @@ namespace Main.Models
         {
             TrainerNames = [];
             ClassNames = [];
+            ClassDescriptions = [];
             PokemonNames = [];
             MoveNames = [];
             ItemNames = [];

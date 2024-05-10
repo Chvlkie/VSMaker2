@@ -99,13 +99,7 @@ namespace Main
             OpenLoadingDialog(LoadType.UnpackNarcs);
         }
 
-        private void class_NameTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                class_DescriptionShowNameTextLbl.Text = class_NameTextBox.Text;
-            }
-        }
+      
 
         private void ClearUnsavedChanges()
         {
@@ -277,8 +271,10 @@ namespace Main
             IsLoadingData = true;
             MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
             MainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(LoadedRom.TrainerNamesTextNumber);
+            MainEditorModel.ClassNames = romFileMethods.GetClassNames(LoadedRom.ClassNamesTextNumber);
+            MainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(LoadedRom.ClassDescriptionMessageNumber);
             MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames, LoadedRom);
-            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(LoadedRom.ClassNamesTextNumber);
+            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
             MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
             MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);

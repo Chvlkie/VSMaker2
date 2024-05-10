@@ -196,7 +196,7 @@ namespace Main
             trainer_Import_Btn.Enabled = true;
             trainer_Export_Btn.Enabled = true;
             trainer_ClassListBox.Enabled = true;
-            trainer_ViewClassBtn.Enabled = true;
+            trainer_ViewClassBtn.Enabled = false;
             trainer_NameTextBox.Enabled = true;
             trainer_PropertiesTabControl.Enabled = true;
             trainer_SaveBtn.Enabled = true;
