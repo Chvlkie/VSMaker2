@@ -3393,6 +3393,7 @@
             class_SaveClassBtn.Name = "class_SaveClassBtn";
             class_SaveClassBtn.Size = new Size(81, 22);
             class_SaveClassBtn.Text = "Save Class";
+            class_SaveClassBtn.Click += class_SaveClassBtn_Click;
             // 
             // class_UndoAllBtn
             // 

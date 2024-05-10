@@ -1,7 +1,5 @@
-﻿using Main.Forms;
-using Main.Models;
+﻿using Main.Models;
 using VsMaker2Core.DataModels;
-using VsMaker2Core.Methods;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -76,6 +74,60 @@ namespace Main
                 }
                 // class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
             }
+        }
+
+        private bool SaveClassName(int classId)
+        {
+            var saveClass = fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, classId, class_NameTextBox.Text, LoadedRom.ClassNamesTextNumber);
+            if (!saveClass.Success)
+            {
+                MessageBox.Show(saveClass.ErrorMessage, "Unable to Save Class", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                class_NameTextBox.BackColor = Color.White;
+                MainEditorModel.ClassNames[classId] = class_NameTextBox.Text;
+                MainEditorModel.Classes[classId - 2].TrainerClassName = class_NameTextBox.Text;
+                var index = class_ClassListBox.FindString(UnfilteredClasses[classId - 2]);
+                if (index > -1)
+                {
+                    class_ClassListBox.Items[index] = MainEditorModel.Classes[classId - 2].ListName;
+                    class_ClassListBox.SelectedIndex = index;
+                }
+                UnfilteredClasses[classId - 2] = MainEditorModel.Classes[classId - 2].ListName;
+            }
+            return saveClass.Success;
+        }
+
+        private bool ValidateClassName()
+        {
+            string className = class_NameTextBox.Text;
+            int stringLength = className.Length;
+            var charArray = className.ToCharArray();
+
+            // Account for PKMN characters.
+            for (int i = 0; i < charArray.Length; i++)
+            {
+                if (charArray[i] == '[' && charArray[i + 1] == 'P' && charArray[i + 2] == ']')
+                {
+                    stringLength -= 3;
+                }
+                else if (charArray[i] == '[' && charArray[i + 1] == 'M' && charArray[i + 2] == ']')
+                {
+                    stringLength -= 3;
+                }
+            }
+
+            if (string.IsNullOrEmpty(className))
+            {
+                MessageBox.Show("You must enter a class name", "Unable to Save Class", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (stringLength > 16)
+            {
+                MessageBox.Show("Important: Class name is longer than 16 characters.\nThere may be issues in-game when displaying this name.", "Long Class Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            return true;
         }
 
         private void EnableClassEditor()
@@ -166,6 +218,7 @@ namespace Main
                 class_TrainersListBox.Items.Add(trainer.ListName);
             }
         }
+
         private void SetupClassEditor()
         {
             IsLoadingData = true;

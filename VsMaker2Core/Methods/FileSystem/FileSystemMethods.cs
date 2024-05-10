@@ -32,6 +32,12 @@ namespace VsMaker2Core.Methods
 
         #region Write
 
+        public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
+        {
+            classNames[classId] = newName;
+            return WriteMessage(classNames, classNamesArchive);
+        }
+
         public (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
         {
             trainerNames[trainerId] = newName;
@@ -92,6 +98,7 @@ namespace VsMaker2Core.Methods
             {
                 stream.Close();
                 Console.WriteLine(ex.Message);
+                throw;
                 return (false, ex.Message);
             }
             return (true, "");
@@ -218,8 +225,7 @@ namespace VsMaker2Core.Methods
             List<int> encoded = [];
             int compressionBuffer = 0;
             int bit = 0;
-            string checkIsName = message.Substring(0, 9);
-            bool isTrainerName = checkIsName == "{TRNNAME}";
+            bool isTrainerName = message.Contains("{TRNNAME}");
             if (isTrainerName)
             {
                 message = message.Substring(9);

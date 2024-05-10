@@ -99,8 +99,6 @@ namespace Main
             OpenLoadingDialog(LoadType.UnpackNarcs);
         }
 
-      
-
         private void ClearUnsavedChanges()
         {
             ClearUnsavedTrainerChanges();
@@ -755,6 +753,19 @@ namespace Main
                 {
                     CloseProject();
                 }
+            }
+        }
+
+        private void class_SaveClassBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                IsLoadingData = true;
+                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
+                {
+                    MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                IsLoadingData = false;
             }
         }
     }
