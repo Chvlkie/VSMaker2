@@ -153,6 +153,16 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap playSound_ico {
+            get {
+                object obj = ResourceManager.GetObject("playSound_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap poke_ico {
             get {
                 object obj = ResourceManager.GetObject("poke_ico", resourceCulture);
@@ -206,6 +216,16 @@ namespace Main.Properties {
         internal static System.Drawing.Bitmap sort_ico {
             get {
                 object obj = ResourceManager.GetObject("sort_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stopSound_ico {
+            get {
+                object obj = ResourceManager.GetObject("stopSound_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

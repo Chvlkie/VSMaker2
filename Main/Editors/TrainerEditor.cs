@@ -37,6 +37,31 @@ namespace Main
         private List<string> UnfilteredTrainers = [];
         private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
 
+        private void AddNewTrainer()
+        {
+            IsLoadingData = true;
+            trainer_FilterBox.Text = "";
+            trainer_TrainersListBox.SelectedIndex = -1;
+            int newTrainerId = LoadedRom.TotalNumberOfTrainers;
+            // Add new name to trainers
+            MainEditorModel.TrainerNames.Add("-");
+            // Add new trainer
+            MainEditorModel.Trainers.Add(new Trainer(newTrainerId));
+
+            // New TrainerProperties
+            fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
+            fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
+            fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, LoadedRom.GameFamily != GameFamily.DiamondPearl);
+            UnfilteredTrainers.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
+            trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
+            LoadedRom.TotalNumberOfTrainers++;
+            IsLoadingData = false;
+            trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
+            EditedTrainerData(true);
+            EditedTrainerParty(true);
+            EditedTrainerProperty(true);
+        }
+
         private void ClearTrainerEditorData()
         {
             trainer_TrainersListBox.Items.Clear();
@@ -177,20 +202,21 @@ namespace Main
             trainer_SaveBtn.Enabled = true;
         }
 
+        #region Get
+
         private string GetAbilityNameByAbilityId(int abilityId)
         {
             return MainEditorModel.AbilityNames[abilityId];
         }
-
         private Species GetSpeciesBySpeciesId(int speciesId)
         {
             return MainEditorModel.PokemonSpecies.Find(x => x.SpeciesId == speciesId);
         }
-
         private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId)
         {
             return MainEditorModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
         }
+        #endregion Get
 
         private void InitializeAiFlags()
         {
@@ -559,47 +585,6 @@ namespace Main
             }
         }
 
-        private void trainer_AddTrainerBtn_Click(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                if (UnsavedTrainerEditorChanges && ConfirmUnsavedChanges())
-                {
-                    ClearUnsavedTrainerChanges();
-                    AddNewTrainer();
-                }
-                else
-                {
-                    AddNewTrainer();
-                }
-            }
-        }
-
-        private void AddNewTrainer()
-        {
-            IsLoadingData = true;
-            trainer_FilterBox.Text = "";
-            trainer_TrainersListBox.SelectedIndex = -1;
-            int newTrainerId = LoadedRom.TotalNumberOfTrainers;
-            // Add new name to trainers
-            MainEditorModel.TrainerNames.Add("-");
-            // Add new trainer
-            MainEditorModel.Trainers.Add(new Trainer(newTrainerId));
-
-            // New TrainerProperties
-            fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
-            fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
-            fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, LoadedRom.GameFamily != GameFamily.DiamondPearl);
-            UnfilteredTrainers.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
-            trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
-            LoadedRom.TotalNumberOfTrainers++;
-            IsLoadingData = false;
-            trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
-            EditedTrainerData(true);
-            EditedTrainerParty(true);
-            EditedTrainerProperty(true);
-        }
-
         private bool SaveTrainerName(int trainerId)
         {
             var saveTrainerName = fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
@@ -622,40 +607,6 @@ namespace Main
                 UnfilteredTrainers[trainerId - 1] = MainEditorModel.Trainers[trainerId - 1].ListName;
             }
             return saveTrainerName.Success;
-        }
-
-        private bool ValidateTrainerName()
-        {
-            if (string.IsNullOrEmpty(trainer_NameTextBox.Text))
-            {
-                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            else if (trainer_NameTextBox.Text.Length > 10 && !LoadedRom.TrainerNameExpansion)
-            {
-                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                MessageBox.Show("Trainer name cannot be longer than 10 characters.\n\nYou can expand this to 16 characters by applying the Trainer Names Expansion patch.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (confirmPatch == DialogResult.Yes)
-                {
-                    return RomPatches.ExpandTrainerNames(LoadedRom);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (trainer_NameTextBox.Text.Length > 16 && LoadedRom.TrainerNameExpansion)
-            {
-                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                MessageBox.Show("Trainer name cannot be longer than 16 characters.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
 
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
@@ -1099,6 +1050,21 @@ namespace Main
             IsLoadingData = false;
         }
 
+        private void trainer_AddTrainerBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (UnsavedTrainerEditorChanges && ConfirmUnsavedChanges())
+                {
+                    ClearUnsavedTrainerChanges();
+                    AddNewTrainer();
+                }
+                else
+                {
+                    AddNewTrainer();
+                }
+            }
+        }
         private void trainer_AiFlags_listbox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (!IsLoadingData)
@@ -1475,6 +1441,40 @@ namespace Main
                 }
             }
             return true;
+        }
+
+        private bool ValidateTrainerName()
+        {
+            if (string.IsNullOrEmpty(trainer_NameTextBox.Text))
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else if (trainer_NameTextBox.Text.Length > 10 && !LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 10 characters.\n\nYou can expand this to 16 characters by applying the Trainer Names Expansion patch.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmPatch == DialogResult.Yes)
+                {
+                    return RomPatches.ExpandTrainerNames(LoadedRom);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (trainer_NameTextBox.Text.Length > 16 && LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 16 characters.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

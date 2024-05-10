@@ -49,6 +49,8 @@
             button4 = new Button();
             label9 = new Label();
             label10 = new Label();
+            panel1 = new Panel();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // patchArm9Btn
@@ -82,7 +84,7 @@
             // 
             arm9PatchCheckBox.AutoSize = true;
             arm9PatchCheckBox.Enabled = false;
-            arm9PatchCheckBox.Location = new Point(401, 49);
+            arm9PatchCheckBox.Location = new Point(401, 38);
             arm9PatchCheckBox.Name = "arm9PatchCheckBox";
             arm9PatchCheckBox.Size = new Size(67, 19);
             arm9PatchCheckBox.TabIndex = 3;
@@ -93,7 +95,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label3.Location = new Point(12, 117);
+            label3.Location = new Point(490, 9);
             label3.Name = "label3";
             label3.Size = new Size(130, 15);
             label3.TabIndex = 4;
@@ -101,15 +103,15 @@
             // 
             // label4
             // 
-            label4.Location = new Point(12, 132);
+            label4.Location = new Point(490, 24);
             label4.Name = "label4";
             label4.Size = new Size(246, 81);
             label4.TabIndex = 5;
-            label4.Text = "This patch expands the character limit for Trainer Names from 7 to 12. This is required after making edits to Trainer names that are originally compressed or you want a longer name.";
+            label4.Text = "This patch expands the character limit for Trainer Names from 10 to 16.";
             // 
             // btn_TrainerName
             // 
-            btn_TrainerName.Location = new Point(277, 132);
+            btn_TrainerName.Location = new Point(755, 24);
             btn_TrainerName.Name = "btn_TrainerName";
             btn_TrainerName.Size = new Size(108, 44);
             btn_TrainerName.TabIndex = 6;
@@ -121,7 +123,7 @@
             // 
             checkBox_TrainerNames.AutoSize = true;
             checkBox_TrainerNames.Enabled = false;
-            checkBox_TrainerNames.Location = new Point(401, 146);
+            checkBox_TrainerNames.Location = new Point(879, 38);
             checkBox_TrainerNames.Name = "checkBox_TrainerNames";
             checkBox_TrainerNames.Size = new Size(67, 19);
             checkBox_TrainerNames.TabIndex = 7;
@@ -132,7 +134,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label5.Location = new Point(12, 225);
+            label5.Location = new Point(12, 112);
             label5.Name = "label5";
             label5.Size = new Size(151, 15);
             label5.TabIndex = 8;
@@ -140,7 +142,7 @@
             // 
             // label6
             // 
-            label6.Location = new Point(12, 240);
+            label6.Location = new Point(12, 127);
             label6.Name = "label6";
             label6.Size = new Size(246, 81);
             label6.TabIndex = 9;
@@ -148,7 +150,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(277, 240);
+            button2.Location = new Point(277, 127);
             button2.Name = "button2";
             button2.Size = new Size(108, 44);
             button2.TabIndex = 10;
@@ -159,7 +161,7 @@
             // 
             checkBox2.AutoSize = true;
             checkBox2.Enabled = false;
-            checkBox2.Location = new Point(401, 254);
+            checkBox2.Location = new Point(401, 141);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(67, 19);
             checkBox2.TabIndex = 11;
@@ -170,7 +172,7 @@
             // 
             checkBox3.AutoSize = true;
             checkBox3.Enabled = false;
-            checkBox3.Location = new Point(401, 347);
+            checkBox3.Location = new Point(401, 234);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new Size(67, 19);
             checkBox3.TabIndex = 15;
@@ -179,7 +181,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(277, 333);
+            button3.Location = new Point(277, 220);
             button3.Name = "button3";
             button3.Size = new Size(108, 44);
             button3.TabIndex = 14;
@@ -188,7 +190,7 @@
             // 
             // label7
             // 
-            label7.Location = new Point(12, 333);
+            label7.Location = new Point(12, 220);
             label7.Name = "label7";
             label7.Size = new Size(246, 81);
             label7.TabIndex = 13;
@@ -198,7 +200,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label8.Location = new Point(12, 318);
+            label8.Location = new Point(12, 205);
             label8.Name = "label8";
             label8.Size = new Size(184, 15);
             label8.TabIndex = 12;
@@ -208,7 +210,7 @@
             // 
             checkBox4.AutoSize = true;
             checkBox4.Enabled = false;
-            checkBox4.Location = new Point(401, 455);
+            checkBox4.Location = new Point(401, 342);
             checkBox4.Name = "checkBox4";
             checkBox4.Size = new Size(67, 19);
             checkBox4.TabIndex = 19;
@@ -217,7 +219,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(277, 441);
+            button4.Location = new Point(277, 328);
             button4.Name = "button4";
             button4.Size = new Size(108, 44);
             button4.TabIndex = 18;
@@ -226,7 +228,7 @@
             // 
             // label9
             // 
-            label9.Location = new Point(12, 441);
+            label9.Location = new Point(12, 328);
             label9.Name = "label9";
             label9.Size = new Size(246, 81);
             label9.TabIndex = 17;
@@ -236,47 +238,55 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label10.Location = new Point(12, 426);
+            label10.Location = new Point(12, 313);
             label10.Name = "label10";
             label10.Size = new Size(153, 15);
             label10.TabIndex = 16;
             label10.Text = "Expand Class Gender Table";
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(checkBox4);
+            panel1.Controls.Add(patchArm9Btn);
+            panel1.Controls.Add(button4);
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(arm9PatchCheckBox);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(checkBox3);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(button3);
+            panel1.Controls.Add(btn_TrainerName);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(checkBox_TrainerNames);
+            panel1.Controls.Add(label8);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(checkBox2);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(button2);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(952, 404);
+            panel1.TabIndex = 20;
+            // 
             // RomPatches
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(477, 509);
-            Controls.Add(checkBox4);
-            Controls.Add(button4);
-            Controls.Add(label9);
-            Controls.Add(label10);
-            Controls.Add(checkBox3);
-            Controls.Add(button3);
-            Controls.Add(label7);
-            Controls.Add(label8);
-            Controls.Add(checkBox2);
-            Controls.Add(button2);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(checkBox_TrainerNames);
-            Controls.Add(btn_TrainerName);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(arm9PatchCheckBox);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Controls.Add(patchArm9Btn);
+            ClientSize = new Size(952, 404);
+            Controls.Add(panel1);
             MaximizeBox = false;
-            MaximumSize = new Size(493, 548);
             MinimizeBox = false;
-            MinimumSize = new Size(493, 548);
             Name = "RomPatches";
             StartPosition = FormStartPosition.WindowsDefaultBounds;
             Text = "ROM Patches";
             TopMost = true;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -301,5 +311,6 @@
         private Button button4;
         private Label label9;
         private Label label10;
+        private Panel panel1;
     }
 }

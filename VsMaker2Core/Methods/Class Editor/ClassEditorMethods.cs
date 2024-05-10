@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VsMaker2Core.DataModels;
+﻿using VsMaker2Core.DataModels;
 
 namespace VsMaker2Core.Methods
 {
@@ -14,6 +9,11 @@ namespace VsMaker2Core.Methods
         public ClassEditorMethods()
         {
             romFileMethods = new RomFileMethods();
+        }
+
+        public TrainerClass GetTrainerClass(List<TrainerClass> classes, int classId)
+        {
+            return classes.SingleOrDefault(x => x.TrainerClassId == classId);
         }
 
         public List<TrainerClass> GetTrainerClasses(int classMessageArchive)

@@ -8,7 +8,7 @@
         public uint EyeContactMusic { get; set; }
         public uint? EyeContactMusicNight { get; set; }
         public uint PrizeMoneyMultiplier { get; set; }
-
+        public int Gender { get; set; }
         public List<Trainer> UsedByTrainers { get; set; }
 
         public string ListName => $"[{TrainerClassId:D4}] {TrainerClassName}";

@@ -223,6 +223,7 @@ namespace Main
                 LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
                 LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
                 InitializeTrainerEditor();
+                InitializeClassEditor();
                 GetInitialData();
                 main_MainTab.SelectedTab = main_MainTab_TrainerTab;
                 SetupTrainerEditor();
@@ -387,6 +388,7 @@ namespace Main
                     if (RomLoaded)
                     {
                         InitializeTrainerEditor();
+                        InitializeClassEditor();
                     }
                     EndOpenRom();
                 }
@@ -397,6 +399,7 @@ namespace Main
                 if (RomLoaded)
                 {
                     InitializeTrainerEditor();
+                    InitializeClassEditor();
                 }
                 EndOpenRom();
             }
@@ -425,6 +428,7 @@ namespace Main
             classEditorMethods = new ClassEditorMethods();
             fileSystemMethods = new FileSystemMethods();
         }
+
         private void menu_Export_Trainers_Click(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -478,6 +482,7 @@ namespace Main
                     if (RomLoaded)
                     {
                         InitializeTrainerEditor();
+                        InitializeClassEditor();
                     }
                     EndOpenRom();
                 }
@@ -488,6 +493,7 @@ namespace Main
                 if (RomLoaded)
                 {
                     InitializeTrainerEditor();
+                    InitializeClassEditor();
                 }
                 EndOpenRom();
             }
@@ -506,6 +512,7 @@ namespace Main
                     if (RomLoaded)
                     {
                         InitializeTrainerEditor();
+                        InitializeClassEditor();
                     }
                     EndOpenRom();
                 }
@@ -516,6 +523,7 @@ namespace Main
                 if (RomLoaded)
                 {
                     InitializeTrainerEditor();
+                    InitializeClassEditor();
                 }
                 EndOpenRom();
             }
@@ -525,7 +533,6 @@ namespace Main
         {
             if (!IsLoadingData)
             {
-
             }
         }
 
@@ -754,7 +761,5 @@ namespace Main
                 }
             }
         }
-
-
     }
 }

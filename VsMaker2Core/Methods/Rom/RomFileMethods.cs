@@ -89,7 +89,7 @@ namespace VsMaker2Core.Methods
             }
             else
             {
-                return 7;
+                return 8;
             }
         }
 
@@ -98,7 +98,6 @@ namespace VsMaker2Core.Methods
             int initialKey = 0;
             int stringCount = 0;
             List<string> messages = [];
-            List<int[]> testArrays = [];
             bool success = false;
 
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchiveId:D4}";
@@ -136,23 +135,12 @@ namespace VsMaker2Core.Methods
                         // Build String
                         for (int i = 0; i < stringCount; i++)
                         {
-                            List<int> testInts = [];
-                            key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
-                            readText.BaseStream.Position = currentOffset[i];
-                            for (int t = 0; t < currentSize[i] - 1; t++)
-                            {
-                                testInts.Add((readText.ReadUInt16()) ^ key1);
-                                key1 += 0x493D;
-                                key1 &= 0xFFFF;
-                            }
-                            testInts.Add((readText.ReadUInt16()) ^ key1);
-
                             bool hasSpecialCharacter = false;
                             bool isCompressed = false;
                             key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
                             readText.BaseStream.Position = currentOffset[i];
                             StringBuilder text = new("");
-                          
+
                             for (int j = 0; j < currentSize[i]; j++)
                             {
                                 int textChar = (readText.ReadUInt16()) ^ key1;
@@ -247,8 +235,6 @@ namespace VsMaker2Core.Methods
                                 key1 &= 0xFFFF;
                             }
                             messages.Add(text.ToString());
-
-                            testArrays.Add(testInts.ToArray());
                         }
                     }
                 }
@@ -272,7 +258,6 @@ namespace VsMaker2Core.Methods
             }
             readText.Close();
             readText.Dispose();
-            var test = testArrays;
             return messageArchives;
         }
 

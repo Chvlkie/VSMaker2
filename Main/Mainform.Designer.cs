@@ -261,8 +261,12 @@
             trainer_TrainersListBox = new ListBox();
             trainer_Trainer_Lbl = new Label();
             main_MainTab_ClassTab = new TabPage();
-            panel5 = new Panel();
             panel4 = new Panel();
+            class_EyeContactDaySoundBtn = new Button();
+            label70 = new Label();
+            label69 = new Label();
+            class_VsEffectsPictureBox = new PictureBox();
+            class_VSEffectsListBox = new ListBox();
             class_DescriptionShowNameTextLbl = new Label();
             class_DescriptionLbl = new Label();
             class_DescriptionTextBox = new TextBox();
@@ -277,6 +281,9 @@
             class_GenderComboBox = new ComboBox();
             label58 = new Label();
             class_Properties_toolStrip = new ToolStrip();
+            class_SavePropertyBtn = new ToolStripButton();
+            class_UndoPropertiesBtn = new ToolStripButton();
+            toolStripSeparator22 = new ToolStripSeparator();
             class_PropertyCopyBtn = new ToolStripButton();
             class_PropertyPastBtn = new ToolStripButton();
             toolStripSeparator16 = new ToolStripSeparator();
@@ -406,6 +413,7 @@
             trainer_List_Panel.SuspendLayout();
             main_MainTab_ClassTab.SuspendLayout();
             panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).BeginInit();
             class_Properties_toolStrip.SuspendLayout();
             panel3.SuspendLayout();
@@ -2791,7 +2799,6 @@
             // 
             // main_MainTab_ClassTab
             // 
-            main_MainTab_ClassTab.Controls.Add(panel5);
             main_MainTab_ClassTab.Controls.Add(panel4);
             main_MainTab_ClassTab.Controls.Add(panel3);
             main_MainTab_ClassTab.Controls.Add(panel2);
@@ -2805,15 +2812,13 @@
             main_MainTab_ClassTab.Text = "Classes";
             main_MainTab_ClassTab.UseVisualStyleBackColor = true;
             // 
-            // panel5
-            // 
-            panel5.Location = new Point(418, 257);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(824, 279);
-            panel5.TabIndex = 6;
-            // 
             // panel4
             // 
+            panel4.Controls.Add(class_EyeContactDaySoundBtn);
+            panel4.Controls.Add(label70);
+            panel4.Controls.Add(label69);
+            panel4.Controls.Add(class_VsEffectsPictureBox);
+            panel4.Controls.Add(class_VSEffectsListBox);
             panel4.Controls.Add(class_DescriptionShowNameTextLbl);
             panel4.Controls.Add(class_DescriptionLbl);
             panel4.Controls.Add(class_DescriptionTextBox);
@@ -2830,14 +2835,64 @@
             panel4.Controls.Add(class_Properties_toolStrip);
             panel4.Location = new Point(418, 31);
             panel4.Name = "panel4";
-            panel4.Size = new Size(818, 223);
+            panel4.Size = new Size(821, 505);
             panel4.TabIndex = 5;
+            // 
+            // class_EyeContactDaySoundBtn
+            // 
+            class_EyeContactDaySoundBtn.BackgroundImage = Properties.Resources.playSound_ico;
+            class_EyeContactDaySoundBtn.BackgroundImageLayout = ImageLayout.Stretch;
+            class_EyeContactDaySoundBtn.ForeColor = SystemColors.Control;
+            class_EyeContactDaySoundBtn.Location = new Point(158, 125);
+            class_EyeContactDaySoundBtn.Name = "class_EyeContactDaySoundBtn";
+            class_EyeContactDaySoundBtn.Size = new Size(23, 23);
+            class_EyeContactDaySoundBtn.TabIndex = 22;
+            class_EyeContactDaySoundBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
+            class_EyeContactDaySoundBtn.UseVisualStyleBackColor = true;
+            // 
+            // label70
+            // 
+            label70.AutoSize = true;
+            label70.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label70.Location = new Point(236, 208);
+            label70.Name = "label70";
+            label70.Size = new Size(53, 15);
+            label70.TabIndex = 21;
+            label70.Text = "Preview";
+            // 
+            // label69
+            // 
+            label69.AutoSize = true;
+            label69.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label69.Location = new Point(6, 208);
+            label69.Name = "label69";
+            label69.Size = new Size(64, 15);
+            label69.TabIndex = 20;
+            label69.Text = "VS Effects";
+            // 
+            // class_VsEffectsPictureBox
+            // 
+            class_VsEffectsPictureBox.Location = new Point(236, 225);
+            class_VsEffectsPictureBox.Name = "class_VsEffectsPictureBox";
+            class_VsEffectsPictureBox.Size = new Size(300, 196);
+            class_VsEffectsPictureBox.TabIndex = 19;
+            class_VsEffectsPictureBox.TabStop = false;
+            // 
+            // class_VSEffectsListBox
+            // 
+            class_VSEffectsListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            class_VSEffectsListBox.FormattingEnabled = true;
+            class_VSEffectsListBox.ItemHeight = 15;
+            class_VSEffectsListBox.Location = new Point(6, 225);
+            class_VSEffectsListBox.Name = "class_VSEffectsListBox";
+            class_VSEffectsListBox.Size = new Size(224, 274);
+            class_VSEffectsListBox.TabIndex = 18;
             // 
             // class_DescriptionShowNameTextLbl
             // 
             class_DescriptionShowNameTextLbl.AutoSize = true;
             class_DescriptionShowNameTextLbl.Font = new Font("Segoe UI", 9F);
-            class_DescriptionShowNameTextLbl.Location = new Point(125, 124);
+            class_DescriptionShowNameTextLbl.Location = new Point(283, 72);
             class_DescriptionShowNameTextLbl.Name = "class_DescriptionShowNameTextLbl";
             class_DescriptionShowNameTextLbl.Size = new Size(12, 15);
             class_DescriptionShowNameTextLbl.TabIndex = 17;
@@ -2847,7 +2902,7 @@
             // 
             class_DescriptionLbl.AutoSize = true;
             class_DescriptionLbl.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            class_DescriptionLbl.Location = new Point(6, 103);
+            class_DescriptionLbl.Location = new Point(201, 47);
             class_DescriptionLbl.Name = "class_DescriptionLbl";
             class_DescriptionLbl.Size = new Size(71, 15);
             class_DescriptionLbl.TabIndex = 16;
@@ -2856,14 +2911,14 @@
             // class_DescriptionTextBox
             // 
             class_DescriptionTextBox.Enabled = false;
-            class_DescriptionTextBox.Location = new Point(6, 121);
+            class_DescriptionTextBox.Location = new Point(201, 70);
             class_DescriptionTextBox.Name = "class_DescriptionTextBox";
-            class_DescriptionTextBox.Size = new Size(113, 23);
+            class_DescriptionTextBox.Size = new Size(76, 23);
             class_DescriptionTextBox.TabIndex = 15;
             // 
             // class_EyeContactHelpBtn
             // 
-            class_EyeContactHelpBtn.Location = new Point(725, 47);
+            class_EyeContactHelpBtn.Location = new Point(158, 98);
             class_EyeContactHelpBtn.Name = "class_EyeContactHelpBtn";
             class_EyeContactHelpBtn.Size = new Size(23, 23);
             class_EyeContactHelpBtn.TabIndex = 14;
@@ -2873,7 +2928,7 @@
             // class_PrizeMoneyHelpBtn
             // 
             class_PrizeMoneyHelpBtn.Enabled = false;
-            class_PrizeMoneyHelpBtn.Location = new Point(282, 47);
+            class_PrizeMoneyHelpBtn.Location = new Point(158, 43);
             class_PrizeMoneyHelpBtn.Name = "class_PrizeMoneyHelpBtn";
             class_PrizeMoneyHelpBtn.Size = new Size(23, 23);
             class_PrizeMoneyHelpBtn.TabIndex = 13;
@@ -2884,16 +2939,16 @@
             // 
             class_EyeContactNightComboBox.Enabled = false;
             class_EyeContactNightComboBox.FormattingEnabled = true;
-            class_EyeContactNightComboBox.Location = new Point(528, 47);
+            class_EyeContactNightComboBox.Location = new Point(201, 125);
             class_EyeContactNightComboBox.Name = "class_EyeContactNightComboBox";
-            class_EyeContactNightComboBox.Size = new Size(191, 23);
+            class_EyeContactNightComboBox.Size = new Size(146, 23);
             class_EyeContactNightComboBox.TabIndex = 7;
             // 
             // label56
             // 
             label56.AutoSize = true;
             label56.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label56.Location = new Point(331, 29);
+            label56.Location = new Point(6, 102);
             label56.Name = "label56";
             label56.Size = new Size(141, 15);
             label56.TabIndex = 5;
@@ -2903,7 +2958,7 @@
             // 
             label57.AutoSize = true;
             label57.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label57.Location = new Point(528, 29);
+            label57.Location = new Point(201, 102);
             label57.Name = "label57";
             label57.Size = new Size(151, 15);
             label57.TabIndex = 8;
@@ -2913,16 +2968,16 @@
             // 
             class_EyeContactDayComboBox.Enabled = false;
             class_EyeContactDayComboBox.FormattingEnabled = true;
-            class_EyeContactDayComboBox.Location = new Point(331, 47);
+            class_EyeContactDayComboBox.Location = new Point(6, 125);
             class_EyeContactDayComboBox.Name = "class_EyeContactDayComboBox";
-            class_EyeContactDayComboBox.Size = new Size(191, 23);
+            class_EyeContactDayComboBox.Size = new Size(146, 23);
             class_EyeContactDayComboBox.TabIndex = 6;
             // 
             // label59
             // 
             label59.AutoSize = true;
             label59.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label59.Location = new Point(200, 25);
+            label59.Location = new Point(76, 47);
             label59.Name = "label59";
             label59.Size = new Size(76, 15);
             label59.TabIndex = 12;
@@ -2931,7 +2986,7 @@
             // class_PrizeMoneyNum
             // 
             class_PrizeMoneyNum.Enabled = false;
-            class_PrizeMoneyNum.Location = new Point(200, 47);
+            class_PrizeMoneyNum.Location = new Point(76, 70);
             class_PrizeMoneyNum.Name = "class_PrizeMoneyNum";
             class_PrizeMoneyNum.Size = new Size(76, 23);
             class_PrizeMoneyNum.TabIndex = 11;
@@ -2940,16 +2995,16 @@
             // 
             class_GenderComboBox.Enabled = false;
             class_GenderComboBox.FormattingEnabled = true;
-            class_GenderComboBox.Location = new Point(6, 47);
+            class_GenderComboBox.Location = new Point(6, 70);
             class_GenderComboBox.Name = "class_GenderComboBox";
-            class_GenderComboBox.Size = new Size(113, 23);
+            class_GenderComboBox.Size = new Size(64, 23);
             class_GenderComboBox.TabIndex = 10;
             // 
             // label58
             // 
             label58.AutoSize = true;
             label58.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label58.Location = new Point(6, 29);
+            label58.Location = new Point(6, 47);
             label58.Name = "label58";
             label58.Size = new Size(49, 15);
             label58.TabIndex = 9;
@@ -2957,12 +3012,34 @@
             // 
             // class_Properties_toolStrip
             // 
-            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_PropertyCopyBtn, class_PropertyPastBtn, toolStripSeparator16, class_PropertyImportBtn, class_PropertyExportBtn });
+            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator22, class_PropertyCopyBtn, class_PropertyPastBtn, toolStripSeparator16, class_PropertyImportBtn, class_PropertyExportBtn });
             class_Properties_toolStrip.Location = new Point(0, 0);
             class_Properties_toolStrip.Name = "class_Properties_toolStrip";
-            class_Properties_toolStrip.Size = new Size(818, 25);
+            class_Properties_toolStrip.Size = new Size(821, 25);
             class_Properties_toolStrip.TabIndex = 0;
             class_Properties_toolStrip.Text = "toolStrip2";
+            // 
+            // class_SavePropertyBtn
+            // 
+            class_SavePropertyBtn.Image = Properties.Resources.save_ico;
+            class_SavePropertyBtn.ImageTransparentColor = Color.Magenta;
+            class_SavePropertyBtn.Name = "class_SavePropertyBtn";
+            class_SavePropertyBtn.Size = new Size(107, 22);
+            class_SavePropertyBtn.Text = "Save Properties";
+            // 
+            // class_UndoPropertiesBtn
+            // 
+            class_UndoPropertiesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            class_UndoPropertiesBtn.Image = Properties.Resources.undo_ico;
+            class_UndoPropertiesBtn.ImageTransparentColor = Color.Magenta;
+            class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
+            class_UndoPropertiesBtn.Size = new Size(23, 22);
+            class_UndoPropertiesBtn.Text = "Undo Changes";
+            // 
+            // toolStripSeparator22
+            // 
+            toolStripSeparator22.Name = "toolStripSeparator22";
+            toolStripSeparator22.Size = new Size(6, 25);
             // 
             // class_PropertyCopyBtn
             // 
@@ -2972,7 +3049,7 @@
             class_PropertyCopyBtn.ImageTransparentColor = Color.Magenta;
             class_PropertyCopyBtn.Name = "class_PropertyCopyBtn";
             class_PropertyCopyBtn.Size = new Size(23, 22);
-            class_PropertyCopyBtn.Text = "toolStripButton14";
+            class_PropertyCopyBtn.Text = "Copy Class Properties";
             // 
             // class_PropertyPastBtn
             // 
@@ -2982,7 +3059,7 @@
             class_PropertyPastBtn.ImageTransparentColor = Color.Magenta;
             class_PropertyPastBtn.Name = "class_PropertyPastBtn";
             class_PropertyPastBtn.Size = new Size(23, 22);
-            class_PropertyPastBtn.Text = "toolStripButton15";
+            class_PropertyPastBtn.Text = "Paste  Class Properties";
             // 
             // toolStripSeparator16
             // 
@@ -2997,7 +3074,7 @@
             class_PropertyImportBtn.ImageTransparentColor = Color.Magenta;
             class_PropertyImportBtn.Name = "class_PropertyImportBtn";
             class_PropertyImportBtn.Size = new Size(23, 22);
-            class_PropertyImportBtn.Text = "toolStripButton16";
+            class_PropertyImportBtn.Text = "Import  Class Properties";
             // 
             // class_PropertyExportBtn
             // 
@@ -3007,7 +3084,7 @@
             class_PropertyExportBtn.ImageTransparentColor = Color.Magenta;
             class_PropertyExportBtn.Name = "class_PropertyExportBtn";
             class_PropertyExportBtn.Size = new Size(23, 22);
-            class_PropertyExportBtn.Text = "toolStripButton17";
+            class_PropertyExportBtn.Text = "Export Class Properties";
             // 
             // panel3
             // 
@@ -3214,6 +3291,7 @@
             class_ClearFilterBtn.TabIndex = 7;
             class_ClearFilterBtn.Text = "X";
             class_ClearFilterBtn.UseVisualStyleBackColor = true;
+            class_ClearFilterBtn.Click += class_ClearFilterBtn_Click;
             // 
             // label68
             // 
@@ -3234,6 +3312,7 @@
             class_FilterTextBox.Name = "class_FilterTextBox";
             class_FilterTextBox.Size = new Size(160, 23);
             class_FilterTextBox.TabIndex = 5;
+            class_FilterTextBox.TextChanged += class_FilterTextBox_TextChanged;
             // 
             // class_ClassListBox
             // 
@@ -3245,6 +3324,7 @@
             class_ClassListBox.Name = "class_ClassListBox";
             class_ClassListBox.Size = new Size(197, 364);
             class_ClassListBox.TabIndex = 1;
+            class_ClassListBox.SelectedIndexChanged += class_ClassListBox_SelectedIndexChanged;
             // 
             // label51
             // 
@@ -3856,6 +3936,7 @@
             main_MainTab_ClassTab.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).EndInit();
             class_Properties_toolStrip.ResumeLayout(false);
             class_Properties_toolStrip.PerformLayout();
@@ -4026,7 +4107,6 @@
         private ToolStripSeparator toolStripSeparator16;
         private ToolStripButton class_PropertyImportBtn;
         private ToolStripButton class_PropertyExportBtn;
-        private Panel panel5;
         private ComboBox class_EyeContactDayComboBox;
         private Label label56;
         private ComboBox class_GenderComboBox;
@@ -4035,7 +4115,6 @@
         private ComboBox class_EyeContactNightComboBox;
         private Label label59;
         private NumericUpDown class_PrizeMoneyNum;
-        private Button class_EyeContactHelpBtn;
         private Button class_PrizeMoneyHelpBtn;
         private Panel panel6;
         private Button battleMessages_MessageUpBtn;
@@ -4249,5 +4328,14 @@
         private ToolStripSeparator toolStripSeparator21;
         private ToolStripButton trainer_ImportProperties_btn;
         private ToolStripButton trainer_ExportProperties_btn;
+        private ToolStripButton class_SavePropertyBtn;
+        private ToolStripButton class_UndoPropertiesBtn;
+        private ToolStripSeparator toolStripSeparator22;
+        private ListBox class_VSEffectsListBox;
+        private Button class_EyeContactHelpBtn;
+        private Label label70;
+        private Label label69;
+        private PictureBox class_VsEffectsPictureBox;
+        private Button class_EyeContactDaySoundBtn;
     }
 }

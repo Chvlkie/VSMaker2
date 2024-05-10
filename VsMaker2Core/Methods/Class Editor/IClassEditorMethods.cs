@@ -9,6 +9,8 @@ namespace VsMaker2Core.Methods
 {
     public interface IClassEditorMethods
     {
+        TrainerClass GetTrainerClass(List<TrainerClass> classes, int classId);
+
         List<TrainerClass> GetTrainerClasses(int classMessageArchive);
     }
 }

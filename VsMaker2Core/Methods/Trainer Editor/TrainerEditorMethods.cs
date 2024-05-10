@@ -100,7 +100,7 @@ namespace VsMaker2Core.Methods
 
         public Pokemon NewPartyPokemon(ushort pokemonId, ushort level, byte difficulty, byte genderAbilityOverride, ushort formId, ushort? ballCapsule = null, ushort? heldItem = null, ushort[] moves = null)
         {
-            var pokemon = new Pokemon
+            return new Pokemon
             {
                 PokemonId = pokemonId,
                 Level = level,
@@ -111,8 +111,6 @@ namespace VsMaker2Core.Methods
                 HeldItemId = heldItem,
                 Moves = moves
             };
-
-            return pokemon;
         }
 
         public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags)
