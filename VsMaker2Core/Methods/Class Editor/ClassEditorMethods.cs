@@ -22,12 +22,16 @@ namespace VsMaker2Core.Methods
             // Start from i 2 to skip player classes
             for (int i = 2; i < classNames.Count; i++)
             {
+                var eyeContactData = loadedRom.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
                 var trainerClass = new TrainerClass
                 {
                     TrainerClassId = i,
                     TrainerClassName = classNames[i],
                     Description = classDescriptions[i],
-                    UsedByTrainers = GetUsedByTrainers(i, trainers)
+                    UsedByTrainers = GetUsedByTrainers(i, trainers),
+                    Gender = loadedRom.ClassGenderData[i].Gender,
+                    EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
+                    EyeContactMusicNight = eyeContactData != default ? eyeContactData.MusicNightId : null,
                 };
                 trainerClasses.Add(trainerClass);
             }

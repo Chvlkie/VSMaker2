@@ -37,6 +37,7 @@ namespace VsMaker2Core.Methods
         List<Species> GetSpecies();
 
         int GetTotalNumberOfTrainers(int trainerNameArchive);
+        int GetTotalNumberOfTrainerClassess(int trainerClassNameArchive);
 
         /// <summary>
         /// Get the TrainerNames from the trainerNameMessageArchive.
@@ -72,5 +73,7 @@ namespace VsMaker2Core.Methods
         List<string> GetItemNames(int itemNameArchive);
         int GetMessageInitialKey(int messageArchive);
         int SetTrainerNameMax(int trainerNameOffset);
+        List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
+        List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
     }
 }

@@ -279,7 +279,9 @@
             ClientSize = new Size(952, 404);
             Controls.Add(panel1);
             MaximizeBox = false;
+            MaximumSize = new Size(968, 443);
             MinimizeBox = false;
+            MinimumSize = new Size(968, 443);
             Name = "RomPatches";
             StartPosition = FormStartPosition.WindowsDefaultBounds;
             Text = "ROM Patches";

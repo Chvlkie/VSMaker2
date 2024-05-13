@@ -66,6 +66,7 @@ namespace VsMaker2Core.Methods
             }
             return classDescriptions;
         }
+
         public List<string> GetClassNames(int classNamesArchive)
         {
             var messageArchives = GetMessageArchiveContents(classNamesArchive, false);
@@ -271,6 +272,34 @@ namespace VsMaker2Core.Methods
             return messageArchives;
         }
 
+        public List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam)
+        {
+            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0) - Arm9.Address;
+            List<ClassGenderData> classGenders = [];
+            using Arm9.Arm9Reader reader = new(tableStartAddress);
+            try
+            {
+                for (int i = 0; i < numberOfClasses; i++)
+                {
+                    var classGender = new ClassGenderData
+                    {
+                        Offset = reader.BaseStream.Position,
+                        Gender = reader.ReadByte(),
+                        TrainerClassId = i
+                    };
+                    classGenders.Add(classGender);
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                throw;
+            }
+            return classGenders;
+        }
+
         public int GetMessageInitialKey(int messageArchive)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchive:D4}";
@@ -350,6 +379,48 @@ namespace VsMaker2Core.Methods
         public int GetTotalNumberOfTrainers(int trainerNameArchive)
         {
             return GetMessageArchiveContents(trainerNameArchive, false).Count;
+        }
+
+        public int GetTotalNumberOfTrainerClassess(int trainerClassNameArchive)
+        {
+            return GetMessageArchiveContents(trainerClassNameArchive, false).Count;
+        }
+
+        public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
+        {
+            List<EyeContactMusicData> eyeContactMusic = [];
+            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
+            uint tableSizeOffset = (uint)(gameFamily == GameFamily.HeartGoldSoulSilver ? 12 : 10);
+            byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
+            using Arm9.Arm9Reader reader = new(tableStartAddress);
+            try
+            {
+                for (int i = 0; i < tableSize; i++)
+                {
+                    uint offset = (uint)reader.BaseStream.Position;
+                    ushort trainerClassId = reader.ReadUInt16();
+                    ushort musicDayId = reader.ReadUInt16();
+                    ushort? musicNightId = gameFamily == GameFamily.HeartGoldSoulSilver ? reader.ReadUInt16() : null;
+                    var eyeContactMusicData = new EyeContactMusicData
+                    {
+                        Offset = offset,
+                        TrainerClassId = trainerClassId,
+                        MusicDayId = musicDayId,
+                        MusicNightId = musicNightId,
+                    };
+                    eyeContactMusic.Add(eyeContactMusicData);
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+
+                throw;
+            }
+
+            return eyeContactMusic;
         }
 
         public List<string> GetTrainerNames(int trainerNameMessageArchive)

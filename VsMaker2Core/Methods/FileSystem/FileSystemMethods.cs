@@ -175,6 +175,15 @@ namespace VsMaker2Core.Methods
 
         #endregion Write
 
+        #region Delete
+        public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
+        {
+            string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{messageArchive:D4}";
+            string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{messageArchive:D4}";
+            return (true, "");
+        }
+        #endregion Delete
+
         public (bool Success, string ErrorMessage) ExportTrainers(VsTrainersFile export, string filePath)
         {
             try

@@ -12,12 +12,10 @@ namespace VsMaker2Core
 
         bool CheckCompressionMark(GameFamily gameFamily);
 
-        byte[] ReadBytes(uint startOffset, long numberOfBytes = 0);
-
+      
         void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null);
 
-        byte ReadByte(uint startOffset);
-
+    
         void WriteByte(byte value, uint destinationOffset);
     }
 }

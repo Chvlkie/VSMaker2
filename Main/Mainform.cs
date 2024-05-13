@@ -214,6 +214,9 @@ namespace Main
                 LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
                 LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
                 LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
+                LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClassess(LoadedRom.ClassNamesTextNumber);
+                LoadedRom.ClassGenderData = romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress);
+                LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, LoadedRom.GameFamily);
                 InitializeTrainerEditor();
                 InitializeClassEditor();
                 GetInitialData();
@@ -756,17 +759,11 @@ namespace Main
             }
         }
 
-        private void class_SaveClassBtn_Click(object sender, EventArgs e)
+        private void class_UndoPropertiesBtn_Click(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
-            {
-                IsLoadingData = true;
-                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
-                {
-                    MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                IsLoadingData = false;
-            }
+            ClearUnsavedClassPropertiesChanges();
+            class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
+            class_DescriptionTextBox.Text = SelectedClass.Description;
         }
     }
 }

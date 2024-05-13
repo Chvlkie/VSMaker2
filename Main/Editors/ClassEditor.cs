@@ -1,4 +1,5 @@
 ﻿using Main.Models;
+using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using static VsMaker2Core.Enums;
 
@@ -7,10 +8,12 @@ namespace Main
     // CLASS EDITOR
     public partial class Mainform : Form
     {
+        private bool ClassNameEdited;
+        private bool ClassPropertyEdited;
         private bool InhibitClassChange = false;
         private TrainerClass SelectedClass = new();
         private List<string> UnfilteredClasses = [];
-        private bool UnsavedClassChanges;
+        private bool UnsavedClassChanges => ClassNameEdited || ClassPropertyEdited;
 
         private void class_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -37,6 +40,7 @@ namespace Main
                     {
                         selectedClass = class_ClassListBox.SelectedItem.ToString();
                         SelectedClass = classEditorMethods.GetTrainerClass(MainEditorModel.Classes, TrainerClass.ListNameToTrainerClassId(selectedClass));
+                        class_ViewTrainerBtn.Enabled = false;
 
                         if (SelectedClass.TrainerClassId > 0)
                         {
@@ -53,26 +57,261 @@ namespace Main
             }
         }
 
+        private void class_ClearFilterBtn_Click(object sender, EventArgs e)
+        {
+            class_FilterTextBox.Text = "";
+        }
+
+        private void class_DescriptionTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerClassProperties(true);
+            }
+        }
+
+        private void class_EyeContactDayComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerClassProperties(true);
+            }
+        }
+
+        private void class_EyeContactNightComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerClassProperties(true);
+            }
+        }
+
+        private void class_FilterTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (string.IsNullOrEmpty(class_FilterTextBox.Text))
+                {
+                    PopulateClassList(MainEditorModel.Classes);
+                    class_ClearFilterBtn.Enabled = false;
+                }
+                else
+                {
+                    FilterListBox(class_ClassListBox, class_FilterTextBox.Text, UnfilteredClasses);
+                    class_ClearFilterBtn.Enabled = true;
+                }
+            }
+        }
+
+        private void class_GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerClassProperties(true);
+            }
+        }
+
         private void class_NameTextBox_TextChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
             {
+                class_NameTextBox.BackColor = Color.White;
+                EditedTrainerClassName(true);
+            }
+        }
+
+        private void class_NewClassInfoBtn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Trainer Classes rely on data from specific tables:\n" +
+                "Class Gender Table and Prize Money table.\n\n" +
+                "In order to create a new Trainer Class, these required tables must first be expanded. " +
+                "It is possible to apply patches to expand these tables from the ROM Patcher Menu.\n" +
+                "To open these patches select Tools > ROM Patcher.\n\n" +
+                "IMPORTANT: Applying patches is an advanced feature and has the potential of corrupting your ROM. " +
+                "Before applying any ROM patch, make a back up of your project to avoid any potential loss of work.",
+                "Creating a New Class");
+        }
+
+        private void class_PrizeMoneyNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerClassProperties(true);
+            }
+        }
+
+        private void class_SaveClassBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                IsLoadingData = true;
+                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
+                {
+                    MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                IsLoadingData = false;
+            }
+        }
+
+        private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            class_ViewTrainerBtn.Enabled = !IsLoadingData && class_TrainersListBox.SelectedIndex > -1;
+        }
+
+        private void ClearUnsavedClassChanges()
+        {
+            EditedTrainerClassName(false);
+            EditedTrainerClassProperties(false);
+        }
+
+        private void ClearUnsavedClassPropertiesChanges()
+        {
+            EditedTrainerClassProperties(false);
+        }
+
+        private void EditedTrainerClassName(bool hasChanges)
+        {
+            ClassNameEdited = hasChanges;
+            main_MainTab_ClassTab.Text = UnsavedClassChanges ? "Classes *" : "Classes";
+            class_UndoAllBtn.Enabled = UnsavedClassChanges;
+        }
+
+        private void EditedTrainerClassProperties(bool hasChanges)
+        {
+            ClassPropertyEdited = hasChanges;
+            main_MainTab_ClassTab.Text = UnsavedClassChanges ? "Classes *" : "Classes";
+            class_UndoAllBtn.Enabled = UnsavedClassChanges;
+            class_UndoPropertiesBtn.Enabled = ClassPropertyEdited;
+        }
+
+        private void EnableClassEditor()
+        {
+            class_EyeContactNightComboBox.Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
+            class_EyeContactNightComboBox.Visible = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
+            class_PrizeMoneyNum.Enabled = true;
+            class_TrainersListBox.Enabled = true;
+            class_NameTextBox.Enabled = true;
+            class_EyeContactDayComboBox.Enabled = true;
+            class_SaveClassBtn.Enabled = true;
+            class_DescriptionTextBox.Enabled = true;
+            class_SavePropertyBtn.Enabled = true;
+            class_GenderComboBox.Enabled = true;
+
+            if (class_EyeContactDayComboBox.SelectedIndex < 0)
+            {
+                class_EyeContactDayComboBox.Enabled = false;
+            }
+            if (class_EyeContactNightComboBox.SelectedIndex < 0)
+            {
+                class_EyeContactNightComboBox.Enabled = false;
+            }
+        }
+
+        private void InitializeClassEditor()
+        {
+            class_UndoAllBtn.Enabled = false;
+            class_SaveClassBtn.Enabled = false;
+            class_AddClassBtn.Enabled = false;
+            class_RemoveBtn.Enabled = false;
+            class_ImportAllBtn.Enabled = false;
+            class_ExportAllBtn.Enabled = false;
+            class_FilterTextBox.Enabled = false;
+            class_ClearFilterBtn.Enabled = false;
+            class_TrainersListBox.Enabled = false;
+            class_SpriteExportBtn.Enabled = false;
+            class_SpriteFrameNum.Enabled = false;
+            class_SpriteImportBtn.Enabled = false;
+            class_CopyBtn.Enabled = false;
+            class_PasteBtn.Enabled = false;
+            class_ImportBtn.Enabled = false;
+            class_ExportBtn.Enabled = false;
+            class_ClassListBox.Enabled = false;
+            class_ViewTrainerBtn.Enabled = false;
+            class_NameTextBox.Enabled = false;
+            class_SavePropertyBtn.Enabled = false;
+            class_UndoPropertiesBtn.Enabled = false;
+            class_PropertyCopyBtn.Enabled = false;
+            class_PropertyExportBtn.Enabled = false;
+            class_PropertyImportBtn.Enabled = false;
+            class_PropertyPasteBtn.Enabled = false;
+            class_EyeContactDaySoundBtn.Enabled = false;
+            class_EyeContactNightPlayBtn.Enabled = false;
+            class_EyeContactHelpBtn.Enabled = false;
+            class_VSEffectsListBox.Enabled = false;
+            class_InBattleMusicPlayBtn.Enabled = false;
+        }
+
+        private void PopulateClassGenderList()
+        {
+            class_GenderComboBox.Items.Clear();
+            class_GenderComboBox.Items.AddRange(Gender.ClassGenders.ToArray());
+        }
+
+        private void PopulateClassList(List<TrainerClass> classes)
+        {
+            class_ClassListBox.Items.Clear();
+            UnfilteredClasses = [];
+            foreach (var item in classes)
+            {
+                class_ClassListBox.Items.Add(item.ListName);
+                UnfilteredClasses.Add(item.ListName);
+            }
+        }
+
+        private void PopulateEyeContactMusic(ComboBox comboBox)
+        {
+            comboBox.Items.Clear();
+            switch (LoadedRom.GameFamily)
+            {
+                case GameFamily.DiamondPearl:
+                    comboBox.Items.AddRange(EyeContactMusics.DiamondPearl.Select(x => x.ListName).ToArray());
+                    break;
+
+                case GameFamily.HeartGoldSoulSilver:
+                case GameFamily.HgEngine:
+                    comboBox.Items.AddRange(EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName).ToArray());
+                    break;
+
+                case GameFamily.Platinum:
+                    comboBox.Items.AddRange(EyeContactMusics.Platinum.Select(x => x.ListName).ToArray());
+                    break;
             }
         }
 
         private void PopulateTrainerClassData()
         {
-            if (!IsLoadingData)
+            IsLoadingData = true;
+            class_NameTextBox.Text = SelectedClass.TrainerClassName;
+            class_PrizeMoneyNum.Value = SelectedClass.PrizeMoneyMultiplier;
+            class_DescriptionTextBox.Text = SelectedClass.Description;
+
+            switch (LoadedRom.GameFamily)
             {
-                class_NameTextBox.Text = SelectedClass.TrainerClassName;
-                class_PrizeMoneyNum.Value = SelectedClass.PrizeMoneyMultiplier;
-                class_DescriptionTextBox.Text = SelectedClass.Description;
-                // class_EyeContactDayComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusic;
-                if (LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
-                {
-                    //    class_EyeContactNightComboBox.SelectedIndex = (int)SelectedClass.EyeContactMusicNight.Value;
-                }
-                // class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
+                case GameFamily.DiamondPearl:
+                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
+                    break;
+
+                case GameFamily.Platinum:
+                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.Platinum.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
+                    break;
+
+                case GameFamily.HeartGoldSoulSilver:
+                case GameFamily.HgEngine:
+                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
+                    class_EyeContactNightComboBox.SelectedIndex = EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicNight);
+                    break;
+            }
+
+            class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
+            IsLoadingData = false;
+        }
+
+        private void PopulateUsedByTrainers(List<Trainer> usedByTrainers)
+        {
+            class_TrainersListBox.Items.Clear();
+            foreach (var trainer in usedByTrainers)
+            {
+                class_TrainersListBox.Items.Add(trainer.ListName);
             }
         }
 
@@ -97,6 +336,30 @@ namespace Main
                 UnfilteredClasses[classId - 2] = MainEditorModel.Classes[classId - 2].ListName;
             }
             return saveClass.Success;
+        }
+
+        private void SetupClassEditor()
+        {
+            IsLoadingData = true;
+            if (class_ClassListBox.Items.Count == 0)
+            {
+                PopulateClassList(MainEditorModel.Classes);
+            }
+            if (class_GenderComboBox.Items.Count == 0)
+            {
+                PopulateClassGenderList();
+            }
+            if (class_EyeContactDayComboBox.Items.Count == 0)
+            {
+                PopulateEyeContactMusic(class_EyeContactDayComboBox);
+            }
+            if (class_EyeContactNightComboBox.Items.Count == 0)
+            {
+                PopulateEyeContactMusic(class_EyeContactNightComboBox);
+            }
+            class_ClassListBox.Enabled = true;
+            class_FilterTextBox.Enabled = true;
+            IsLoadingData = false;
         }
 
         private bool ValidateClassName()
@@ -128,107 +391,6 @@ namespace Main
                 MessageBox.Show("Important: Class name is longer than 16 characters.\nThere may be issues in-game when displaying this name.", "Long Class Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return true;
-        }
-
-        private void EnableClassEditor()
-        {
-            class_EyeContactNightComboBox.Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
-            class_EyeContactNightComboBox.Visible = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
-            class_PrizeMoneyNum.Enabled = true;
-            class_TrainersListBox.Enabled = true;
-            class_NameTextBox.Enabled = true;
-            class_EyeContactDayComboBox.Enabled = true;
-            class_SaveClassBtn.Enabled = true;
-            class_DescriptionTextBox.Enabled = true;
-        }
-
-        private void class_ClearFilterBtn_Click(object sender, EventArgs e)
-        {
-            class_FilterTextBox.Text = "";
-        }
-
-        private void class_FilterTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                if (string.IsNullOrEmpty(class_FilterTextBox.Text))
-                {
-                    PopulateClassList(MainEditorModel.Classes);
-                    class_ClearFilterBtn.Enabled = false;
-                }
-                else
-                {
-                    FilterListBox(class_ClassListBox, class_FilterTextBox.Text, UnfilteredClasses);
-                    class_ClearFilterBtn.Enabled = true;
-                }
-            }
-        }
-
-        private void ClearUnsavedClassChanges()
-        {
-            EditedTrainerClass(false);
-        }
-
-        private void EditedTrainerClass(bool hasChanges)
-        {
-            UnsavedClassChanges = hasChanges;
-            main_MainTab_ClassTab.Text = UnsavedTrainerEditorChanges ? "Classes *" : "Classes";
-            class_UndoAllBtn.Enabled = UnsavedClassChanges;
-        }
-
-        private void InitializeClassEditor()
-        {
-            class_UndoAllBtn.Enabled = false;
-            class_SaveClassBtn.Enabled = false;
-            class_AddClassBtn.Enabled = false;
-            class_RemoveBtn.Enabled = false;
-            class_ImportAllBtn.Enabled = false;
-            class_ExportAllBtn.Enabled = false;
-            class_FilterTextBox.Enabled = false;
-            class_ClearFilterBtn.Enabled = false;
-            class_TrainersListBox.Enabled = false;
-            class_SpriteExportBtn.Enabled = false;
-            class_SpriteFrameNum.Enabled = false;
-            class_SpriteImportBtn.Enabled = false;
-            class_CopyBtn.Enabled = false;
-            class_PasteBtn.Enabled = false;
-            class_ImportBtn.Enabled = false;
-            class_ExportBtn.Enabled = false;
-            class_ClassListBox.Enabled = false;
-            class_ViewTrainerBtn.Enabled = false;
-            class_NameTextBox.Enabled = false;
-        }
-
-        private void PopulateClassList(List<TrainerClass> classes)
-        {
-            class_ClassListBox.Items.Clear();
-            UnfilteredClasses = [];
-            foreach (var item in classes)
-            {
-                class_ClassListBox.Items.Add(item.ListName);
-                UnfilteredClasses.Add(item.ListName);
-            }
-        }
-
-        private void PopulateUsedByTrainers(List<Trainer> usedByTrainers)
-        {
-            class_TrainersListBox.Items.Clear();
-            foreach (var trainer in usedByTrainers)
-            {
-                class_TrainersListBox.Items.Add(trainer.ListName);
-            }
-        }
-
-        private void SetupClassEditor()
-        {
-            IsLoadingData = true;
-            if (class_ClassListBox.Items.Count == 0)
-            {
-                PopulateClassList(MainEditorModel.Classes);
-            }
-            class_ClassListBox.Enabled = true;
-            class_FilterTextBox.Enabled = true;
-            IsLoadingData = false;
         }
     }
 }

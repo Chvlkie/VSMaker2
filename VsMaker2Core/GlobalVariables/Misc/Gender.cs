@@ -8,9 +8,9 @@
 
         public static List<string> ClassGenders =>
             [
-            Default,
             Male,
-            Female
+            Female,
+            Default,
             ];
 
         public static List<string> PokemonGenders =>

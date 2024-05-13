@@ -36,5 +36,6 @@ namespace VsMaker2Core.Methods
         (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
         (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive);
         (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive);
+        (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
     }
 }

@@ -262,6 +262,7 @@
             trainer_Trainer_Lbl = new Label();
             main_MainTab_ClassTab = new TabPage();
             panel4 = new Panel();
+            class_NewClassInfoBtn = new Button();
             label71 = new Label();
             class_InBattleMusicPlayBtn = new Button();
             class_InBattleMusicTextBox = new TextBox();
@@ -288,7 +289,7 @@
             class_UndoPropertiesBtn = new ToolStripButton();
             toolStripSeparator22 = new ToolStripSeparator();
             class_PropertyCopyBtn = new ToolStripButton();
-            class_PropertyPastBtn = new ToolStripButton();
+            class_PropertyPasteBtn = new ToolStripButton();
             toolStripSeparator16 = new ToolStripSeparator();
             class_PropertyImportBtn = new ToolStripButton();
             class_PropertyExportBtn = new ToolStripButton();
@@ -2818,6 +2819,7 @@
             // panel4
             // 
             panel4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel4.Controls.Add(class_NewClassInfoBtn);
             panel4.Controls.Add(label71);
             panel4.Controls.Add(class_InBattleMusicPlayBtn);
             panel4.Controls.Add(class_InBattleMusicTextBox);
@@ -2844,6 +2846,17 @@
             panel4.Name = "panel4";
             panel4.Size = new Size(821, 505);
             panel4.TabIndex = 5;
+            // 
+            // class_NewClassInfoBtn
+            // 
+            class_NewClassInfoBtn.BackColor = SystemColors.Info;
+            class_NewClassInfoBtn.Location = new Point(543, 47);
+            class_NewClassInfoBtn.Name = "class_NewClassInfoBtn";
+            class_NewClassInfoBtn.Size = new Size(256, 49);
+            class_NewClassInfoBtn.TabIndex = 27;
+            class_NewClassInfoBtn.Text = "About Adding New Classes";
+            class_NewClassInfoBtn.UseVisualStyleBackColor = false;
+            class_NewClassInfoBtn.Click += class_NewClassInfoBtn_Click;
             // 
             // label71
             // 
@@ -2955,6 +2968,7 @@
             class_DescriptionTextBox.Name = "class_DescriptionTextBox";
             class_DescriptionTextBox.Size = new Size(146, 23);
             class_DescriptionTextBox.TabIndex = 15;
+            class_DescriptionTextBox.TextChanged += class_DescriptionTextBox_TextChanged;
             // 
             // class_EyeContactHelpBtn
             // 
@@ -2977,12 +2991,14 @@
             // 
             // class_EyeContactNightComboBox
             // 
+            class_EyeContactNightComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             class_EyeContactNightComboBox.Enabled = false;
             class_EyeContactNightComboBox.FormattingEnabled = true;
             class_EyeContactNightComboBox.Location = new Point(187, 125);
             class_EyeContactNightComboBox.Name = "class_EyeContactNightComboBox";
             class_EyeContactNightComboBox.Size = new Size(146, 23);
             class_EyeContactNightComboBox.TabIndex = 7;
+            class_EyeContactNightComboBox.SelectedIndexChanged += class_EyeContactNightComboBox_SelectedIndexChanged;
             // 
             // label56
             // 
@@ -3006,12 +3022,14 @@
             // 
             // class_EyeContactDayComboBox
             // 
+            class_EyeContactDayComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             class_EyeContactDayComboBox.Enabled = false;
             class_EyeContactDayComboBox.FormattingEnabled = true;
             class_EyeContactDayComboBox.Location = new Point(6, 125);
             class_EyeContactDayComboBox.Name = "class_EyeContactDayComboBox";
             class_EyeContactDayComboBox.Size = new Size(146, 23);
             class_EyeContactDayComboBox.TabIndex = 6;
+            class_EyeContactDayComboBox.SelectedIndexChanged += class_EyeContactDayComboBox_SelectedIndexChanged;
             // 
             // label59
             // 
@@ -3030,15 +3048,18 @@
             class_PrizeMoneyNum.Name = "class_PrizeMoneyNum";
             class_PrizeMoneyNum.Size = new Size(76, 23);
             class_PrizeMoneyNum.TabIndex = 11;
+            class_PrizeMoneyNum.ValueChanged += class_PrizeMoneyNum_ValueChanged;
             // 
             // class_GenderComboBox
             // 
+            class_GenderComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             class_GenderComboBox.Enabled = false;
             class_GenderComboBox.FormattingEnabled = true;
             class_GenderComboBox.Location = new Point(6, 70);
             class_GenderComboBox.Name = "class_GenderComboBox";
             class_GenderComboBox.Size = new Size(64, 23);
             class_GenderComboBox.TabIndex = 10;
+            class_GenderComboBox.SelectedIndexChanged += class_GenderComboBox_SelectedIndexChanged;
             // 
             // label58
             // 
@@ -3052,7 +3073,7 @@
             // 
             // class_Properties_toolStrip
             // 
-            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator22, class_PropertyCopyBtn, class_PropertyPastBtn, toolStripSeparator16, class_PropertyImportBtn, class_PropertyExportBtn });
+            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator22, class_PropertyCopyBtn, class_PropertyPasteBtn, toolStripSeparator16, class_PropertyImportBtn, class_PropertyExportBtn });
             class_Properties_toolStrip.Location = new Point(0, 0);
             class_Properties_toolStrip.Name = "class_Properties_toolStrip";
             class_Properties_toolStrip.Size = new Size(821, 25);
@@ -3075,6 +3096,7 @@
             class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
             class_UndoPropertiesBtn.Size = new Size(23, 22);
             class_UndoPropertiesBtn.Text = "Undo Changes";
+            class_UndoPropertiesBtn.Click += class_UndoPropertiesBtn_Click;
             // 
             // toolStripSeparator22
             // 
@@ -3091,15 +3113,15 @@
             class_PropertyCopyBtn.Size = new Size(23, 22);
             class_PropertyCopyBtn.Text = "Copy Class Properties";
             // 
-            // class_PropertyPastBtn
+            // class_PropertyPasteBtn
             // 
-            class_PropertyPastBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_PropertyPastBtn.Enabled = false;
-            class_PropertyPastBtn.Image = Properties.Resources.paste_ico;
-            class_PropertyPastBtn.ImageTransparentColor = Color.Magenta;
-            class_PropertyPastBtn.Name = "class_PropertyPastBtn";
-            class_PropertyPastBtn.Size = new Size(23, 22);
-            class_PropertyPastBtn.Text = "Paste  Class Properties";
+            class_PropertyPasteBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            class_PropertyPasteBtn.Enabled = false;
+            class_PropertyPasteBtn.Image = Properties.Resources.paste_ico;
+            class_PropertyPasteBtn.ImageTransparentColor = Color.Magenta;
+            class_PropertyPasteBtn.Name = "class_PropertyPasteBtn";
+            class_PropertyPasteBtn.Size = new Size(23, 22);
+            class_PropertyPasteBtn.Text = "Paste  Class Properties";
             // 
             // toolStripSeparator16
             // 
@@ -3185,6 +3207,7 @@
             class_TrainersListBox.Name = "class_TrainersListBox";
             class_TrainersListBox.Size = new Size(197, 274);
             class_TrainersListBox.TabIndex = 8;
+            class_TrainersListBox.SelectedIndexChanged += class_TrainersListBox_SelectedIndexChanged;
             // 
             // label53
             // 
@@ -4127,7 +4150,7 @@
         private Panel panel4;
         private ToolStrip class_Properties_toolStrip;
         private ToolStripButton class_PropertyCopyBtn;
-        private ToolStripButton class_PropertyPastBtn;
+        private ToolStripButton class_PropertyPasteBtn;
         private Panel panel3;
         private Label label52;
         private TextBox class_NameTextBox;
@@ -4381,5 +4404,6 @@
         private Button class_InBattleMusicPlayBtn;
         private TextBox class_InBattleMusicTextBox;
         private Button class_EyeContactNightPlayBtn;
+        private Button class_NewClassInfoBtn;
     }
 }

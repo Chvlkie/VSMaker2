@@ -5,7 +5,7 @@
         public int TrainerClassId { get; set; }
         public string TrainerClassName { get; set; }
 
-        public int EyeContactMusic { get; set; }
+        public int EyeContactMusicDay { get; set; }
         public int? EyeContactMusicNight { get; set; }
         public int PrizeMoneyMultiplier { get; set; }
         public int Gender { get; set; }
