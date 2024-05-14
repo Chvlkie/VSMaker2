@@ -37,5 +37,10 @@ namespace VsMaker2Core.Methods
         (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive);
         (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive);
         (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
+        (bool Success, string ErrorMessage) WritePrizeMoneyData(PrizeMoneyData prizeMoneyData, RomFile loadedRom);
+        (bool Success, string ErrorMessage) WriteEyeContactMusicData(EyeContactMusicData eyeContactMusicData, RomFile loadedRom);
+        (bool Success, string ErrorMessage) WriteClassGenderData(ClassGenderData classGenderData);
+
+        (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber);
     }
 }

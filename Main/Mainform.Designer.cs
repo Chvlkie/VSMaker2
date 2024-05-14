@@ -2607,6 +2607,7 @@
             trainer_ViewClassBtn.TabIndex = 9;
             trainer_ViewClassBtn.Text = "View Class";
             trainer_ViewClassBtn.UseVisualStyleBackColor = true;
+            trainer_ViewClassBtn.Click += trainer_ViewClassBtn_Click;
             // 
             // trainer_ClassListBox
             // 
@@ -3087,6 +3088,7 @@
             class_SavePropertyBtn.Name = "class_SavePropertyBtn";
             class_SavePropertyBtn.Size = new Size(107, 22);
             class_SavePropertyBtn.Text = "Save Properties";
+            class_SavePropertyBtn.Click += class_SavePropertyBtn_Click;
             // 
             // class_UndoPropertiesBtn
             // 
@@ -3196,6 +3198,7 @@
             class_ViewTrainerBtn.TabIndex = 9;
             class_ViewTrainerBtn.Text = "View Trainer";
             class_ViewTrainerBtn.UseVisualStyleBackColor = true;
+            class_ViewTrainerBtn.Click += class_ViewTrainerBtn_Click;
             // 
             // class_TrainersListBox
             // 
@@ -3426,6 +3429,7 @@
             class_UndoAllBtn.Name = "class_UndoAllBtn";
             class_UndoAllBtn.Size = new Size(73, 22);
             class_UndoAllBtn.Text = "Undo All";
+            class_UndoAllBtn.Click += class_UndoAllBtn_Click;
             // 
             // toolStripSeparator14
             // 

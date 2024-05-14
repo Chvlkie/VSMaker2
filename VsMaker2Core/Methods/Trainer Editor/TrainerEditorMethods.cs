@@ -14,7 +14,7 @@ namespace VsMaker2Core.Methods
             romFileMethods = new RomFileMethods();
         }
 
-        public List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom )
+        public List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom)
         {
             List<Trainer> trainers = [];
             // Start from i 1 to skip player trainer file
@@ -84,33 +84,12 @@ namespace VsMaker2Core.Methods
             var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
             var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
 
-            return new Trainer
-            {
-                TrainerId = (ushort)trainerId,
-                TrainerName = trainerName,
-                TrainerParty = trainerParty,
-                TrainerProperties = trainerProperties,
-            };
+            return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty);
         }
 
         public Trainer GetTrainer(List<Trainer> trainers, int trainerId)
         {
             return trainers.SingleOrDefault(x => x.TrainerId == trainerId);
-        }
-
-        public Pokemon NewPartyPokemon(ushort pokemonId, ushort level, byte difficulty, byte genderAbilityOverride, ushort formId, ushort? ballCapsule = null, ushort? heldItem = null, ushort[] moves = null)
-        {
-            return new Pokemon
-            {
-                PokemonId = pokemonId,
-                Level = level,
-                DifficultyValue = difficulty,
-                GenderAbilityOverride = genderAbilityOverride,
-                FormId = formId,
-                BallCapsuleId = ballCapsule,
-                HeldItemId = heldItem,
-                Moves = moves
-            };
         }
 
         public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags)
@@ -148,27 +127,12 @@ namespace VsMaker2Core.Methods
                 }
             }
 
-            return new TrainerData
-            {
-                TrainerType = trainerType,
-                TrainerClassId = trainerProperties.TrainerClassId,
-                TeamSize = trainerProperties.TeamSize,
-                AIFlags = aiFlags,
-                Items = trainerProperties.Items,
-                IsDoubleBattle = (uint)(trainerProperties.DoubleBattle ? 2 : 0)
-            };
+            return new TrainerData(trainerType, trainerProperties.TrainerClassId, 0, trainerProperties.TeamSize, trainerProperties.Items, aiFlags, (uint)(trainerProperties.DoubleBattle ? 2 : 0));
         }
 
-        public TrainerPartyData NewTrainerPartyData(TrainerPartyPokemonData[] pokemonDatas)
-        {
-             return new TrainerPartyData
-            {
-                  PokemonData = pokemonDatas
-            };
-        }
         public TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule)
         {
-            var newPokemonData = new TrainerPartyPokemonData
+            var newPokemonData = new TrainerPartyPokemonData()
             {
                 Difficulty = pokemon.DifficultyValue,
                 GenderAbilityOverride = pokemon.GenderAbilityOverride,

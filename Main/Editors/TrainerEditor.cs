@@ -1,5 +1,6 @@
 ﻿using Main.Forms;
 using Main.Models;
+using System.Runtime.InteropServices;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -52,8 +53,8 @@ namespace Main
             fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
             fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
             fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, LoadedRom.GameFamily != GameFamily.DiamondPearl);
-            UnfilteredTrainers.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
-            trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers[newTrainerId - 1].ListName);
+            UnfilteredTrainers.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
+            trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
             LoadedRom.TotalNumberOfTrainers++;
             IsLoadingData = false;
             trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
@@ -180,7 +181,7 @@ namespace Main
                 pokeFormsComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokeComboBoxes[i].SelectedIndex);
                 pokeHeldItemComboBoxes[i].Enabled = chooseItems;
                 pokeMoveButtons[i].Enabled = chooseMoves;
-                pokeGenderComboBoxes[i].Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver
+                pokeGenderComboBoxes[i].Enabled = LoadedRom.IsHeartGoldSoulSilver
                     && species.HasMoreThanOneGender;
             }
         }
@@ -196,7 +197,7 @@ namespace Main
             trainer_Import_Btn.Enabled = true;
             trainer_Export_Btn.Enabled = true;
             trainer_ClassListBox.Enabled = true;
-            trainer_ViewClassBtn.Enabled = false;
+            trainer_ViewClassBtn.Enabled = trainer_ClassListBox.SelectedIndex > -1;
             trainer_NameTextBox.Enabled = true;
             trainer_PropertiesTabControl.Enabled = true;
             trainer_SaveBtn.Enabled = true;
@@ -600,14 +601,14 @@ namespace Main
                 EditedTrainerData(false);
                 trainer_NameTextBox.BackColor = Color.White;
                 MainEditorModel.TrainerNames[trainerId] = trainer_NameTextBox.Text;
-                MainEditorModel.Trainers[trainerId - 1].TrainerName = trainer_NameTextBox.Text;
+                MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerName = trainer_NameTextBox.Text;
                 var index = trainer_TrainersListBox.FindString(UnfilteredTrainers[trainerId - 1]);
                 if (index > -1)
                 {
-                    trainer_TrainersListBox.Items[index] = MainEditorModel.Trainers[trainerId - 1].ListName;
+                    trainer_TrainersListBox.Items[index] = MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
                     trainer_TrainersListBox.SelectedIndex = index;
                 }
-                UnfilteredTrainers[trainerId - 1] = MainEditorModel.Trainers[trainerId - 1].ListName;
+                UnfilteredTrainers[trainerId - 1] = MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
             }
             return saveTrainerName.Success;
         }
@@ -619,14 +620,16 @@ namespace Main
             for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
             {
                 var species = GetSpeciesBySpeciesId(pokeComboBoxes[i].SelectedIndex);
+
+
+
                 byte genderAbilityOverride = species.HasMoreThanOneGender ? (byte)(pokeGenderComboBoxes[i].SelectedIndex + (pokeAbilityComboBoxes[i].SelectedIndex << 4)) : (byte)(pokeAbilityComboBoxes[i].SelectedIndex << 4);
-                var newPokemon = trainerEditorMethods.NewPartyPokemon((ushort)pokeComboBoxes[i].SelectedIndex, (ushort)pokeLevelNums[i].Value, (byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i]);
+                var newPokemon = new Pokemon((byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeLevelNums[i].Value, (ushort)pokeComboBoxes[i].SelectedIndex, (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i], (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex);
                 var newPokemonData = trainerEditorMethods.NewTrainerPartyPokemonData(newPokemon, trainer_ChooseMovesCheckbox.Checked, trainer_HeldItemsCheckbox.Checked, LoadedRom.GameFamily != GameFamily.DiamondPearl);
                 newPokemons.Add(newPokemon);
                 newPokemonDatas[i] = newPokemonData;
             }
-            var trainerPartyData = trainerEditorMethods.NewTrainerPartyData(newPokemonDatas);
-
+            var trainerPartyData = new TrainerPartyData(newPokemonDatas);
             var writeFile = fileSystemMethods.WriteTrainerPartyData(trainerPartyData, trainerId, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked, LoadedRom.GameFamily != GameFamily.DiamondPearl);
             if (writeFile.Success)
             {
@@ -638,7 +641,7 @@ namespace Main
                 var trainerParty = new TrainerParty { Pokemons = newPokemons };
 
                 SelectedTrainer.TrainerParty = trainerParty;
-                MainEditorModel.Trainers[trainerId - 1].TrainerParty = trainerParty;
+                MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerParty = trainerParty;
                 LoadedRom.TrainersPartyData[trainerId] = trainerPartyData;
                 EditedTrainerParty(false);
                 if (displaySuccess)
@@ -681,7 +684,7 @@ namespace Main
             if (writeFile.Success)
             {
                 SelectedTrainer.TrainerProperties = trainerProperties;
-                MainEditorModel.Trainers[trainerId - 1].TrainerProperties = trainerProperties;
+                MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
                 LoadedRom.TrainersData[trainerId] = newTrainerData;
                 EditedTrainerProperty(false);
                 if (displaySucces)
@@ -753,7 +756,7 @@ namespace Main
                 pokeAbilityComboBoxes[partyIndex].Enabled = false;
                 pokeAbilityComboBoxes[partyIndex].Items.Clear();
 
-                if (LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
+                if (LoadedRom.IsHeartGoldSoulSilver)
                 {
                     pokeGenderComboBoxes[partyIndex].SelectedIndex = species.GenderRatio switch
                     {
@@ -812,7 +815,7 @@ namespace Main
                     pokeMoves[i][3] = SelectedTrainer.TrainerParty.Pokemons[i].Moves[3];
                 }
 
-                if (LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
+                if (LoadedRom.IsHeartGoldSoulSilver)
                 {
                     switch (species.GenderRatio)
                     {
@@ -1030,7 +1033,7 @@ namespace Main
                 pokeComboBoxes?.ForEach(x => x.SelectedIndex = -1);
                 PopulatePokemonComboBoxes();
             }
-            if (poke1GenderComboBox.Items.Count == 0 && LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver)
+            if (poke1GenderComboBox.Items.Count == 0 && LoadedRom.IsHeartGoldSoulSilver)
             {
                 PopulatePokemonGenderComboBoxes();
                 pokeGenderComboBoxes?.ForEach(x => x.Visible = true);
@@ -1062,7 +1065,7 @@ namespace Main
                     ClearUnsavedTrainerChanges();
                     AddNewTrainer();
                 }
-                else
+                else if (!UnsavedTrainerEditorChanges)
                 {
                     AddNewTrainer();
                 }
@@ -1092,6 +1095,7 @@ namespace Main
             {
                 EditedTrainerProperty(true);
             }
+            trainer_ViewClassBtn.Enabled = trainer_ClassListBox.SelectedIndex > -1;
         }
 
         private void trainer_ClearFilterBtn_Click(object sender, EventArgs e)
@@ -1202,294 +1206,295 @@ namespace Main
                     }
                 }
             }
+        }
 
-            private void trainer_SaveBtn_Click(object sender, EventArgs e)
+        private void trainer_SaveBtn_Click(object sender, EventArgs e)
+        {
+            IsLoadingData = true;
+            if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(SelectedTrainer.TrainerId) && SaveTrainerProperties(SelectedTrainer.TrainerId) && SaveTrainerParty(SelectedTrainer.TrainerId))
             {
-                IsLoadingData = true;
-                if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(SelectedTrainer.TrainerId) && SaveTrainerProperties(SelectedTrainer.TrainerId) && SaveTrainerParty(SelectedTrainer.TrainerId))
-                {
-                    MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                IsLoadingData = false;
+                MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            IsLoadingData = false;
+        }
 
-            private void trainer_SaveParty_btn_Click(object sender, EventArgs e)
+        private void trainer_SaveParty_btn_Click(object sender, EventArgs e)
+        {
+            if (ValidatePokemon() && ValidatePokemonMoves())
             {
-                if (ValidatePokemon() && ValidatePokemonMoves())
+                if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked
+                    && SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
                 {
-                    if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked
-                        && SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
-                    {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
-                            "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerParty(SelectedTrainer.TrainerId, true);
-                        }
-                    }
-                    else if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked)
-                    {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
-                            "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerParty(SelectedTrainer.TrainerId, true);
-                        }
-                    }
-                    else if (SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
-                    {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
-                            "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerParty(SelectedTrainer.TrainerId, true);
-                        }
-                    }
-                    else
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
+                        "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
                     {
                         SaveTrainerParty(SelectedTrainer.TrainerId, true);
                     }
                 }
-            }
-
-            private void trainer_SaveProperties_btn_Click(object sender, EventArgs e)
-            {
-                if (ValidatePokemonMoves())
+                else if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked)
                 {
-                    if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked
-                        && SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
+                        "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
                     {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
-                            "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerProperties(SelectedTrainer.TrainerId, true);
-                        }
+                        SaveTrainerParty(SelectedTrainer.TrainerId, true);
                     }
-                    else if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked)
+                }
+                else if (SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
+                {
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
+                        "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(SelectedTrainer.TrainerId))
                     {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
-                            "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerProperties(SelectedTrainer.TrainerId, true);
-                        }
+                        SaveTrainerParty(SelectedTrainer.TrainerId, true);
                     }
-                    else if (SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
-                    {
-                        var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
-                            "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
-                        {
-                            SaveTrainerProperties(SelectedTrainer.TrainerId, true);
-                        }
-                    }
-                    else
+                }
+                else
+                {
+                    SaveTrainerParty(SelectedTrainer.TrainerId, true);
+                }
+            }
+        }
+
+        private void trainer_SaveProperties_btn_Click(object sender, EventArgs e)
+        {
+            if (ValidatePokemonMoves())
+            {
+                if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked
+                    && SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
+                {
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
+                        "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
                         SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
                 }
-            }
-
-            private void trainer_TeamSizeNum_ValueChanged(object sender, EventArgs e)
-            {
-                if (!IsLoadingData)
+                else if (SelectedTrainer.TrainerProperties.ChooseMoves != trainer_ChooseMovesCheckbox.Checked)
                 {
-                    if (trainer_TeamSizeNum.Minimum == 0)
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
+                        "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
-                        trainer_TeamSizeNum.Minimum = 1;
-                    }
-                    EditedTrainerProperty(true);
-                    EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                }
-            }
-
-            private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
-            {
-                if (!IsLoadingData && trainer_TrainersListBox.SelectedIndex > -1)
-                {
-                    string selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
-
-                    if (selectedTrainer != SelectedTrainer.ListName)
-                    {
-                        if (UnsavedTrainerEditorChanges && !InhibitTrainerChange)
-                        {
-                            if (ConfirmUnsavedChanges())
-                            {
-                                ClearUnsavedTrainerChanges();
-                            }
-                            else
-                            {
-                                InhibitTrainerChange = true;
-                                trainer_TrainersListBox.SelectedIndex = trainer_TrainersListBox.Items.IndexOf(SelectedTrainer.ListName);
-                            }
-                        }
-
-                        if (!InhibitTrainerChange)
-                        {
-                            selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
-                            SelectedTrainer = trainerEditorMethods.GetTrainer(MainEditorModel.Trainers, Trainer.ListNameToTrainerId(selectedTrainer));
-
-                            if (SelectedTrainer.TrainerId > 0)
-                            {
-                                PopulateTrainerData();
-                                PopulatePartyData();
-                                EnableTrainerEditor();
-                                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                            }
-                        }
-                        else
-                        {
-                            InhibitTrainerChange = false;
-                        }
+                        SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
                 }
-            }
-
-            private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)
-            {
-                UndoTrainerChanges();
-            }
-
-            private void trainer_UndoParty_btn_Click(object sender, EventArgs e)
-            {
-                UndoTrainerPartyChanges();
-            }
-
-            private void trainer_UndoProperties_Click(object sender, EventArgs e)
-            {
-                UndoTrainerPropertyChanges();
-            }
-
-            private void UndoTrainerChanges()
-            {
-                IsLoadingData = true;
-                SetTrainerName();
-                SetTrainerProperties();
-                InitializePartyEditor();
-                SetTrainerParty();
-                EditedTrainerData(false);
-                EditedTrainerProperty(false);
-                EditedTrainerParty(false);
-                IsLoadingData = false;
-            }
-
-            private void UndoTrainerPartyChanges()
-            {
-                IsLoadingData = true;
-                InitializePartyEditor();
-                SetTrainerParty();
-                EditedTrainerParty(false);
-                IsLoadingData = false;
-            }
-
-            private void UndoTrainerPropertyChanges()
-            {
-                IsLoadingData = true;
-                SetTrainerProperties();
-                EditedTrainerProperty(false);
-                IsLoadingData = false;
-            }
-
-            private void UpdateAbilty(int index)
-            {
-                EditedTrainerParty(true);
-            }
-
-            private bool ValidatePokemon()
-            {
-                bool valid = true;
-                for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
+                else if (SelectedTrainer.TrainerProperties.ChooseItems != trainer_HeldItemsCheckbox.Checked)
                 {
-                    if (pokeComboBoxes[i].SelectedIndex <= 0)
+                    var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
+                        "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(SelectedTrainer.TrainerId))
                     {
-                        pokeComboBoxes[i].BackColor = Color.PaleVioletRed;
-                        valid = false;
+                        SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                     }
-                }
-                if (!valid)
-                {
-                    MessageBox.Show("You must select a Pokemon", "Unable to Save Trainer Party", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                return valid;
-            }
-
-            private bool ValidatePokemonMoves()
-            {
-                if (trainer_ChooseMovesCheckbox.Checked)
-                {
-                    int partyCount = 0;
-                    foreach (var moveArray in pokeMoves)
-                    {
-                        if (partyCount == trainer_TeamSizeNum.Value)
-                        {
-                            break;
-                        }
-                        if (moveArray == null)
-                        {
-                            MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return false;
-                        }
-
-                        int movesSelected = 0;
-
-                        for (int i = 0; i < 4; i++)
-                        {
-                            if (moveArray[i] > 0)
-                            {
-                                movesSelected++;
-                            }
-                        }
-
-                        if (movesSelected == 0)
-                        {
-                            MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            return false;
-                        }
-                        partyCount++;
-                    }
-                }
-                return true;
-            }
-
-            private bool ValidateTrainerName()
-            {
-                if (string.IsNullOrEmpty(trainer_NameTextBox.Text))
-                {
-                    trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                    MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
-                }
-                else if (trainer_NameTextBox.Text.Length > 10 && !LoadedRom.TrainerNameExpansion)
-                {
-                    trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                    MessageBox.Show("Trainer name cannot be longer than 10 characters.\n\nYou can expand this to 16 characters by applying the Trainer Names Expansion patch.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (confirmPatch == DialogResult.Yes)
-                    {
-                        return RomPatches.ExpandTrainerNames(LoadedRom);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else if (trainer_NameTextBox.Text.Length > 16 && LoadedRom.TrainerNameExpansion)
-                {
-                    trainer_NameTextBox.BackColor = Color.PaleVioletRed;
-                    MessageBox.Show("Trainer name cannot be longer than 16 characters.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return false;
                 }
                 else
                 {
-                    return true;
+                    SaveTrainerProperties(SelectedTrainer.TrainerId, true);
                 }
             }
         }
+
+        private void trainer_TeamSizeNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                if (trainer_TeamSizeNum.Minimum == 0)
+                {
+                    trainer_TeamSizeNum.Minimum = 1;
+                }
+                EditedTrainerProperty(true);
+                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+            }
+        }
+
+        private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData && trainer_TrainersListBox.SelectedIndex > -1)
+            {
+                string selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
+
+                if (selectedTrainer != SelectedTrainer.ListName)
+                {
+                    if (UnsavedTrainerEditorChanges && !InhibitTrainerChange)
+                    {
+                        if (ConfirmUnsavedChanges())
+                        {
+                            ClearUnsavedTrainerChanges();
+                        }
+                        else
+                        {
+                            InhibitTrainerChange = true;
+                            trainer_TrainersListBox.SelectedIndex = trainer_TrainersListBox.Items.IndexOf(SelectedTrainer.ListName);
+                        }
+                    }
+
+                    if (!InhibitTrainerChange)
+                    {
+                        selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
+                        SelectedTrainer = trainerEditorMethods.GetTrainer(MainEditorModel.Trainers, Trainer.ListNameToTrainerId(selectedTrainer));
+
+                        if (SelectedTrainer.TrainerId > 0)
+                        {
+                            PopulateTrainerData();
+                            PopulatePartyData();
+                            EnableTrainerEditor();
+                            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+                        }
+                    }
+                    else
+                    {
+                        InhibitTrainerChange = false;
+                    }
+                }
+            }
+        }
+
+        private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)
+        {
+            UndoTrainerChanges();
+        }
+
+        private void trainer_UndoParty_btn_Click(object sender, EventArgs e)
+        {
+            UndoTrainerPartyChanges();
+        }
+
+        private void trainer_UndoProperties_Click(object sender, EventArgs e)
+        {
+            UndoTrainerPropertyChanges();
+        }
+
+        private void UndoTrainerChanges()
+        {
+            IsLoadingData = true;
+            SetTrainerName();
+            SetTrainerProperties();
+            InitializePartyEditor();
+            SetTrainerParty();
+            EditedTrainerData(false);
+            EditedTrainerProperty(false);
+            EditedTrainerParty(false);
+            IsLoadingData = false;
+        }
+
+        private void UndoTrainerPartyChanges()
+        {
+            IsLoadingData = true;
+            InitializePartyEditor();
+            SetTrainerParty();
+            EditedTrainerParty(false);
+            IsLoadingData = false;
+        }
+
+        private void UndoTrainerPropertyChanges()
+        {
+            IsLoadingData = true;
+            SetTrainerProperties();
+            EditedTrainerProperty(false);
+            IsLoadingData = false;
+        }
+
+        private void UpdateAbilty(int index)
+        {
+            EditedTrainerParty(true);
+        }
+
+        private bool ValidatePokemon()
+        {
+            bool valid = true;
+            for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
+            {
+                if (pokeComboBoxes[i].SelectedIndex <= 0)
+                {
+                    pokeComboBoxes[i].BackColor = Color.PaleVioletRed;
+                    valid = false;
+                }
+            }
+            if (!valid)
+            {
+                MessageBox.Show("You must select a Pokemon", "Unable to Save Trainer Party", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            return valid;
+        }
+
+        private bool ValidatePokemonMoves()
+        {
+            if (trainer_ChooseMovesCheckbox.Checked)
+            {
+                int partyCount = 0;
+                foreach (var moveArray in pokeMoves)
+                {
+                    if (partyCount == trainer_TeamSizeNum.Value)
+                    {
+                        break;
+                    }
+                    if (moveArray == null)
+                    {
+                        MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return false;
+                    }
+
+                    int movesSelected = 0;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (moveArray[i] > 0)
+                        {
+                            movesSelected++;
+                        }
+                    }
+
+                    if (movesSelected == 0)
+                    {
+                        MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return false;
+                    }
+                    partyCount++;
+                }
+            }
+            return true;
+        }
+
+        private bool ValidateTrainerName()
+        {
+            if (string.IsNullOrEmpty(trainer_NameTextBox.Text))
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("You must enter a name for this Trainer.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else if (trainer_NameTextBox.Text.Length > 10 && !LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 10 characters.\n\nYou can expand this to 16 characters by applying the Trainer Names Expansion patch.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmPatch == DialogResult.Yes)
+                {
+                    return RomPatches.ExpandTrainerNames(LoadedRom);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (trainer_NameTextBox.Text.Length > 16 && LoadedRom.TrainerNameExpansion)
+            {
+                trainer_NameTextBox.BackColor = Color.PaleVioletRed;
+                MessageBox.Show("Trainer name cannot be longer than 16 characters.", "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
+}

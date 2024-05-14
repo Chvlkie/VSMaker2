@@ -8,6 +8,8 @@
 
         public string ListName => "[" + MusicId + "] - " + Name;
 
+        public static int ListNameToId(string listName) => int.Parse(listName.Substring(1, 4));
+
         public EyeContactMusic(int musicId)
         {
             MusicId = musicId;

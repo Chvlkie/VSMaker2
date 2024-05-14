@@ -25,8 +25,6 @@ namespace VsMaker2Core.Methods
         Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule);
         TrainerData NewTrainerData(TrainerProperty trainerProperties);
         TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags);
-        Pokemon NewPartyPokemon(ushort pokemonId, ushort level, byte difficulty, byte genderAbilityOverride, ushort formId, ushort? ballCapsule = null, ushort? heldItem = null, ushort[] moves = null);
         TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule);
-        TrainerPartyData NewTrainerPartyData(TrainerPartyPokemonData[] pokemonDatas);
     }
 }

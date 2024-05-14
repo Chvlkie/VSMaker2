@@ -28,5 +28,17 @@ namespace VsMaker2Core.DataModels
             Moves = null;
             BallCapsuleId = 0;
         }
+
+        public Pokemon(byte difficultyValue, byte genderAbilityOverride, ushort level, ushort pokemonId, ushort formId, ushort? heldItemId, ushort[]? moves, ushort? ballCapsuleId = null)
+        {
+            DifficultyValue = difficultyValue;
+            GenderAbilityOverride = genderAbilityOverride;
+            Level = level;
+            PokemonId = pokemonId;
+            FormId = formId;
+            HeldItemId = heldItemId;
+            Moves = moves;
+            BallCapsuleId = ballCapsuleId;
+        }
     }
 }

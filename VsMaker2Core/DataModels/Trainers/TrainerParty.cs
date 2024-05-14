@@ -8,5 +8,10 @@
         {
             Pokemons = [];
         }
+
+        public TrainerParty(List<Pokemon> pokemons)
+        {
+            Pokemons = pokemons;
+        }
     }
 }

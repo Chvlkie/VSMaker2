@@ -12,6 +12,8 @@ namespace VsMaker2Core.DataModels
         public string FileName { get; set; }
         public string GameCode { get; set; }
 
+        public bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
+
         public GameFamily GameFamily => GameVersion switch
         {
             GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
@@ -36,7 +38,7 @@ namespace VsMaker2Core.DataModels
         public int TotalNumberOfTrainers { get; set; }
         public List<TrainerData> TrainersData { get; set; }
         public List<TrainerPartyData> TrainersPartyData { get; set; }
-        public List<ClassGenderData> ClassGenderData { get;set; }
+        public List<ClassGenderData> ClassGenderData { get; set; }
         public List<PrizeMoneyData> PrizeMoneyData { get; set; }
         public List<EyeContactMusicData> EyeContactMusicData { get; set; }
 
@@ -48,7 +50,7 @@ namespace VsMaker2Core.DataModels
             _ => 0,
         };
 
-        public string WorkingDirectory { get; set; }
+        public static string WorkingDirectory { get; set; }
 
         #endregion RomInfo
 
@@ -64,9 +66,6 @@ namespace VsMaker2Core.DataModels
         {
             ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
             WorkingDirectory = workingDirectory;
-            Arm9Path = WorkingDirectory + Common.Arm9FilePath;
-            OverlayTablePath = WorkingDirectory + Common.Y9FilePath;
-            OverlayPath = WorkingDirectory + Common.OverlayFilePath;
 
             try
             {

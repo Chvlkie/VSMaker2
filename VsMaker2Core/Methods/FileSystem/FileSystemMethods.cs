@@ -1,6 +1,8 @@
 ﻿using MsgPack.Serialization;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DsUtils;
+using VsMaker2Core.DSUtils;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -173,15 +175,100 @@ namespace VsMaker2Core.Methods
             }
         }
 
+        public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
+        {
+            descriptions[classId] = newDescription;
+            return WriteMessage(descriptions, classDescriptionMessageNumber);
+        }
+
+        public (bool Success, string ErrorMessage) WriteClassGenderData(ClassGenderData classGenderData)
+        {
+            try
+            {
+                Arm9.WriteByte(classGenderData.Gender, (uint)classGenderData.Offset);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return (false, ex.Message);
+            }
+            return (true, "");
+        }
+
+        public (bool Success, string ErrorMessage) WriteEyeContactMusicData(EyeContactMusicData eyeContactMusicData, RomFile loadedRom)
+        {
+            try
+            {
+                if (loadedRom.IsHeartGoldSoulSilver)
+                {
+                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
+                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0), eyeContactMusicData.Offset + 4);
+                }
+                else
+                {
+                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return (false, ex.Message);
+            }
+            return (true, "");
+        }
+
+        public (bool Success, string ErrorMessage) WritePrizeMoneyData(PrizeMoneyData prizeMoneyData, RomFile loadedRom)
+        {
+            if (loadedRom.IsHeartGoldSoulSilver)
+            {
+                if (Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
+                {
+                    Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
+                    Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                }
+                using EasyWriter writer = new(Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber), prizeMoneyData.Offset);
+                try
+                {
+                    writer.Write(prizeMoneyData.TrainerClassId);
+                    writer.Write(prizeMoneyData.PrizeMoney);
+                    writer.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    writer.Close();
+                    return (false, ex.Message);
+                }
+            }
+            else
+            {
+                using EasyWriter writer = new(RomFile.OverlayPath, prizeMoneyData.Offset);
+                try
+                {
+                    writer.Write((byte)prizeMoneyData.PrizeMoney);
+                    writer.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    writer.Close();
+                    return (false, ex.Message);
+                }
+            }
+            return (true, "");
+        }
+
         #endregion Write
 
         #region Delete
+
         public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
         {
-            string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{messageArchive:D4}";
-            string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{messageArchive:D4}";
+            string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
             return (true, "");
         }
+
         #endregion Delete
 
         public (bool Success, string ErrorMessage) ExportTrainers(VsTrainersFile export, string filePath)

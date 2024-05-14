@@ -7,21 +7,21 @@ namespace VsMaker2Core.DataModels
         #region ARM9
 
         public const uint SynthOverlayLoadAddress = 0x023C8000;
-        public static string Arm9Path { get; set; }
-        public uint Arm9SpwanOffset { get; set; }
+        public static string Arm9Path => WorkingDirectory + Common.Arm9FilePath;
+        public uint Arm9SpawnOffset { get; set; }
 
         #endregion ARM9
 
         #region Overlay
 
-        public string OverlayPath { get; set; }
-        public string OverlayTablePath { get; set; }
+        public static string OverlayPath => WorkingDirectory + Common.OverlayFilePath;
+        public static string OverlayTablePath => WorkingDirectory + Common.Y9FilePath;
 
         #endregion Overlay
 
         #region Trainer Text Table
 
-        public string TrainerTablePath { get; set; }
+        public static string TrainerTablePath => WorkingDirectory + "\\unpacked\\TrainerTextTable\\0000";
 
         #endregion Trainer Text Table
 
@@ -33,9 +33,30 @@ namespace VsMaker2Core.DataModels
 
         #region PrizeMoney
 
-        public uint PrizeMoneyTableOffset { get; set; }
-        public int PrizeMoneyTableOverlayNumber { get; set; }
-        public int PrizeMoneyTableSize { get; set; }
+        public uint PrizeMoneyTableOffset => GameFamily switch
+        {
+            GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
+            GameFamily.Platinum => 0x359E0,
+            GameFamily.HeartGoldSoulSilver => 0x34C04,
+            GameFamily.HgEngine => 0x34C04,
+            _ => 0
+        };
+        public int PrizeMoneyTableOverlayNumber => GameFamily switch
+        {
+            GameFamily.DiamondPearl => 11,
+            GameFamily.Platinum => 16,
+            GameFamily.HeartGoldSoulSilver => 12,
+            GameFamily.HgEngine => 12,
+            _ => 0
+        };
+        public int PrizeMoneyTableSize => GameFamily switch
+        {
+            GameFamily.DiamondPearl => 98,
+            GameFamily.Platinum => 105,
+            GameFamily.HeartGoldSoulSilver => 516,
+            GameFamily.HgEngine => 516,
+            _ => 0
+        };
 
         #endregion PrizeMoney
 

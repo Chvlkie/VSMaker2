@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using VsMaker2Core.DataModels;
 
 namespace VsMaker2Core.RomFiles
 {
@@ -15,6 +11,7 @@ namespace VsMaker2Core.RomFiles
         /// Pokemon Has Items and Choose Moves = 0x03.
         /// </summary>
         public byte TrainerType { get; set; }
+
         public byte TrainerClassId { get; set; }
         public byte Padding { get; set; }
         public byte TeamSize { get; set; }
@@ -31,6 +28,17 @@ namespace VsMaker2Core.RomFiles
             AIFlags = 0;
             IsDoubleBattle = 0;
             TrainerClassId = 2;
+        }
+
+        public TrainerData(byte trainerType, byte trainerClassId, byte padding, byte teamSize, ushort[] items, uint aiFlags, uint isDoubleBattle)
+        {
+            TrainerType = trainerType;
+            TrainerClassId = trainerClassId;
+            Padding = padding;
+            TeamSize = teamSize;
+            Items = items;
+            AIFlags = aiFlags;
+            IsDoubleBattle = isDoubleBattle;
         }
     }
 }

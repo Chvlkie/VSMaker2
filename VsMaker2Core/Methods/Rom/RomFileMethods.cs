@@ -2,6 +2,7 @@
 using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
@@ -264,8 +265,7 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < messages.Count; i++)
             {
-                var item = new MessageArchive { MessageId = i, MessageText = messages[i] };
-                messageArchives.Add(item);
+                messageArchives.Add(new MessageArchive(i, messages[i]));
             }
             readText.Close();
             readText.Dispose();
@@ -281,13 +281,10 @@ namespace VsMaker2Core.Methods
             {
                 for (int i = 0; i < numberOfClasses; i++)
                 {
-                    var classGender = new ClassGenderData
-                    {
-                        Offset = reader.BaseStream.Position,
-                        Gender = reader.ReadByte(),
-                        TrainerClassId = i
-                    };
-                    classGenders.Add(classGender);
+                    long offset = reader.BaseStream.Position;
+                    byte gender = reader.ReadByte();
+                    int trainerClassId = i;
+                    classGenders.Add(new ClassGenderData(offset, gender, trainerClassId));
                 }
                 reader.Close();
             }
@@ -297,6 +294,7 @@ namespace VsMaker2Core.Methods
                 reader.Close();
                 throw;
             }
+
             return classGenders;
         }
 
@@ -401,13 +399,7 @@ namespace VsMaker2Core.Methods
                     ushort trainerClassId = reader.ReadUInt16();
                     ushort musicDayId = reader.ReadUInt16();
                     ushort? musicNightId = gameFamily == GameFamily.HeartGoldSoulSilver ? reader.ReadUInt16() : null;
-                    var eyeContactMusicData = new EyeContactMusicData
-                    {
-                        Offset = offset,
-                        TrainerClassId = trainerClassId,
-                        MusicDayId = musicDayId,
-                        MusicNightId = musicNightId,
-                    };
+                    var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
                     eyeContactMusic.Add(eyeContactMusicData);
                 }
                 reader.Close();
@@ -421,6 +413,51 @@ namespace VsMaker2Core.Methods
             }
 
             return eyeContactMusic;
+        }
+
+        public List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom)
+        {
+            List<PrizeMoneyData> prizeMoneyData = [];
+            if ((loadedRom.IsHeartGoldSoulSilver)
+                && Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
+            {
+                Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
+                Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+            }
+            string filePath = Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber);
+            using BinaryReader reader = new(new FileStream(filePath, FileMode.Open));
+            try
+            {
+                reader.BaseStream.Position = loadedRom.PrizeMoneyTableOffset;
+                long streamSize = reader.BaseStream.Position + loadedRom.PrizeMoneyTableSize;
+                ushort count = 0;
+                while (reader.BaseStream.Position <= streamSize)
+                {
+                    long offset = reader.BaseStream.Position;
+                    if (loadedRom.IsHeartGoldSoulSilver)
+                    {
+                        ushort trainerClassId = reader.ReadUInt16();
+                        ushort prizeMoney = reader.ReadUInt16();
+                        var item = new PrizeMoneyData(offset, trainerClassId, prizeMoney);
+                        prizeMoneyData.Add(item);
+                    }
+                    else
+                    {
+                        byte prizeMoney = reader.ReadByte();
+                        var item = new PrizeMoneyData(offset, count, prizeMoney);
+                        prizeMoneyData.Add(item);
+                        count++;
+                    }
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                throw;
+            }
+            return prizeMoneyData;
         }
 
         public List<string> GetTrainerNames(int trainerNameMessageArchive)
@@ -495,7 +532,6 @@ namespace VsMaker2Core.Methods
         {
             var trainerPartyData = new TrainerPartyData
             {
-                TrainerType = trainerType,
                 PokemonData = new TrainerPartyPokemonData[teamSize],
             };
 

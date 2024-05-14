@@ -5,7 +5,7 @@ using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DSUtils
 {
-    public class Arm9 : IArm9
+    public static class Arm9
     {
         public static readonly uint Address = 0x02000000;
 
@@ -42,7 +42,7 @@ namespace VsMaker2Core.DSUtils
             writer.Write(toOutput, indexFirstByteToWrite, indexLastByteToWrite is null ? toOutput.Length - indexFirstByteToWrite : (int)indexLastByteToWrite);
         }
 
-        public bool Arm9Compress(string path)
+        public static bool Arm9Compress(string path)
         {
             Process compress = new();
             compress.StartInfo.FileName = Common.BlzFilePath;
@@ -55,7 +55,7 @@ namespace VsMaker2Core.DSUtils
             return new FileInfo(RomFile.Arm9Path).Length <= 0xBC000;
         }
 
-        public bool Arm9Decompress(string path)
+        public static bool Arm9Decompress(string path)
         {
             Process decompress = new();
             decompress.StartInfo.FileName = Common.BlzFilePath;
@@ -68,21 +68,21 @@ namespace VsMaker2Core.DSUtils
             return new FileInfo(RomFile.Arm9Path).Length > 0xBC000;
         }
 
-        public void Arm9EditSize(int increment)
+        public static void Arm9EditSize(int increment)
         {
             using Arm9Writer writer = new();
             writer.EditSize(increment);
         }
-        public bool CheckCompressionMark(GameFamily gameFamily)
+        public static bool CheckCompressionMark(GameFamily gameFamily)
         {
             return BitConverter.ToInt32(ReadBytes((uint)(gameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4), 4), 0) != 0;
         }
-        public void WriteByte(byte value, uint destinationOffset)
+        public static void WriteByte(byte value, uint destinationOffset)
         {
             WriteToFile(RomFile.Arm9Path, BitConverter.GetBytes((short)value), destinationOffset, 0);
         }
 
-        public void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)
+        public static void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)
         {
             WriteToFile(RomFile.Arm9Path, bytesToWrite, destinationOffset, indexFirstByte, indexLastByte);
         }

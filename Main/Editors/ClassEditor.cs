@@ -145,7 +145,7 @@ namespace Main
             if (!IsLoadingData)
             {
                 IsLoadingData = true;
-                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
+                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId) && SaveTrainerClassProperties(SelectedClass.TrainerClassId))
                 {
                     MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -186,8 +186,8 @@ namespace Main
 
         private void EnableClassEditor()
         {
-            class_EyeContactNightComboBox.Enabled = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
-            class_EyeContactNightComboBox.Visible = LoadedRom.GameFamily == GameFamily.HeartGoldSoulSilver;
+            class_EyeContactNightComboBox.Enabled = LoadedRom.IsHeartGoldSoulSilver;
+            class_EyeContactNightComboBox.Visible = LoadedRom.IsHeartGoldSoulSilver;
             class_PrizeMoneyNum.Enabled = true;
             class_TrainersListBox.Enabled = true;
             class_NameTextBox.Enabled = true;
@@ -281,28 +281,8 @@ namespace Main
         private void PopulateTrainerClassData()
         {
             IsLoadingData = true;
-            class_NameTextBox.Text = SelectedClass.TrainerClassName;
-            class_PrizeMoneyNum.Value = SelectedClass.PrizeMoneyMultiplier;
-            class_DescriptionTextBox.Text = SelectedClass.Description;
-
-            switch (LoadedRom.GameFamily)
-            {
-                case GameFamily.DiamondPearl:
-                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
-                    break;
-
-                case GameFamily.Platinum:
-                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.Platinum.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
-                    break;
-
-                case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
-                    class_EyeContactDayComboBox.SelectedIndex = EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicDay);
-                    class_EyeContactNightComboBox.SelectedIndex = EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.EyeContactMusicNight);
-                    break;
-            }
-
-            class_GenderComboBox.SelectedIndex = SelectedClass.Gender;
+            SetClassName();
+            SetClassProperties();
             IsLoadingData = false;
         }
 
@@ -318,25 +298,50 @@ namespace Main
         private bool SaveClassName(int classId)
         {
             var saveClass = fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, classId, class_NameTextBox.Text, LoadedRom.ClassNamesTextNumber);
-            if (!saveClass.Success)
-            {
-                MessageBox.Show(saveClass.ErrorMessage, "Unable to Save Class", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
+            if (saveClass.Success)
             {
                 class_NameTextBox.BackColor = Color.White;
                 MainEditorModel.ClassNames[classId] = class_NameTextBox.Text;
-                MainEditorModel.Classes[classId - 2].TrainerClassName = class_NameTextBox.Text;
+                MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).TrainerClassName = class_NameTextBox.Text;
                 var index = class_ClassListBox.FindString(UnfilteredClasses[classId - 2]);
                 if (index > -1)
                 {
-                    class_ClassListBox.Items[index] = MainEditorModel.Classes[classId - 2].ListName;
+                    class_ClassListBox.Items[index] = MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
                     class_ClassListBox.SelectedIndex = index;
                 }
-                UnfilteredClasses[classId - 2] = MainEditorModel.Classes[classId - 2].ListName;
+                UnfilteredClasses[classId - 2] = MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
+            }
+            else
+            {
+                MessageBox.Show(saveClass.ErrorMessage, "Unable to Save Class", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return saveClass.Success;
         }
+
+        private void SetClassName()
+        {
+            class_NameTextBox.Text = SelectedClass.TrainerClassName;
+        }
+
+        private void SetClassProperties()
+        {
+            class_GenderComboBox.SelectedIndex = SelectedClass.ClassProperties.Gender;
+            class_DescriptionTextBox.Text = SelectedClass.ClassProperties.Description;
+            class_PrizeMoneyNum.Value = SelectedClass.ClassProperties.PrizeMoneyMultiplier;
+            class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(LoadedRom.GameFamily);
+            class_EyeContactNightComboBox.SelectedIndex = LoadedRom.IsHeartGoldSoulSilver ?
+                EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicNight)
+                : -1;
+        }
+
+        private int SetEyeContactMusicDay(GameFamily gameFamily) => gameFamily switch
+        {
+            GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.Platinum => EyeContactMusics.Platinum.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.HgEngine => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
+            _ => -1
+        };
 
         private void SetupClassEditor()
         {
@@ -359,6 +364,27 @@ namespace Main
             }
             class_ClassListBox.Enabled = true;
             class_FilterTextBox.Enabled = true;
+            IsLoadingData = false;
+        }
+
+        private void UndoAllClassChanges()
+        {
+            UndoClassNameChange();
+            UndoClassPropertiesChanges();
+        }
+
+        private void UndoClassNameChange()
+        {
+            IsLoadingData = true;
+            SetClassName();
+            IsLoadingData = false;
+        }
+
+        private void UndoClassPropertiesChanges()
+        {
+            IsLoadingData = true;
+            SetClassProperties();
+            EditedTrainerClassProperties(false);
             IsLoadingData = false;
         }
 

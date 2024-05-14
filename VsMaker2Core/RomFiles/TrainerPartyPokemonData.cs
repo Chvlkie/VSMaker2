@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VsMaker2Core.RomFiles
+﻿namespace VsMaker2Core.RomFiles
 {
     public class TrainerPartyPokemonData
     {
@@ -16,5 +10,19 @@ namespace VsMaker2Core.RomFiles
 
         public ushort? ItemId { get; set; }
         public ushort[]? MoveIds { get; set; }
+
+        public TrainerPartyPokemonData()
+        { }
+
+        public TrainerPartyPokemonData(byte difficulty, byte genderAbilityOverride, ushort level, ushort species, ushort? ballCapsule, ushort? itemId, ushort[]? moveIds)
+        {
+            Difficulty = difficulty;
+            GenderAbilityOverride = genderAbilityOverride;
+            Level = level;
+            Species = species;
+            BallCapsule = ballCapsule;
+            ItemId = itemId;
+            MoveIds = moveIds;
+        }
     }
 }

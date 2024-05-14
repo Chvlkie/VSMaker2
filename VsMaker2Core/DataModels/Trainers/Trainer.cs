@@ -17,12 +17,12 @@
             TrainerParty = new();
         }
 
-        public Trainer(Trainer trainer)
+        public Trainer(ushort trainerId, string trainerName, TrainerProperty trainerProperties, TrainerParty trainerParty)
         {
-            TrainerId = trainer.TrainerId;
-            TrainerName = trainer.TrainerName;
-            TrainerProperties = trainer.TrainerProperties;
-            TrainerParty = trainer.TrainerParty;
+            TrainerId = trainerId;
+            TrainerName = trainerName;
+            TrainerProperties = trainerProperties;
+            TrainerParty = trainerParty;
         }
 
         // Default New Trainer

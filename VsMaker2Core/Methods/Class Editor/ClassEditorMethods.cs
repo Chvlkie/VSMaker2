@@ -1,4 +1,5 @@
 ﻿using VsMaker2Core.DataModels;
+using VsMaker2Core.RomFiles;
 
 namespace VsMaker2Core.Methods
 {
@@ -16,6 +17,7 @@ namespace VsMaker2Core.Methods
             return classes.SingleOrDefault(x => x.TrainerClassId == classId);
         }
 
+
         public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions, RomFile loadedRom)
         {
             List<TrainerClass> trainerClasses = [];
@@ -27,11 +29,15 @@ namespace VsMaker2Core.Methods
                 {
                     TrainerClassId = i,
                     TrainerClassName = classNames[i],
-                    Description = classDescriptions[i],
+                    ClassProperties = new TrainerClassProperty
+                    {
+                        Description = classDescriptions[i],
+                        Gender = loadedRom.ClassGenderData[i].Gender,
+                        EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
+                        EyeContactMusicNight = eyeContactData != default ? eyeContactData.MusicNightId : null,
+                        PrizeMoneyMultiplier = loadedRom.PrizeMoneyData[i].PrizeMoney
+                    },
                     UsedByTrainers = GetUsedByTrainers(i, trainers),
-                    Gender = loadedRom.ClassGenderData[i].Gender,
-                    EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
-                    EyeContactMusicNight = eyeContactData != default ? eyeContactData.MusicNightId : null,
                 };
                 trainerClasses.Add(trainerClass);
             }

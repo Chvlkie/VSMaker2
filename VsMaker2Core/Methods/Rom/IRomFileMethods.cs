@@ -75,5 +75,6 @@ namespace VsMaker2Core.Methods
         int SetTrainerNameMax(int trainerNameOffset);
         List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
         List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
+        List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom);
     }
 }

@@ -32,5 +32,16 @@ namespace VsMaker2Core.DataModels
             Pokedex.ShayminId => true,
             _ => false,
         };
+
+        public Species()
+        { }
+
+        public Species(ushort speciesId, byte genderRatio, byte ability1, byte ability2)
+        {
+            SpeciesId = speciesId;
+            GenderRatio = genderRatio;
+            Ability1 = ability1;
+            Ability2 = ability2;
+        }
     }
 }

@@ -29,5 +29,16 @@ namespace VsMaker2Core.DataModels
             Items = [0, 0, 0, 0];
             TrainerClassId = 2;
         }
+
+        public TrainerProperty(bool doubleBattle, byte teamSize, bool chooseMoves, bool chooseItems, byte trainerClassId, ushort[] items, List<bool> aiFlags)
+        {
+            AIFlags = aiFlags;
+            Items = items;
+            TeamSize = teamSize;
+            ChooseMoves = chooseMoves;
+            ChooseItems = chooseItems;
+            TrainerClassId = trainerClassId;
+            DoubleBattle = doubleBattle;
+        }
     }
 }
