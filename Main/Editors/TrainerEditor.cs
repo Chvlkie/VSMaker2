@@ -1,6 +1,5 @@
 ﻿using Main.Forms;
 using Main.Models;
-using System.Runtime.InteropServices;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -221,6 +220,13 @@ namespace Main
         }
 
         #endregion Get
+
+        private void GoToSelectedClass(int classId)
+        {
+            class_FilterTextBox.Text = "";
+            main_MainTab.SelectedTab = main_MainTab_ClassTab;
+            class_ClassListBox.SelectedIndex = classId - 2;
+        }
 
         private void InitializeAiFlags()
         {
@@ -620,8 +626,6 @@ namespace Main
             for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
             {
                 var species = GetSpeciesBySpeciesId(pokeComboBoxes[i].SelectedIndex);
-
-
 
                 byte genderAbilityOverride = species.HasMoreThanOneGender ? (byte)(pokeGenderComboBoxes[i].SelectedIndex + (pokeAbilityComboBoxes[i].SelectedIndex << 4)) : (byte)(pokeAbilityComboBoxes[i].SelectedIndex << 4);
                 var newPokemon = new Pokemon((byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeLevelNums[i].Value, (ushort)pokeComboBoxes[i].SelectedIndex, (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i], (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex);
@@ -1370,6 +1374,24 @@ namespace Main
         private void trainer_UndoProperties_Click(object sender, EventArgs e)
         {
             UndoTrainerPropertyChanges();
+        }
+
+        private void trainer_ViewClassBtn_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData && trainer_ClassListBox.SelectedIndex > -1)
+            {
+                if (UnsavedClassChanges && ConfirmUnsavedChanges())
+                {
+                    ClearUnsavedClassChanges();
+                    int classId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
+                    GoToSelectedClass(classId);
+                }
+                else if (!UnsavedClassChanges)
+                {
+                    int classId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
+                    GoToSelectedClass(classId);
+                }
+            }
         }
 
         private void UndoTrainerChanges()
