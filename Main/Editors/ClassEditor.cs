@@ -379,6 +379,7 @@ namespace Main
                     class_ClassListBox.SelectedIndex = index;
                 }
                 UnfilteredClasses[classId - 2] = MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
+                EditedTrainerClassName(false);
             }
             else
             {
@@ -462,6 +463,7 @@ namespace Main
                 && SaveTrainerClassDescription(classId, newDescription))
             {
                 MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties = new TrainerClassProperty(gender, prizeMoneyMultiplier, newDescription, eyeContactMusicDay, eyeContactMusicNight);
+                EditedTrainerClassProperties(false);
                 return true;
             }
             else

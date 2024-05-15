@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
+using VsMaker2Core.MessageEncrypt;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -11,8 +11,6 @@ namespace VsMaker2Core.Methods
 {
     public class RomFileMethods : IRomFileMethods
     {
-        private readonly Dictionary<int, string> ReadTextDictionary = VsMakerDatabase.RomData.TextCharacters.ReadTextDictionary;
-
         #region Extract
 
         public (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName)
@@ -105,170 +103,17 @@ namespace VsMaker2Core.Methods
             }
         }
 
-        public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines)
+        public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
         {
-            int initialKey = 0;
-            int stringCount = 0;
-            List<string> messages = [];
-            bool success = false;
-
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchiveId:D4}";
-            var fileStream = new FileStream(directory, FileMode.Open);
-            BinaryReader readText = new(fileStream);
-            try
-            {
-                stringCount = readText.ReadUInt16();
-                success = true;
-            }
-            catch (EndOfStreamException)
-            {
-                readText.Close();
-                throw;
-            }
-
-            if (success)
-            {
-                try
-                {
-                    initialKey = readText.ReadUInt16();
-                    if (!discardLines)
-                    {
-                        int key1 = (initialKey * 0x2FD) & 0xFFFF;
-                        int[] currentOffset = new int[stringCount];
-                        int[] currentSize = new int[stringCount];
-                        // Get Offset and Sizes
-                        for (int i = 0; i < stringCount; i++)
-                        {
-                            int key2 = (key1 * (i + 1) & 0xFFFF);
-                            int actualKey = key2 | (key2 << 16);
-                            currentOffset[i] = ((int)readText.ReadUInt32()) ^ actualKey;
-                            currentSize[i] = ((int)readText.ReadUInt32()) ^ actualKey;
-                        }
-                        // Build String
-                        for (int i = 0; i < stringCount; i++)
-                        {
-                            bool hasSpecialCharacter = false;
-                            bool isCompressed = false;
-                            key1 = (0x91BD3 * (i + 1)) & 0xFFFF;
-                            readText.BaseStream.Position = currentOffset[i];
-                            StringBuilder text = new("");
-
-                            for (int j = 0; j < currentSize[i]; j++)
-                            {
-                                int textChar = (readText.ReadUInt16()) ^ key1;
-                                switch (textChar)
-                                {
-                                    case 0xE000:
-                                        text.Append("\\n");
-                                        break;
-
-                                    case 0x25BC:
-                                        text.Append("\\r");
-                                        break;
-
-                                    case 0x25BD:
-                                        text.Append("\\f");
-                                        break;
-
-                                    case 0xF100:
-                                        isCompressed = true;
-                                        break;
-
-                                    case 0xFFFE:
-                                        text.Append("\\v");
-                                        hasSpecialCharacter = true;
-                                        break;
-
-                                    case 0xFFFF:
-                                        text.Append("");
-                                        break;
-
-                                    default:
-                                        if (hasSpecialCharacter)
-                                        {
-                                            text.Append(textChar.ToString("X4"));
-                                            hasSpecialCharacter = false;
-                                        }
-                                        if (isCompressed)
-                                        {
-                                            int shift = 0;
-                                            int trans = 0;
-                                            while (true)
-                                            {
-                                                int compChar = textChar >> shift;
-                                                if (shift >= 0xF)
-                                                {
-                                                    shift -= 0xF;
-                                                    if (shift > 0)
-                                                    {
-                                                        compChar = (trans | ((textChar << (9 - shift)) & 0x1FF));
-                                                        if ((compChar & 0xFF) == 0xFF)
-                                                        {
-                                                            break;
-                                                        }
-                                                        if (compChar != 0x0 && compChar != 0x1)
-                                                        {
-                                                            text.Append(DecodeCharacter(compChar));
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    compChar = (textChar >> shift) & 0x1FF;
-                                                    if ((compChar & 0xFF) == 0xFF)
-                                                    {
-                                                        break;
-                                                    }
-                                                    if (compChar != 0x0 && compChar != 0x1)
-                                                    {
-                                                        text.Append(DecodeCharacter(compChar));
-                                                    }
-                                                    shift += 9;
-                                                    if (shift < 0xF)
-                                                    {
-                                                        trans = (textChar >> shift) & 0x1FF;
-                                                        shift += 9;
-                                                    }
-                                                    key1 += 0x493D;
-                                                    key1 &= 0xFFFF;
-                                                    textChar = Convert.ToUInt16(readText.ReadUInt16() ^ key1);
-                                                    j++;
-                                                }
-                                            }
-                                            text.Append("");
-                                        }
-                                        else
-                                        {
-                                            text.Append(DecodeCharacter(textChar));
-                                        }
-                                        break;
-                                }
-                                key1 += 0x493D;
-                                key1 &= 0xFFFF;
-                            }
-                            messages.Add(text.ToString());
-                        }
-                    }
-                }
-                catch (EndOfStreamException)
-                {
-                    readText.Close();
-                    throw;
-                }
-            }
-            else
-            {
-                return [];
-            }
-
+            var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+            var messages = EncryptText.ReadMessageArchive(fileStream, discardLines);
             List<MessageArchive> messageArchives = [];
 
             for (int i = 0; i < messages.Count; i++)
             {
                 messageArchives.Add(new MessageArchive(i, messages[i]));
             }
-            readText.Close();
-            readText.Dispose();
             return messageArchives;
         }
 
@@ -768,17 +613,5 @@ namespace VsMaker2Core.Methods
         }
 
         #endregion Unpack
-
-        private string DecodeCharacter(int textChar)
-        {
-            if (ReadTextDictionary.TryGetValue(textChar, out var character))
-            {
-                return character;
-            }
-            else
-            {
-                return $"\\x{textChar:X4}";
-            }
-        }
     }
 }

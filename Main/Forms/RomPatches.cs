@@ -21,8 +21,8 @@ namespace Main.Forms
             LoadedRom = loadedRom;
             if (loadedRom != null)
             {
-                btn_TrainerName.Enabled = !LoadedRom.TrainerNameExpansion;
-                checkBox_TrainerNames.Checked = LoadedRom.TrainerNameExpansion;
+                btn_TrainerName.Enabled = !RomFile.TrainerNameExpansion;
+                checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;
             }
         }
 
@@ -30,8 +30,8 @@ namespace Main.Forms
         {
             if (ExpandTrainerNames(LoadedRom))
             {
-                btn_TrainerName.Enabled = !LoadedRom.TrainerNameExpansion;
-                checkBox_TrainerNames.Checked = LoadedRom.TrainerNameExpansion;
+                btn_TrainerName.Enabled = !RomFile.TrainerNameExpansion;
+                checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;
             }
         }
 
@@ -43,7 +43,7 @@ namespace Main.Forms
                 writer.Write((byte)12);
                 writer.Close();
                 MessageBox.Show("Patch applied!\nYou can now have trainer names up to 16 characters!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                loadedRom.TrainerNameMaxByte = 12;
+                RomFile.TrainerNameMaxByte = 12;
                 return true;
 
             }

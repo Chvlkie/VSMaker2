@@ -3,6 +3,7 @@ using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
+using VsMaker2Core.MessageEncrypt;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -10,7 +11,6 @@ namespace VsMaker2Core.Methods
 {
     public class FileSystemMethods : IFileSystemMethods
     {
-        private readonly Dictionary<int, int> WriteTextDictionary = VsMakerDatabase.RomData.TextCharacters.WriteTextDictionary;
         private IRomFileMethods romFileMethods;
 
         public FileSystemMethods()
@@ -43,62 +43,17 @@ namespace VsMaker2Core.Methods
         public (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
         {
             trainerNames[trainerId] = newName;
-            List<string> writeMessages = [];
-            foreach (string message in trainerNames)
-            {
-                writeMessages.Add($"{{TRNNAME}}{message}");
-            }
-            return WriteMessage(writeMessages, trainerNamesArchive);
+            return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
 
-        public (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive)
+        public (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive, bool isTrainerName = false)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchive:D4}";
-            int initialKey = romFileMethods.GetMessageInitialKey(messageArchive);
-
-            var stream = new MemoryStream();
-            using BinaryWriter writer = new(stream);
             try
             {
-                var encoded = EncodeMessages(messages);
-                writer.Write((ushort)encoded.Count);
-                writer.Write((ushort)initialKey);
-                int key = (initialKey * 0x2FD) & 0xFFFF;
-                int key2 = 0;
-                int realKey = 0;
-                int offset = 0x4 + (encoded.Count * 8);
-                int[] stringLengths = new int[encoded.Count];
-
-                for (int i = 0; i < encoded.Count; i++)
-                { // Reads and stores string offsets and sizes
-                    key2 = (key * (i + 1) & 0xFFFF);
-                    realKey = key2 | (key2 << 16);
-                    writer.Write(offset ^ realKey);
-                    int[] currentString = encoded[i];
-                    int length = encoded[i].Length;
-                    stringLengths[i] = length;
-                    writer.Write(length ^ realKey);
-                    offset += length * 2;
-                }
-
-                for (int i = 0; i < encoded.Count; i++)
-                { // Encodes strings and writes them to file
-                    key = (0x91BD3 * (i + 1)) & 0xFFFF;
-                    int[] currentString = encoded[i];
-                    for (int j = 0; j < stringLengths[i] - 1; j++)
-                    {
-                        writer.Write((ushort)(currentString[j] ^ key));
-                        key += 0x493D;
-                        key &= 0xFFFF;
-                    }
-                    writer.Write((ushort)(0xFFFF ^ key));
-                }
-                File.WriteAllBytes(directory, stream.ToArray());
-                stream.Close();
+                EncryptText.WriteMessageArchive(messageArchive, messages, isTrainerName);
             }
             catch (Exception ex)
             {
-                stream.Close();
                 Console.WriteLine(ex.Message);
                 return (false, ex.Message);
             }
@@ -313,126 +268,6 @@ namespace VsMaker2Core.Methods
                 return (null, false, ex.Message);
             }
             return (vsTrainersFile, true, string.Empty);
-        }
-
-        private int[] EncodeMessage(string message)
-        {
-            List<int> encoded = [];
-            int compressionBuffer = 0;
-            int bit = 0;
-            bool isTrainerName = message.Contains("{TRNNAME}");
-            if (isTrainerName)
-            {
-                message = message.Substring(9);
-                encoded.Add(0xF100);
-            }
-            var charArray = message.ToCharArray();
-            string characterId;
-            for (int i = 0; i < charArray.Length; i++)
-            {
-                switch (charArray[i])
-                {
-                    case '\\':
-                        switch (charArray[i + 1])
-                        {
-                            case 'r':
-                                encoded.Add(0x25BC);
-                                i++;
-                                break;
-
-                            case 'n':
-                                encoded.Add(0xE000);
-                                i++;
-                                break;
-
-                            case 'f':
-                                encoded.Add(0x25BD);
-                                i++;
-                                break;
-
-                            case 'v':
-                                encoded.Add(0xFFFE);
-                                characterId = $"{charArray[i + 2]}{charArray[i + 3]}{charArray[i + 4]}{charArray[i + 5]}";
-                                encoded.Add((int)Convert.ToUInt32(characterId, 16));
-                                i += 5;
-                                break;
-
-                            case 'x':
-                                if (charArray[i + 2] == '0' && charArray[i + 3] == '0' && charArray[i + 4] == '0' && charArray[i + 5] == '0')
-                                {
-                                    encoded.Add(0x0000);
-                                    i += 5;
-                                    break;
-                                }
-                                else if (charArray[i + 2] == '0' && charArray[i + 3] == '0' && charArray[i + 4] == '0' && charArray[i + 5] == '1')
-                                {
-                                    encoded.Add(0x0001);
-                                    i += 5;
-                                    break;
-                                }
-                                else
-                                {
-                                    characterId = $"{charArray[i + 2]}{charArray[i + 3]}{charArray[i + 4]}{charArray[i + 5]}";
-                                    encoded.Add((int)Convert.ToUInt32(characterId, 16));
-                                    i += 5;
-                                    break;
-                                }
-                        }
-                        break;
-
-                    case '[':
-                        switch (charArray[i + 1])
-                        {
-                            case 'P':
-                                encoded.Add(0x01E0);
-                                i += 3;
-                                break;
-
-                            case 'M':
-                                encoded.Add(0x01E1);
-                                i += 3;
-                                break;
-                        }
-                        break;
-
-                    default:
-
-                        WriteTextDictionary.TryGetValue(charArray[i], out int code);
-                        if (isTrainerName)
-                        {
-                            compressionBuffer |= code << bit;
-                            bit += 9;
-                            if (bit >= 15)
-                            {
-                                bit -= 15;
-                                encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
-                                compressionBuffer >>= 15;
-                            }
-                        }
-                        else
-                        {
-                            encoded.Add(code);
-                        }
-                        break;
-                }
-            }
-            if (isTrainerName && bit > 1)
-            {
-                compressionBuffer |= (0xFFFF << bit);
-                encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
-            }
-            encoded.Add(0xFFFF);
-            return [.. encoded];
-        }
-
-        private List<int[]> EncodeMessages(List<string> messages)
-        {
-            List<int[]> messagesArray = [];
-            foreach (var message in messages)
-            {
-                messagesArray.Add(EncodeMessage(message));
-            }
-            return messagesArray;
         }
 
         private List<byte[]> GetAllTrainerPartyFiles(int trainerCount)

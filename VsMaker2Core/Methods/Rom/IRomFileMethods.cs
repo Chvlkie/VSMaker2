@@ -23,7 +23,7 @@ namespace VsMaker2Core.Methods
         /// <param name="messageArchiveId"></param>
         /// <param name="discardLines"></param>
         /// <returns></returns>
-        List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines);
+        List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false);
 
         List<string> GetMoveNames(int moveTextArchive);
         List<string> GetAbilityNames(int abilityNameArchive);

@@ -137,7 +137,7 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
+            RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -361,13 +361,11 @@ namespace Main
                 if (saveChanges == DialogResult.Yes)
                 {
                     SelectExtractedRomFolder();
-                    EndOpenRom();
                 }
             }
             else
             {
                 SelectExtractedRomFolder();
-                EndOpenRom();
             }
             IsLoadingData = false;
         }
@@ -387,23 +385,11 @@ namespace Main
                 if (saveChanges == DialogResult.Yes)
                 {
                     OpenRom();
-                    if (RomLoaded)
-                    {
-                        InitializeTrainerEditor();
-                        InitializeClassEditor();
-                    }
-                    EndOpenRom();
                 }
             }
             else
             {
                 OpenRom();
-                if (RomLoaded)
-                {
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                }
-                EndOpenRom();
             }
         }
 
@@ -481,23 +467,11 @@ namespace Main
                 if (saveChanges == DialogResult.Yes)
                 {
                     SelectExtractedRomFolder();
-                    if (RomLoaded)
-                    {
-                        InitializeTrainerEditor();
-                        InitializeClassEditor();
-                    }
-                    EndOpenRom();
                 }
             }
             else
             {
                 SelectExtractedRomFolder();
-                if (RomLoaded)
-                {
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                }
-                EndOpenRom();
             }
         }
 
@@ -511,23 +485,11 @@ namespace Main
                 if (saveChanges == DialogResult.Yes)
                 {
                     OpenRom();
-                    if (RomLoaded)
-                    {
-                        InitializeTrainerEditor();
-                        InitializeClassEditor();
-                    }
-                    EndOpenRom();
                 }
             }
             else
             {
                 OpenRom();
-                if (RomLoaded)
-                {
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                }
-                EndOpenRom();
             }
         }
 
@@ -567,11 +529,7 @@ namespace Main
 
             if (openRom.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(openRom.FileName))
             {
-                SelectWorkingFolderDirectory(openRom.FileName);
-                if (RomLoaded)
-                {
-                    BeginExtractRomData();
-                }
+                SelectWorkingFolderDirectory(openRom.FileName);          
             }
         }
 
@@ -641,6 +599,9 @@ namespace Main
                 if (RomLoaded)
                 {
                     BeginExtractRomData();
+                    InitializeTrainerEditor();
+                    InitializeClassEditor();
+                    EndOpenRom();
                 }
             }
         }
@@ -666,14 +627,7 @@ namespace Main
                     {
                         CloseProject();
                         RomLoaded = ReadRomExtractedFolder(workingDirectory);
-                        if (RomLoaded)
-                        {
-                            BeginExtractRomData();
-                        }
-                        else
-                        {
-                            return;
-                        }
+
                     }
                     else
                     {

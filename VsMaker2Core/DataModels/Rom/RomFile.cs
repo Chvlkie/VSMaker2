@@ -57,9 +57,10 @@ namespace VsMaker2Core.DataModels
 
         #endregion RomInfo
 
-        public bool TrainerNameExpansion => TrainerNameMaxByte > 8;
+        public static bool TrainerNameExpansion => TrainerNameMaxByte > 8;
+        public static int TrainerNameMaxLength => TrainerNameMaxByte + ((TrainerNameMaxByte -4) / 2);
 
-        public int TrainerNameMaxByte { get; set; }
+        public static int TrainerNameMaxByte { get; set; }
 
         public RomFile()
         {
