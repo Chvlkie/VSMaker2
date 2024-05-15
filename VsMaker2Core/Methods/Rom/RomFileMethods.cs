@@ -460,6 +460,28 @@ namespace VsMaker2Core.Methods
             return prizeMoneyData;
         }
 
+        public List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath)
+        {
+            List<BattleMessageOffsetData> battleMessageOffsetData = [];
+            using BinaryReader reader = new(new FileStream(battleMessageOffsetPath, FileMode.Open, FileAccess.Read));
+            try
+            {
+                while (reader.BaseStream.Position != reader.BaseStream.Length)
+                {
+                    uint offset = reader.ReadUInt16();
+                    battleMessageOffsetData.Add(new BattleMessageOffsetData(BattleMessageOffsetData.OffsetToMessageId(offset)));
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                throw;
+            }
+            return battleMessageOffsetData;
+        }
+
         public List<string> GetTrainerNames(int trainerNameMessageArchive)
         {
             var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
@@ -489,6 +511,42 @@ namespace VsMaker2Core.Methods
                 trainersPartyData.Add(ReadTrainerPartyData(i, trainerData[i].TeamSize, trainerData[i].TrainerType, gameFamily != GameFamily.DiamondPearl));
             }
             return trainersPartyData;
+        }
+
+        public List<string> GetBattleMessages(int battleMessageArchive)
+        {
+            var messageArchives = GetMessageArchiveContents(battleMessageArchive, false);
+            var trainerNames = new List<string>();
+            foreach (var item in messageArchives)
+            {
+                trainerNames.Add(item.MessageText);
+            }
+            return trainerNames;
+        }
+
+        public List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath)
+        {
+            List<BattleMessageTableData> trainerTextTableDatas = [];
+            using BinaryReader reader = new(new FileStream(trainerTextTablePath, FileMode.Open, FileAccess.Read));
+            int messageId = 0;
+            try
+            {
+                while (reader.BaseStream.Position != reader.BaseStream.Length)
+                {
+                    uint trainerId = reader.ReadUInt16();
+                    ushort messageTriggerId = reader.ReadUInt16();
+                    trainerTextTableDatas.Add(new BattleMessageTableData(messageId, trainerId, messageTriggerId));
+                    messageId++;
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                reader.Close();
+                throw;
+            }
+            return trainerTextTableDatas;
         }
 
         #endregion Get

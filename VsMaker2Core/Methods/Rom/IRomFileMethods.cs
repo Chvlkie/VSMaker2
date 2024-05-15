@@ -76,5 +76,8 @@ namespace VsMaker2Core.Methods
         List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
         List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
         List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom);
+        List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath);
+        List<string> GetBattleMessages(int battleMessageArchive);
+        List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath);
     }
 }

@@ -228,6 +228,8 @@ namespace Main
             class_ClassListBox.SelectedIndex = classId - 2;
         }
 
+        #region Initialize
+
         private void InitializeAiFlags()
         {
             foreach (var flag in AiFlags.AiFlagNames)
@@ -283,6 +285,7 @@ namespace Main
             trainer_PropertiesTabControl.Enabled = false;
         }
 
+        #endregion Initialize
         private void OpenMoveSelector(int partyIndex, int pokemonId)
         {
             // Set new array if null
@@ -310,11 +313,22 @@ namespace Main
             }
         }
 
+        #region Event Handlers
+
+        #endregion Event Handlers
         private void poke1AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
             {
                 UpdateAbilty(0);
+            }
+        }
+
+        private void poke1BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
             }
         }
 
@@ -329,8 +343,44 @@ namespace Main
             }
         }
 
+        private void poke1DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke1FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke1GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke1HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke1LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
         }
 
         private void poke1MoveBtn_Click(object sender, EventArgs e)
@@ -353,6 +403,14 @@ namespace Main
             }
         }
 
+        private void poke2BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResetPokeComboBoxValidation(1);
@@ -364,8 +422,44 @@ namespace Main
             }
         }
 
+        private void poke2DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke2FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke2GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke2HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke2LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
         }
 
         private void poke2MoveBtn_Click(object sender, EventArgs e)
@@ -388,6 +482,14 @@ namespace Main
             }
         }
 
+        private void poke3BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResetPokeComboBoxValidation(2);
@@ -399,8 +501,44 @@ namespace Main
             }
         }
 
+        private void poke3DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke3FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke3GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke3HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke3LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
         }
 
         private void poke3MoveBtn_Click(object sender, EventArgs e)
@@ -423,6 +561,14 @@ namespace Main
             }
         }
 
+        private void poke4BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResetPokeComboBoxValidation(3);
@@ -434,8 +580,44 @@ namespace Main
             }
         }
 
+        private void poke4DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke4FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke4GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke4HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke4LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
         }
 
         private void poke4MoveBtn_Click(object sender, EventArgs e)
@@ -458,6 +640,14 @@ namespace Main
             }
         }
 
+        private void poke5BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke5ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResetPokeComboBoxValidation(4);
@@ -465,6 +655,46 @@ namespace Main
             {
                 SetPokemonSpecialData(4);
                 EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke5DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke5FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke5GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke5HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke5LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
                 EditedTrainerParty(true);
             }
         }
@@ -489,6 +719,14 @@ namespace Main
             }
         }
 
+        private void poke6BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
         private void poke6ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResetPokeComboBoxValidation(5);
@@ -500,6 +738,44 @@ namespace Main
             }
         }
 
+        private void poke6DVNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke6FormComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke6GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+        private void poke6HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
+
+        private void poke6LevelNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedTrainerParty(true);
+            }
+        }
         private void poke6MoveBtn_Click(object sender, EventArgs e)
         {
             if (poke6ComboBox.SelectedIndex > 0)

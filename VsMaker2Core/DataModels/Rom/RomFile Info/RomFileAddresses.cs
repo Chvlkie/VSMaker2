@@ -19,11 +19,12 @@ namespace VsMaker2Core.DataModels
 
         #endregion Overlay
 
-        #region Trainer Text Table
+        #region Battle Message Table
 
-        public static string TrainerTablePath => WorkingDirectory + "\\unpacked\\TrainerTextTable\\0000";
+        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.BattleMessageTable)}\\0000";
+        public static string BattleMessageOffsetPath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.BattleMessageOffset)}\\0000";
 
-        #endregion Trainer Text Table
+        #endregion Battle Message Table
 
         #region Palettes
 
@@ -41,6 +42,7 @@ namespace VsMaker2Core.DataModels
             GameFamily.HgEngine => 0x34C04,
             _ => 0
         };
+
         public int PrizeMoneyTableOverlayNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 11,
@@ -49,6 +51,7 @@ namespace VsMaker2Core.DataModels
             GameFamily.HgEngine => 12,
             _ => 0
         };
+
         public int PrizeMoneyTableSize => GameFamily switch
         {
             GameFamily.DiamondPearl => 98,
@@ -90,13 +93,13 @@ namespace VsMaker2Core.DataModels
             GameFamily.Platinum =>
             GameLanguage switch
             {
-               GameLanguage.English => 0x793b4,
-               GameLanguage.French => 0x079454,
-               GameLanguage.German => 0x079454,
-               GameLanguage.Italian => 0x079454,
-               GameLanguage.Japanese => 0x078c8c,
-               GameLanguage.Spanish => 0x079454,
-               _ => 0
+                GameLanguage.English => 0x793b4,
+                GameLanguage.French => 0x079454,
+                GameLanguage.German => 0x079454,
+                GameLanguage.Italian => 0x079454,
+                GameLanguage.Japanese => 0x078c8c,
+                GameLanguage.Spanish => 0x079454,
+                _ => 0
             },
             _ => 0
         };

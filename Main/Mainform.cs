@@ -4,7 +4,6 @@ using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.Methods;
-using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -69,6 +68,97 @@ namespace Main
                 return;
             }
             RomLoaded = true;
+        }
+
+        public void GetInitialData(IProgress<int> progress = null)
+        {
+            IsLoadingData = true;
+            int progressCount = 0;
+            const int increment = 12;
+            MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(LoadedRom.TrainerNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.ClassNames = romFileMethods.GetClassNames(LoadedRom.ClassNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(LoadedRom.ClassDescriptionMessageNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames, LoadedRom);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
+            progressCount += increment;
+            progress?.Report(progressCount); MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
+
+            MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount); MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
+
+            MainEditorModel.ItemNames = romFileMethods.GetItemNames(LoadedRom.ItemNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            IsLoadingData = false;
+            progress?.Report(100);
+        }
+
+        public void LoadRomData(IProgress<int> progress)
+        {
+            IsLoadingData = true;
+            int progressCount = 0;
+            const int increment = 10;
+
+            LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClassess(LoadedRom.ClassNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.ClassGenderData = romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, LoadedRom.GameFamily);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            LoadedRom.PrizeMoneyData = romFileMethods.GetPrizeMoneyData(LoadedRom);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            IsLoadingData = false;
+            progress?.Report(100);
         }
 
         private static void CreateDirectory(string workingDirectory)
@@ -211,43 +301,14 @@ namespace Main
             startupTab.SelectedTab = RomLoaded ? mainPage : startupPage;
             if (RomLoaded)
             {
-                LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
-                LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
-                LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
-                LoadedRom.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
-                LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClassess(LoadedRom.ClassNamesTextNumber);
-                LoadedRom.ClassGenderData = romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress);
-                LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, LoadedRom.GameFamily);
-                LoadedRom.PrizeMoneyData = romFileMethods.GetPrizeMoneyData(LoadedRom);
+                OpenLoadingDialog(LoadType.LoadRomData);
                 InitializeTrainerEditor();
                 InitializeClassEditor();
-                GetInitialData();
+                OpenLoadingDialog(LoadType.SetupEditor);
                 main_MainTab.SelectedTab = main_MainTab_TrainerTab;
                 SetupTrainerEditor();
             }
             IsLoadingData = false;
-        }
-
-        private void exportAstrainersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //var save = new SaveFileDialog
-            //{
-            //    Filter = "VS Maker Trainers|*.vstrainers",
-            //    Title = "Export VS Maker Trainers"
-            //};
-            //save.ShowDialog();
-            //if (!string.IsNullOrEmpty(save.FileName))
-            //{
-            //    var export = fileSystemMethods.ExportTrainers(MainEditorModel.Trainers, save.FileName, LoadedRom.GameFamily, LoadedRom.TrainerNamesTextNumber, 100, 100);
-            //    if (export.Success)
-            //    {
-            //        MessageBox.Show("VS Maker Trainers exported!", "Success");
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show(export.ErrorMessage, "Unable to Export VS Maker Trainers", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    }
-            //}
         }
 
         private void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
@@ -269,70 +330,12 @@ namespace Main
             }
         }
 
-        private void GetInitialData()
-        {
-            IsLoadingData = true;
-            MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
-            MainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(LoadedRom.TrainerNamesTextNumber);
-            MainEditorModel.ClassNames = romFileMethods.GetClassNames(LoadedRom.ClassNamesTextNumber);
-            MainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(LoadedRom.ClassDescriptionMessageNumber);
-            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames, LoadedRom);
-            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
-            MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
-            MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
-            MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
-            MainEditorModel.ItemNames = romFileMethods.GetItemNames(LoadedRom.ItemNamesTextNumber);
-            IsLoadingData = false;
-        }
-
         private string GetPokemonNameById(int pokemonId)
         {
             return MainEditorModel.PokemonNames[pokemonId];
         }
 
-        private void importVSMakerTrainersvstrainersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var confirmImport = MessageBox.Show("This will overwrite all current Trainer Data." +
-                "\n\nDo you wish to continue?", "Import Trainer Data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (confirmImport == DialogResult.Yes)
-            {
-                var open = new OpenFileDialog
-                {
-                    Filter = "VS Maker Trainers|*.vstrainers",
-                    Title = "Import VS Maker Trainers"
-                };
-
-                if (open.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(open.FileName))
-                {
-                    var import = fileSystemMethods.ImportTrainers(open.FileName);
-
-                    if (import.Success)
-                    {
-                        var gameFamily = import.VsTrainersFile.GameFamily;
-                        if (gameFamily != LoadedRom.GameFamily)
-                        {
-                            var confirm = MessageBox.Show("The selected VsTrainers file was exported from " + gameFamily
-                                 + ".\nLoaded ROM is " + LoadedRom.GameFamily +
-                                 "\n\nThe Trainer Data may cause issues with Loaded ROM.", "Game Family Mismatch", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                            if (confirm != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
-                        var newTrainers = import.VsTrainersFile.TrainerData;
-                        var oldTrainers = MainEditorModel.Trainers;
-
-                        ConfirmImportTrainers(newTrainers, oldTrainers);
-                    }
-                    else
-                    {
-                        MessageBox.Show(import.ErrorMessage, "Unable to Import VS Maker Trainers", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-            }
-        }
+        #region Event Handlers
 
         private void main_MainTab_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -545,6 +548,8 @@ namespace Main
             OpenSettingsWindow();
         }
 
+        #endregion Event Handlers
+
         private void OpenLoadingDialog(LoadType loadType)
         {
             UseWaitCursor = true;
@@ -579,58 +584,6 @@ namespace Main
         private void OpenSettingsWindow()
         {
             Settings.ShowDialog();
-        }
-
-        private void poke1BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void poke2BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void poke3BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void poke4BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void poke5BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void poke6BallCapsuleComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                EditedTrainerParty(true);
-            }
-        }
-
-        private void ProcessImportTrainers(List<Trainer> newTrainers, List<Trainer> oldTrainers)
-        {
         }
 
         private bool ReadRomExtractedFolder(string selectedFolder)

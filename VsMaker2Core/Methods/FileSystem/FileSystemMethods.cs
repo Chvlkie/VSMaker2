@@ -100,7 +100,6 @@ namespace VsMaker2Core.Methods
             {
                 stream.Close();
                 Console.WriteLine(ex.Message);
-                throw;
                 return (false, ex.Message);
             }
             return (true, "");
@@ -442,7 +441,7 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < trainerCount; i++)
             {
-                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{i:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{i:D4}";
                 var fileStream = new FileStream(directory, FileMode.Open);
                 using var stream = new MemoryStream();
                 fileStream.CopyTo(stream);
@@ -458,7 +457,7 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < trainerCount; i++)
             {
-                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{i:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{i:D4}";
                 var fileStream = new FileStream(directory, FileMode.Open);
                 using var stream = new MemoryStream();
                 fileStream.CopyTo(stream);

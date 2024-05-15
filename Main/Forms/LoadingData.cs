@@ -14,8 +14,8 @@ namespace Main.Forms
 {
     public partial class LoadingData : Form
     {
-        private Mainform mainForm;
         private LoadType loadType;
+        private Mainform mainForm;
         public LoadingData()
         {
             InitializeComponent();
@@ -29,22 +29,31 @@ namespace Main.Forms
             LoadData();
         }
 
-        private void LoadData()
+        public async Task LoadRomData()
         {
-            progressBar.Value = 0;
-            switch(loadType)
-            {
-                case LoadType.UnpackRom:
-                    Text = "Unpacking ROM Data";
-                    UnpackRom();
-                    break;
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => progressBar.Value = value);
+            await Task.Run(() => mainForm.LoadRomData(progress));
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
 
-                case LoadType.UnpackNarcs:
-                    Text = "Unpacking Essential NARCs";
-                    progressBar.Maximum = 100;
-                    UnpackNarcs();
-                    break;
-            }
+        public async Task SetupEditor()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => progressBar.Value = value);
+            await Task.Run(() => mainForm.GetInitialData(progress));
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
+        public async Task UnpackNarcs()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => progressBar.Value = value);
+            await Task.Run(() => mainForm.BeginUnpackNarcs(progress));
+            FormClosing -= LoadingData_FormClosing;
+            Close();
         }
 
         public async Task UnpackRom()
@@ -57,13 +66,28 @@ namespace Main.Forms
             Close();
         }
 
-        public async Task UnpackNarcs()
+        private void LoadData()
         {
-            await Task.Delay(500);
-            var progress = new Progress<int>(value => { progressBar.Value = value; });
-            await Task.Run(() => mainForm.BeginUnpackNarcs(progress));
-            FormClosing -= LoadingData_FormClosing;
-            Close();
+            progressBar.Value = 0;
+            switch(loadType)
+            {
+                case LoadType.UnpackRom:
+                    Text = "Unpacking ROM Data";
+                    UnpackRom();
+                    break;
+                case LoadType.LoadRomData:
+                    Text = "Loading ROM Data";
+                    LoadRomData();
+                    break;
+                case LoadType.SetupEditor:
+                    Text = "Setting up VS Maker";
+                    SetupEditor();
+                    break;
+                case LoadType.UnpackNarcs:
+                    Text = "Unpacking Essential NARCs";
+                    UnpackNarcs();
+                    break;
+            }
         }
         private void LoadingData_FormClosing(object sender, FormClosingEventArgs e)
         {

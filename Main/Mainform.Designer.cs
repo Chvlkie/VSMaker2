@@ -963,6 +963,7 @@
             poke1LevelNum.Size = new Size(46, 22);
             poke1LevelNum.TabIndex = 13;
             poke1LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke1LevelNum.ValueChanged += poke1LevelNum_ValueChanged;
             // 
             // label41
             // 
@@ -1034,6 +1035,7 @@
             poke6FormComboBox.Name = "poke6FormComboBox";
             poke6FormComboBox.Size = new Size(65, 21);
             poke6FormComboBox.TabIndex = 149;
+            poke6FormComboBox.SelectedIndexChanged += poke6FormComboBox_SelectedIndexChanged;
             // 
             // poke1BallCapsuleComboBox
             // 
@@ -1089,6 +1091,7 @@
             poke6GenderComboBox.Name = "poke6GenderComboBox";
             poke6GenderComboBox.Size = new Size(47, 21);
             poke6GenderComboBox.TabIndex = 147;
+            poke6GenderComboBox.SelectedIndexChanged += this.poke6GenderComboBox_SelectedIndexChanged;
             // 
             // label44
             // 
@@ -1108,6 +1111,7 @@
             poke1DVNum.Name = "poke1DVNum";
             poke1DVNum.Size = new Size(46, 22);
             poke1DVNum.TabIndex = 55;
+            poke1DVNum.ValueChanged += poke1DVNum_ValueChanged;
             // 
             // poke6DVNum
             // 
@@ -1117,6 +1121,7 @@
             poke6DVNum.Name = "poke6DVNum";
             poke6DVNum.Size = new Size(46, 22);
             poke6DVNum.TabIndex = 145;
+            poke6DVNum.ValueChanged += this.poke6DVNum_ValueChanged;
             // 
             // label7
             // 
@@ -1138,6 +1143,7 @@
             poke6HeldItemComboBox.Name = "poke6HeldItemComboBox";
             poke6HeldItemComboBox.Size = new Size(112, 21);
             poke6HeldItemComboBox.TabIndex = 144;
+            poke6HeldItemComboBox.SelectedIndexChanged += poke6HeldItemComboBox_SelectedIndexChanged;
             // 
             // poke1GenderComboBox
             // 
@@ -1148,6 +1154,7 @@
             poke1GenderComboBox.Name = "poke1GenderComboBox";
             poke1GenderComboBox.Size = new Size(47, 21);
             poke1GenderComboBox.TabIndex = 57;
+            poke1GenderComboBox.SelectedIndexChanged += poke1GenderComboBox_SelectedIndexChanged;
             // 
             // poke6MoveBtn
             // 
@@ -1191,6 +1198,7 @@
             poke1FormComboBox.Name = "poke1FormComboBox";
             poke1FormComboBox.Size = new Size(65, 21);
             poke1FormComboBox.TabIndex = 59;
+            poke1FormComboBox.SelectedIndexChanged += poke1FormComboBox_SelectedIndexChanged;
             // 
             // label45
             // 
@@ -1262,6 +1270,7 @@
             poke6LevelNum.Size = new Size(46, 22);
             poke6LevelNum.TabIndex = 138;
             poke6LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke6LevelNum.ValueChanged += this.poke6LevelNum_ValueChanged;
             // 
             // label5
             // 
@@ -1336,6 +1345,7 @@
             poke2LevelNum.Size = new Size(46, 22);
             poke2LevelNum.TabIndex = 66;
             poke2LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke2LevelNum.ValueChanged += this.poke2LevelNum_ValueChanged;
             // 
             // label33
             // 
@@ -1407,6 +1417,7 @@
             poke5FormComboBox.Name = "poke5FormComboBox";
             poke5FormComboBox.Size = new Size(65, 21);
             poke5FormComboBox.TabIndex = 131;
+            poke5FormComboBox.SelectedIndexChanged += this.poke5FormComboBox_SelectedIndexChanged;
             // 
             // poke2BallCapsuleComboBox
             // 
@@ -1450,6 +1461,7 @@
             poke5GenderComboBox.Name = "poke5GenderComboBox";
             poke5GenderComboBox.Size = new Size(47, 21);
             poke5GenderComboBox.TabIndex = 129;
+            poke5GenderComboBox.SelectedIndexChanged += this.poke5GenderComboBox_SelectedIndexChanged;
             // 
             // poke2HeldItemComboBox
             // 
@@ -1481,6 +1493,7 @@
             poke2DVNum.Name = "poke2DVNum";
             poke2DVNum.Size = new Size(46, 22);
             poke2DVNum.TabIndex = 73;
+            poke2DVNum.ValueChanged += this.poke2DVNum_ValueChanged;
             // 
             // poke5DVNum
             // 
@@ -1490,6 +1503,7 @@
             poke5DVNum.Name = "poke5DVNum";
             poke5DVNum.Size = new Size(46, 22);
             poke5DVNum.TabIndex = 127;
+            poke5DVNum.ValueChanged += this.poke5DVNum_ValueChanged;
             // 
             // label12
             // 
@@ -1511,6 +1525,7 @@
             poke5HeldItemComboBox.Name = "poke5HeldItemComboBox";
             poke5HeldItemComboBox.Size = new Size(112, 21);
             poke5HeldItemComboBox.TabIndex = 126;
+            poke5HeldItemComboBox.SelectedIndexChanged += this.poke5HeldItemComboBox_SelectedIndexChanged;
             // 
             // poke2GenderComboBox
             // 
@@ -1521,6 +1536,7 @@
             poke2GenderComboBox.Name = "poke2GenderComboBox";
             poke2GenderComboBox.Size = new Size(47, 21);
             poke2GenderComboBox.TabIndex = 75;
+            poke2GenderComboBox.SelectedIndexChanged += this.poke2GenderComboBox_SelectedIndexChanged;
             // 
             // poke5MoveBtn
             // 
@@ -1564,6 +1580,7 @@
             poke2FormComboBox.Name = "poke2FormComboBox";
             poke2FormComboBox.Size = new Size(65, 21);
             poke2FormComboBox.TabIndex = 77;
+            poke2FormComboBox.SelectedIndexChanged += poke2FormComboBox_SelectedIndexChanged;
             // 
             // label37
             // 
@@ -1635,6 +1652,7 @@
             poke5LevelNum.Size = new Size(46, 22);
             poke5LevelNum.TabIndex = 120;
             poke5LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke5LevelNum.ValueChanged += this.poke5LevelNum_ValueChanged;
             // 
             // label6
             // 
@@ -1709,6 +1727,7 @@
             poke3LevelNum.Size = new Size(46, 22);
             poke3LevelNum.TabIndex = 84;
             poke3LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke3LevelNum.ValueChanged += this.poke3LevelNum_ValueChanged;
             // 
             // label25
             // 
@@ -1780,6 +1799,7 @@
             poke4FormComboBox.Name = "poke4FormComboBox";
             poke4FormComboBox.Size = new Size(65, 21);
             poke4FormComboBox.TabIndex = 113;
+            poke4FormComboBox.SelectedIndexChanged += this.poke4FormComboBox_SelectedIndexChanged;
             // 
             // poke3BallCapsuleComboBox
             // 
@@ -1823,6 +1843,7 @@
             poke4GenderComboBox.Name = "poke4GenderComboBox";
             poke4GenderComboBox.Size = new Size(47, 21);
             poke4GenderComboBox.TabIndex = 111;
+            poke4GenderComboBox.SelectedIndexChanged += this.poke4GenderComboBox_SelectedIndexChanged;
             // 
             // poke3HeldItemComboBox
             // 
@@ -1854,6 +1875,7 @@
             poke3DVNum.Name = "poke3DVNum";
             poke3DVNum.Size = new Size(46, 22);
             poke3DVNum.TabIndex = 91;
+            poke3DVNum.ValueChanged += this.poke3DVNum_ValueChanged;
             // 
             // poke4DVNum
             // 
@@ -1863,6 +1885,7 @@
             poke4DVNum.Name = "poke4DVNum";
             poke4DVNum.Size = new Size(46, 22);
             poke4DVNum.TabIndex = 109;
+            poke4DVNum.ValueChanged += this.poke4DVNum_ValueChanged;
             // 
             // label20
             // 
@@ -1895,6 +1918,7 @@
             poke3GenderComboBox.Name = "poke3GenderComboBox";
             poke3GenderComboBox.Size = new Size(47, 21);
             poke3GenderComboBox.TabIndex = 93;
+            poke3GenderComboBox.SelectedIndexChanged += this.poke3GenderComboBox_SelectedIndexChanged;
             // 
             // poke4MoveBtn
             // 
@@ -1938,6 +1962,7 @@
             poke3FormComboBox.Name = "poke3FormComboBox";
             poke3FormComboBox.Size = new Size(65, 21);
             poke3FormComboBox.TabIndex = 95;
+            poke3FormComboBox.SelectedIndexChanged += this.poke3FormComboBox_SelectedIndexChanged;
             // 
             // label29
             // 
@@ -2009,6 +2034,7 @@
             poke4LevelNum.Size = new Size(46, 22);
             poke4LevelNum.TabIndex = 102;
             poke4LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            poke4LevelNum.ValueChanged += this.poke4LevelNum_ValueChanged;
             // 
             // label16
             // 

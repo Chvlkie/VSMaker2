@@ -41,6 +41,9 @@ namespace VsMaker2Core.DataModels
         public List<ClassGenderData> ClassGenderData { get; set; }
         public List<PrizeMoneyData> PrizeMoneyData { get; set; }
         public List<EyeContactMusicData> EyeContactMusicData { get; set; }
+        public List<BattleMessageTableData> BattleMessageTableData { get; set; }
+
+        public List<BattleMessageOffsetData> BattleMessageOffsetData { get; set; }
 
         public int VanillaTotalTrainers => GameFamily switch
         {
