@@ -18,7 +18,7 @@ namespace VsMaker2Core.Methods
             Process unpack = new();
             unpack.StartInfo.FileName = Common.NdsToolsFilePath;
             unpack.StartInfo.Arguments = "-x " + '"' + fileName + '"'
-                + " -9 " + '"' + workingDirectory + "\\" + Common.Arm9FilePath + '"'
+                + " -9 " + '"' + RomFile.Arm9Path + '"'
                 + " -7 " + '"' + workingDirectory + "\\" + Common.Arm7FilePath + '"'
                 + " -y9 " + '"' + workingDirectory + "\\" + Common.Y9FilePath + '"'
                 + " -y7 " + '"' + workingDirectory + "\\" + Common.Y7FilePath + '"'
@@ -33,10 +33,10 @@ namespace VsMaker2Core.Methods
                 unpack.Start();
                 unpack.WaitForExit();
             }
-            catch (System.ComponentModel.Win32Exception ex)
+            catch (Exception ex)
             {
                 return (false, ex.Message);
-            }
+            }          
             return (true, "");
         }
 
@@ -119,7 +119,10 @@ namespace VsMaker2Core.Methods
 
         public List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam)
         {
-            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0) - Arm9.Address;
+            uint test = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0);
+
+            uint tableStartAddress = test - Arm9.Address;
+
             List<ClassGenderData> classGenders = [];
             using Arm9.Arm9Reader reader = new(tableStartAddress);
             try

@@ -61,7 +61,7 @@ namespace VsMaker2Core.DSUtils
             decompress.StartInfo.FileName = Common.BlzFilePath;
             decompress.StartInfo.Arguments = @" -d " + '"' + path + '"';
             decompress.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            decompress.StartInfo.CreateNoWindow = true;
+            decompress.StartInfo.CreateNoWindow = false;
             decompress.Start();
             decompress.WaitForExit();
 

@@ -7,15 +7,15 @@ namespace VsMaker2Core.DataModels
         #region ARM9
 
         public const uint SynthOverlayLoadAddress = 0x023C8000;
-        public static string Arm9Path => WorkingDirectory + Common.Arm9FilePath;
+        public static string Arm9Path => $"{WorkingDirectory}{Common.Arm9FilePath}";
         public uint Arm9SpawnOffset { get; set; }
 
         #endregion ARM9
 
         #region Overlay
 
-        public static string OverlayPath => WorkingDirectory + Common.OverlayFilePath;
-        public static string OverlayTablePath => WorkingDirectory + Common.Y9FilePath;
+        public static string OverlayPath => $"{WorkingDirectory}{Common.OverlayFilePath}";
+        public static string OverlayTablePath => $"{WorkingDirectory}{Common.Y9FilePath}";
 
         #endregion Overlay
 

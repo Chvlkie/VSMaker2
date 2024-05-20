@@ -3,6 +3,7 @@ using Main.Models;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
 using static VsMaker2Core.Enums;
 
@@ -529,7 +530,7 @@ namespace Main
 
             if (openRom.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(openRom.FileName))
             {
-                SelectWorkingFolderDirectory(openRom.FileName);          
+                SelectWorkingFolderDirectory(openRom.FileName);
             }
         }
 
@@ -580,7 +581,6 @@ namespace Main
                 return false;
             }
             romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
-
             return true;
         }
 
@@ -627,7 +627,6 @@ namespace Main
                     {
                         CloseProject();
                         RomLoaded = ReadRomExtractedFolder(workingDirectory);
-
                     }
                     else
                     {
@@ -655,6 +654,28 @@ namespace Main
                     if (ReadRomFile(workingDirectory, fileName))
                     {
                         OpenLoadingDialog(LoadType.UnpackRom);
+                        if (RomLoaded)
+                        {
+                            Arm9.Arm9EditSize(-12);
+
+                            if (Arm9.CheckCompressionMark(LoadedRom.GameFamily))
+                            {
+                                if (!LoadedRom.IsHeartGoldSoulSilver)
+                                {
+                                    MessageBox.Show("Unexpected compression of Arm9");
+                                    return;
+                                }
+                                if (!Arm9.Arm9Decompress(RomFile.Arm9Path))
+                                {
+                                    MessageBox.Show("Unable to decompress Arm9");
+                                    return;
+                                }
+                            }
+                            BeginExtractRomData();
+                            InitializeTrainerEditor();
+                            InitializeClassEditor();
+                            EndOpenRom();
+                        }
                     }
                     else
                     {
