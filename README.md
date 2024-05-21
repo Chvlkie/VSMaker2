@@ -1,6 +1,6 @@
 **VS Maker 2: Customise Your Pokémon DS Experience**
 
-VS Maker 2 is a C# WinForms app designed for fans of Generation 4 Pokémon DS games, including Pokémon Diamond, Pearl, Platinum, HeartGold, and SoulSilver. Built with .NET Framework 8, it lets you easily edit Trainers, Trainer Classes, and Battle Messages.
+VS Maker 2 is a C# WinForms app for Generation IV Pokémon DS games, including Pokémon Diamond, Pearl, Platinum, HeartGold, and SoulSilver. Built with .NET Framework 8, it lets you easily edit Trainers, Trainer Classes, and Battle Messages.
 
 **Features:**
 
@@ -12,6 +12,4 @@ VS Maker 2 is a C# WinForms app designed for fans of Generation 4 Pokémon DS ga
 - **Compatible with DSPRE:** Works with ROMs extracted using DSPRE.
 - **User-Friendly:** Intuitive interface for both beginners and pros.
 
-Special thanks to the Kingdom Of DS hacking community on Discord for their support and contributions.
-
-With VS Maker 2, you can tailor your Pokémon adventure to be exactly the way you want it. Dive in and start customising your favourite Generation 4 games today!
+Special thanks to the Kingdom Of DS hacking community on Discord for their support and contributions!
