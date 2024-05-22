@@ -1,4 +1,5 @@
-﻿using VsMaker2Core.RomFiles;
+﻿using VsMaker2Core.Database;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels
@@ -10,11 +11,11 @@ namespace VsMaker2Core.DataModels
         public byte EuropeByte { get; set; }
         public string ExtractedFolderSuffix { get; set; }
         public string FileName { get; set; }
-        public string GameCode { get; set; }
+        public static string GameCode { get; set; }
 
         public bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
 
-        public GameFamily GameFamily => GameVersion switch
+        public static GameFamily GameFamily => GameVersion switch
         {
             GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
             GameVersion.Platinum => GameFamily.Platinum,
@@ -23,7 +24,36 @@ namespace VsMaker2Core.DataModels
             _ => GameFamily.Unknown,
         };
 
-        public GameLanguage GameLanguage => GameCode switch
+        public static Dictionary<ushort, byte[]> BuildCommandParametersDatabase(GameFamily gameFam)
+        {
+            Dictionary<ushort, byte[]> commonDictionaryParams;
+            Dictionary<ushort, byte[]> specificDictionaryParams;
+
+            switch (gameFam)
+            {
+                case GameFamily.DiamondPearl:
+                    commonDictionaryParams = ScriptDatabase.DPPtScrCmdParameters;
+                    specificDictionaryParams = ScriptDatabase.DPScrCmdParameters;
+                    break;
+
+                case GameFamily.Platinum:
+                    commonDictionaryParams = ScriptDatabase.DPPtScrCmdParameters;
+                    specificDictionaryParams = ScriptDatabase.PlatScrCmdParameters;
+                    break;
+
+                default:
+                    commonDictionaryParams = ScriptDatabase.HGSSScrCmdParameters;
+#if true
+                    specificDictionaryParams = [];
+#else
+                        specificDictionaryParams = ScriptDatabase.CustomScrCmdParameters;
+#endif
+                    break;
+            }
+            return commonDictionaryParams.Concat(specificDictionaryParams).ToLookup(x => x.Key, x => x.Value).ToDictionary(x => x.Key, g => g.First());
+
+        }
+        public static GameLanguage GameLanguage => GameCode switch
         {
             "ADAE" or "APAE" or "CPUE" or "IPKE" or "IPGE" => GameLanguage.English,
             "ADAS" or "APAS" or "CPUS" or "IPKS" or "IPGS" or "LATA" => GameLanguage.Spanish,
@@ -33,7 +63,8 @@ namespace VsMaker2Core.DataModels
             _ => GameLanguage.Japanese,
         };
 
-        public GameVersion GameVersion { get; set; }
+        public static Dictionary<ushort, byte[]> ScriptCommandParametersDict => BuildCommandParametersDatabase(GameFamily);
+        public static GameVersion GameVersion { get; set; }
         public int TotalNumberOfTrainerClasses { get; set; }
         public int TotalNumberOfTrainers { get; set; }
         public List<TrainerData> TrainersData { get; set; }
@@ -58,7 +89,7 @@ namespace VsMaker2Core.DataModels
         #endregion RomInfo
 
         public static bool TrainerNameExpansion => TrainerNameMaxByte > 8;
-        public static int TrainerNameMaxLength => TrainerNameMaxByte + ((TrainerNameMaxByte -4) / 2);
+        public static int TrainerNameMaxLength => TrainerNameMaxByte + ((TrainerNameMaxByte - 4) / 2);
 
         public static int TrainerNameMaxByte { get; set; }
 

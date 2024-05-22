@@ -1,5 +1,4 @@
-﻿using VsMaker2Core.DataModels;
-using static VsMaker2Core.Enums;
+﻿using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core
 {
@@ -9,6 +8,7 @@ namespace VsMaker2Core
                         NarcDirectory.monIcons,
                         NarcDirectory.moveData,
                         NarcDirectory.personalPokeData,
+                        NarcDirectory.scripts,
                         NarcDirectory.synthOverlay,
                         NarcDirectory.textArchives,
                         NarcDirectory.trainerGraphics,
@@ -22,6 +22,7 @@ namespace VsMaker2Core
                         NarcDirectory.monIcons,
                         NarcDirectory.moveData,
                         NarcDirectory.personalPokeData,
+                        NarcDirectory.scripts,
                         NarcDirectory.synthOverlay,
                         NarcDirectory.textArchives,
                         NarcDirectory.trainerGraphics,
@@ -38,6 +39,7 @@ namespace VsMaker2Core
                         NarcDirectory.monIcons,
                         NarcDirectory.moveData,
                         NarcDirectory.personalPokeData,
+                        NarcDirectory.scripts,
                         NarcDirectory.synthOverlay,
                         NarcDirectory.textArchives,
                         NarcDirectory.trainerGraphics,
@@ -54,6 +56,7 @@ namespace VsMaker2Core
                         NarcDirectory.monIcons,
                         NarcDirectory.moveData,
                         NarcDirectory.personalPokeData,
+                        NarcDirectory.scripts,
                         NarcDirectory.synthOverlay,
                         NarcDirectory.textArchives,
                         NarcDirectory.trainerGraphics,

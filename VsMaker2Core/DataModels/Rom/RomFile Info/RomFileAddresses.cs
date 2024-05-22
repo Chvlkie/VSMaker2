@@ -235,26 +235,70 @@ namespace VsMaker2Core.DataModels
         #endregion TrainerNames
 
         #region TrainerEncounter
-        public int TrainerEncounterScriptFile => GameFamily switch
+
+        public static int TrainerScriptFile => GameFamily switch
         {
-            GameFamily.DiamondPearl => 1114,
-            GameFamily.Platinum => 0x359E0,
+            GameFamily.DiamondPearl => 1040,
+            GameFamily.Platinum => 1114,
             GameFamily.HeartGoldSoulSilver => 953,
-            GameFamily.HgEngine => 0x34C04,
+            GameFamily.HgEngine => 953,
             _ => 0
         };
 
-        public uint TrainerEncounterScriptOffset => GameFamily switch
+        public static uint TrainerEncounterScriptOffset => GameFamily switch
         {
-            GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
-            GameFamily.Platinum => 0x67BA4,
-            GameFamily.HeartGoldSoulSilver => 0x641E8,
-            GameFamily.HgEngine => 0x641E8,
+            GameFamily.DiamondPearl =>
+            GameLanguage switch
+            {
+                GameLanguage.English => 0x5C6B8,
+                GameLanguage.French => 0x5C728,
+                GameLanguage.Spanish => 0x5C728,
+                GameLanguage.Italian => 0x5C728,
+                GameLanguage.German => 0x5C728,
+                GameLanguage.Japanese => 0x609CC,
+                _ => 0
+            },
+            GameFamily.Platinum => GameLanguage switch
+            {
+                GameLanguage.English => 0x67BA4,
+                GameLanguage.French => 0x67C48,
+                GameLanguage.Spanish => 0x67C48,
+                GameLanguage.Italian => 0x67C48,
+                GameLanguage.German => 0x67C48,
+                GameLanguage.Japanese => 0x6746C,
+                _ => 0
+            },
+            GameFamily.HeartGoldSoulSilver => GameLanguage switch
+            {
+                GameLanguage.English => 0x641E8,
+                GameLanguage.French => 0x641E8,
+                GameLanguage.Spanish => GameVersion == GameVersion.SoulSilver ? (uint)0x641E8 : 0x641E0,
+                GameLanguage.Italian => 0x641E8,
+                GameLanguage.German => 0x641E8,
+                GameLanguage.Japanese => 0x63C44,
+                _ => 0
+            },
+            GameFamily.HgEngine => GameLanguage switch
+            {
+                GameLanguage.English => 0x641E8,
+                GameLanguage.French => 0x641E8,
+                GameLanguage.Spanish => GameVersion == GameVersion.SoulSilver ? (uint)0x641E8 : 0x641E0,
+                GameLanguage.Italian => 0x641E8,
+                GameLanguage.German => 0x641E8,
+                GameLanguage.Japanese => 0x63C44,
+                _ => 0
+            },
             _ => 0
         };
 
-        public static int TrainerEncounterScript;
-        public static uint TrainerEncounterScriptCall => (uint)(2999 + TrainerEncounterScript);
+        public static int OriginalTrainerEncounterScript => GameFamily switch
+        {
+            GameFamily.DiamondPearl => 851,
+            GameFamily.Platinum => 929,
+            GameFamily.HeartGoldSoulSilver => 740,
+            GameFamily.HgEngine => 740,
+            _ => 0
+        };
 
         #endregion TrainerEncounter
     }

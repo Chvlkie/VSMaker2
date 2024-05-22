@@ -308,7 +308,7 @@ namespace Main
         private void PopulateEyeContactMusic(ComboBox comboBox)
         {
             comboBox.Items.Clear();
-            switch (LoadedRom.GameFamily)
+            switch (RomFile.GameFamily)
             {
                 case GameFamily.DiamondPearl:
                     comboBox.Items.AddRange(EyeContactMusics.DiamondPearl.Select(x => x.ListName).ToArray());
@@ -482,7 +482,7 @@ namespace Main
             class_GenderComboBox.SelectedIndex = SelectedClass.ClassProperties.Gender ?? -1;
             class_DescriptionTextBox.Text = SelectedClass.ClassProperties.Description;
             class_PrizeMoneyNum.Value = SelectedClass.ClassProperties.PrizeMoneyMultiplier;
-            class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(LoadedRom.GameFamily);
+            class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(RomFile.GameFamily);
             class_EyeContactNightComboBox.SelectedIndex = LoadedRom.IsHeartGoldSoulSilver ?
                 EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicNight)
                 : -1;

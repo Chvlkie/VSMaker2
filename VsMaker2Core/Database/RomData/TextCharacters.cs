@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static VsMaker2Core.Enums;
-
-namespace VsMaker2Core.Database
+﻿namespace VsMaker2Core.Database
 {
     public partial class VsMakerDatabase
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using static System.Formats.Asn1.AsnWriter;
-
-namespace VsMaker2Core
+﻿namespace VsMaker2Core
 {
     public static class BallCapsules
     {

@@ -22,7 +22,7 @@ namespace VsMaker2Core.Methods
             {
                 var trainerData = loadedRom.TrainersData[i];
                 var trainerPartyData = loadedRom.TrainersPartyData[i];
-                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, loadedRom.GameFamily != GameFamily.DiamondPearl));
+                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl));
             }
             return trainers;
         }

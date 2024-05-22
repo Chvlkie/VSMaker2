@@ -51,10 +51,17 @@ namespace Main
             // New TrainerProperties
             fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
             fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
-            fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, LoadedRom.GameFamily != GameFamily.DiamondPearl);
+            fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, RomFile.GameFamily != GameFamily.DiamondPearl);
             UnfilteredTrainers.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
             trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
             LoadedRom.TotalNumberOfTrainers++;
+
+            // Create new Trainer Script
+            var updateScripts = fileSystemMethods.UpdateTrainerScripts(LoadedRom.TotalNumberOfTrainers);
+            if (!updateScripts.Success)
+            {
+                MessageBox.Show(updateScripts.ErrorMessage, "Couldn't update Trainer Scripts");
+            }
             IsLoadingData = false;
             trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
             EditedTrainerData(true);
@@ -175,9 +182,9 @@ namespace Main
                 pokeIconsPictureBoxes[i].Enabled = true;
                 pokeLevelNums[i].Enabled = true;
                 pokeDVNums[i].Enabled = true;
-                pokeBallCapsuleComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl;
-                pokeAbilityComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneAbility;
-                pokeFormsComboBoxes[i].Enabled = LoadedRom.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokeComboBoxes[i].SelectedIndex);
+                pokeBallCapsuleComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl;
+                pokeAbilityComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneAbility;
+                pokeFormsComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokeComboBoxes[i].SelectedIndex);
                 pokeHeldItemComboBoxes[i].Enabled = chooseItems;
                 pokeMoveButtons[i].Enabled = chooseMoves;
                 pokeGenderComboBoxes[i].Enabled = LoadedRom.IsHeartGoldSoulSilver
@@ -905,12 +912,12 @@ namespace Main
 
                 byte genderAbilityOverride = species.HasMoreThanOneGender ? (byte)(pokeGenderComboBoxes[i].SelectedIndex + (pokeAbilityComboBoxes[i].SelectedIndex << 4)) : (byte)(pokeAbilityComboBoxes[i].SelectedIndex << 4);
                 var newPokemon = new Pokemon((byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeLevelNums[i].Value, (ushort)pokeComboBoxes[i].SelectedIndex, (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i], (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex);
-                var newPokemonData = trainerEditorMethods.NewTrainerPartyPokemonData(newPokemon, trainer_ChooseMovesCheckbox.Checked, trainer_HeldItemsCheckbox.Checked, LoadedRom.GameFamily != GameFamily.DiamondPearl);
+                var newPokemonData = trainerEditorMethods.NewTrainerPartyPokemonData(newPokemon, trainer_ChooseMovesCheckbox.Checked, trainer_HeldItemsCheckbox.Checked, RomFile.GameFamily != GameFamily.DiamondPearl);
                 newPokemons.Add(newPokemon);
                 newPokemonDatas[i] = newPokemonData;
             }
             var trainerPartyData = new TrainerPartyData(newPokemonDatas);
-            var writeFile = fileSystemMethods.WriteTrainerPartyData(trainerPartyData, trainerId, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked, LoadedRom.GameFamily != GameFamily.DiamondPearl);
+            var writeFile = fileSystemMethods.WriteTrainerPartyData(trainerPartyData, trainerId, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked, RomFile.GameFamily != GameFamily.DiamondPearl);
             if (writeFile.Success)
             {
                 // Add dummy pokemon data
@@ -1060,7 +1067,7 @@ namespace Main
                 pokeAbilityComboBoxes[partyIndex].SelectedIndex = 0;
                 pokeAbilityComboBoxes[partyIndex].Enabled = species.HasMoreThanOneAbility;
 
-                if (LoadedRom.GameFamily != GameFamily.DiamondPearl)
+                if (RomFile.GameFamily != GameFamily.DiamondPearl)
                 {
                     SetPokemonForms(pokeComboBoxes[partyIndex].SelectedIndex, partyIndex);
                     pokeFormsComboBoxes[partyIndex].SelectedIndex = 0;
@@ -1085,7 +1092,7 @@ namespace Main
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
                 pokeHeldItemComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].HeldItemId ?? 0;
-                pokeBallCapsuleComboBoxes[i].SelectedIndex = LoadedRom.GameFamily != GameFamily.DiamondPearl ? SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId ?? 0 : -1;
+                pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.GameFamily != GameFamily.DiamondPearl ? SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId ?? 0 : -1;
                 if (SelectedTrainer.TrainerProperties.ChooseMoves)
                 {
                     pokeMoves[i] = new ushort[4];
@@ -1119,7 +1126,7 @@ namespace Main
                     }
                 }
 
-                if (LoadedRom.GameFamily != GameFamily.DiamondPearl)
+                if (RomFile.GameFamily != GameFamily.DiamondPearl)
                 {
                     SetPokemonForms(SelectedTrainer.TrainerParty.Pokemons[i].PokemonId, i);
                     pokeFormsComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].FormId;
@@ -1328,7 +1335,7 @@ namespace Main
             {
                 pokeHeldItemComboBoxes?.ForEach(PopulateItemComboBox);
             }
-            if (poke1BallCapsuleComboBox.Items.Count == 0 && LoadedRom.GameFamily != GameFamily.DiamondPearl)
+            if (poke1BallCapsuleComboBox.Items.Count == 0 && RomFile.GameFamily != GameFamily.DiamondPearl)
             {
                 InitializeBallCapsules();
             }

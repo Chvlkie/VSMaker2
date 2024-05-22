@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using VsMaker2Core.RomFiles;
-
-namespace VsMaker2Core.RomFiles
+﻿namespace VsMaker2Core.RomFiles
 {
     public class TrainerPartyData
     {

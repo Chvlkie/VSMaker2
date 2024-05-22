@@ -1,6 +1,4 @@
-﻿using VsMaker2Core.DataModels;
-
-namespace VsMaker2Core.RomFiles
+﻿namespace VsMaker2Core.RomFiles
 {
     public class TrainerData
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VsMaker2Core
+﻿namespace VsMaker2Core
 {
     public static class Enums
     {
@@ -53,6 +47,13 @@ namespace VsMaker2Core
             Chinese
         }
 
+        public enum ScriptType
+        {
+            Script,
+            Function,
+            Action
+        }
+
         public enum NarcDirectory : byte
         {
             Unknown,
@@ -60,6 +61,7 @@ namespace VsMaker2Core
             battleTowerPokeData,
             battleTowerTrainerData,
             personalPokeData,
+            scripts,
             synthOverlay,
             textArchives,
             trainerProperties,
@@ -67,7 +69,6 @@ namespace VsMaker2Core
             trainerGraphics,
             monIcons,
             moveData,
-            scipts,
             trainerTextTable,
             trainerTextOffset
         }

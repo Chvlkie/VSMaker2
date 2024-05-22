@@ -12,10 +12,12 @@ namespace VsMaker2Core.Methods
     public class FileSystemMethods : IFileSystemMethods
     {
         private IRomFileMethods romFileMethods;
+        private IScriptFileMethods scriptFileMethods;
 
         public FileSystemMethods()
         {
             romFileMethods = new RomFileMethods();
+            scriptFileMethods = new ScriptFileMethods();
         }
 
         public VsTrainersFile BuildVsTrainersFile(List<Trainer> trainers, GameFamily gameFamily, int trainerNameTextArchiveId, int classesCount, int battleMessagesCount)
@@ -125,6 +127,50 @@ namespace VsMaker2Core.Methods
             {
                 Console.WriteLine(ex.Message);
                 stream.Close();
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool Success, string ErrorMessage) UpdateTrainerScripts(int totalNumberOfTrainers)
+        {
+            try
+            {
+                var originalScriptData = scriptFileMethods.GetScriptFileData(RomFile.TrainerScriptFile);
+                List<ScriptData> newScripts = [];
+                int trainerScriptCount = totalNumberOfTrainers >= RomFile.OriginalTrainerEncounterScript
+                    ? totalNumberOfTrainers
+                    : RomFile.OriginalTrainerEncounterScript;
+
+                //Add Script#1 for Trainer Scripts
+                newScripts.Add(originalScriptData.Scripts[0]);
+                //Add the "UseScript_#1" Trainer Script for each TrainerId
+                for (int i = 0; i < trainerScriptCount - 2; i++)
+                {
+                    newScripts.Add(new ScriptData(originalScriptData.Scripts[1], (uint)(i + 2)));
+                }
+                //Add the Encounter Script to the last script
+                newScripts.Add(new ScriptData(originalScriptData.Scripts.Last(), (uint)trainerScriptCount));
+               
+                //Write new Trainer Scripts
+                var newScriptData = new ScriptFileData(originalScriptData, newScripts);
+
+                var writeScripts = scriptFileMethods.WriteScriptData(newScriptData);
+                if (!writeScripts.Success)
+                {
+                    return (false, writeScripts.ErrorMessage);
+                }
+
+                //Change Encounter Script call in ARM9 file
+                uint encounterScriptId = (uint)(2999 + newScriptData.Scripts.Count);
+
+                using Arm9.Arm9Writer writer = new(RomFile.TrainerEncounterScriptOffset);
+                writer.Write(encounterScriptId);
+                writer.Close();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return (false, ex.Message);
             }
         }

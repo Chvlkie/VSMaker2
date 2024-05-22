@@ -31,7 +31,7 @@ namespace VsMaker2Core.Methods
                     ClassProperties = new TrainerClassProperty
                     {
                         Description = classDescriptions[i],
-                        Gender = loadedRom.GameFamily != GameFamily.DiamondPearl ? loadedRom.ClassGenderData[i].Gender : null,
+                        Gender = RomFile.GameFamily != GameFamily.DiamondPearl ? loadedRom.ClassGenderData[i].Gender : null,
                         EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
                         EyeContactMusicNight = loadedRom.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
                         : null,

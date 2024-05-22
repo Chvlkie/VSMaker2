@@ -47,7 +47,7 @@ namespace Main
 
         public void BeginUnpackNarcs(IProgress<int> progress)
         {
-            var narcs = GameFamilyNarcs.GetGameFamilyNarcs(LoadedRom.GameFamily);
+            var narcs = GameFamilyNarcs.GetGameFamilyNarcs(RomFile.GameFamily);
 
             var (success, exception) = romFileMethods.UnpackNarcs(narcs, progress);
             if (!success)
@@ -134,7 +134,7 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, LoadedRom.GameFamily);
+            LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -146,11 +146,11 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.ClassGenderData = LoadedRom.GameFamily != GameFamily.DiamondPearl ? romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
+            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, LoadedRom.GameFamily);
+            LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -423,7 +423,7 @@ namespace Main
             if (!IsLoadingData)
             {
                 var trainers = MainEditorModel.Trainers;
-                var gameFamily = LoadedRom.GameFamily;
+                var gameFamily = RomFile.GameFamily;
                 int classesCount = 100;
                 int battleMessagesCount = 200;
                 var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, LoadedRom.TrainerNamesTextNumber, classesCount, battleMessagesCount);
@@ -572,7 +572,7 @@ namespace Main
             IsLoadingData = true;
             var loadedRom = LoadInitialRomData(fileName);
             LoadedRom = new RomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
-            if (LoadedRom.GameVersion == GameVersion.Unknown)
+            if (RomFile.GameVersion == GameVersion.Unknown)
             {
                 MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
                     "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Soul Silver version."
@@ -580,7 +580,7 @@ namespace Main
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            romFileMethods.SetNarcDirectories(workingDirectory, LoadedRom.GameVersion, LoadedRom.GameFamily, LoadedRom.GameLanguage);
+            romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
             return true;
         }
 
@@ -658,7 +658,7 @@ namespace Main
                         {
                             Arm9.Arm9EditSize(-12);
 
-                            if (Arm9.CheckCompressionMark(LoadedRom.GameFamily))
+                            if (Arm9.CheckCompressionMark(RomFile.GameFamily))
                             {
                                 if (!Arm9.Arm9Decompress(RomFile.Arm9Path))
                                 {

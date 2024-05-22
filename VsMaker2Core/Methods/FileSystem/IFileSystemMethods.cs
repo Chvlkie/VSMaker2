@@ -31,16 +31,27 @@ namespace VsMaker2Core.Methods
         /// <param name="filePath"></param>
         /// <returns></returns>
         (VsTrainersFile VsTrainersFile, bool Success, string ErrorMessage) ImportTrainers(string filePath);
+
         (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId);
+
         (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
+
         (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
+
         (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive);
+
         (bool Success, string ErrorMessage) WriteMessage(List<string> messages, int messageArchive, bool isTrainerName = false);
+
         (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
+
         (bool Success, string ErrorMessage) WritePrizeMoneyData(PrizeMoneyData prizeMoneyData, RomFile loadedRom);
+
         (bool Success, string ErrorMessage) WriteEyeContactMusicData(EyeContactMusicData eyeContactMusicData, RomFile loadedRom);
+
         (bool Success, string ErrorMessage) WriteClassGenderData(ClassGenderData classGenderData);
 
         (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber);
+
+        (bool Success, string ErrorMessage) UpdateTrainerScripts(int totalNumberOfTrainers);
     }
 }
