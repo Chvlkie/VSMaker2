@@ -6,61 +6,61 @@ namespace VsMaker2Core
     public static class GameFamilyNarcs
     {
         public static List<NarcDirectory> DiamondPearl = [
-                        NarcDirectory.MonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchives,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
+                        NarcDirectory.monIcons,
+                        NarcDirectory.moveData,
+                        NarcDirectory.personalPokeData,
+                        NarcDirectory.synthOverlay,
+                        NarcDirectory.textArchives,
+                        NarcDirectory.trainerGraphics,
+                        NarcDirectory.trainerParty,
+                        NarcDirectory.trainerProperties,
+                        NarcDirectory.trainerTextTable,
+                        NarcDirectory.trainerTextOffset
                         ];
 
         public static List<NarcDirectory> Platinum = [
-                        NarcDirectory.MonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchives,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
+                        NarcDirectory.monIcons,
+                        NarcDirectory.moveData,
+                        NarcDirectory.personalPokeData,
+                        NarcDirectory.synthOverlay,
+                        NarcDirectory.textArchives,
+                        NarcDirectory.trainerGraphics,
+                        NarcDirectory.trainerParty,
+                        NarcDirectory.trainerProperties,
+                        NarcDirectory.trainerTextTable,
+                        NarcDirectory.trainerTextOffset
                       ];
 
         public static List<NarcDirectory> HeartGoldSoulSilver = [
-                       NarcDirectory.BattleStagePokeData,
-                        NarcDirectory.BattleTowerPokeData,
-                        NarcDirectory.BattleTowerTrainerData,
-                        NarcDirectory.MonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchives,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
+                       NarcDirectory.battleStagePokeData,
+                        NarcDirectory.battleTowerPokeData,
+                        NarcDirectory.battleTowerTrainerData,
+                        NarcDirectory.monIcons,
+                        NarcDirectory.moveData,
+                        NarcDirectory.personalPokeData,
+                        NarcDirectory.synthOverlay,
+                        NarcDirectory.textArchives,
+                        NarcDirectory.trainerGraphics,
+                        NarcDirectory.trainerParty,
+                        NarcDirectory.trainerProperties,
+                        NarcDirectory.trainerTextTable,
+                        NarcDirectory.trainerTextOffset
                       ];
 
         public static List<NarcDirectory> HgEngine = [
-                     NarcDirectory.BattleStagePokeData,
-                        NarcDirectory.BattleTowerPokeData,
-                        NarcDirectory.BattleTowerTrainerData,
-                        NarcDirectory.MonIcons,
-                        NarcDirectory.MoveData,
-                        NarcDirectory.PersonalPokeData,
-                        NarcDirectory.SynthOverlay,
-                        NarcDirectory.TextArchives,
-                        NarcDirectory.TrainerGraphics,
-                        NarcDirectory.TrainerParty,
-                        NarcDirectory.TrainerProperties,
-                        NarcDirectory.BattleMessageTable,
-                        NarcDirectory.BattleMessageOffset
+                     NarcDirectory.battleStagePokeData,
+                        NarcDirectory.battleTowerPokeData,
+                        NarcDirectory.battleTowerTrainerData,
+                        NarcDirectory.monIcons,
+                        NarcDirectory.moveData,
+                        NarcDirectory.personalPokeData,
+                        NarcDirectory.synthOverlay,
+                        NarcDirectory.textArchives,
+                        NarcDirectory.trainerGraphics,
+                        NarcDirectory.trainerParty,
+                        NarcDirectory.trainerProperties,
+                        NarcDirectory.trainerTextTable,
+                        NarcDirectory.trainerTextOffset
                       ];
 
         public static List<NarcDirectory> GetGameFamilyNarcs(GameFamily gameFamily)

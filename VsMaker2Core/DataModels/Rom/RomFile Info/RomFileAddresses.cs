@@ -21,8 +21,8 @@ namespace VsMaker2Core.DataModels
 
         #region Battle Message Table
 
-        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.BattleMessageTable)}\\0000";
-        public static string BattleMessageOffsetPath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.BattleMessageOffset)}\\0000";
+        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextTable)}\\0000";
+        public static string BattleMessageOffsetPath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextOffset)}\\0000";
 
         #endregion Battle Message Table
 
@@ -149,7 +149,7 @@ namespace VsMaker2Core.DataModels
                 GameLanguage.French => 0x4ADAC,
                 GameLanguage.German => 0x4ADAC,
                 GameLanguage.Italian => 0x4ADAC,
-                GameLanguage.Japanese => 0x4D9AC,
+                GameLanguage.Japanese => 0x4ADAC,
                 GameLanguage.Spanish => 0x4ADAC,
                 _ => 0,
             },
@@ -233,5 +233,29 @@ namespace VsMaker2Core.DataModels
         };
 
         #endregion TrainerNames
+
+        #region TrainerEncounter
+        public int TrainerEncounterScriptFile => GameFamily switch
+        {
+            GameFamily.DiamondPearl => 1114,
+            GameFamily.Platinum => 0x359E0,
+            GameFamily.HeartGoldSoulSilver => 953,
+            GameFamily.HgEngine => 0x34C04,
+            _ => 0
+        };
+
+        public uint TrainerEncounterScriptOffset => GameFamily switch
+        {
+            GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
+            GameFamily.Platinum => 0x67BA4,
+            GameFamily.HeartGoldSoulSilver => 0x641E8,
+            GameFamily.HgEngine => 0x641E8,
+            _ => 0
+        };
+
+        public static int TrainerEncounterScript;
+        public static uint TrainerEncounterScriptCall => (uint)(2999 + TrainerEncounterScript);
+
+        #endregion TrainerEncounter
     }
 }

@@ -5,7 +5,7 @@
         public int EyeContactMusicDay { get; set; }
         public int? EyeContactMusicNight { get; set; }
         public int PrizeMoneyMultiplier { get; set; }
-        public int Gender { get; set; }
+        public int? Gender { get; set; }
         public string Description { get; set; }
 
         public TrainerClassProperty() { }

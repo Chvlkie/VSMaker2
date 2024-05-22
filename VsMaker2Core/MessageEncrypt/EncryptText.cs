@@ -327,7 +327,7 @@ namespace VsMaker2Core.MessageEncrypt
 
         public static bool WriteMessageArchive(int messageArchiveId, List<string> messages, bool isTrainerName = false)
         {
-            string filePath = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchiveId:D4}";
+            string filePath = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchiveId:D4}";
             int initialKey = GetInitialKey(filePath);
 
             var stream = new MemoryStream();

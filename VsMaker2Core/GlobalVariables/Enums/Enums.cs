@@ -56,19 +56,20 @@ namespace VsMaker2Core
         public enum NarcDirectory : byte
         {
             Unknown,
-            BattleStagePokeData,
-            BattleTowerPokeData,
-            BattleTowerTrainerData,
-            PersonalPokeData,
-            SynthOverlay,
-            TextArchives,
-            TrainerProperties,
-            TrainerParty,
-            TrainerGraphics,
-            MonIcons,
-            MoveData,
-            BattleMessageTable,
-            BattleMessageOffset
+            battleStagePokeData,
+            battleTowerPokeData,
+            battleTowerTrainerData,
+            personalPokeData,
+            synthOverlay,
+            textArchives,
+            trainerProperties,
+            trainerParty,
+            trainerGraphics,
+            monIcons,
+            moveData,
+            scipts,
+            trainerTextTable,
+            trainerTextOffset
         }
 
         public enum ViewVsMakerFileType

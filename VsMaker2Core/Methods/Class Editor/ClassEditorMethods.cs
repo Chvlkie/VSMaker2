@@ -1,5 +1,5 @@
 ﻿using VsMaker2Core.DataModels;
-using VsMaker2Core.RomFiles;
+using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
 {
@@ -17,7 +17,6 @@ namespace VsMaker2Core.Methods
             return classes.SingleOrDefault(x => x.TrainerClassId == classId);
         }
 
-
         public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions, RomFile loadedRom)
         {
             List<TrainerClass> trainerClasses = [];
@@ -32,9 +31,10 @@ namespace VsMaker2Core.Methods
                     ClassProperties = new TrainerClassProperty
                     {
                         Description = classDescriptions[i],
-                        Gender = loadedRom.ClassGenderData[i].Gender,
+                        Gender = loadedRom.GameFamily != GameFamily.DiamondPearl ? loadedRom.ClassGenderData[i].Gender : null,
                         EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
-                        EyeContactMusicNight = eyeContactData != default ? eyeContactData.MusicNightId : null,
+                        EyeContactMusicNight = loadedRom.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
+                        : null,
                         PrizeMoneyMultiplier = loadedRom.PrizeMoneyData[i].PrizeMoney
                     },
                     UsedByTrainers = GetUsedByTrainers(i, trainers),

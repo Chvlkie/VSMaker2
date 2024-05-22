@@ -62,7 +62,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
         {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
             var stream = new MemoryStream();
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
@@ -93,7 +93,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
             var stream = new MemoryStream();
             using (BinaryWriter writer = new(stream))
             {
@@ -218,8 +218,8 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
         {
-            string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
-            string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
             return (true, "");
         }
 
@@ -276,7 +276,7 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < trainerCount; i++)
             {
-                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{i:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{i:D4}";
                 var fileStream = new FileStream(directory, FileMode.Open);
                 using var stream = new MemoryStream();
                 fileStream.CopyTo(stream);
@@ -292,7 +292,7 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < trainerCount; i++)
             {
-                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{i:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{i:D4}";
                 var fileStream = new FileStream(directory, FileMode.Open);
                 using var stream = new MemoryStream();
                 fileStream.CopyTo(stream);
@@ -304,7 +304,7 @@ namespace VsMaker2Core.Methods
 
         private byte[] GetTrainerNamesFile(int trainerNameTextArchiveId)
         {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
+            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             using var stream = new MemoryStream();
             fileStream.CopyTo(stream);

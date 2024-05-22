@@ -146,7 +146,7 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.ClassGenderData = romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress);
+            LoadedRom.ClassGenderData = LoadedRom.GameFamily != GameFamily.DiamondPearl ? romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -660,11 +660,6 @@ namespace Main
 
                             if (Arm9.CheckCompressionMark(LoadedRom.GameFamily))
                             {
-                                if (!LoadedRom.IsHeartGoldSoulSilver)
-                                {
-                                    MessageBox.Show("Unexpected compression of Arm9");
-                                    return;
-                                }
                                 if (!Arm9.Arm9Decompress(RomFile.Arm9Path))
                                 {
                                     MessageBox.Show("Unable to decompress Arm9");

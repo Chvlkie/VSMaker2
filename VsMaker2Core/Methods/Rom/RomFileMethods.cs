@@ -36,7 +36,7 @@ namespace VsMaker2Core.Methods
             catch (Exception ex)
             {
                 return (false, ex.Message);
-            }          
+            }
             return (true, "");
         }
 
@@ -105,7 +105,7 @@ namespace VsMaker2Core.Methods
 
         public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchiveId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchiveId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
             var messages = EncryptText.ReadMessageArchive(fileStream, discardLines);
             List<MessageArchive> messageArchives = [];
@@ -148,7 +148,7 @@ namespace VsMaker2Core.Methods
 
         public int GetMessageInitialKey(int messageArchive)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TextArchives].unpackedDirectory}\\{messageArchive:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchive:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             BinaryReader readText = new(fileStream);
             try
@@ -191,11 +191,11 @@ namespace VsMaker2Core.Methods
         public List<Species> GetSpecies()
         {
             List<Species> allSpecies = [];
-            int numberOfSpecies = Directory.GetFiles(VsMakerDatabase.RomData.GameDirectories[NarcDirectory.PersonalPokeData].unpackedDirectory, "*").Length;
+            int numberOfSpecies = Directory.GetFiles(VsMakerDatabase.RomData.GameDirectories[NarcDirectory.personalPokeData].unpackedDirectory, "*").Length;
 
             for (int i = 0; i < numberOfSpecies; i++)
             {
-                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.PersonalPokeData].unpackedDirectory}\\{i:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.personalPokeData].unpackedDirectory}\\{i:D4}";
 
                 var species = new Species { SpeciesId = (ushort)i };
                 var fileStream = new FileStream(directory, FileMode.Open);
@@ -236,7 +236,7 @@ namespace VsMaker2Core.Methods
         {
             List<EyeContactMusicData> eyeContactMusic = [];
             uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
-            uint tableSizeOffset = (uint)(gameFamily == GameFamily.HeartGoldSoulSilver ? 12 : 10);
+            uint tableSizeOffset = (uint)(gameFamily == GameFamily.HeartGoldSoulSilver || gameFamily == GameFamily.HgEngine ? 12 : 10);
             byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
             using Arm9.Arm9Reader reader = new(tableStartAddress);
             try
@@ -246,7 +246,11 @@ namespace VsMaker2Core.Methods
                     uint offset = (uint)reader.BaseStream.Position;
                     ushort trainerClassId = reader.ReadUInt16();
                     ushort musicDayId = reader.ReadUInt16();
-                    ushort? musicNightId = gameFamily == GameFamily.HeartGoldSoulSilver ? reader.ReadUInt16() : null;
+                    ushort? musicNightId = null;
+                    if (gameFamily == GameFamily.HgEngine || gameFamily == GameFamily.HeartGoldSoulSilver)
+                    {
+                        musicNightId = reader.ReadUInt16();
+                    }
                     var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
                     eyeContactMusic.Add(eyeContactMusicData);
                 }
@@ -404,7 +408,7 @@ namespace VsMaker2Core.Methods
         public TrainerData ReadTrainerData(int trainerId)
         {
             var trainerData = new TrainerData();
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             using BinaryReader reader = new(fileStream);
             try
@@ -444,7 +448,7 @@ namespace VsMaker2Core.Methods
             bool hasMoves = (trainerType & 1) != 0;
             bool heldItems = (trainerType & 2) != 0;
 
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.TrainerParty].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);
             using var reader = new BinaryReader(fileStream);
             try
@@ -503,52 +507,52 @@ namespace VsMaker2Core.Methods
                 case GameFamily.DiamondPearl:
                     packedDirectories = new Dictionary<NarcDirectory, string>()
                     {
-                        [NarcDirectory.PersonalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
-                        [NarcDirectory.SynthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.TextArchives] = @"data\msgdata\msg.narc",
-                        [NarcDirectory.TrainerProperties] = @"data\poketool\trainer\trdata.narc",
-                        [NarcDirectory.TrainerParty] = @"data\poketool\trainer\trpoke.narc",
-                        [NarcDirectory.TrainerGraphics] = @"data\poketool\trgra\trfgra.narc",
-                        [NarcDirectory.BattleMessageTable] = @"data\poketool\trmsg\trtbl.narc",
-                        [NarcDirectory.BattleMessageOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.MonIcons] = @"data\poketool\icongra\poke_icon.narc",
-                        [NarcDirectory.MoveData] = @"data\poketool\waza\waza_tbl.narc",
+                        [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
+                        [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
+                        [NarcDirectory.textArchives] = @"data\msgdata\msg.narc",
+                        [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
+                        [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
+                        [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
+                        [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
+                        [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
+                        [NarcDirectory.monIcons] = @"data\poketool\icongra\poke_icon.narc",
+                        [NarcDirectory.moveData] = @"data\poketool\waza\waza_tbl.narc",
                     };
                     break;
 
                 case GameFamily.Platinum:
                     packedDirectories = new Dictionary<NarcDirectory, string>()
                     {
-                        [NarcDirectory.PersonalPokeData] = @"data\poketool\personal\pl_personal.narc",
-                        [NarcDirectory.PersonalPokeData] = @"data\poketool\personal\pl_personal.narc",
-                        [NarcDirectory.SynthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.TextArchives] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
-                        [NarcDirectory.TrainerProperties] = @"data\poketool\trainer\trdata.narc",
-                        [NarcDirectory.TrainerParty] = @"data\poketool\trainer\trpoke.narc",
-                        [NarcDirectory.TrainerGraphics] = @"data\poketool\trgra\trfgra.narc",
-                        [NarcDirectory.BattleMessageTable] = @"data\poketool\trmsg\trtbl.narc",
-                        [NarcDirectory.BattleMessageOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.MonIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
-                        [NarcDirectory.MoveData] = @"data\poketool\waza\pl_waza_tbl.narc",
+                        [NarcDirectory.personalPokeData] = @"data\poketool\personal\pl_personal.narc",
+                        [NarcDirectory.personalPokeData] = @"data\poketool\personal\pl_personal.narc",
+                        [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
+                        [NarcDirectory.textArchives] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
+                        [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
+                        [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
+                        [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
+                        [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
+                        [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
+                        [NarcDirectory.monIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
+                        [NarcDirectory.moveData] = @"data\poketool\waza\pl_waza_tbl.narc",
                     };
                     break;
 
                 case GameFamily.HeartGoldSoulSilver:
                     packedDirectories = new Dictionary<NarcDirectory, string>()
                     {
-                        [NarcDirectory.BattleStagePokeData] = @"data\a\2\0\4",
-                        [NarcDirectory.BattleTowerPokeData] = @"data\a\2\0\3",
-                        [NarcDirectory.BattleTowerTrainerData] = @"data\a\2\0\2",
-                        [NarcDirectory.PersonalPokeData] = @"data\a\0\0\2",
-                        [NarcDirectory.SynthOverlay] = @"data\a\0\2\8",
-                        [NarcDirectory.TextArchives] = @"data\a\0\2\7",
-                        [NarcDirectory.TrainerProperties] = @"data\a\0\5\5",
-                        [NarcDirectory.TrainerParty] = @"data\a\0\5\6",
-                        [NarcDirectory.TrainerGraphics] = @"data\a\0\5\8",
-                        [NarcDirectory.BattleMessageTable] = @"data\a\0\5\7",
-                        [NarcDirectory.BattleMessageOffset] = @"data\a\1\3\1",
-                        [NarcDirectory.MonIcons] = @"data\a\0\2\0",
-                        [NarcDirectory.MoveData] = @"data\a\0\1\1",
+                        [NarcDirectory.battleStagePokeData] = @"data\a\2\0\4",
+                        [NarcDirectory.battleTowerPokeData] = @"data\a\2\0\3",
+                        [NarcDirectory.battleTowerTrainerData] = @"data\a\2\0\2",
+                        [NarcDirectory.personalPokeData] = @"data\a\0\0\2",
+                        [NarcDirectory.synthOverlay] = @"data\a\0\2\8",
+                        [NarcDirectory.textArchives] = @"data\a\0\2\7",
+                        [NarcDirectory.trainerProperties] = @"data\a\0\5\5",
+                        [NarcDirectory.trainerParty] = @"data\a\0\5\6",
+                        [NarcDirectory.trainerGraphics] = @"data\a\0\5\8",
+                        [NarcDirectory.trainerTextTable] = @"data\a\0\5\7",
+                        [NarcDirectory.trainerTextOffset] = @"data\a\1\3\1",
+                        [NarcDirectory.monIcons] = @"data\a\0\2\0",
+                        [NarcDirectory.moveData] = @"data\a\0\1\1",
                     };
                     break;
             }

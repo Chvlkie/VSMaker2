@@ -479,7 +479,7 @@ namespace Main
 
         private void SetClassProperties()
         {
-            class_GenderComboBox.SelectedIndex = SelectedClass.ClassProperties.Gender;
+            class_GenderComboBox.SelectedIndex = SelectedClass.ClassProperties.Gender ?? -1;
             class_DescriptionTextBox.Text = SelectedClass.ClassProperties.Description;
             class_PrizeMoneyNum.Value = SelectedClass.ClassProperties.PrizeMoneyMultiplier;
             class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(LoadedRom.GameFamily);

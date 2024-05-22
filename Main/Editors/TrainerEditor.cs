@@ -922,7 +922,7 @@ namespace Main
 
                 SelectedTrainer.TrainerParty = trainerParty;
                 MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerParty = trainerParty;
-                LoadedRom.TrainersPartyData[trainerId] = trainerPartyData;
+                LoadedRom.TrainersPartyData[trainerId - 1] = trainerPartyData;
                 EditedTrainerParty(false);
                 if (displaySuccess)
                 {
@@ -965,7 +965,7 @@ namespace Main
             {
                 SelectedTrainer.TrainerProperties = trainerProperties;
                 MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
-                LoadedRom.TrainersData[trainerId] = newTrainerData;
+                LoadedRom.TrainersData[trainerId - 1] = newTrainerData;
                 EditedTrainerProperty(false);
                 if (displaySucces)
                 {
@@ -1085,7 +1085,7 @@ namespace Main
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
                 pokeHeldItemComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].HeldItemId ?? 0;
-                pokeBallCapsuleComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId ?? 0;
+                pokeBallCapsuleComboBoxes[i].SelectedIndex = LoadedRom.GameFamily != GameFamily.DiamondPearl ? SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId ?? 0 : -1;
                 if (SelectedTrainer.TrainerProperties.ChooseMoves)
                 {
                     pokeMoves[i] = new ushort[4];
