@@ -25,13 +25,20 @@ namespace Main
             return (currentLineNumber == lineNumber) ? line : string.Empty;
         }
 
+        private void battleMessage_MessageTableDataGrid_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                EditedBattleMessage(true);
+            }
+        }
+
         private void battleMessage_MessageTableDataGrid_SelectionChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
             {
                 MainEditorModel.SelectedBattleMessageRowIndex = battleMessage_MessageTableDataGrid.CurrentCell.RowIndex;
                 battleMessages_MessageTextBox.Enabled = true;
-                battleMessages_SaveMessageBtn.Enabled = true;
                 battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
             }
         }
@@ -46,16 +53,30 @@ namespace Main
             if (!IsLoadingData)
             {
                 UpdateTextPreview(battleMessages_MessageTextBox.Text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
-                if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
-                {
-                    EditedBattleMessage(true);
-                }
             }
         }
 
         private void battleMessages_MessageUpBtn_Click(object sender, EventArgs e)
         {
             MessagePreviewBack(battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
+        }
+
+        private void battleMessages_UndoAllBtn_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("This will undo all unsaved changes!", "Confirm Undo Changes", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (confirm == DialogResult.OK)
+            {
+                UndoBattleMessageChanges(true);
+            }
+        }
+
+        private void battleMessages_UpdateText_Click(object sender, EventArgs e)
+        {
+            if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
+            {
+                EditedBattleMessage(true);
+            }
+            battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
         }
 
         private async void BeginPopulateBattleMessages()
@@ -71,7 +92,7 @@ namespace Main
         {
             UnsavedBattleMessageChanges = hasChanges;
             main_MainTable_BattleMessageTab.Text = UnsavedBattleMessageChanges ? "Battle Messages *" : "Battle Messages";
-            class_UndoAllBtn.Enabled = UnsavedClassChanges;
+            battleMessages_UndoAllBtn.Enabled = UnsavedBattleMessageChanges;
         }
 
         private void InitializeBattleMessageEditor()
@@ -89,7 +110,6 @@ namespace Main
             battleMessages_RedoMessageBtn.Enabled = false;
             battleMessages_RemoveBtn.Enabled = false;
             battleMessages_SaveBtn.Enabled = false;
-            battleMessages_SaveMessageBtn.Enabled = false;
             battleMessages_SortBtn.Enabled = false;
             battleMessages_UndoAllBtn.Enabled = false;
             battleMessages_UndoMessageBtn.Enabled = false;
@@ -152,6 +172,29 @@ namespace Main
             return Task.CompletedTask;
         }
 
+        private bool SaveBattleMessageTexts()
+        {
+            string[] battleMessages = new string[battleMessage_MessageTableDataGrid.RowCount];
+            for (int i = 0; i < battleMessage_MessageTableDataGrid.RowCount; i++)
+            {
+                var row = battleMessage_MessageTableDataGrid.Rows[i];
+                // Set by message ID to not change sorting.
+                battleMessages[(int)row.Cells[0].Value] = (string)row.Cells[3].Value;
+            }
+            var saveBattleMessages = fileSystemMethods.WriteBattleMessages([.. battleMessages], LoadedRom.BattleMessageTextNumber);
+
+            if (!saveBattleMessages.Success)
+            {
+                MessageBox.Show(saveBattleMessages.ErrorMessage, "Unable to Save Message");
+                return false;
+            }
+            else
+            {
+                MessageBox.Show("Battle Message texts updated!", "Success");
+                return true;
+            }
+        }
+
         private void SetupBattleMessageEditor()
         {
             IsLoadingData = true;
@@ -186,6 +229,18 @@ namespace Main
             {
                 battleMessage_MessageTableDataGrid.Rows.Add(row);
             }
+        }
+
+        private void UndoBattleMessageChanges(bool repopulate)
+        {
+            EditedBattleMessage(false);
+            IsLoadingData = true;
+            battleMessage_MessageTableDataGrid.Rows.Clear();
+            if (repopulate)
+            {
+                SetupBattleMessageEditor();
+            }
+            IsLoadingData = false;
         }
 
         private void UpdateTextPreview(string battleMessage, Label previewText, Button nextButton, Button backButton)

@@ -36,6 +36,7 @@ namespace VsMaker2Core.Methods
 
         (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
 
+        (bool Success, string ErrorMessage) WriteBattleMessages(List<string> battleMessages, int battleMessageArchive);
         (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
 
         (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive);

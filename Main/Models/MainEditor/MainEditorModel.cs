@@ -16,10 +16,32 @@ namespace Main.Models
         public List<TrainerClass> Classes { get; set; }
         public List<BattleMessage> BattleMessages { get; set; }
 
+        #region TrainerEditor
+
+        public Trainer SelectedTrainer { get; set; }
+        public Trainer? ClipboardTrainer { get; set; }
+        public TrainerProperty? ClipboardTrainerProperties { get; set; }
+        public TrainerParty? ClipboardTrainerParty { get; set; }
+
+        #endregion TrainerEditor
+
+
+        #region ClassEditor
+
+        public TrainerClass SelectedClass{ get; set; }
+        public TrainerClass? ClipboardTrainerClass { get; set; }
+        public TrainerClassProperty? ClipboardClassTrainerProperties { get; set; }
+
+        #endregion TrainerEditor
+
+        #region BattleEditor
+
         public int BattleMessageDisplayIndex { get; set; }
         public List<string> DisplayBattleMessageText { get; set; }
 
         public int SelectedBattleMessageRowIndex { get; set; }
+
+        #endregion BattleEditor
 
         public MainEditorModel()
         {

@@ -46,6 +46,8 @@ namespace Main
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
 
+        private bool InhibitTabChange = false;
+
         public void BeginUnpackNarcs(IProgress<int> progress)
         {
             var narcs = GameFamilyNarcs.GetGameFamilyNarcs(RomFile.GameFamily);
@@ -351,17 +353,34 @@ namespace Main
 
         private void main_MainTab_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (main_MainTab.SelectedTab == main_MainTab_TrainerTab)
+            if (!InhibitTabChange)
             {
-                SetupTrainerEditor();
+                if (UnsavedBattleMessageChanges && ConfirmUnsavedChanges())
+                {
+                    UndoBattleMessageChanges(false);
+                    InhibitTabChange = false;
+                }
+                else if (UnsavedBattleMessageChanges)
+                {
+                    InhibitTabChange = true;
+                    main_MainTab.SelectedTab = main_MainTable_BattleMessageTab;
+                }
+                if (main_MainTab.SelectedTab == main_MainTab_TrainerTab)
+                {
+                    SetupTrainerEditor();
+                }
+                else if (main_MainTab.SelectedTab == main_MainTab_ClassTab)
+                {
+                    SetupClassEditor();
+                }
+                else if (main_MainTab.SelectedTab == main_MainTable_BattleMessageTab)
+                {
+                    SetupBattleMessageEditor();
+                }
             }
-            else if (main_MainTab.SelectedTab == main_MainTab_ClassTab)
+            else
             {
-                SetupClassEditor();
-            }
-            else if (main_MainTab.SelectedTab == main_MainTable_BattleMessageTab)
-            {
-                SetupBattleMessageEditor();
+                InhibitTabChange = false;
             }
         }
 
@@ -698,6 +717,77 @@ namespace Main
                     CloseProject();
                 }
             }
+        }
+
+        private void trainer_Copy_Btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainer = new Trainer(MainEditorModel.SelectedTrainer);
+            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
+            MainEditorModel.ClipboardTrainerParty = new TrainerParty(MainEditorModel.SelectedTrainer.TrainerParty);
+            trainer_Paste_Btn.Enabled = true;
+            trainer_PastePropeties_btn.Enabled = true;
+            trainer_PasteParty_btn.Enabled = true;
+        }
+
+        private void trainer_Paste_Btn_Click(object sender, EventArgs e)
+        {
+            int selectedTrainerId = MainEditorModel.SelectedTrainer.TrainerId;
+            var pasteTrainer = new Trainer(selectedTrainerId, MainEditorModel.ClipboardTrainer);
+
+            PopulateTrainerData(pasteTrainer);
+            PopulatePartyData(pasteTrainer.TrainerParty, pasteTrainer.TrainerProperties.TeamSize, pasteTrainer.TrainerProperties.ChooseMoves);
+            PopulateTrainerBattleMessageTriggers(pasteTrainer);
+            EnableTrainerEditor();
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+            EditedTrainerData(true);
+        }
+
+        private void trainer_CopyParty_btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainerParty = new TrainerParty(MainEditorModel.SelectedTrainer.TrainerParty)
+            {
+                ChooseItems = MainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems,
+                ChooseMoves = MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves,
+                DoubleBattle = MainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle,
+                TeamSize = MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize,
+            };
+            trainer_PasteParty_btn.Enabled = true;
+        }
+
+        private void trainer_PasteParty_btn_Click(object sender, EventArgs e)
+        {
+            IsLoadingData = true;
+            if (MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize != MainEditorModel.ClipboardTrainerParty.TeamSize
+                                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != MainEditorModel.ClipboardTrainerParty.ChooseItems
+                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != MainEditorModel.ClipboardTrainerParty.ChooseMoves
+                || MainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle != MainEditorModel.ClipboardTrainerParty.DoubleBattle
+                )
+            {
+                var pasteProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties, MainEditorModel.ClipboardTrainerParty.DoubleBattle,
+                   MainEditorModel.ClipboardTrainerParty.TeamSize,
+                    MainEditorModel.ClipboardTrainerParty.ChooseMoves,
+                   MainEditorModel.ClipboardTrainerParty.ChooseItems);
+                SetTrainerPartyProperties(pasteProperties);
+                EditedTrainerProperty(true);
+            }
+            else
+            {
+
+            }
+            IsLoadingData = false;
+            PopulatePartyData(MainEditorModel.ClipboardTrainerParty, MainEditorModel.ClipboardTrainerParty.TeamSize, MainEditorModel.ClipboardTrainerParty.ChooseMoves);
+            EditedTrainerParty(true);
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+        }
+
+        private void trainer_CopyProperties_btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
+            trainer_PastePropeties_btn.Enabled = true;
+        }
+
+        private void trainer_PastePropeties_btn_Click(object sender, EventArgs e)
+        {
         }
     }
 }

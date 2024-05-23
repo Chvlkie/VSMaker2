@@ -113,6 +113,16 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MessageBox {
+            get {
+                object obj = ResourceManager.GetObject("MessageBox", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap nds_ico {
             get {
                 object obj = ResourceManager.GetObject("nds_ico", resourceCulture);
