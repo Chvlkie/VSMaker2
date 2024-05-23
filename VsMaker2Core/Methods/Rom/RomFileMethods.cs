@@ -80,12 +80,12 @@ namespace VsMaker2Core.Methods
         public List<string> GetBattleMessages(int battleMessageArchive)
         {
             var messageArchives = GetMessageArchiveContents(battleMessageArchive, false);
-            var trainerNames = new List<string>();
+            var battleMessages = new List<string>();
             foreach (var item in messageArchives)
             {
-                trainerNames.Add(item.MessageText);
+                battleMessages.Add(item.MessageText);
             }
-            return trainerNames;
+            return battleMessages;
         }
 
         public List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath)

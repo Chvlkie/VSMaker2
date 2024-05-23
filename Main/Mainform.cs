@@ -22,6 +22,7 @@ namespace Main
 
         #region Methods
 
+        private IBattleMessageEditorMethods battleMessageEditorMethods;
         private IClassEditorMethods classEditorMethods;
         private IFileSystemMethods fileSystemMethods;
         private IRomFileMethods romFileMethods;
@@ -75,7 +76,8 @@ namespace Main
         {
             IsLoadingData = true;
             int progressCount = 0;
-            const int increment = 12;
+            const int increment = 10;
+
             MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
             progressCount += increment;
             progress?.Report(progressCount);
@@ -102,9 +104,17 @@ namespace Main
 
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
             progressCount += increment;
-            progress?.Report(progressCount); MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
+            progress?.Report(progressCount);
+
+            MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
 
             MainEditorModel.ItemNames = romFileMethods.GetItemNames(LoadedRom.ItemNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            MainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -305,6 +315,7 @@ namespace Main
                 OpenLoadingDialog(LoadType.LoadRomData);
                 InitializeTrainerEditor();
                 InitializeClassEditor();
+                InitializeBattleMessageEditor();
                 OpenLoadingDialog(LoadType.SetupEditor);
                 main_MainTab.SelectedTab = main_MainTab_TrainerTab;
                 SetupTrainerEditor();
@@ -347,6 +358,10 @@ namespace Main
             else if (main_MainTab.SelectedTab == main_MainTab_ClassTab)
             {
                 SetupClassEditor();
+            }
+            else if (main_MainTab.SelectedTab == main_MainTable_BattleMessageTab)
+            {
+                SetupBattleMessageEditor();
             }
         }
 
@@ -413,6 +428,7 @@ namespace Main
             Settings = new Settings();
             LoadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
+            battleMessageEditorMethods = new BattleMessageEditorMethods();
             trainerEditorMethods = new TrainerEditorMethods();
             classEditorMethods = new ClassEditorMethods();
             fileSystemMethods = new FileSystemMethods();

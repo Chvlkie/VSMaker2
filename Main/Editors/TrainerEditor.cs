@@ -293,6 +293,7 @@ namespace Main
         }
 
         #endregion Initialize
+
         private void OpenMoveSelector(int partyIndex, int pokemonId)
         {
             // Set new array if null
@@ -320,9 +321,6 @@ namespace Main
             }
         }
 
-        #region Event Handlers
-
-        #endregion Event Handlers
         private void poke1AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -768,6 +766,7 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
+
         private void poke6HeldItemComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -783,6 +782,7 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
+
         private void poke6MoveBtn_Click(object sender, EventArgs e)
         {
             if (poke6ComboBox.SelectedIndex > 0)
@@ -1042,6 +1042,7 @@ namespace Main
                 var species = GetSpeciesBySpeciesId(speciesId);
                 pokeAbilityComboBoxes[partyIndex].Enabled = false;
                 pokeAbilityComboBoxes[partyIndex].Items.Clear();
+                pokeAbilityComboBoxes[partyIndex].SelectedIndex = -1;
 
                 if (LoadedRom.IsHeartGoldSoulSilver)
                 {
@@ -1081,6 +1082,22 @@ namespace Main
             trainer_NameTextBox.Text = SelectedTrainer.TrainerName;
         }
 
+        private int GetIndex(ushort? index)
+        {
+            if (!index.HasValue)
+            {
+                return -1;
+            }
+            else if (index.Value == 0xFFFF)
+            {
+                return 0;
+            }
+            else
+            {
+                return index.Value;
+            }
+        }
+
         private void SetTrainerParty()
         {
             for (int i = 0; i < SelectedTrainer.TrainerProperties.TeamSize; i++)
@@ -1091,8 +1108,8 @@ namespace Main
                 pokeDVNums[i].Value = SelectedTrainer.TrainerParty.Pokemons[i].DifficultyValue;
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
-                pokeHeldItemComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].HeldItemId ?? 0;
-                pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.GameFamily != GameFamily.DiamondPearl ? SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId ?? 0 : -1;
+                pokeHeldItemComboBoxes[i].SelectedIndex = GetIndex(SelectedTrainer.TrainerParty.Pokemons[i].HeldItemId);
+                pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.GameFamily != GameFamily.DiamondPearl ? GetIndex(SelectedTrainer.TrainerParty.Pokemons[i].BallCapsuleId) : -1;
                 if (SelectedTrainer.TrainerProperties.ChooseMoves)
                 {
                     pokeMoves[i] = new ushort[4];
@@ -1132,24 +1149,25 @@ namespace Main
                     pokeFormsComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].FormId;
                 }
 
-                pokeAbilityComboBoxes[i].Items.Add("-");
-
-                if (species.Ability1 > 0)
+                if (species.Ability1 > 0 && species.Ability2 > 0)
+                {
+                    pokeAbilityComboBoxes[i].Items.Add("-");
+                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
+                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
+                    pokeAbilityComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].AbilityOverride
+                               switch
+                    {
+                        AbilityOverride.None => 0,
+                        AbilityOverride.Ability1 => 1,
+                        AbilityOverride.Ability2 => 2,
+                        _ => 0
+                    };
+                }
+                else
                 {
                     pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
+                    pokeAbilityComboBoxes[i].SelectedIndex = 0;
                 }
-                if (species.Ability2 > 0)
-                {
-                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
-                }
-                pokeAbilityComboBoxes[i].SelectedIndex = SelectedTrainer.TrainerParty.Pokemons[i].AbilityOverride
-                    switch
-                {
-                    AbilityOverride.None => 0,
-                    AbilityOverride.Ability1 => 1,
-                    AbilityOverride.Ability2 => 2,
-                    _ => 0
-                };
             }
         }
 
@@ -1175,6 +1193,8 @@ namespace Main
             if (SelectedTrainer.TrainerProperties.TeamSize < 1)
             {
                 MessageBox.Show("This trainer does not currently have any Pokemon set.\nYou must set at least one Pokemon before use in-game", "Set a Party Pokemon", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                EditedTrainerParty(true);
+                EditedTrainerProperty(true);
             }
         }
 
@@ -1632,6 +1652,7 @@ namespace Main
                         {
                             PopulateTrainerData();
                             PopulatePartyData();
+                            PopulateTrainerBattleMessageTriggers();
                             EnableTrainerEditor();
                             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
                         }
@@ -1642,6 +1663,62 @@ namespace Main
                     }
                 }
             }
+        }
+
+        private void trainer_MessageTriggerListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerId = SelectedTrainer.TrainerId;
+                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                if (message != default)
+                {
+                    trainer_MessageTextBox.Text = message.MessageText;
+                }
+                else
+                {
+                    trainer_MessageTextBox.Text = "";
+                }
+            }
+        }
+
+        private void trainer_MessageTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                UpdateTextPreview(trainer_MessageTextBox.Text, trainer_MessagePreviewText, trainer_MessageUpBtn, trainer_MessageDownBtn);
+            }
+        }
+
+        private void trainer_MessageUpBtn_Click(object sender, EventArgs e)
+        {
+            MessagePreviewBack(trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
+        }
+
+        private void trainer_MessageDownBtn_Click(object sender, EventArgs e)
+        {
+            MessagePreviewNext(trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
+        }
+
+        private void PopulateTrainerBattleMessageTriggers()
+        {
+            IsLoadingData = true;
+            trainer_MessageTriggerListBox.Items.Clear();
+            trainer_MessagePreviewText.Text = "";
+            trainer_MessageTextBox.Text = "";
+            List<string> messageTriggers = [];
+            foreach (var item in MainEditorModel.BattleMessages.Where(x => x.TrainerId == SelectedTrainer.TrainerId))
+            {
+                messageTriggers.Add(MessageTrigger.MessageTriggers.Find(x => x.MessageTriggerId == item.MessageTriggerId).ListName);
+            }
+            messageTriggers.Sort();
+            messageTriggers.ForEach(x => trainer_MessageTriggerListBox.Items.Add(x));
+            trainer_MessageUpBtn.Enabled = false;
+            trainer_MessageUpBtn.Visible = false;
+            trainer_MessageDownBtn.Enabled = false;
+            trainer_MessageDownBtn.Visible = false;
+            IsLoadingData = false;
         }
 
         private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)

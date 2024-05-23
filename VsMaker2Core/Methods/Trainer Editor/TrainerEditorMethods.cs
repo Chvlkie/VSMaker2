@@ -73,7 +73,7 @@ namespace VsMaker2Core.Methods
             var aiFlags = new BitArray(BitConverter.GetBytes(trainerData.AIFlags));
             for (int i = 0; i < Trainer.Constants.NumberOfTrainerAIFlags; i++)
             {
-                trainerProperty.AIFlags.Add(aiFlags[i]);
+                trainerProperty.AIFlags[i] = aiFlags[i];
             }
 
             return trainerProperty;

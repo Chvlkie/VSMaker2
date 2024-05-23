@@ -206,15 +206,17 @@
             trainer_AiFlags_listbox = new CheckedListBox();
             label49 = new Label();
             trainer_BattleMessageTab = new TabPage();
+            trainer_MessagePreviewText = new Label();
             label66 = new Label();
             panel9 = new Panel();
+            panel12 = new Panel();
             trainer_MessageTextBox = new RichTextBox();
             trainer_MessageText_toolStrip = new ToolStrip();
             toolStripButton5 = new ToolStripButton();
             toolStripButton6 = new ToolStripButton();
             toolStripButton7 = new ToolStripButton();
-            button1 = new Button();
-            button2 = new Button();
+            trainer_MessageUpBtn = new Button();
+            trainer_MessageDownBtn = new Button();
             trainer_MessagePreviewPicBox = new PictureBox();
             trainer_MessageTriggerListBox = new ListBox();
             label64 = new Label();
@@ -325,42 +327,40 @@
             toolStripSeparator15 = new ToolStripSeparator();
             class_ImportBtn = new ToolStripButton();
             class_ExportBtn = new ToolStripButton();
-            messageTab = new TabPage();
+            main_MainTable_BattleMessageTab = new TabPage();
             panel8 = new Panel();
+            panel7 = new Panel();
             battleMessage_MessageTableDataGrid = new DataGridView();
             messageId = new DataGridViewTextBoxColumn();
             trainerId = new DataGridViewTextBoxColumn();
             messageTrigger = new DataGridViewTextBoxColumn();
             messageText = new DataGridViewTextBoxColumn();
+            panel6 = new Panel();
+            panel5 = new Panel();
+            battleMessages_MessageTextBox = new RichTextBox();
+            battleMessage_PreviewText = new Label();
+            battleMessages_MessageText_toolStrip = new ToolStrip();
+            battleMessages_SaveMessageBtn = new ToolStripButton();
+            battleMessages_UndoMessageBtn = new ToolStripButton();
+            battleMessages_RedoMessageBtn = new ToolStripButton();
+            label63 = new Label();
+            label61 = new Label();
+            battleMessages_MessageUpBtn = new Button();
+            battleMessages_MessageDownBtn = new Button();
+            battleMessages_PreviewPicBox = new PictureBox();
             battleMessages_Table_toolStrip = new ToolStrip();
+            battleMessages_SaveBtn = new ToolStripButton();
+            battleMessages_UndoAllBtn = new ToolStripButton();
+            toolStripSeparator19 = new ToolStripSeparator();
             battleMessages_CopyBtn = new ToolStripButton();
             battleMessages_PasteBtn = new ToolStripButton();
             toolStripSeparator17 = new ToolStripSeparator();
             battleMessages_ImportBtn = new ToolStripButton();
             battleMessages_ExportBtn = new ToolStripButton();
             toolStripSeparator18 = new ToolStripSeparator();
-            battleMessages_SaveBtn = new ToolStripButton();
-            battleMessages_UndoAllBtn = new ToolStripButton();
-            toolStripSeparator19 = new ToolStripSeparator();
             battleMessages_AddLineBtn = new ToolStripButton();
             battleMessages_RemoveBtn = new ToolStripButton();
             battleMessages_SortBtn = new ToolStripButton();
-            panel6 = new Panel();
-            label63 = new Label();
-            label62 = new Label();
-            label61 = new Label();
-            label60 = new Label();
-            battleMessages_MessageTriggerComboBox = new ComboBox();
-            battleMessages_TrainerComboBox = new ComboBox();
-            panel7 = new Panel();
-            battleMessages_MessageTextBox = new RichTextBox();
-            battleMessages_MessageText_toolStrip = new ToolStrip();
-            battleMessages_SaveMessageBtn = new ToolStripButton();
-            battleMessages_UndoMessageBtn = new ToolStripButton();
-            battleMessages_RedoMessageBtn = new ToolStripButton();
-            battleMessages_MessageUpBtn = new Button();
-            battleMessages_MessageDOwnBtn = new Button();
-            battleMessages_PreviewPicBox = new PictureBox();
             mainStatusStrip = new StatusStrip();
             toolstripContainer = new SplitContainer();
             mainToolStrip = new ToolStrip();
@@ -373,6 +373,7 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
+            toolStripSeparator23 = new ToolStripSeparator();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -406,6 +407,7 @@
             ((System.ComponentModel.ISupportInitialize)trainer_TeamSizeNum).BeginInit();
             trainer_BattleMessageTab.SuspendLayout();
             panel9.SuspendLayout();
+            panel12.SuspendLayout();
             trainer_MessageText_toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).BeginInit();
             trainer_BattleMessages_toolStrip.SuspendLayout();
@@ -426,14 +428,15 @@
             panel2.SuspendLayout();
             panel1.SuspendLayout();
             class_ClassEditor_toolStrip.SuspendLayout();
-            messageTab.SuspendLayout();
+            main_MainTable_BattleMessageTab.SuspendLayout();
             panel8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)battleMessage_MessageTableDataGrid).BeginInit();
-            battleMessages_Table_toolStrip.SuspendLayout();
-            panel6.SuspendLayout();
             panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)battleMessage_MessageTableDataGrid).BeginInit();
+            panel6.SuspendLayout();
+            panel5.SuspendLayout();
             battleMessages_MessageText_toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)battleMessages_PreviewPicBox).BeginInit();
+            battleMessages_Table_toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)toolstripContainer).BeginInit();
             toolstripContainer.Panel1.SuspendLayout();
             toolstripContainer.Panel2.SuspendLayout();
@@ -681,7 +684,7 @@
             // 
             main_MainTab.Controls.Add(main_MainTab_TrainerTab);
             main_MainTab.Controls.Add(main_MainTab_ClassTab);
-            main_MainTab.Controls.Add(messageTab);
+            main_MainTab.Controls.Add(main_MainTable_BattleMessageTab);
             main_MainTab.Dock = DockStyle.Fill;
             main_MainTab.Location = new Point(3, 3);
             main_MainTab.Name = "main_MainTab";
@@ -1012,9 +1015,9 @@
             label42.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label42.Location = new Point(427, 287);
             label42.Name = "label42";
-            label42.Size = new Size(42, 15);
+            label42.Size = new Size(95, 15);
             label42.TabIndex = 150;
-            label42.Text = "Ability";
+            label42.Text = "Ability Override";
             // 
             // label3
             // 
@@ -1091,7 +1094,7 @@
             poke6GenderComboBox.Name = "poke6GenderComboBox";
             poke6GenderComboBox.Size = new Size(47, 21);
             poke6GenderComboBox.TabIndex = 147;
-            poke6GenderComboBox.SelectedIndexChanged += this.poke6GenderComboBox_SelectedIndexChanged;
+            poke6GenderComboBox.SelectedIndexChanged += poke6GenderComboBox_SelectedIndexChanged;
             // 
             // label44
             // 
@@ -1121,7 +1124,7 @@
             poke6DVNum.Name = "poke6DVNum";
             poke6DVNum.Size = new Size(46, 22);
             poke6DVNum.TabIndex = 145;
-            poke6DVNum.ValueChanged += this.poke6DVNum_ValueChanged;
+            poke6DVNum.ValueChanged += poke6DVNum_ValueChanged;
             // 
             // label7
             // 
@@ -1216,9 +1219,9 @@
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label2.Location = new Point(427, 32);
             label2.Name = "label2";
-            label2.Size = new Size(42, 15);
+            label2.Size = new Size(95, 15);
             label2.TabIndex = 60;
-            label2.Text = "Ability";
+            label2.Text = "Ability Override";
             // 
             // label46
             // 
@@ -1270,7 +1273,7 @@
             poke6LevelNum.Size = new Size(46, 22);
             poke6LevelNum.TabIndex = 138;
             poke6LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            poke6LevelNum.ValueChanged += this.poke6LevelNum_ValueChanged;
+            poke6LevelNum.ValueChanged += poke6LevelNum_ValueChanged;
             // 
             // label5
             // 
@@ -1345,7 +1348,7 @@
             poke2LevelNum.Size = new Size(46, 22);
             poke2LevelNum.TabIndex = 66;
             poke2LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            poke2LevelNum.ValueChanged += this.poke2LevelNum_ValueChanged;
+            poke2LevelNum.ValueChanged += poke2LevelNum_ValueChanged;
             // 
             // label33
             // 
@@ -1394,9 +1397,9 @@
             label34.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label34.Location = new Point(427, 236);
             label34.Name = "label34";
-            label34.Size = new Size(42, 15);
+            label34.Size = new Size(95, 15);
             label34.TabIndex = 132;
-            label34.Text = "Ability";
+            label34.Text = "Ability Override";
             // 
             // label13
             // 
@@ -1417,7 +1420,7 @@
             poke5FormComboBox.Name = "poke5FormComboBox";
             poke5FormComboBox.Size = new Size(65, 21);
             poke5FormComboBox.TabIndex = 131;
-            poke5FormComboBox.SelectedIndexChanged += this.poke5FormComboBox_SelectedIndexChanged;
+            poke5FormComboBox.SelectedIndexChanged += poke5FormComboBox_SelectedIndexChanged;
             // 
             // poke2BallCapsuleComboBox
             // 
@@ -1461,7 +1464,7 @@
             poke5GenderComboBox.Name = "poke5GenderComboBox";
             poke5GenderComboBox.Size = new Size(47, 21);
             poke5GenderComboBox.TabIndex = 129;
-            poke5GenderComboBox.SelectedIndexChanged += this.poke5GenderComboBox_SelectedIndexChanged;
+            poke5GenderComboBox.SelectedIndexChanged += poke5GenderComboBox_SelectedIndexChanged;
             // 
             // poke2HeldItemComboBox
             // 
@@ -1493,7 +1496,7 @@
             poke2DVNum.Name = "poke2DVNum";
             poke2DVNum.Size = new Size(46, 22);
             poke2DVNum.TabIndex = 73;
-            poke2DVNum.ValueChanged += this.poke2DVNum_ValueChanged;
+            poke2DVNum.ValueChanged += poke2DVNum_ValueChanged;
             // 
             // poke5DVNum
             // 
@@ -1503,7 +1506,7 @@
             poke5DVNum.Name = "poke5DVNum";
             poke5DVNum.Size = new Size(46, 22);
             poke5DVNum.TabIndex = 127;
-            poke5DVNum.ValueChanged += this.poke5DVNum_ValueChanged;
+            poke5DVNum.ValueChanged += poke5DVNum_ValueChanged;
             // 
             // label12
             // 
@@ -1525,7 +1528,7 @@
             poke5HeldItemComboBox.Name = "poke5HeldItemComboBox";
             poke5HeldItemComboBox.Size = new Size(112, 21);
             poke5HeldItemComboBox.TabIndex = 126;
-            poke5HeldItemComboBox.SelectedIndexChanged += this.poke5HeldItemComboBox_SelectedIndexChanged;
+            poke5HeldItemComboBox.SelectedIndexChanged += poke5HeldItemComboBox_SelectedIndexChanged;
             // 
             // poke2GenderComboBox
             // 
@@ -1536,7 +1539,7 @@
             poke2GenderComboBox.Name = "poke2GenderComboBox";
             poke2GenderComboBox.Size = new Size(47, 21);
             poke2GenderComboBox.TabIndex = 75;
-            poke2GenderComboBox.SelectedIndexChanged += this.poke2GenderComboBox_SelectedIndexChanged;
+            poke2GenderComboBox.SelectedIndexChanged += poke2GenderComboBox_SelectedIndexChanged;
             // 
             // poke5MoveBtn
             // 
@@ -1598,9 +1601,9 @@
             label10.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label10.Location = new Point(427, 83);
             label10.Name = "label10";
-            label10.Size = new Size(42, 15);
+            label10.Size = new Size(95, 15);
             label10.TabIndex = 78;
-            label10.Text = "Ability";
+            label10.Text = "Ability Override";
             // 
             // label38
             // 
@@ -1652,7 +1655,7 @@
             poke5LevelNum.Size = new Size(46, 22);
             poke5LevelNum.TabIndex = 120;
             poke5LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            poke5LevelNum.ValueChanged += this.poke5LevelNum_ValueChanged;
+            poke5LevelNum.ValueChanged += poke5LevelNum_ValueChanged;
             // 
             // label6
             // 
@@ -1727,7 +1730,7 @@
             poke3LevelNum.Size = new Size(46, 22);
             poke3LevelNum.TabIndex = 84;
             poke3LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            poke3LevelNum.ValueChanged += this.poke3LevelNum_ValueChanged;
+            poke3LevelNum.ValueChanged += poke3LevelNum_ValueChanged;
             // 
             // label25
             // 
@@ -1776,9 +1779,9 @@
             label26.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label26.Location = new Point(427, 185);
             label26.Name = "label26";
-            label26.Size = new Size(42, 15);
+            label26.Size = new Size(95, 15);
             label26.TabIndex = 114;
-            label26.Text = "Ability";
+            label26.Text = "Ability Override";
             // 
             // label21
             // 
@@ -1799,7 +1802,7 @@
             poke4FormComboBox.Name = "poke4FormComboBox";
             poke4FormComboBox.Size = new Size(65, 21);
             poke4FormComboBox.TabIndex = 113;
-            poke4FormComboBox.SelectedIndexChanged += this.poke4FormComboBox_SelectedIndexChanged;
+            poke4FormComboBox.SelectedIndexChanged += poke4FormComboBox_SelectedIndexChanged;
             // 
             // poke3BallCapsuleComboBox
             // 
@@ -1843,7 +1846,7 @@
             poke4GenderComboBox.Name = "poke4GenderComboBox";
             poke4GenderComboBox.Size = new Size(47, 21);
             poke4GenderComboBox.TabIndex = 111;
-            poke4GenderComboBox.SelectedIndexChanged += this.poke4GenderComboBox_SelectedIndexChanged;
+            poke4GenderComboBox.SelectedIndexChanged += poke4GenderComboBox_SelectedIndexChanged;
             // 
             // poke3HeldItemComboBox
             // 
@@ -1875,7 +1878,7 @@
             poke3DVNum.Name = "poke3DVNum";
             poke3DVNum.Size = new Size(46, 22);
             poke3DVNum.TabIndex = 91;
-            poke3DVNum.ValueChanged += this.poke3DVNum_ValueChanged;
+            poke3DVNum.ValueChanged += poke3DVNum_ValueChanged;
             // 
             // poke4DVNum
             // 
@@ -1885,7 +1888,7 @@
             poke4DVNum.Name = "poke4DVNum";
             poke4DVNum.Size = new Size(46, 22);
             poke4DVNum.TabIndex = 109;
-            poke4DVNum.ValueChanged += this.poke4DVNum_ValueChanged;
+            poke4DVNum.ValueChanged += poke4DVNum_ValueChanged;
             // 
             // label20
             // 
@@ -1918,7 +1921,7 @@
             poke3GenderComboBox.Name = "poke3GenderComboBox";
             poke3GenderComboBox.Size = new Size(47, 21);
             poke3GenderComboBox.TabIndex = 93;
-            poke3GenderComboBox.SelectedIndexChanged += this.poke3GenderComboBox_SelectedIndexChanged;
+            poke3GenderComboBox.SelectedIndexChanged += poke3GenderComboBox_SelectedIndexChanged;
             // 
             // poke4MoveBtn
             // 
@@ -1962,7 +1965,7 @@
             poke3FormComboBox.Name = "poke3FormComboBox";
             poke3FormComboBox.Size = new Size(65, 21);
             poke3FormComboBox.TabIndex = 95;
-            poke3FormComboBox.SelectedIndexChanged += this.poke3FormComboBox_SelectedIndexChanged;
+            poke3FormComboBox.SelectedIndexChanged += poke3FormComboBox_SelectedIndexChanged;
             // 
             // label29
             // 
@@ -1980,9 +1983,9 @@
             label18.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label18.Location = new Point(427, 134);
             label18.Name = "label18";
-            label18.Size = new Size(42, 15);
+            label18.Size = new Size(95, 15);
             label18.TabIndex = 96;
-            label18.Text = "Ability";
+            label18.Text = "Ability Override";
             // 
             // label30
             // 
@@ -2034,7 +2037,7 @@
             poke4LevelNum.Size = new Size(46, 22);
             poke4LevelNum.TabIndex = 102;
             poke4LevelNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            poke4LevelNum.ValueChanged += this.poke4LevelNum_ValueChanged;
+            poke4LevelNum.ValueChanged += poke4LevelNum_ValueChanged;
             // 
             // label16
             // 
@@ -2304,10 +2307,11 @@
             // 
             // trainer_BattleMessageTab
             // 
+            trainer_BattleMessageTab.Controls.Add(trainer_MessagePreviewText);
             trainer_BattleMessageTab.Controls.Add(label66);
             trainer_BattleMessageTab.Controls.Add(panel9);
-            trainer_BattleMessageTab.Controls.Add(button1);
-            trainer_BattleMessageTab.Controls.Add(button2);
+            trainer_BattleMessageTab.Controls.Add(trainer_MessageUpBtn);
+            trainer_BattleMessageTab.Controls.Add(trainer_MessageDownBtn);
             trainer_BattleMessageTab.Controls.Add(trainer_MessagePreviewPicBox);
             trainer_BattleMessageTab.Controls.Add(trainer_MessageTriggerListBox);
             trainer_BattleMessageTab.Controls.Add(label64);
@@ -2322,6 +2326,16 @@
             trainer_BattleMessageTab.Text = "Battle Messages";
             trainer_BattleMessageTab.UseVisualStyleBackColor = true;
             // 
+            // trainer_MessagePreviewText
+            // 
+            trainer_MessagePreviewText.AutoSize = true;
+            trainer_MessagePreviewText.Font = new Font("Segoe UI", 9F);
+            trainer_MessagePreviewText.Location = new Point(260, 70);
+            trainer_MessagePreviewText.Name = "trainer_MessagePreviewText";
+            trainer_MessagePreviewText.Size = new Size(12, 15);
+            trainer_MessagePreviewText.TabIndex = 16;
+            trainer_MessagePreviewText.Text = "-";
+            // 
             // label66
             // 
             label66.AutoSize = true;
@@ -2335,21 +2349,35 @@
             // panel9
             // 
             panel9.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel9.Controls.Add(trainer_MessageTextBox);
+            panel9.Controls.Add(panel12);
             panel9.Controls.Add(trainer_MessageText_toolStrip);
             panel9.Location = new Point(254, 192);
             panel9.Name = "panel9";
             panel9.Size = new Size(563, 284);
             panel9.TabIndex = 14;
             // 
+            // panel12
+            // 
+            panel12.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel12.BorderStyle = BorderStyle.Fixed3D;
+            panel12.Controls.Add(trainer_MessageTextBox);
+            panel12.Location = new Point(0, 28);
+            panel12.Name = "panel12";
+            panel12.Size = new Size(559, 256);
+            panel12.TabIndex = 1;
+            // 
             // trainer_MessageTextBox
             // 
-            trainer_MessageTextBox.Dock = DockStyle.Fill;
-            trainer_MessageTextBox.Location = new Point(0, 25);
+            trainer_MessageTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            trainer_MessageTextBox.BorderStyle = BorderStyle.None;
+            trainer_MessageTextBox.Font = new Font("Segoe UI", 9F);
+            trainer_MessageTextBox.Location = new Point(5, 6);
+            trainer_MessageTextBox.Margin = new Padding(10);
             trainer_MessageTextBox.Name = "trainer_MessageTextBox";
-            trainer_MessageTextBox.Size = new Size(563, 259);
+            trainer_MessageTextBox.Size = new Size(549, 242);
             trainer_MessageTextBox.TabIndex = 1;
             trainer_MessageTextBox.Text = "";
+            trainer_MessageTextBox.TextChanged += trainer_MessageTextBox_TextChanged;
             // 
             // trainer_MessageText_toolStrip
             // 
@@ -2387,25 +2415,27 @@
             toolStripButton7.Size = new Size(23, 22);
             toolStripButton7.Text = "Redo";
             // 
-            // button1
+            // trainer_MessageUpBtn
             // 
-            button1.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            button1.Location = new Point(768, 62);
-            button1.Name = "button1";
-            button1.Size = new Size(45, 45);
-            button1.TabIndex = 13;
-            button1.Text = "🔼";
-            button1.UseVisualStyleBackColor = true;
+            trainer_MessageUpBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            trainer_MessageUpBtn.Location = new Point(768, 62);
+            trainer_MessageUpBtn.Name = "trainer_MessageUpBtn";
+            trainer_MessageUpBtn.Size = new Size(45, 45);
+            trainer_MessageUpBtn.TabIndex = 13;
+            trainer_MessageUpBtn.Text = "🔼";
+            trainer_MessageUpBtn.UseVisualStyleBackColor = true;
+            trainer_MessageUpBtn.Click += trainer_MessageUpBtn_Click;
             // 
-            // button2
+            // trainer_MessageDownBtn
             // 
-            button2.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            button2.Location = new Point(768, 113);
-            button2.Name = "button2";
-            button2.Size = new Size(45, 45);
-            button2.TabIndex = 12;
-            button2.Text = "🔽";
-            button2.UseVisualStyleBackColor = true;
+            trainer_MessageDownBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            trainer_MessageDownBtn.Location = new Point(768, 113);
+            trainer_MessageDownBtn.Name = "trainer_MessageDownBtn";
+            trainer_MessageDownBtn.Size = new Size(45, 45);
+            trainer_MessageDownBtn.TabIndex = 12;
+            trainer_MessageDownBtn.Text = "🔽";
+            trainer_MessageDownBtn.UseVisualStyleBackColor = true;
+            trainer_MessageDownBtn.Click += trainer_MessageDownBtn_Click;
             // 
             // trainer_MessagePreviewPicBox
             // 
@@ -2424,8 +2454,9 @@
             trainer_MessageTriggerListBox.ItemHeight = 15;
             trainer_MessageTriggerListBox.Location = new Point(9, 62);
             trainer_MessageTriggerListBox.Name = "trainer_MessageTriggerListBox";
-            trainer_MessageTriggerListBox.Size = new Size(239, 409);
+            trainer_MessageTriggerListBox.Size = new Size(239, 394);
             trainer_MessageTriggerListBox.TabIndex = 5;
+            trainer_MessageTriggerListBox.SelectedIndexChanged += trainer_MessageTriggerListBox_SelectedIndexChanged;
             // 
             // label64
             // 
@@ -2642,7 +2673,7 @@
             trainer_ClassListBox.ItemHeight = 15;
             trainer_ClassListBox.Location = new Point(3, 226);
             trainer_ClassListBox.Name = "trainer_ClassListBox";
-            trainer_ClassListBox.Size = new Size(197, 274);
+            trainer_ClassListBox.Size = new Size(197, 259);
             trainer_ClassListBox.TabIndex = 8;
             trainer_ClassListBox.SelectedIndexChanged += trainer_ClassListBox_SelectedIndexChanged;
             // 
@@ -2814,7 +2845,7 @@
             trainer_TrainersListBox.ItemHeight = 15;
             trainer_TrainersListBox.Location = new Point(3, 21);
             trainer_TrainersListBox.Name = "trainer_TrainersListBox";
-            trainer_TrainersListBox.Size = new Size(197, 364);
+            trainer_TrainersListBox.Size = new Size(197, 349);
             trainer_TrainersListBox.TabIndex = 1;
             trainer_TrainersListBox.SelectedIndexChanged += trainer_TrainersListBox_SelectedIndexChanged;
             // 
@@ -2975,7 +3006,7 @@
             class_VSEffectsListBox.ItemHeight = 15;
             class_VSEffectsListBox.Location = new Point(6, 225);
             class_VSEffectsListBox.Name = "class_VSEffectsListBox";
-            class_VSEffectsListBox.Size = new Size(224, 274);
+            class_VSEffectsListBox.Size = new Size(224, 259);
             class_VSEffectsListBox.TabIndex = 18;
             // 
             // class_DescriptionLbl
@@ -3234,7 +3265,7 @@
             class_TrainersListBox.ItemHeight = 15;
             class_TrainersListBox.Location = new Point(3, 226);
             class_TrainersListBox.Name = "class_TrainersListBox";
-            class_TrainersListBox.Size = new Size(197, 274);
+            class_TrainersListBox.Size = new Size(197, 259);
             class_TrainersListBox.TabIndex = 8;
             class_TrainersListBox.SelectedIndexChanged += class_TrainersListBox_SelectedIndexChanged;
             // 
@@ -3414,7 +3445,7 @@
             class_ClassListBox.ItemHeight = 15;
             class_ClassListBox.Location = new Point(3, 21);
             class_ClassListBox.Name = "class_ClassListBox";
-            class_ClassListBox.Size = new Size(197, 364);
+            class_ClassListBox.Size = new Size(197, 349);
             class_ClassListBox.TabIndex = 1;
             class_ClassListBox.SelectedIndexChanged += class_ClassListBox_SelectedIndexChanged;
             // 
@@ -3503,26 +3534,35 @@
             class_ExportBtn.Size = new Size(61, 22);
             class_ExportBtn.Text = "Export";
             // 
-            // messageTab
+            // main_MainTable_BattleMessageTab
             // 
-            messageTab.Controls.Add(panel8);
-            messageTab.Controls.Add(panel6);
-            messageTab.Location = new Point(4, 24);
-            messageTab.Name = "messageTab";
-            messageTab.Size = new Size(1242, 542);
-            messageTab.TabIndex = 2;
-            messageTab.Text = "Battle Messages";
-            messageTab.UseVisualStyleBackColor = true;
+            main_MainTable_BattleMessageTab.Controls.Add(panel8);
+            main_MainTable_BattleMessageTab.Location = new Point(4, 24);
+            main_MainTable_BattleMessageTab.Name = "main_MainTable_BattleMessageTab";
+            main_MainTable_BattleMessageTab.Size = new Size(1242, 542);
+            main_MainTable_BattleMessageTab.TabIndex = 2;
+            main_MainTable_BattleMessageTab.Text = "Battle Messages";
+            main_MainTable_BattleMessageTab.UseVisualStyleBackColor = true;
             // 
             // panel8
             // 
-            panel8.Controls.Add(battleMessage_MessageTableDataGrid);
+            panel8.Controls.Add(panel7);
+            panel8.Controls.Add(panel6);
             panel8.Controls.Add(battleMessages_Table_toolStrip);
             panel8.Dock = DockStyle.Fill;
             panel8.Location = new Point(0, 0);
             panel8.Name = "panel8";
-            panel8.Size = new Size(1242, 366);
+            panel8.Size = new Size(1242, 542);
             panel8.TabIndex = 1;
+            // 
+            // panel7
+            // 
+            panel7.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel7.Controls.Add(battleMessage_MessageTableDataGrid);
+            panel7.Location = new Point(3, 28);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(1238, 358);
+            panel7.TabIndex = 2;
             // 
             // battleMessage_MessageTableDataGrid
             // 
@@ -3531,10 +3571,11 @@
             battleMessage_MessageTableDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             battleMessage_MessageTableDataGrid.Columns.AddRange(new DataGridViewColumn[] { messageId, trainerId, messageTrigger, messageText });
             battleMessage_MessageTableDataGrid.Dock = DockStyle.Fill;
-            battleMessage_MessageTableDataGrid.Location = new Point(0, 25);
+            battleMessage_MessageTableDataGrid.Location = new Point(0, 0);
             battleMessage_MessageTableDataGrid.Name = "battleMessage_MessageTableDataGrid";
-            battleMessage_MessageTableDataGrid.Size = new Size(1242, 341);
+            battleMessage_MessageTableDataGrid.Size = new Size(1238, 358);
             battleMessage_MessageTableDataGrid.TabIndex = 1;
+            battleMessage_MessageTableDataGrid.SelectionChanged += battleMessage_MessageTableDataGrid_SelectionChanged;
             // 
             // messageId
             // 
@@ -3560,12 +3601,12 @@
             // messageTrigger
             // 
             messageTrigger.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            messageTrigger.FillWeight = 60F;
+            messageTrigger.FillWeight = 80F;
             messageTrigger.Frozen = true;
             messageTrigger.HeaderText = "Message Triggers";
             messageTrigger.MinimumWidth = 8;
             messageTrigger.Name = "messageTrigger";
-            messageTrigger.Width = 216;
+            messageTrigger.Width = 250;
             // 
             // messageText
             // 
@@ -3574,32 +3615,192 @@
             messageText.MinimumWidth = 8;
             messageText.Name = "messageText";
             // 
+            // panel6
+            // 
+            panel6.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel6.BackColor = Color.Transparent;
+            panel6.Controls.Add(panel5);
+            panel6.Controls.Add(battleMessage_PreviewText);
+            panel6.Controls.Add(battleMessages_MessageText_toolStrip);
+            panel6.Controls.Add(label63);
+            panel6.Controls.Add(label61);
+            panel6.Controls.Add(battleMessages_MessageUpBtn);
+            panel6.Controls.Add(battleMessages_MessageDownBtn);
+            panel6.Controls.Add(battleMessages_PreviewPicBox);
+            panel6.Location = new Point(3, 389);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(1242, 150);
+            panel6.TabIndex = 0;
+            // 
+            // panel5
+            // 
+            panel5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel5.BackColor = SystemColors.Window;
+            panel5.BorderStyle = BorderStyle.Fixed3D;
+            panel5.Controls.Add(battleMessages_MessageTextBox);
+            panel5.Location = new Point(3, 47);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(658, 96);
+            panel5.TabIndex = 1;
+            // 
+            // battleMessages_MessageTextBox
+            // 
+            battleMessages_MessageTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            battleMessages_MessageTextBox.BackColor = SystemColors.Window;
+            battleMessages_MessageTextBox.BorderStyle = BorderStyle.None;
+            battleMessages_MessageTextBox.Location = new Point(3, 3);
+            battleMessages_MessageTextBox.Name = "battleMessages_MessageTextBox";
+            battleMessages_MessageTextBox.Size = new Size(648, 91);
+            battleMessages_MessageTextBox.TabIndex = 1;
+            battleMessages_MessageTextBox.Text = "";
+            battleMessages_MessageTextBox.TextChanged += battleMessages_MessageTextBox_TextChanged;
+            // 
+            // battleMessage_PreviewText
+            // 
+            battleMessage_PreviewText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            battleMessage_PreviewText.AutoSize = true;
+            battleMessage_PreviewText.Location = new Point(685, 58);
+            battleMessage_PreviewText.Name = "battleMessage_PreviewText";
+            battleMessage_PreviewText.Size = new Size(12, 15);
+            battleMessage_PreviewText.TabIndex = 23;
+            battleMessage_PreviewText.Text = "-";
+            // 
+            // battleMessages_MessageText_toolStrip
+            // 
+            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_SaveMessageBtn, battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn });
+            battleMessages_MessageText_toolStrip.Location = new Point(0, 0);
+            battleMessages_MessageText_toolStrip.Name = "battleMessages_MessageText_toolStrip";
+            battleMessages_MessageText_toolStrip.Size = new Size(1242, 25);
+            battleMessages_MessageText_toolStrip.TabIndex = 0;
+            battleMessages_MessageText_toolStrip.Text = "toolStrip1";
+            // 
+            // battleMessages_SaveMessageBtn
+            // 
+            battleMessages_SaveMessageBtn.Image = Properties.Resources.save_ico;
+            battleMessages_SaveMessageBtn.ImageTransparentColor = Color.Magenta;
+            battleMessages_SaveMessageBtn.Name = "battleMessages_SaveMessageBtn";
+            battleMessages_SaveMessageBtn.Size = new Size(133, 22);
+            battleMessages_SaveMessageBtn.Text = "Save Battle Message";
+            // 
+            // battleMessages_UndoMessageBtn
+            // 
+            battleMessages_UndoMessageBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            battleMessages_UndoMessageBtn.Image = Properties.Resources.undo_ico;
+            battleMessages_UndoMessageBtn.ImageTransparentColor = Color.Magenta;
+            battleMessages_UndoMessageBtn.Name = "battleMessages_UndoMessageBtn";
+            battleMessages_UndoMessageBtn.Size = new Size(23, 22);
+            battleMessages_UndoMessageBtn.Text = "Undo";
+            // 
+            // battleMessages_RedoMessageBtn
+            // 
+            battleMessages_RedoMessageBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            battleMessages_RedoMessageBtn.Image = Properties.Resources.redo_ico;
+            battleMessages_RedoMessageBtn.ImageTransparentColor = Color.Magenta;
+            battleMessages_RedoMessageBtn.Name = "battleMessages_RedoMessageBtn";
+            battleMessages_RedoMessageBtn.Size = new Size(23, 22);
+            battleMessages_RedoMessageBtn.Text = "Redo";
+            // 
+            // label63
+            // 
+            label63.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            label63.AutoSize = true;
+            label63.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label63.Location = new Point(676, 29);
+            label63.Name = "label63";
+            label63.Size = new Size(53, 15);
+            label63.TabIndex = 22;
+            label63.Text = "Preview";
+            // 
+            // label61
+            // 
+            label61.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            label61.AutoSize = true;
+            label61.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label61.Location = new Point(3, 29);
+            label61.Name = "label61";
+            label61.Size = new Size(83, 15);
+            label61.TabIndex = 20;
+            label61.Text = "Message Text";
+            // 
+            // battleMessages_MessageUpBtn
+            // 
+            battleMessages_MessageUpBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            battleMessages_MessageUpBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            battleMessages_MessageUpBtn.Location = new Point(1194, 47);
+            battleMessages_MessageUpBtn.Name = "battleMessages_MessageUpBtn";
+            battleMessages_MessageUpBtn.Size = new Size(45, 45);
+            battleMessages_MessageUpBtn.TabIndex = 14;
+            battleMessages_MessageUpBtn.Text = "🔼";
+            battleMessages_MessageUpBtn.UseVisualStyleBackColor = true;
+            battleMessages_MessageUpBtn.Click += battleMessages_MessageUpBtn_Click;
+            // 
+            // battleMessages_MessageDownBtn
+            // 
+            battleMessages_MessageDownBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            battleMessages_MessageDownBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            battleMessages_MessageDownBtn.Location = new Point(1194, 98);
+            battleMessages_MessageDownBtn.Name = "battleMessages_MessageDownBtn";
+            battleMessages_MessageDownBtn.Size = new Size(45, 45);
+            battleMessages_MessageDownBtn.TabIndex = 13;
+            battleMessages_MessageDownBtn.Text = "🔽";
+            battleMessages_MessageDownBtn.UseVisualStyleBackColor = true;
+            battleMessages_MessageDownBtn.Click += battleMessages_MessageDOwnBtn_Click;
+            // 
+            // battleMessages_PreviewPicBox
+            // 
+            battleMessages_PreviewPicBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            battleMessages_PreviewPicBox.BackColor = Color.White;
+            battleMessages_PreviewPicBox.Location = new Point(676, 47);
+            battleMessages_PreviewPicBox.Name = "battleMessages_PreviewPicBox";
+            battleMessages_PreviewPicBox.Size = new Size(512, 96);
+            battleMessages_PreviewPicBox.TabIndex = 12;
+            battleMessages_PreviewPicBox.TabStop = false;
+            // 
             // battleMessages_Table_toolStrip
             // 
-            battleMessages_Table_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_CopyBtn, battleMessages_PasteBtn, toolStripSeparator17, battleMessages_ImportBtn, battleMessages_ExportBtn, toolStripSeparator18, battleMessages_SaveBtn, battleMessages_UndoAllBtn, toolStripSeparator19, battleMessages_AddLineBtn, battleMessages_RemoveBtn, battleMessages_SortBtn });
+            battleMessages_Table_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_SaveBtn, battleMessages_UndoAllBtn, toolStripSeparator19, battleMessages_AddLineBtn, battleMessages_RemoveBtn, toolStripSeparator23, battleMessages_CopyBtn, battleMessages_PasteBtn, toolStripSeparator17, battleMessages_ImportBtn, battleMessages_ExportBtn, toolStripSeparator18, battleMessages_SortBtn });
             battleMessages_Table_toolStrip.Location = new Point(0, 0);
             battleMessages_Table_toolStrip.Name = "battleMessages_Table_toolStrip";
             battleMessages_Table_toolStrip.Size = new Size(1242, 25);
             battleMessages_Table_toolStrip.TabIndex = 0;
             battleMessages_Table_toolStrip.Text = "toolStrip4";
             // 
+            // battleMessages_SaveBtn
+            // 
+            battleMessages_SaveBtn.Image = Properties.Resources.save_ico;
+            battleMessages_SaveBtn.ImageTransparentColor = Color.Magenta;
+            battleMessages_SaveBtn.Name = "battleMessages_SaveBtn";
+            battleMessages_SaveBtn.Size = new Size(163, 22);
+            battleMessages_SaveBtn.Text = "Save Battle Message Table";
+            // 
+            // battleMessages_UndoAllBtn
+            // 
+            battleMessages_UndoAllBtn.Image = Properties.Resources.undo_ico;
+            battleMessages_UndoAllBtn.ImageTransparentColor = Color.Magenta;
+            battleMessages_UndoAllBtn.Name = "battleMessages_UndoAllBtn";
+            battleMessages_UndoAllBtn.Size = new Size(73, 22);
+            battleMessages_UndoAllBtn.Text = "Undo All";
+            // 
+            // toolStripSeparator19
+            // 
+            toolStripSeparator19.Name = "toolStripSeparator19";
+            toolStripSeparator19.Size = new Size(6, 25);
+            // 
             // battleMessages_CopyBtn
             // 
-            battleMessages_CopyBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             battleMessages_CopyBtn.Image = Properties.Resources.copy_ico;
             battleMessages_CopyBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_CopyBtn.Name = "battleMessages_CopyBtn";
-            battleMessages_CopyBtn.Size = new Size(23, 22);
-            battleMessages_CopyBtn.Text = "Copy Battle Message";
+            battleMessages_CopyBtn.Size = new Size(55, 22);
+            battleMessages_CopyBtn.Text = "Copy";
             // 
             // battleMessages_PasteBtn
             // 
-            battleMessages_PasteBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             battleMessages_PasteBtn.Image = Properties.Resources.paste_ico;
             battleMessages_PasteBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_PasteBtn.Name = "battleMessages_PasteBtn";
-            battleMessages_PasteBtn.Size = new Size(23, 22);
-            battleMessages_PasteBtn.Text = "Paste Battle Message";
+            battleMessages_PasteBtn.Size = new Size(55, 22);
+            battleMessages_PasteBtn.Text = "Paste";
             // 
             // toolStripSeparator17
             // 
@@ -3608,49 +3809,24 @@
             // 
             // battleMessages_ImportBtn
             // 
-            battleMessages_ImportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             battleMessages_ImportBtn.Image = Properties.Resources.import_ico;
             battleMessages_ImportBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_ImportBtn.Name = "battleMessages_ImportBtn";
-            battleMessages_ImportBtn.Size = new Size(23, 22);
-            battleMessages_ImportBtn.Text = "Import Battle Message Table";
+            battleMessages_ImportBtn.Size = new Size(63, 22);
+            battleMessages_ImportBtn.Text = "Import";
             // 
             // battleMessages_ExportBtn
             // 
-            battleMessages_ExportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             battleMessages_ExportBtn.Image = Properties.Resources.export_ico;
             battleMessages_ExportBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_ExportBtn.Name = "battleMessages_ExportBtn";
-            battleMessages_ExportBtn.Size = new Size(23, 22);
-            battleMessages_ExportBtn.Text = "Export Battle Message Table";
+            battleMessages_ExportBtn.Size = new Size(61, 22);
+            battleMessages_ExportBtn.Text = "Export";
             // 
             // toolStripSeparator18
             // 
             toolStripSeparator18.Name = "toolStripSeparator18";
             toolStripSeparator18.Size = new Size(6, 25);
-            // 
-            // battleMessages_SaveBtn
-            // 
-            battleMessages_SaveBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            battleMessages_SaveBtn.Image = Properties.Resources.save_ico;
-            battleMessages_SaveBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_SaveBtn.Name = "battleMessages_SaveBtn";
-            battleMessages_SaveBtn.Size = new Size(23, 22);
-            battleMessages_SaveBtn.Text = "Save";
-            // 
-            // battleMessages_UndoAllBtn
-            // 
-            battleMessages_UndoAllBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            battleMessages_UndoAllBtn.Image = Properties.Resources.undo_ico;
-            battleMessages_UndoAllBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_UndoAllBtn.Name = "battleMessages_UndoAllBtn";
-            battleMessages_UndoAllBtn.Size = new Size(23, 22);
-            battleMessages_UndoAllBtn.Text = "Undo All Changes";
-            // 
-            // toolStripSeparator19
-            // 
-            toolStripSeparator19.Name = "toolStripSeparator19";
-            toolStripSeparator19.Size = new Size(6, 25);
             // 
             // battleMessages_AddLineBtn
             // 
@@ -3672,179 +3848,12 @@
             // 
             // battleMessages_SortBtn
             // 
-            battleMessages_SortBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
             battleMessages_SortBtn.Image = Properties.Resources.sort_ico;
             battleMessages_SortBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_SortBtn.Name = "battleMessages_SortBtn";
-            battleMessages_SortBtn.Size = new Size(23, 22);
+            battleMessages_SortBtn.Size = new Size(145, 22);
             battleMessages_SortBtn.Text = "Sort and Repoint Table";
             battleMessages_SortBtn.ToolTipText = "Sort & Repoint Table (This will save any changes)";
-            // 
-            // panel6
-            // 
-            panel6.Controls.Add(label63);
-            panel6.Controls.Add(label62);
-            panel6.Controls.Add(label61);
-            panel6.Controls.Add(label60);
-            panel6.Controls.Add(battleMessages_MessageTriggerComboBox);
-            panel6.Controls.Add(battleMessages_TrainerComboBox);
-            panel6.Controls.Add(panel7);
-            panel6.Controls.Add(battleMessages_MessageUpBtn);
-            panel6.Controls.Add(battleMessages_MessageDOwnBtn);
-            panel6.Controls.Add(battleMessages_PreviewPicBox);
-            panel6.Dock = DockStyle.Bottom;
-            panel6.Location = new Point(0, 366);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(1242, 176);
-            panel6.TabIndex = 0;
-            // 
-            // label63
-            // 
-            label63.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            label63.AutoSize = true;
-            label63.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label63.Location = new Point(676, 55);
-            label63.Name = "label63";
-            label63.Size = new Size(53, 15);
-            label63.TabIndex = 22;
-            label63.Text = "Preview";
-            // 
-            // label62
-            // 
-            label62.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            label62.AutoSize = true;
-            label62.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label62.Location = new Point(676, 6);
-            label62.Name = "label62";
-            label62.Size = new Size(46, 15);
-            label62.TabIndex = 21;
-            label62.Text = "Trainer";
-            // 
-            // label61
-            // 
-            label61.AutoSize = true;
-            label61.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label61.Location = new Point(6, 6);
-            label61.Name = "label61";
-            label61.Size = new Size(83, 15);
-            label61.TabIndex = 20;
-            label61.Text = "Message Text";
-            // 
-            // label60
-            // 
-            label60.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            label60.AutoSize = true;
-            label60.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label60.Location = new Point(879, 6);
-            label60.Name = "label60";
-            label60.Size = new Size(98, 15);
-            label60.TabIndex = 19;
-            label60.Text = "Message Trigger";
-            // 
-            // battleMessages_MessageTriggerComboBox
-            // 
-            battleMessages_MessageTriggerComboBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            battleMessages_MessageTriggerComboBox.FormattingEnabled = true;
-            battleMessages_MessageTriggerComboBox.Location = new Point(879, 24);
-            battleMessages_MessageTriggerComboBox.Name = "battleMessages_MessageTriggerComboBox";
-            battleMessages_MessageTriggerComboBox.Size = new Size(309, 23);
-            battleMessages_MessageTriggerComboBox.TabIndex = 18;
-            // 
-            // battleMessages_TrainerComboBox
-            // 
-            battleMessages_TrainerComboBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            battleMessages_TrainerComboBox.FormattingEnabled = true;
-            battleMessages_TrainerComboBox.Location = new Point(676, 24);
-            battleMessages_TrainerComboBox.Name = "battleMessages_TrainerComboBox";
-            battleMessages_TrainerComboBox.Size = new Size(191, 23);
-            battleMessages_TrainerComboBox.TabIndex = 17;
-            // 
-            // panel7
-            // 
-            panel7.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panel7.Controls.Add(battleMessages_MessageTextBox);
-            panel7.Controls.Add(battleMessages_MessageText_toolStrip);
-            panel7.Location = new Point(6, 24);
-            panel7.Name = "panel7";
-            panel7.Size = new Size(664, 145);
-            panel7.TabIndex = 16;
-            // 
-            // battleMessages_MessageTextBox
-            // 
-            battleMessages_MessageTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            battleMessages_MessageTextBox.Location = new Point(0, 28);
-            battleMessages_MessageTextBox.Name = "battleMessages_MessageTextBox";
-            battleMessages_MessageTextBox.Size = new Size(661, 114);
-            battleMessages_MessageTextBox.TabIndex = 1;
-            battleMessages_MessageTextBox.Text = "";
-            // 
-            // battleMessages_MessageText_toolStrip
-            // 
-            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_SaveMessageBtn, battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn });
-            battleMessages_MessageText_toolStrip.Location = new Point(0, 0);
-            battleMessages_MessageText_toolStrip.Name = "battleMessages_MessageText_toolStrip";
-            battleMessages_MessageText_toolStrip.Size = new Size(664, 25);
-            battleMessages_MessageText_toolStrip.TabIndex = 0;
-            battleMessages_MessageText_toolStrip.Text = "toolStrip1";
-            // 
-            // battleMessages_SaveMessageBtn
-            // 
-            battleMessages_SaveMessageBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            battleMessages_SaveMessageBtn.Image = Properties.Resources.save_ico;
-            battleMessages_SaveMessageBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_SaveMessageBtn.Name = "battleMessages_SaveMessageBtn";
-            battleMessages_SaveMessageBtn.Size = new Size(23, 22);
-            battleMessages_SaveMessageBtn.Text = "Save Battle Message";
-            // 
-            // battleMessages_UndoMessageBtn
-            // 
-            battleMessages_UndoMessageBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            battleMessages_UndoMessageBtn.Image = Properties.Resources.undo_ico;
-            battleMessages_UndoMessageBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_UndoMessageBtn.Name = "battleMessages_UndoMessageBtn";
-            battleMessages_UndoMessageBtn.Size = new Size(23, 22);
-            battleMessages_UndoMessageBtn.Text = "Undo";
-            // 
-            // battleMessages_RedoMessageBtn
-            // 
-            battleMessages_RedoMessageBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            battleMessages_RedoMessageBtn.Image = Properties.Resources.redo_ico;
-            battleMessages_RedoMessageBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_RedoMessageBtn.Name = "battleMessages_RedoMessageBtn";
-            battleMessages_RedoMessageBtn.Size = new Size(23, 22);
-            battleMessages_RedoMessageBtn.Text = "Redo";
-            // 
-            // battleMessages_MessageUpBtn
-            // 
-            battleMessages_MessageUpBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            battleMessages_MessageUpBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            battleMessages_MessageUpBtn.Location = new Point(1194, 73);
-            battleMessages_MessageUpBtn.Name = "battleMessages_MessageUpBtn";
-            battleMessages_MessageUpBtn.Size = new Size(45, 45);
-            battleMessages_MessageUpBtn.TabIndex = 14;
-            battleMessages_MessageUpBtn.Text = "🔼";
-            battleMessages_MessageUpBtn.UseVisualStyleBackColor = true;
-            // 
-            // battleMessages_MessageDOwnBtn
-            // 
-            battleMessages_MessageDOwnBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            battleMessages_MessageDOwnBtn.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            battleMessages_MessageDOwnBtn.Location = new Point(1194, 124);
-            battleMessages_MessageDOwnBtn.Name = "battleMessages_MessageDOwnBtn";
-            battleMessages_MessageDOwnBtn.Size = new Size(45, 45);
-            battleMessages_MessageDOwnBtn.TabIndex = 13;
-            battleMessages_MessageDOwnBtn.Text = "🔽";
-            battleMessages_MessageDOwnBtn.UseVisualStyleBackColor = true;
-            // 
-            // battleMessages_PreviewPicBox
-            // 
-            battleMessages_PreviewPicBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            battleMessages_PreviewPicBox.BackColor = Color.White;
-            battleMessages_PreviewPicBox.Location = new Point(676, 73);
-            battleMessages_PreviewPicBox.Name = "battleMessages_PreviewPicBox";
-            battleMessages_PreviewPicBox.Size = new Size(512, 96);
-            battleMessages_PreviewPicBox.TabIndex = 12;
-            battleMessages_PreviewPicBox.TabStop = false;
             // 
             // mainStatusStrip
             // 
@@ -3956,6 +3965,11 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
+            // toolStripSeparator23
+            // 
+            toolStripSeparator23.Name = "toolStripSeparator23";
+            toolStripSeparator23.Size = new Size(6, 25);
+            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -4012,6 +4026,7 @@
             trainer_BattleMessageTab.PerformLayout();
             panel9.ResumeLayout(false);
             panel9.PerformLayout();
+            panel12.ResumeLayout(false);
             trainer_MessageText_toolStrip.ResumeLayout(false);
             trainer_MessageText_toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).EndInit();
@@ -4043,19 +4058,19 @@
             panel1.PerformLayout();
             class_ClassEditor_toolStrip.ResumeLayout(false);
             class_ClassEditor_toolStrip.PerformLayout();
-            messageTab.ResumeLayout(false);
+            main_MainTable_BattleMessageTab.ResumeLayout(false);
             panel8.ResumeLayout(false);
             panel8.PerformLayout();
+            panel7.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)battleMessage_MessageTableDataGrid).EndInit();
-            battleMessages_Table_toolStrip.ResumeLayout(false);
-            battleMessages_Table_toolStrip.PerformLayout();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
-            panel7.ResumeLayout(false);
-            panel7.PerformLayout();
+            panel5.ResumeLayout(false);
             battleMessages_MessageText_toolStrip.ResumeLayout(false);
             battleMessages_MessageText_toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)battleMessages_PreviewPicBox).EndInit();
+            battleMessages_Table_toolStrip.ResumeLayout(false);
+            battleMessages_Table_toolStrip.PerformLayout();
             toolstripContainer.Panel1.ResumeLayout(false);
             toolstripContainer.Panel1.PerformLayout();
             toolstripContainer.Panel2.ResumeLayout(false);
@@ -4115,7 +4130,7 @@
         private PictureBox romIcon_PicBox;
         private TabControl main_MainTab;
         private TabPage main_MainTab_TrainerTab;
-        private TabPage messageTab;
+        private TabPage main_MainTable_BattleMessageTab;
         private Panel trainer_List_Buttons;
         private Panel trainer_List_Panel;
         private Button trainer_ExportAllBtn;
@@ -4152,13 +4167,11 @@
         private ToolStripButton trainer_MessagesPasteBtn;
         private ToolStripButton traioner_MessagesImportBtn;
         private ToolStripButton trainer_MessagesExportBtn;
-        private Button trainer_MessageDownBtn;
         private Label trainer_MsgPreview_lbl;
         private Label trainer_MessageTrigger_lbl;
         private ListBox trainer_MessageTriggersListBox;
         private Label trainer_Msg_Text_lbl;
         private Panel trainer_MessaageEditor_Panel;
-        private Button trainer_MessageUpBtn;
         private Button trainer_ViewMessageTableBtn;
         private ToolStrip trainer_MessageEditToolstrip;
         private ToolStripButton trainer_MessageEditSaveBtn;
@@ -4212,39 +4225,15 @@
         private Button class_PrizeMoneyHelpBtn;
         private Panel panel6;
         private Button battleMessages_MessageUpBtn;
-        private Button battleMessages_MessageDOwnBtn;
+        private Button battleMessages_MessageDownBtn;
         private PictureBox battleMessages_PreviewPicBox;
-        private Label label62;
         private Label label61;
-        private Label label60;
-        private ComboBox battleMessages_MessageTriggerComboBox;
-        private ComboBox battleMessages_TrainerComboBox;
-        private Panel panel7;
         private RichTextBox battleMessages_MessageTextBox;
         private ToolStrip battleMessages_MessageText_toolStrip;
         private ToolStripButton battleMessages_SaveMessageBtn;
         private ToolStripButton battleMessages_UndoMessageBtn;
         private ToolStripButton battleMessages_RedoMessageBtn;
         private Label label63;
-        private Panel panel8;
-        private ToolStrip battleMessages_Table_toolStrip;
-        private ToolStripButton battleMessages_CopyBtn;
-        private ToolStripButton battleMessages_PasteBtn;
-        private ToolStripSeparator toolStripSeparator17;
-        private ToolStripButton battleMessages_ImportBtn;
-        private ToolStripButton battleMessages_ExportBtn;
-        private ToolStripSeparator toolStripSeparator18;
-        private ToolStripButton battleMessages_SaveBtn;
-        private ToolStripButton battleMessages_UndoAllBtn;
-        private ToolStripSeparator toolStripSeparator19;
-        private ToolStripButton battleMessages_AddLineBtn;
-        private ToolStripButton battleMessages_RemoveBtn;
-        private ToolStripButton battleMessages_SortBtn;
-        private DataGridView battleMessage_MessageTableDataGrid;
-        private DataGridViewTextBoxColumn messageId;
-        private DataGridViewTextBoxColumn trainerId;
-        private DataGridViewTextBoxColumn messageTrigger;
-        private DataGridViewTextBoxColumn messageText;
         private ToolStripSeparator toolStripSeparator20;
         private ToolStripButton main_OpenPatchesBtn;
         private ToolStripButton main_SettingsBtn;
@@ -4388,8 +4377,8 @@
         private ToolStripButton toolStripButton5;
         private ToolStripButton toolStripButton6;
         private ToolStripButton toolStripButton7;
-        private Button button1;
-        private Button button2;
+        private Button trainer_MessageUpBtn;
+        private Button trainer_MessageDownBtn;
         private PictureBox trainer_MessagePreviewPicBox;
         private ListBox trainer_MessageTriggerListBox;
         private Label label64;
@@ -4435,5 +4424,30 @@
         private TextBox class_InBattleMusicTextBox;
         private Button class_EyeContactNightPlayBtn;
         private Button class_NewClassInfoBtn;
+        private Label battleMessage_PreviewText;
+        private Label trainer_MessagePreviewText;
+        private Panel panel5;
+        private Panel panel12;
+        private Panel panel8;
+        private DataGridView battleMessage_MessageTableDataGrid;
+        private DataGridViewTextBoxColumn messageId;
+        private DataGridViewTextBoxColumn trainerId;
+        private DataGridViewTextBoxColumn messageTrigger;
+        private DataGridViewTextBoxColumn messageText;
+        private ToolStrip battleMessages_Table_toolStrip;
+        private ToolStripButton battleMessages_CopyBtn;
+        private ToolStripButton battleMessages_PasteBtn;
+        private ToolStripSeparator toolStripSeparator17;
+        private ToolStripButton battleMessages_ImportBtn;
+        private ToolStripButton battleMessages_ExportBtn;
+        private ToolStripSeparator toolStripSeparator18;
+        private ToolStripButton battleMessages_SaveBtn;
+        private ToolStripButton battleMessages_UndoAllBtn;
+        private ToolStripSeparator toolStripSeparator19;
+        private ToolStripButton battleMessages_AddLineBtn;
+        private ToolStripButton battleMessages_RemoveBtn;
+        private ToolStripButton battleMessages_SortBtn;
+        private Panel panel7;
+        private ToolStripSeparator toolStripSeparator23;
     }
 }

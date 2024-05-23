@@ -12,7 +12,7 @@
         public const string TagTeam = "Tag Team";
         public const string CheckHp = "Check HP";
         public const string WeatherEffect = "Weather Effects";
-        public const string Unown = "???";
+        public const string Harassment = "Harassment";
 
         public static List<string> AiFlagNames =>
             [
@@ -26,7 +26,7 @@
             TagTeam,
             CheckHp, 
             WeatherEffect,
-            Unown
+            Harassment
             ];
     }
 }

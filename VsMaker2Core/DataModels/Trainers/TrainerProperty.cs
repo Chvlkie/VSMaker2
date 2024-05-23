@@ -18,7 +18,7 @@
 
         public TrainerProperty()
         {
-            AIFlags = [];
+            AIFlags = [true, false, false, false, false, false, false, false, false, false, false];
             Items = [0, 0, 0, 0];
             TrainerClassId = 2;
         }

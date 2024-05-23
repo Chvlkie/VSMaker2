@@ -16,8 +16,16 @@ namespace Main.Models
         public List<TrainerClass> Classes { get; set; }
         public List<BattleMessage> BattleMessages { get; set; }
 
+        public int BattleMessageDisplayIndex { get; set; }
+        public List<string> DisplayBattleMessageText { get; set; }
+
+        public int SelectedBattleMessageRowIndex { get; set; }
+
         public MainEditorModel()
         {
+            SelectedBattleMessageRowIndex = -1;
+            BattleMessageDisplayIndex = 0;
+            DisplayBattleMessageText = [];
             TrainerNames = [];
             ClassNames = [];
             ClassDescriptions = [];
