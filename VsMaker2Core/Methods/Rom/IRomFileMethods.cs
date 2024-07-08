@@ -79,5 +79,6 @@ namespace VsMaker2Core.Methods
         List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath);
         List<string> GetBattleMessages(int battleMessageArchive);
         List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath);
+        Task RepackRom(string ndsFileName);
     }
 }

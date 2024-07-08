@@ -6,6 +6,7 @@ namespace Main.Forms
     {
         private LoadType loadType;
         private Mainform mainForm;
+        private string FilePath;
         public LoadingData()
         {
             InitializeComponent();
@@ -15,6 +16,15 @@ namespace Main.Forms
         {
             this.mainForm = mainForm;
             this.loadType = loadType;
+            InitializeComponent();
+            LoadData();
+        }
+
+        public LoadingData(Mainform mainForm, LoadType loadType, string filePath)
+        {
+            this.mainForm = mainForm;
+            this.loadType = loadType;
+            this.FilePath = filePath;
             InitializeComponent();
             LoadData();
         }
@@ -56,6 +66,15 @@ namespace Main.Forms
             Close();
         }
 
+        public async Task SaveRom()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            await Task.Run(() => mainForm.BeginSaveRomChanges(progress, FilePath));
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
         private void LoadData()
         {
             progressBar.Value = 0;
@@ -76,6 +95,10 @@ namespace Main.Forms
                 case LoadType.UnpackNarcs:
                     Text = "Unpacking Essential NARCs";
                     UnpackNarcs();
+                    break;
+                case LoadType.SaveRom:
+                    Text = "Saving ROM";
+                    SaveRom();
                     break;
             }
         }

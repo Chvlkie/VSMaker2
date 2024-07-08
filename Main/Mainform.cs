@@ -3,6 +3,7 @@ using Main.Models;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
+using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
 using static VsMaker2Core.Enums;
@@ -30,6 +31,7 @@ namespace Main
 
         #endregion Methods
 
+        private bool InhibitTabChange = false;
         private bool IsLoadingData;
         private RomFile LoadedRom;
         private MainEditorModel MainEditorModel;
@@ -45,8 +47,85 @@ namespace Main
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
+        public void BeginSaveRomChanges(IProgress<int> progress, string filePath)
+        {
+            int count = 0;
+            int increment = 100 / VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories.Count;
+            // Repack NARCs
+            foreach (KeyValuePair<NarcDirectory, (string packedDirectory, string unpackedDirectory)> kvp in VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories)
+            {
+                DirectoryInfo di = new(kvp.Value.unpackedDirectory);
+                if (di.Exists)
+                {
+                    Narc.FromFolder(kvp.Value.unpackedDirectory).Save(kvp.Value.packedDirectory); // Make new NARC from folder
+                }
+                progress?.Report(count += increment);
+            }
 
-        private bool InhibitTabChange = false;
+            if (Arm9.CheckCompressionMark(RomFile.GameFamily))
+            {
+                DialogResult d = MessageBox.Show("The ARM9 file of this ROM is currently uncompressed, but marked as compressed.\n" +
+                    "This will prevent your ROM from working on native hardware.\n\n" +
+                "Do you want to mark the ARM9 as uncompressed?", "ARM9 compression mismatch detected",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                progress?.Report(0);
+                if (d == DialogResult.Yes)
+                {
+                    Arm9.WriteBytes([0, 0, 0, 0], (uint)(RomFile.GameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4));
+                    for (int i = 0; i < 100; i += 10)
+                    {
+                        progress?.Report(i);
+                    }
+                }
+            }
+
+            progress?.Report(0);
+
+            if (Overlay.CheckOverlayHasCompressionFlag(1))
+            {
+                if (RomPatches.LoadOverlay1FromBackup)
+                {
+                    var restore = Overlay.RestoreOverlayFromCompressedBackup(1, false);
+                    if (!restore.Success)
+                    {
+                        MessageBox.Show(restore.Error, "Unable to Restore Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    if (!Overlay.CheckOverlayIsCompressed(1))
+                    {
+                        Overlay.CompressOverlay(1);
+                    }
+                }
+            }
+
+            if (Overlay.CheckOverlayHasCompressionFlag(LoadedRom.InitialMoneyOverlayNumber) && !Overlay.CheckOverlayIsCompressed(LoadedRom.InitialMoneyOverlayNumber))
+            {
+                Overlay.CompressOverlay(LoadedRom.InitialMoneyOverlayNumber);
+            }
+            progress?.Report(90);
+
+            if (RomFile.GameFamily == GameFamily.HeartGoldSoulSilver || RomFile.GameFamily == GameFamily.HeartGoldSoulSilver)
+            {
+                if (Overlay.CheckOverlayIsCompressed(LoadedRom.PrizeMoneyTableOverlayNumber))
+                {
+                    Overlay.CompressOverlay(LoadedRom.PrizeMoneyTableOverlayNumber);
+                }
+            }
+            romFileMethods.RepackRom(filePath);
+
+            if (RomFile.GameFamily == GameFamily.HeartGoldSoulSilver || RomFile.GameFamily == GameFamily.HgEngine)
+            {
+                if (Overlay.CheckOverlayIsCompressed(1))
+                {
+                    Overlay.DecompressOverlay(1);
+                }
+            }
+
+            progress?.Report(100);
+            MessageBox.Show("ROM File saved to " + filePath, "Success!");
+        }
 
         public void BeginUnpackNarcs(IProgress<int> progress)
         {
@@ -548,10 +627,23 @@ namespace Main
 
         #endregion Event Handlers
 
+        private void main_SaveRomBtn_Click(object sender, EventArgs e)
+        {
+            SaveRomChanges();
+        }
+
         private void OpenLoadingDialog(LoadType loadType)
         {
             UseWaitCursor = true;
             LoadingData = new(this, loadType);
+            LoadingData.ShowDialog();
+            UseWaitCursor = false;
+        }
+
+        private void OpenLoadingDialog(LoadType loadType, string filePath)
+        {
+            UseWaitCursor = true;
+            LoadingData = new(this, loadType, filePath);
             LoadingData.ShowDialog();
             UseWaitCursor = false;
         }
@@ -617,6 +709,20 @@ namespace Main
             }
             romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
             return true;
+        }
+
+        private void SaveRomChanges()
+        {
+            var save = new SaveFileDialog()
+            {
+                Filter = Common.NdsRomFilter
+            };
+            if (save.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+            string saveFileName = save.FileName;
+            OpenLoadingDialog(LoadType.SaveRom, saveFileName);
         }
 
         private void SelectExtractedRomFolder()
@@ -729,19 +835,6 @@ namespace Main
             trainer_PasteParty_btn.Enabled = true;
         }
 
-        private void trainer_Paste_Btn_Click(object sender, EventArgs e)
-        {
-            int selectedTrainerId = MainEditorModel.SelectedTrainer.TrainerId;
-            var pasteTrainer = new Trainer(selectedTrainerId, MainEditorModel.ClipboardTrainer);
-
-            PopulateTrainerData(pasteTrainer);
-            PopulatePartyData(pasteTrainer.TrainerParty, pasteTrainer.TrainerProperties.TeamSize, pasteTrainer.TrainerProperties.ChooseMoves);
-            PopulateTrainerBattleMessageTriggers(pasteTrainer);
-            EnableTrainerEditor();
-            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-            EditedTrainerData(true);
-        }
-
         private void trainer_CopyParty_btn_Click(object sender, EventArgs e)
         {
             MainEditorModel.ClipboardTrainerParty = new TrainerParty(MainEditorModel.SelectedTrainer.TrainerParty)
@@ -754,6 +847,24 @@ namespace Main
             trainer_PasteParty_btn.Enabled = true;
         }
 
+        private void trainer_CopyProperties_btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
+            trainer_PastePropeties_btn.Enabled = true;
+        }
+
+        private void trainer_Paste_Btn_Click(object sender, EventArgs e)
+        {
+            int selectedTrainerId = MainEditorModel.SelectedTrainer.TrainerId;
+            var pasteTrainer = new Trainer(selectedTrainerId, MainEditorModel.ClipboardTrainer);
+
+            PopulateTrainerData(pasteTrainer);
+            PopulatePartyData(pasteTrainer.TrainerParty, pasteTrainer.TrainerProperties.TeamSize, pasteTrainer.TrainerProperties.ChooseMoves);
+            PopulateTrainerBattleMessageTriggers(pasteTrainer);
+            EnableTrainerEditor();
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+            EditedTrainerData(true);
+        }
         private void trainer_PasteParty_btn_Click(object sender, EventArgs e)
         {
             IsLoadingData = true;
@@ -772,20 +883,12 @@ namespace Main
             }
             else
             {
-
             }
             IsLoadingData = false;
             PopulatePartyData(MainEditorModel.ClipboardTrainerParty, MainEditorModel.ClipboardTrainerParty.TeamSize, MainEditorModel.ClipboardTrainerParty.ChooseMoves);
             EditedTrainerParty(true);
             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
         }
-
-        private void trainer_CopyProperties_btn_Click(object sender, EventArgs e)
-        {
-            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
-            trainer_PastePropeties_btn.Enabled = true;
-        }
-
         private void trainer_PastePropeties_btn_Click(object sender, EventArgs e)
         {
             IsLoadingData = true;
@@ -801,7 +904,7 @@ namespace Main
                 SetTrainerProperties(pasteProperties);
                 EditedTrainerProperty(true);
             }
-  
+
             IsLoadingData = false;
             PopulatePartyData(MainEditorModel.SelectedTrainer.TrainerParty, MainEditorModel.ClipboardTrainerProperties.TeamSize, MainEditorModel.ClipboardTrainerProperties.ChooseMoves);
             EditedTrainerParty(true);

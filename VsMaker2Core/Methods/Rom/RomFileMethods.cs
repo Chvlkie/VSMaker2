@@ -5,6 +5,7 @@ using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.MessageEncrypt;
 using VsMaker2Core.RomFiles;
+using static System.Net.Mime.MediaTypeNames;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -400,6 +401,7 @@ namespace VsMaker2Core.Methods
                 return 8;
             }
         }
+
         #endregion Get
 
         #region Read
@@ -622,5 +624,43 @@ namespace VsMaker2Core.Methods
         }
 
         #endregion Unpack
+
+        #region Repack
+
+        public async Task RepackRom(string ndsFileName)
+        {
+            Process repack = new()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = @"Tools\ndstool.exe",
+                    Arguments = "-c " + '"' + ndsFileName + '"'
+                        + " -9 " + '"' + RomFile.Arm9Path + '"'
+                        + " -7 " + '"' + RomFile.WorkingDirectory + "arm7.bin" + '"'
+                        + " -y9 " + '"' + RomFile.WorkingDirectory + "y9.bin" + '"'
+                        + " -y7 " + '"' + RomFile.WorkingDirectory + "y7.bin" + '"'
+                        + " -d " + '"' + RomFile.WorkingDirectory + "data" + '"'
+                        + " -y " + '"' + RomFile.WorkingDirectory + "overlay" + '"'
+                        + " -t " + '"' + RomFile.WorkingDirectory + "banner.bin" + '"'
+                        + " -h " + '"' + RomFile.WorkingDirectory + "header.bin" + '"',
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    CreateNoWindow = true
+                },
+                EnableRaisingEvents = true
+            };
+
+            var tcs = new TaskCompletionSource<object>();
+
+            repack.Exited += (sender, args) =>
+            {
+                tcs.SetResult(null);
+                repack.Dispose();
+            };
+
+            repack.Start();
+            await tcs.Task;
+        }
+
+        #endregion Repack
     }
 }

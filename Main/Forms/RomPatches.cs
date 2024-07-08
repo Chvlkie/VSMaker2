@@ -6,6 +6,7 @@ namespace Main.Forms
     public partial class RomPatches : Form
     {
         private RomFile LoadedRom;
+        public static bool LoadOverlay1FromBackup;
         public RomPatches(RomFile loadedRom)
         {
             InitializeComponent();

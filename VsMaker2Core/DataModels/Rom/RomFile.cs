@@ -51,8 +51,8 @@ namespace VsMaker2Core.DataModels
                     break;
             }
             return commonDictionaryParams.Concat(specificDictionaryParams).ToLookup(x => x.Key, x => x.Value).ToDictionary(x => x.Key, g => g.First());
-
         }
+
         public static GameLanguage GameLanguage => GameCode switch
         {
             "ADAE" or "APAE" or "CPUE" or "IPKE" or "IPGE" => GameLanguage.English,
@@ -67,6 +67,8 @@ namespace VsMaker2Core.DataModels
         public static GameVersion GameVersion { get; set; }
         public int TotalNumberOfTrainerClasses { get; set; }
         public int TotalNumberOfTrainers { get; set; }
+        public int InitialMoneyOverlayNumber => SetInitialMoneyOverlay().overlayNumber;
+        public int InitialMoneyOverlayOffset => SetInitialMoneyOverlay().offset;
         public List<TrainerData> TrainersData { get; set; }
         public List<TrainerPartyData> TrainersPartyData { get; set; }
         public List<ClassGenderData> ClassGenderData { get; set; }

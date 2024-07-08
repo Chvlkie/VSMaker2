@@ -301,5 +301,30 @@ namespace VsMaker2Core.DataModels
         };
 
         #endregion TrainerEncounter
+
+        public static (int overlayNumber, int offset) SetInitialMoneyOverlay()
+        {
+            int initialMoneyOverlayNumber = -1;
+            int initialMoneyOverlayOffset = -1;
+            switch (GameFamily)
+            {
+                case GameFamily.DiamondPearl:
+                    initialMoneyOverlayNumber = 52;
+                    initialMoneyOverlayOffset = 0x1E4;
+                    break;
+
+                case GameFamily.Platinum:
+                    initialMoneyOverlayNumber = 57;
+                    initialMoneyOverlayOffset = 0x1EC;
+                    break;
+
+                case GameFamily.HeartGoldSoulSilver:
+                case GameFamily.HgEngine:
+                    initialMoneyOverlayNumber = 36;
+                    initialMoneyOverlayOffset = 0x2FC;
+                    break;
+            }
+            return (initialMoneyOverlayNumber, initialMoneyOverlayOffset);
+        }
     }
 }

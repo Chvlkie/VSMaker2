@@ -3951,6 +3951,7 @@
             main_SaveRomBtn.Name = "main_SaveRomBtn";
             main_SaveRomBtn.Size = new Size(81, 22);
             main_SaveRomBtn.Text = "Save ROM";
+            main_SaveRomBtn.Click += main_SaveRomBtn_Click;
             // 
             // toolStripSeparator20
             // 
