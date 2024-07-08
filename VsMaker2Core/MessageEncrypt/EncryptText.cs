@@ -63,7 +63,7 @@ namespace VsMaker2Core.MessageEncrypt
                             decode.Append(textChar.ToString("X4"));
                             hasSpecialCharacter = false;
                         }
-                        if (isCompressed)
+                        else if (isCompressed)
                         {
                             int shift = 0;
                             int trans = 0;
@@ -194,7 +194,7 @@ namespace VsMaker2Core.MessageEncrypt
             }
             var charArray = message.ToCharArray();
             string characterId;
-            for (int i = 0; i < charArray.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
                 switch (charArray[i])
                 {
