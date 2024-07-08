@@ -1,6 +1,7 @@
-﻿namespace VsMaker2Core.DataModels
+﻿
+namespace VsMaker2Core.DataModels
 {
-    public class TrainerProperty
+    public class TrainerProperty : IEquatable<TrainerProperty?>
     {
         public List<bool> AIFlags { get; set; }
 
@@ -53,6 +54,28 @@
             ChooseItems = toCopy.ChooseItems;
             TrainerClassId = toCopy.TrainerClassId;
             DoubleBattle = toCopy.DoubleBattle;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as TrainerProperty);
+        }
+
+        public bool Equals(TrainerProperty? other)
+        {
+            return other is not null &&
+                   EqualityComparer<List<bool>>.Default.Equals(AIFlags, other.AIFlags) &&
+                   ChooseMoves == other.ChooseMoves &&
+                   ChooseItems == other.ChooseItems &&
+                   TrainerClassId == other.TrainerClassId &&
+                   EqualityComparer<ushort[]>.Default.Equals(Items, other.Items) &&
+                   DoubleBattle == other.DoubleBattle &&
+                   TeamSize == other.TeamSize;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(AIFlags, ChooseMoves, ChooseItems, TrainerClassId, Items, DoubleBattle, TeamSize);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace VsMaker2Core.DataModels
 {
-    public partial class Species
+    public partial class Species : IEquatable<Species?>
     {
         public ushort SpeciesId { get; set; }
         public byte GenderRatio { get; set; }
@@ -32,6 +32,27 @@ namespace VsMaker2Core.DataModels
             Pokedex.ShayminId => true,
             _ => false,
         };
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Species);
+        }
+
+        public bool Equals(Species? other)
+        {
+            return other is not null &&
+                   SpeciesId == other.SpeciesId &&
+                   GenderRatio == other.GenderRatio &&
+                   Ability1 == other.Ability1 &&
+                   Ability2 == other.Ability2 &&
+                   HasMoreThanOneGender == other.HasMoreThanOneGender &&
+                   HasMoreThanOneAbility == other.HasMoreThanOneAbility;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(SpeciesId, GenderRatio, Ability1, Ability2, HasMoreThanOneGender, HasMoreThanOneAbility);
+        }
 
         public Species()
         { }

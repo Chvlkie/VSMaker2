@@ -1,6 +1,7 @@
-﻿namespace VsMaker2Core.DataModels
+﻿
+namespace VsMaker2Core.DataModels
 {
-    public class TrainerClassProperty
+    public class TrainerClassProperty : IEquatable<TrainerClassProperty?>
     {
         public int EyeContactMusicDay { get; set; }
         public int? EyeContactMusicNight { get; set; }
@@ -16,6 +17,26 @@
             Description = description;
             EyeContactMusicDay = eyeContactMusicDay;
             EyeContactMusicNight = eyeContactMusicNight;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as TrainerClassProperty);
+        }
+
+        public bool Equals(TrainerClassProperty? other)
+        {
+            return other is not null &&
+                   EyeContactMusicDay == other.EyeContactMusicDay &&
+                   EyeContactMusicNight == other.EyeContactMusicNight &&
+                   PrizeMoneyMultiplier == other.PrizeMoneyMultiplier &&
+                   Gender == other.Gender &&
+                   Description == other.Description;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(EyeContactMusicDay, EyeContactMusicNight, PrizeMoneyMultiplier, Gender, Description);
         }
     }
 }

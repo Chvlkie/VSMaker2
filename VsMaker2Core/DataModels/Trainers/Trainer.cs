@@ -1,6 +1,7 @@
-﻿namespace VsMaker2Core.DataModels
+﻿
+namespace VsMaker2Core.DataModels
 {
-    public partial class Trainer
+    public partial class Trainer : IEquatable<Trainer?>
     {
         public ushort TrainerId { get; set; }
         public string TrainerName { get; set; }
@@ -10,6 +11,26 @@
         public string ListName => $"[{TrainerId:D4}] {TrainerName}";
 
         public static int ListNameToTrainerId(string listName) => int.Parse(listName.Substring(1, 4));
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Trainer);
+        }
+
+        public bool Equals(Trainer? other)
+        {
+            return other is not null &&
+                   TrainerId == other.TrainerId &&
+                   TrainerName == other.TrainerName &&
+                   EqualityComparer<TrainerProperty>.Default.Equals(TrainerProperties, other.TrainerProperties) &&
+                   EqualityComparer<TrainerParty>.Default.Equals(TrainerParty, other.TrainerParty) &&
+                   ListName == other.ListName;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(TrainerId, TrainerName, TrainerProperties, TrainerParty, ListName);
+        }
 
         public Trainer()
         {

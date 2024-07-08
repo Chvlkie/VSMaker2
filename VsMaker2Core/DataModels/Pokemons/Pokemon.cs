@@ -2,7 +2,7 @@
 
 namespace VsMaker2Core.DataModels
 {
-    public partial class Pokemon
+    public partial class Pokemon : IEquatable<Pokemon?>
     {
         public byte DifficultyValue { get; set; }
         public GenderOverride GenderOverride => (GenderOverride)(GenderAbilityOverride & 0xF);
@@ -39,6 +39,46 @@ namespace VsMaker2Core.DataModels
             HeldItemId = heldItemId;
             Moves = moves;
             BallCapsuleId = ballCapsuleId;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Pokemon);
+        }
+
+        public bool Equals(Pokemon? other)
+        {
+            return other is not null &&
+                   DifficultyValue == other.DifficultyValue &&
+                   GenderOverride == other.GenderOverride &&
+                   AbilityOverride == other.AbilityOverride &&
+                   GenderAbilityOverride == other.GenderAbilityOverride &&
+                   Level == other.Level &&
+                   SpeciesId == other.SpeciesId &&
+                   IconId == other.IconId &&
+                   PokemonId == other.PokemonId &&
+                   FormId == other.FormId &&
+                   HeldItemId == other.HeldItemId &&
+                   EqualityComparer<ushort[]?>.Default.Equals(Moves, other.Moves) &&
+                   BallCapsuleId == other.BallCapsuleId;
+        }
+
+        public override int GetHashCode()
+        {
+            HashCode hash = new HashCode();
+            hash.Add(DifficultyValue);
+            hash.Add(GenderOverride);
+            hash.Add(AbilityOverride);
+            hash.Add(GenderAbilityOverride);
+            hash.Add(Level);
+            hash.Add(SpeciesId);
+            hash.Add(IconId);
+            hash.Add(PokemonId);
+            hash.Add(FormId);
+            hash.Add(HeldItemId);
+            hash.Add(Moves);
+            hash.Add(BallCapsuleId);
+            return hash.ToHashCode();
         }
     }
 }
