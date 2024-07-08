@@ -1180,6 +1180,7 @@ namespace Main
             trainer_HeldItemsCheckbox.Checked = trainerProperties.ChooseItems;
             trainer_ChooseMovesCheckbox.Checked = trainerProperties.ChooseMoves;
         }
+
         private void SetTrainerProperties(TrainerProperty trainerProperties)
         {
             for (int i = 0; i < 4; i++)
@@ -1625,6 +1626,16 @@ namespace Main
             }
         }
 
+        private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
+        {
+            trainer_ScriptUsage.Items.Clear();
+            trainer_EventUsage.Items.Clear();
+            foreach (var item in trainerUsage.Where(x => x.TrainerUsageType == TrainerUsageType.Script || x.TrainerUsageType == TrainerUsageType.Function).OrderBy(x => x.FileId))
+            {
+                trainer_ScriptUsage.Items.Add(item.ListItemName);
+            }
+        }
+
         private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && trainer_TrainersListBox.SelectedIndex > -1)
@@ -1656,6 +1667,7 @@ namespace Main
                             PopulateTrainerData(MainEditorModel.SelectedTrainer);
                             PopulatePartyData(MainEditorModel.SelectedTrainer.TrainerParty, MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);
                             PopulateTrainerBattleMessageTriggers(MainEditorModel.SelectedTrainer);
+                            PopualteTrainerUsages(MainEditorModel.SelectedTrainer.TrainerUsages);
                             EnableTrainerEditor();
                             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
                         }

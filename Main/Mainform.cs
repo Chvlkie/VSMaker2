@@ -28,6 +28,7 @@ namespace Main
         private IFileSystemMethods fileSystemMethods;
         private IRomFileMethods romFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
+        private IScriptFileMethods scriptFileMethods;
 
         #endregion Methods
 
@@ -207,7 +208,11 @@ namespace Main
         {
             IsLoadingData = true;
             int progressCount = 0;
-            const int increment = 10;
+            int increment = 100 / 11;
+
+            LoadedRom.ScriptFileData = scriptFileMethods.GetScriptFiles();
+            progressCount += increment;
+            progress?.Report(progressCount);
 
             LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
             progressCount += increment;
@@ -526,6 +531,7 @@ namespace Main
             Settings = new Settings();
             LoadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
+            scriptFileMethods = new ScriptFileMethods();
             battleMessageEditorMethods = new BattleMessageEditorMethods();
             trainerEditorMethods = new TrainerEditorMethods();
             classEditorMethods = new ClassEditorMethods();

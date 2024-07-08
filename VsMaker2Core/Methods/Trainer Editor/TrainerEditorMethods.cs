@@ -22,7 +22,7 @@ namespace VsMaker2Core.Methods
             {
                 var trainerData = loadedRom.TrainersData[i];
                 var trainerPartyData = loadedRom.TrainersPartyData[i];
-                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl));
+                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl, loadedRom));
             }
             return trainers;
         }
@@ -79,12 +79,38 @@ namespace VsMaker2Core.Methods
             return trainerProperty;
         }
 
-        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
+        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule, RomFile loadedRom)
         {
             var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
             var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
+            var usages = FindTrainerUses(trainerId, loadedRom);
+            return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty, usages);
+        }
 
-            return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty);
+        public List<TrainerUsage> FindTrainerUses(int trainerId, RomFile loadedRom)
+        {
+            List<TrainerUsage> scripts = [];
+
+            foreach (var scriptFile in loadedRom.ScriptFileData.Where(x => !x.IsLevelScript))
+            {
+                foreach (var script in scriptFile.Scripts.Where(x => !x.UsedScriptId.HasValue))
+                {
+                    foreach (var line in script.Lines.Where(x => (x.ScriptCommandId == 0x00E5 || x.ScriptCommandId == 0x00D5) && x.Parameters[0].Length >= 2 && BitConverter.ToUInt16(x.Parameters[0], 0) == trainerId))
+                    {
+                        scripts.Add(new TrainerUsage(trainerId, scriptFile.ScriptFileId, (int)script.ScriptNumber, TrainerUsageType.Script));
+                    }
+                }
+
+                foreach (var function in scriptFile.Functions.Where(x => !x.UsedScriptId.HasValue))
+                {
+                    foreach (var line in function.Lines.Where(x => (x.ScriptCommandId == 0x00E5 || x.ScriptCommandId == 0x00D5) && x.Parameters[0].Length >= 2 && BitConverter.ToUInt16(x.Parameters[0], 0) == trainerId))
+                    {
+                        scripts.Add(new TrainerUsage(trainerId, scriptFile.ScriptFileId, (int)function.ScriptNumber, TrainerUsageType.Function));
+                    }
+                }
+            }
+            List<TrainerUsage> events = [];
+            return [.. scripts, .. events];
         }
 
         public Trainer GetTrainer(List<Trainer> trainers, int trainerId)

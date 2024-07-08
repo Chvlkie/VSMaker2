@@ -2,17 +2,11 @@
 {
     public static class Enums
     {
-        public enum LoadType
+        public enum AbilityOverride
         {
-            UnpackRom = 0,
-            LoadRomData = 1,
-            UnpackNarcs = 2,
-            SetupEditor = 3,
-            SaveRom = 4,
-            SaveTrainerTextTable = 5,
-            RepointTextTable = 6,
-            ImportTextTable = 7,
-            ExportTextTable = 8,
+            None = 0,
+            Ability1 = 1,
+            Ability2 = 2,
         }
 
         public enum GameFamily : byte
@@ -21,17 +15,6 @@
             DiamondPearl,
             Platinum,
             HeartGoldSoulSilver,
-            HgEngine
-        }
-
-        public enum GameVersion : byte
-        {
-            Unknown,
-            Diamond,
-            Pearl,
-            Platinum,
-            HeartGold,
-            SoulSilver,
             HgEngine
         }
 
@@ -47,13 +30,45 @@
             Chinese
         }
 
-        public enum ScriptType
+        public enum GameVersion : byte
         {
-            Script,
-            Function,
-            Action
+            Unknown,
+            Diamond,
+            Pearl,
+            Platinum,
+            HeartGold,
+            SoulSilver,
+            HgEngine
         }
 
+        public enum GenderAbilityOverride
+        {
+            None = 0,
+            IsMale = 0x1,
+            IsFemale = 0x2,
+            Ability1 = 0x10,
+            Ability2 = 0x20,
+        }
+
+        public enum GenderOverride
+        {
+            None = 0,
+            IsMale = 1,
+            IsFemale = 2,
+        }
+
+        public enum LoadType
+        {
+            UnpackRom = 0,
+            LoadRomData = 1,
+            UnpackNarcs = 2,
+            SetupEditor = 3,
+            SaveRom = 4,
+            SaveTrainerTextTable = 5,
+            RepointTextTable = 6,
+            ImportTextTable = 7,
+            ExportTextTable = 8,
+        }
         public enum NarcDirectory : byte
         {
             Unknown,
@@ -73,6 +88,20 @@
             trainerTextOffset
         }
 
+        public enum ScriptType
+        {
+            Script,
+            Function,
+            Action
+        }
+        public enum TrainerUsageType
+        {
+            Unknown = 0,
+            Script = 1,
+            Function = 2,
+            Event = 3
+        }
+
         public enum ViewVsMakerFileType
         {
             ViewOnly,
@@ -80,27 +109,12 @@
             Export
         }
 
-        public enum GenderAbilityOverride
+        public enum EventType : byte
         {
-            None = 0,
-            IsMale = 0x1,
-            IsFemale = 0x2,
-            Ability1 = 0x10,
-            Ability2 = 0x20,
-        }
-
-        public enum GenderOverride
-        {
-            None = 0,
-            IsMale = 1,
-            IsFemale = 2,
-        }
-
-        public enum AbilityOverride
-        {
-            None = 0,
-            Ability1 = 1,
-            Ability2 = 2,
+            Spawnable,
+            Overworld,
+            Warp,
+            Trigger
         }
     }
 }

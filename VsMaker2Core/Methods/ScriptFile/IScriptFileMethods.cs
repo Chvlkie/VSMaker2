@@ -6,6 +6,7 @@ namespace VsMaker2Core.Methods
     {
         ScriptFileData GetScriptFileData(int scriptFileId);
         (bool Success, string ErrorMessage) WriteScriptData(ScriptFileData scriptFileData);
+        List<ScriptFileData> GetScriptFiles();
         #region Get
 
         #endregion Get

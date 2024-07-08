@@ -1,4 +1,5 @@
-﻿using VsMaker2Core.Database;
+﻿using System.Net.Http.Headers;
+using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
@@ -393,6 +394,16 @@ namespace VsMaker2Core.Methods
 
         #region Get
 
+        public List<ScriptFileData> GetScriptFiles()
+        {
+            List<ScriptFileData> scripts = [];
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}";
+            for (int i = 0; i < new DirectoryInfo(directory).GetFiles().Length; i++)
+            {
+                scripts.Add(GetScriptFileData(i));
+            }
+            return scripts;
+        }
         public ScriptFileData GetScriptFileData(int scriptFileId)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}\\{scriptFileId:D4}";

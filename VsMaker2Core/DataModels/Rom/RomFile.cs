@@ -78,6 +78,9 @@ namespace VsMaker2Core.DataModels
 
         public List<BattleMessageOffsetData> BattleMessageOffsetData { get; set; }
 
+        public List<ScriptFileData> ScriptFileData { get; set; }
+        public List<ScriptFileData> EventFileData { get; set; }
+
         public int VanillaTotalTrainers => GameFamily switch
         {
             GameFamily.DiamondPearl => Trainer.Constants.DefaultTotalTrainers.DiamondPearlTotalTrainers,

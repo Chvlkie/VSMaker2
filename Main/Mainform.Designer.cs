@@ -230,6 +230,7 @@
             toolStripSeparator4 = new ToolStripSeparator();
             toolStripButton3 = new ToolStripButton();
             toolStripButton4 = new ToolStripButton();
+            trainer_UsesTab = new TabPage();
             trainer_Toolstrip = new ToolStrip();
             trainer_SaveBtn = new ToolStripButton();
             trainer_UndoAll_Btn = new ToolStripButton();
@@ -375,6 +376,10 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
+            trainer_ScriptUsage = new ListBox();
+            trainer_EventUsage = new ListBox();
+            label60 = new Label();
+            label62 = new Label();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -412,6 +417,7 @@
             trainer_MessageText_toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).BeginInit();
             trainer_BattleMessages_toolStrip.SuspendLayout();
+            trainer_UsesTab.SuspendLayout();
             trainer_Toolstrip.SuspendLayout();
             trainer_Class_Panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_SpriteFrameNum).BeginInit();
@@ -714,6 +720,7 @@
             trainer_PropertiesTabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             trainer_PropertiesTabControl.Controls.Add(trainer_TrainerData_tab);
             trainer_PropertiesTabControl.Controls.Add(trainer_BattleMessageTab);
+            trainer_PropertiesTabControl.Controls.Add(trainer_UsesTab);
             trainer_PropertiesTabControl.Location = new Point(415, 31);
             trainer_PropertiesTabControl.Name = "trainer_PropertiesTabControl";
             trainer_PropertiesTabControl.SelectedIndex = 0;
@@ -2558,6 +2565,20 @@
             toolStripButton4.Size = new Size(23, 22);
             toolStripButton4.Text = "Export Trainer Properties";
             // 
+            // trainer_UsesTab
+            // 
+            trainer_UsesTab.Controls.Add(label62);
+            trainer_UsesTab.Controls.Add(label60);
+            trainer_UsesTab.Controls.Add(trainer_EventUsage);
+            trainer_UsesTab.Controls.Add(trainer_ScriptUsage);
+            trainer_UsesTab.Location = new Point(4, 24);
+            trainer_UsesTab.Name = "trainer_UsesTab";
+            trainer_UsesTab.Padding = new Padding(3);
+            trainer_UsesTab.Size = new Size(819, 483);
+            trainer_UsesTab.TabIndex = 4;
+            trainer_UsesTab.Text = "Trainer Usage";
+            trainer_UsesTab.UseVisualStyleBackColor = true;
+            // 
             // trainer_Toolstrip
             // 
             trainer_Toolstrip.Items.AddRange(new ToolStripItem[] { trainer_SaveBtn, trainer_UndoAll_Btn, toolStripSeparator9, trainer_Copy_Btn, trainer_Paste_Btn, toolStripSeparator8, trainer_Import_Btn, trainer_Export_Btn });
@@ -3996,6 +4017,44 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
+            // trainer_ScriptUsage
+            // 
+            trainer_ScriptUsage.FormattingEnabled = true;
+            trainer_ScriptUsage.ItemHeight = 15;
+            trainer_ScriptUsage.Location = new Point(9, 41);
+            trainer_ScriptUsage.Name = "trainer_ScriptUsage";
+            trainer_ScriptUsage.Size = new Size(305, 439);
+            trainer_ScriptUsage.TabIndex = 0;
+            // 
+            // trainer_EventUsage
+            // 
+            trainer_EventUsage.FormattingEnabled = true;
+            trainer_EventUsage.ItemHeight = 15;
+            trainer_EventUsage.Location = new Point(334, 41);
+            trainer_EventUsage.Name = "trainer_EventUsage";
+            trainer_EventUsage.Size = new Size(305, 439);
+            trainer_EventUsage.TabIndex = 1;
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label60.Location = new Point(9, 23);
+            label60.Name = "label60";
+            label60.Size = new Size(45, 15);
+            label60.TabIndex = 5;
+            label60.Text = "Scripts";
+            // 
+            // label62
+            // 
+            label62.AutoSize = true;
+            label62.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label62.Location = new Point(334, 23);
+            label62.Name = "label62";
+            label62.Size = new Size(44, 15);
+            label62.TabIndex = 6;
+            label62.Text = "Events";
+            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -4058,6 +4117,8 @@
             ((System.ComponentModel.ISupportInitialize)trainer_MessagePreviewPicBox).EndInit();
             trainer_BattleMessages_toolStrip.ResumeLayout(false);
             trainer_BattleMessages_toolStrip.PerformLayout();
+            trainer_UsesTab.ResumeLayout(false);
+            trainer_UsesTab.PerformLayout();
             trainer_Toolstrip.ResumeLayout(false);
             trainer_Toolstrip.PerformLayout();
             trainer_Class_Panel.ResumeLayout(false);
@@ -4476,5 +4537,10 @@
         private DataGridViewTextBoxColumn messageText;
         private ToolStripButton battleMessages_UpdateText;
         private ToolStripSeparator toolStripSeparator24;
+        private TabPage trainer_UsesTab;
+        private Label label62;
+        private Label label60;
+        private ListBox trainer_EventUsage;
+        private ListBox trainer_ScriptUsage;
     }
 }
