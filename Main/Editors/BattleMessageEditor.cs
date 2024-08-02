@@ -231,6 +231,21 @@ namespace Main
             }
         }
 
+        private void ThreadSafeDataTable(DataGridViewRow row, int index)
+        {
+            if (battleMessage_MessageTableDataGrid.InvokeRequired)
+            {
+                battleMessage_MessageTableDataGrid.Invoke((MethodInvoker)delegate
+                {
+                    battleMessage_MessageTableDataGrid.Rows.Insert(index, row);
+                });
+            }
+            else
+            {
+                battleMessage_MessageTableDataGrid.Rows.Insert(index, row);
+            }
+        }
+
         private void UndoBattleMessageChanges(bool repopulate)
         {
             EditedBattleMessage(false);

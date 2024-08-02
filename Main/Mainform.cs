@@ -48,6 +48,7 @@ namespace Main
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
+
         public void BeginSaveRomChanges(IProgress<int> progress, string filePath)
         {
             int count = 0;
@@ -871,6 +872,7 @@ namespace Main
             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
             EditedTrainerData(true);
         }
+
         private void trainer_PasteParty_btn_Click(object sender, EventArgs e)
         {
             IsLoadingData = true;
@@ -895,6 +897,7 @@ namespace Main
             EditedTrainerParty(true);
             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
         }
+
         private void trainer_PastePropeties_btn_Click(object sender, EventArgs e)
         {
             IsLoadingData = true;
@@ -915,6 +918,65 @@ namespace Main
             PopulatePartyData(MainEditorModel.SelectedTrainer.TrainerParty, MainEditorModel.ClipboardTrainerProperties.TeamSize, MainEditorModel.ClipboardTrainerProperties.ChooseMoves);
             EditedTrainerParty(true);
             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+        }
+
+        private void battleMessages_AddLineBtn_Click(object sender, EventArgs e)
+        {
+            int index = battleMessage_MessageTableDataGrid.Rows.Count - 1;
+
+            // Get current selected row index - Can't multi-select
+            if (battleMessage_MessageTableDataGrid.SelectedRows.Count > 0)
+            {
+                index = battleMessage_MessageTableDataGrid.SelectedRows[0].Index;
+            }
+            else if (battleMessage_MessageTableDataGrid.SelectedCells.Count > 0)
+            {
+                index = battleMessage_MessageTableDataGrid.SelectedCells[0].RowIndex;
+            }
+            string[] currentTrainers = new string[MainEditorModel.Trainers.Count];
+            string[] currentMessageTriggers = new string[MessageTrigger.MessageTriggers.Count];
+
+            for (int i = 0; i < MainEditorModel.Trainers.Count; i++)
+            {
+                currentTrainers[i] = MainEditorModel.Trainers[i].ListName;
+            }
+
+            for (int i = 0; i < MessageTrigger.MessageTriggers.Count; i++)
+            {
+                currentMessageTriggers[i] = MessageTrigger.MessageTriggers[i].ListName;
+            }
+
+            DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
+            row.Cells[0].Value = battleMessage_MessageTableDataGrid.Rows.Count;
+            row.Cells[1] = new DataGridViewComboBoxCell { DataSource = currentTrainers, Value = currentTrainers[0] };
+            row.Cells[2] = new DataGridViewComboBoxCell { DataSource = currentMessageTriggers, Value = currentMessageTriggers[0] };
+            row.Cells[3].Value = "";
+            ThreadSafeDataTable(row, index + 1);
+            battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
+            battleMessage_MessageTableDataGrid.ClearSelection();
+            battleMessage_MessageTableDataGrid.Rows[index + 1].Selected = true;
+            EditedBattleMessage(true);
+        }
+
+        private void battleMessages_RemoveBtn_Click(object sender, EventArgs e)
+        {
+            int index = battleMessage_MessageTableDataGrid.Rows.Count - 1;
+
+            // Get current selected row index - Can't multi-select
+            if (battleMessage_MessageTableDataGrid.SelectedRows.Count > 0)
+            {
+                index = battleMessage_MessageTableDataGrid.SelectedRows[0].Index;
+            }
+            else if (battleMessage_MessageTableDataGrid.SelectedCells.Count > 0)
+            {
+                index = battleMessage_MessageTableDataGrid.SelectedCells[0].RowIndex;
+            }
+
+            battleMessage_MessageTableDataGrid.Rows.RemoveAt(index);
+            battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
+            battleMessage_MessageTableDataGrid.ClearSelection();
+            battleMessage_MessageTableDataGrid.Rows[index].Selected = true;
+            EditedBattleMessage(true);
         }
     }
 }

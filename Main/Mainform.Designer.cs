@@ -231,6 +231,10 @@
             toolStripButton3 = new ToolStripButton();
             toolStripButton4 = new ToolStripButton();
             trainer_UsesTab = new TabPage();
+            label62 = new Label();
+            label60 = new Label();
+            trainer_EventUsage = new ListBox();
+            trainer_ScriptUsage = new ListBox();
             trainer_Toolstrip = new ToolStrip();
             trainer_SaveBtn = new ToolStripButton();
             trainer_UndoAll_Btn = new ToolStripButton();
@@ -376,10 +380,6 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
-            trainer_ScriptUsage = new ListBox();
-            trainer_EventUsage = new ListBox();
-            label60 = new Label();
-            label62 = new Label();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -721,6 +721,7 @@
             trainer_PropertiesTabControl.Controls.Add(trainer_TrainerData_tab);
             trainer_PropertiesTabControl.Controls.Add(trainer_BattleMessageTab);
             trainer_PropertiesTabControl.Controls.Add(trainer_UsesTab);
+            trainer_PropertiesTabControl.Enabled = false;
             trainer_PropertiesTabControl.Location = new Point(415, 31);
             trainer_PropertiesTabControl.Name = "trainer_PropertiesTabControl";
             trainer_PropertiesTabControl.SelectedIndex = 0;
@@ -2107,6 +2108,7 @@
             // 
             trainer_Properties_toolStrip.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             trainer_Properties_toolStrip.Dock = DockStyle.None;
+            trainer_Properties_toolStrip.Enabled = false;
             trainer_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveProperties_btn, trainer_UndoProperties_btn, toolStripSeparator13, trainer_CopyProperties_btn, trainer_PastePropeties_btn, toolStripSeparator21, trainer_ImportProperties_btn, trainer_ExportProperties_btn });
             trainer_Properties_toolStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
             trainer_Properties_toolStrip.Location = new Point(569, 5);
@@ -2127,6 +2129,7 @@
             // trainer_UndoProperties_btn
             // 
             trainer_UndoProperties_btn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            trainer_UndoProperties_btn.Enabled = false;
             trainer_UndoProperties_btn.Image = Properties.Resources.undo_ico;
             trainer_UndoProperties_btn.ImageTransparentColor = Color.Magenta;
             trainer_UndoProperties_btn.Name = "trainer_UndoProperties_btn";
@@ -2142,6 +2145,7 @@
             // trainer_CopyProperties_btn
             // 
             trainer_CopyProperties_btn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            trainer_CopyProperties_btn.Enabled = false;
             trainer_CopyProperties_btn.Image = Properties.Resources.copy_ico;
             trainer_CopyProperties_btn.ImageTransparentColor = Color.Magenta;
             trainer_CopyProperties_btn.Name = "trainer_CopyProperties_btn";
@@ -2168,6 +2172,7 @@
             // trainer_ImportProperties_btn
             // 
             trainer_ImportProperties_btn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            trainer_ImportProperties_btn.Enabled = false;
             trainer_ImportProperties_btn.Image = Properties.Resources.import_ico;
             trainer_ImportProperties_btn.ImageTransparentColor = Color.Magenta;
             trainer_ImportProperties_btn.Name = "trainer_ImportProperties_btn";
@@ -2177,6 +2182,7 @@
             // trainer_ExportProperties_btn
             // 
             trainer_ExportProperties_btn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            trainer_ExportProperties_btn.Enabled = false;
             trainer_ExportProperties_btn.Image = Properties.Resources.export_ico;
             trainer_ExportProperties_btn.ImageTransparentColor = Color.Magenta;
             trainer_ExportProperties_btn.Name = "trainer_ExportProperties_btn";
@@ -2405,6 +2411,7 @@
             // toolStripButton5
             // 
             toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Enabled = false;
             toolStripButton5.Image = Properties.Resources.save_ico;
             toolStripButton5.ImageTransparentColor = Color.Magenta;
             toolStripButton5.Name = "toolStripButton5";
@@ -2414,6 +2421,7 @@
             // toolStripButton6
             // 
             toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton6.Enabled = false;
             toolStripButton6.Image = Properties.Resources.undo_ico;
             toolStripButton6.ImageTransparentColor = Color.Magenta;
             toolStripButton6.Name = "toolStripButton6";
@@ -2423,6 +2431,7 @@
             // toolStripButton7
             // 
             toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton7.Enabled = false;
             toolStripButton7.Image = Properties.Resources.redo_ico;
             toolStripButton7.ImageTransparentColor = Color.Magenta;
             toolStripButton7.Name = "toolStripButton7";
@@ -2494,6 +2503,7 @@
             // 
             // trainer_BattleMessages_toolStrip
             // 
+            trainer_BattleMessages_toolStrip.Enabled = false;
             trainer_BattleMessages_toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton13, toolStripButton12, toolStripSeparator11, toolStripButton1, toolStripButton2, toolStripSeparator4, toolStripButton3, toolStripButton4 });
             trainer_BattleMessages_toolStrip.Location = new Point(3, 3);
             trainer_BattleMessages_toolStrip.Name = "trainer_BattleMessages_toolStrip";
@@ -2504,6 +2514,7 @@
             // toolStripButton13
             // 
             toolStripButton13.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton13.Enabled = false;
             toolStripButton13.Image = Properties.Resources.save_ico;
             toolStripButton13.ImageTransparentColor = Color.Magenta;
             toolStripButton13.Name = "toolStripButton13";
@@ -2513,6 +2524,7 @@
             // toolStripButton12
             // 
             toolStripButton12.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton12.Enabled = false;
             toolStripButton12.Image = Properties.Resources.undo_ico;
             toolStripButton12.ImageTransparentColor = Color.Magenta;
             toolStripButton12.Name = "toolStripButton12";
@@ -2527,6 +2539,7 @@
             // toolStripButton1
             // 
             toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Enabled = false;
             toolStripButton1.Image = Properties.Resources.copy_ico;
             toolStripButton1.ImageTransparentColor = Color.Magenta;
             toolStripButton1.Name = "toolStripButton1";
@@ -2536,6 +2549,7 @@
             // toolStripButton2
             // 
             toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton2.Enabled = false;
             toolStripButton2.Image = Properties.Resources.paste_ico;
             toolStripButton2.ImageTransparentColor = Color.Magenta;
             toolStripButton2.Name = "toolStripButton2";
@@ -2550,6 +2564,7 @@
             // toolStripButton3
             // 
             toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton3.Enabled = false;
             toolStripButton3.Image = Properties.Resources.import_ico;
             toolStripButton3.ImageTransparentColor = Color.Magenta;
             toolStripButton3.Name = "toolStripButton3";
@@ -2579,6 +2594,44 @@
             trainer_UsesTab.Text = "Trainer Usage";
             trainer_UsesTab.UseVisualStyleBackColor = true;
             // 
+            // label62
+            // 
+            label62.AutoSize = true;
+            label62.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label62.Location = new Point(334, 23);
+            label62.Name = "label62";
+            label62.Size = new Size(44, 15);
+            label62.TabIndex = 6;
+            label62.Text = "Events";
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label60.Location = new Point(9, 23);
+            label60.Name = "label60";
+            label60.Size = new Size(45, 15);
+            label60.TabIndex = 5;
+            label60.Text = "Scripts";
+            // 
+            // trainer_EventUsage
+            // 
+            trainer_EventUsage.FormattingEnabled = true;
+            trainer_EventUsage.ItemHeight = 15;
+            trainer_EventUsage.Location = new Point(334, 41);
+            trainer_EventUsage.Name = "trainer_EventUsage";
+            trainer_EventUsage.Size = new Size(305, 439);
+            trainer_EventUsage.TabIndex = 1;
+            // 
+            // trainer_ScriptUsage
+            // 
+            trainer_ScriptUsage.FormattingEnabled = true;
+            trainer_ScriptUsage.ItemHeight = 15;
+            trainer_ScriptUsage.Location = new Point(9, 41);
+            trainer_ScriptUsage.Name = "trainer_ScriptUsage";
+            trainer_ScriptUsage.Size = new Size(305, 439);
+            trainer_ScriptUsage.TabIndex = 0;
+            // 
             // trainer_Toolstrip
             // 
             trainer_Toolstrip.Items.AddRange(new ToolStripItem[] { trainer_SaveBtn, trainer_UndoAll_Btn, toolStripSeparator9, trainer_Copy_Btn, trainer_Paste_Btn, toolStripSeparator8, trainer_Import_Btn, trainer_Export_Btn });
@@ -2590,6 +2643,7 @@
             // 
             // trainer_SaveBtn
             // 
+            trainer_SaveBtn.Enabled = false;
             trainer_SaveBtn.Image = Properties.Resources.save_ico;
             trainer_SaveBtn.ImageTransparentColor = Color.Magenta;
             trainer_SaveBtn.Name = "trainer_SaveBtn";
@@ -2599,6 +2653,7 @@
             // 
             // trainer_UndoAll_Btn
             // 
+            trainer_UndoAll_Btn.Enabled = false;
             trainer_UndoAll_Btn.Image = Properties.Resources.undo_ico;
             trainer_UndoAll_Btn.ImageTransparentColor = Color.Magenta;
             trainer_UndoAll_Btn.Name = "trainer_UndoAll_Btn";
@@ -2613,6 +2668,7 @@
             // 
             // trainer_Copy_Btn
             // 
+            trainer_Copy_Btn.Enabled = false;
             trainer_Copy_Btn.Image = Properties.Resources.copy_ico;
             trainer_Copy_Btn.ImageTransparentColor = Color.Magenta;
             trainer_Copy_Btn.Name = "trainer_Copy_Btn";
@@ -2622,6 +2678,7 @@
             // 
             // trainer_Paste_Btn
             // 
+            trainer_Paste_Btn.Enabled = false;
             trainer_Paste_Btn.Image = Properties.Resources.paste_ico;
             trainer_Paste_Btn.ImageTransparentColor = Color.Magenta;
             trainer_Paste_Btn.Name = "trainer_Paste_Btn";
@@ -2636,6 +2693,7 @@
             // 
             // trainer_Import_Btn
             // 
+            trainer_Import_Btn.Enabled = false;
             trainer_Import_Btn.Image = Properties.Resources.import_ico;
             trainer_Import_Btn.ImageTransparentColor = Color.Magenta;
             trainer_Import_Btn.Name = "trainer_Import_Btn";
@@ -2644,6 +2702,7 @@
             // 
             // trainer_Export_Btn
             // 
+            trainer_Export_Btn.Enabled = false;
             trainer_Export_Btn.Image = Properties.Resources.export_ico;
             trainer_Export_Btn.ImageTransparentColor = Color.Magenta;
             trainer_Export_Btn.Name = "trainer_Export_Btn";
@@ -2690,6 +2749,7 @@
             // 
             // trainer_ViewClassBtn
             // 
+            trainer_ViewClassBtn.Enabled = false;
             trainer_ViewClassBtn.Location = new Point(109, 200);
             trainer_ViewClassBtn.Name = "trainer_ViewClassBtn";
             trainer_ViewClassBtn.Size = new Size(88, 23);
@@ -2738,6 +2798,7 @@
             // 
             // trainer_SpriteExportBtn
             // 
+            trainer_SpriteExportBtn.Enabled = false;
             trainer_SpriteExportBtn.Location = new Point(109, 94);
             trainer_SpriteExportBtn.Name = "trainer_SpriteExportBtn";
             trainer_SpriteExportBtn.Size = new Size(88, 23);
@@ -2747,6 +2808,7 @@
             // 
             // trainer_SpriteImportBtn
             // 
+            trainer_SpriteImportBtn.Enabled = false;
             trainer_SpriteImportBtn.Location = new Point(109, 65);
             trainer_SpriteImportBtn.Name = "trainer_SpriteImportBtn";
             trainer_SpriteImportBtn.Size = new Size(88, 23);
@@ -2789,6 +2851,7 @@
             // 
             // trainer_RemoveBtn
             // 
+            trainer_RemoveBtn.Enabled = false;
             trainer_RemoveBtn.Location = new Point(3, 3);
             trainer_RemoveBtn.Name = "trainer_RemoveBtn";
             trainer_RemoveBtn.Size = new Size(96, 23);
@@ -2799,6 +2862,7 @@
             // 
             // trainer_ExportAllBtn
             // 
+            trainer_ExportAllBtn.Enabled = false;
             trainer_ExportAllBtn.Location = new Point(101, 32);
             trainer_ExportAllBtn.Name = "trainer_ExportAllBtn";
             trainer_ExportAllBtn.Size = new Size(96, 23);
@@ -2808,6 +2872,7 @@
             // 
             // trainer_ImportAllBtn
             // 
+            trainer_ImportAllBtn.Enabled = false;
             trainer_ImportAllBtn.Location = new Point(3, 32);
             trainer_ImportAllBtn.Name = "trainer_ImportAllBtn";
             trainer_ImportAllBtn.Size = new Size(96, 23);
@@ -2817,6 +2882,7 @@
             // 
             // trainer_AddTrainerBtn
             // 
+            trainer_AddTrainerBtn.Enabled = false;
             trainer_AddTrainerBtn.Location = new Point(101, 3);
             trainer_AddTrainerBtn.Name = "trainer_AddTrainerBtn";
             trainer_AddTrainerBtn.Size = new Size(96, 23);
@@ -3840,6 +3906,7 @@
             battleMessages_AddLineBtn.Name = "battleMessages_AddLineBtn";
             battleMessages_AddLineBtn.Size = new Size(23, 22);
             battleMessages_AddLineBtn.Text = "Insert New Battle Message";
+            battleMessages_AddLineBtn.Click += battleMessages_AddLineBtn_Click;
             // 
             // battleMessages_RemoveBtn
             // 
@@ -3849,6 +3916,7 @@
             battleMessages_RemoveBtn.Name = "battleMessages_RemoveBtn";
             battleMessages_RemoveBtn.Size = new Size(23, 22);
             battleMessages_RemoveBtn.Text = "Remove Battle Message";
+            battleMessages_RemoveBtn.Click += battleMessages_RemoveBtn_Click;
             // 
             // toolStripSeparator23
             // 
@@ -4016,44 +4084,6 @@
             romIcon_PicBox.Size = new Size(20, 20);
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
-            // 
-            // trainer_ScriptUsage
-            // 
-            trainer_ScriptUsage.FormattingEnabled = true;
-            trainer_ScriptUsage.ItemHeight = 15;
-            trainer_ScriptUsage.Location = new Point(9, 41);
-            trainer_ScriptUsage.Name = "trainer_ScriptUsage";
-            trainer_ScriptUsage.Size = new Size(305, 439);
-            trainer_ScriptUsage.TabIndex = 0;
-            // 
-            // trainer_EventUsage
-            // 
-            trainer_EventUsage.FormattingEnabled = true;
-            trainer_EventUsage.ItemHeight = 15;
-            trainer_EventUsage.Location = new Point(334, 41);
-            trainer_EventUsage.Name = "trainer_EventUsage";
-            trainer_EventUsage.Size = new Size(305, 439);
-            trainer_EventUsage.TabIndex = 1;
-            // 
-            // label60
-            // 
-            label60.AutoSize = true;
-            label60.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label60.Location = new Point(9, 23);
-            label60.Name = "label60";
-            label60.Size = new Size(45, 15);
-            label60.TabIndex = 5;
-            label60.Text = "Scripts";
-            // 
-            // label62
-            // 
-            label62.AutoSize = true;
-            label62.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label62.Location = new Point(334, 23);
-            label62.Name = "label62";
-            label62.Size = new Size(44, 15);
-            label62.TabIndex = 6;
-            label62.Text = "Events";
             // 
             // Mainform
             // 
