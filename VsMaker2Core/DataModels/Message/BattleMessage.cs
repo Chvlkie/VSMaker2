@@ -20,6 +20,12 @@ namespace VsMaker2Core.DataModels
             MessageText = messageText;
         }
 
+        public BattleMessage(int trainerId, int messageTriggerId)
+        {
+            TrainerId = trainerId;
+            MessageTriggerId = messageTriggerId;
+        }
+
         public override bool Equals(object? obj)
         {
             return Equals(obj as BattleMessage);

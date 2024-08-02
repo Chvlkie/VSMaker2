@@ -7,6 +7,7 @@ namespace Main
     {
         private readonly string Seperator = @"\r";
         private bool UnsavedBattleMessageChanges;
+        public int BattleMessageCount;
 
         private static string? ReadLine(string text, int lineNumber)
         {
@@ -40,6 +41,7 @@ namespace Main
                 MainEditorModel.SelectedBattleMessageRowIndex = battleMessage_MessageTableDataGrid.CurrentCell.RowIndex;
                 battleMessages_MessageTextBox.Enabled = true;
                 battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
+                battleMessages_RemoveBtn.Enabled = true;
             }
         }
 
@@ -181,7 +183,7 @@ namespace Main
                 // Set by message ID to not change sorting.
                 battleMessages[(int)row.Cells[0].Value] = (string)row.Cells[3].Value;
             }
-            var saveBattleMessages = fileSystemMethods.WriteBattleMessages([.. battleMessages], LoadedRom.BattleMessageTextNumber);
+            var saveBattleMessages = fileSystemMethods.WriteBattleMessageTexts([.. battleMessages], LoadedRom.BattleMessageTextNumber);
 
             if (!saveBattleMessages.Success)
             {
@@ -195,23 +197,29 @@ namespace Main
             }
         }
 
+        private void LoadBattleMessages()
+        {
+            battleMessage_MessageTableDataGrid.Rows.Clear();
+            battleMessage_MessageTableDataGrid.SuspendLayout();
+            BeginPopulateBattleMessages();
+            battleMessage_MessageTableDataGrid.ResumeLayout();
+            BattleMessageCount = battleMessage_MessageTableDataGrid.RowCount;
+        }
+
         private void SetupBattleMessageEditor()
         {
             IsLoadingData = true;
 
             if (battleMessage_MessageTableDataGrid.RowCount == 0)
             {
-                battleMessage_MessageTableDataGrid.Rows.Clear();
-                battleMessage_MessageTableDataGrid.SuspendLayout();
-                BeginPopulateBattleMessages();
-                battleMessage_MessageTableDataGrid.ResumeLayout();
+                LoadBattleMessages();
             }
 
             battleMessages_SaveBtn.Enabled = true;
             battleMessages_ImportBtn.Enabled = true;
             battleMessages_ExportBtn.Enabled = true;
             battleMessages_AddLineBtn.Enabled = true;
-            battleMessages_RemoveBtn.Enabled = true;
+            battleMessages_RemoveBtn.Enabled = false;
             battleMessages_SortBtn.Enabled = true;
             IsLoadingData = false;
         }

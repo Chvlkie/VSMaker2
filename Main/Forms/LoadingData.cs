@@ -75,6 +75,15 @@ namespace Main.Forms
             Close();
         }
 
+        public async Task SaveTrainerTextTable()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            await Task.Run(() => mainForm.BeginSaveBattleMessages(progress));
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
         private void LoadData()
         {
             progressBar.Value = 0;
@@ -99,6 +108,11 @@ namespace Main.Forms
                 case LoadType.SaveRom:
                     Text = "Saving ROM";
                     SaveRom();
+                    break;
+                case LoadType.SaveTrainerTextTable:
+                    Text = "Saving Trainer Text Table";
+                    progressBar.Maximum = mainForm.BattleMessageCount + 10;
+                    SaveTrainerTextTable();
                     break;
             }
         }

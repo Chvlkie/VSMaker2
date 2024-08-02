@@ -100,6 +100,40 @@ namespace VsMaker2Core.Methods
             return (true, "");
         }
 
+        public (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive)
+        {
+            return WriteMessage(messages, battleMessageArchive);
+        }
+
+        public (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress)
+        {
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable].unpackedDirectory}\\{0:D4}";
+            try
+            {
+                using MemoryStream wr = new();
+                for (int i = 0; i < messageData.Count; i++)
+                {
+                    wr.Position = 4 * i;
+                    wr.Write(BitConverter.GetBytes(messageData[i].TrainerId), 0, sizeof(ushort));
+                    wr.Write(BitConverter.GetBytes(messageData[i].MessageTriggerId), 0, sizeof(ushort));
+
+                    progress?.Report(i);
+                }
+
+                wr.Seek(0, SeekOrigin.Begin);
+
+                using (FileStream fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
+                {
+                    wr.CopyTo(fileStream);
+                }
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
         public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
         {
             classNames[classId] = newName;
@@ -218,11 +252,6 @@ namespace VsMaker2Core.Methods
         {
             trainerNames[trainerId] = newName;
             return WriteMessage(trainerNames, trainerNamesArchive, true);
-        }
-
-        public (bool Success, string ErrorMessage) WriteBattleMessages(List<string> battleMessages, int battleMessageArchive)
-        {
-            return (true, "");
         }
 
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)

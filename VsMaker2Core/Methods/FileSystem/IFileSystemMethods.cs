@@ -36,7 +36,6 @@ namespace VsMaker2Core.Methods
 
         (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
 
-        (bool Success, string ErrorMessage) WriteBattleMessages(List<string> battleMessages, int battleMessageArchive);
         (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
 
         (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive);
@@ -54,5 +53,7 @@ namespace VsMaker2Core.Methods
         (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber);
 
         (bool Success, string ErrorMessage) UpdateTrainerScripts(int totalNumberOfTrainers);
+        (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive);
+        (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress);
     }
 }

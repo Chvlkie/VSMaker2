@@ -3883,6 +3883,7 @@
             battleMessages_SaveBtn.Name = "battleMessages_SaveBtn";
             battleMessages_SaveBtn.Size = new Size(163, 22);
             battleMessages_SaveBtn.Text = "Save Battle Message Table";
+            battleMessages_SaveBtn.Click += battleMessages_SaveBtn_Click;
             // 
             // battleMessages_UndoAllBtn
             // 
@@ -3911,6 +3912,7 @@
             // battleMessages_RemoveBtn
             // 
             battleMessages_RemoveBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            battleMessages_RemoveBtn.Enabled = false;
             battleMessages_RemoveBtn.Image = Properties.Resources.del_ico;
             battleMessages_RemoveBtn.ImageTransparentColor = Color.Magenta;
             battleMessages_RemoveBtn.Name = "battleMessages_RemoveBtn";
@@ -3973,6 +3975,7 @@
             battleMessages_SortBtn.Size = new Size(145, 22);
             battleMessages_SortBtn.Text = "Sort and Repoint Table";
             battleMessages_SortBtn.ToolTipText = "Sort & Repoint Table (This will save any changes)";
+            battleMessages_SortBtn.Click += battleMessages_SortBtn_Click;
             // 
             // mainStatusStrip
             // 
