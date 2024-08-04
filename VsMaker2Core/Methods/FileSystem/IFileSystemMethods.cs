@@ -55,5 +55,6 @@ namespace VsMaker2Core.Methods
         (bool Success, string ErrorMessage) UpdateTrainerScripts(int totalNumberOfTrainers);
         (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive);
         (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress);
+        (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress);
     }
 }

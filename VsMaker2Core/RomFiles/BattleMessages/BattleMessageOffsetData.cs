@@ -3,9 +3,9 @@
     public class BattleMessageOffsetData
     {
         public int MessageId { get; set; }
-        public uint Offset => (uint)(MessageId * 4);
+        public ushort Offset => (ushort)(MessageId * 4);
 
-        public static int OffsetToMessageId(uint offset) => (int)(offset / 4);
+        public static int OffsetToMessageId(ushort offset) => offset / 4;
 
         public BattleMessageOffsetData()
         { }

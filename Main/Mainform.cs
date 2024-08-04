@@ -6,6 +6,7 @@ using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -49,6 +50,24 @@ namespace Main
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
 
+        public void BeginSortRepointTrainerText(IProgress<int> progress, int max)
+        {
+            List<BattleMessage> messageData = [];
+            foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
+            {
+                string selectedTrainer = row.Cells[1].Value.ToString();
+                string selectedMessageTrigger = row.Cells[2].Value.ToString();
+                string messageText = row.Cells[3].Value.ToString();
+                int trainerId = int.Parse(selectedTrainer.Remove(0, 1).Remove(4));
+                int messageTriggerId = MessageTrigger.MessageTriggers.Find(x => x.ListName == selectedMessageTrigger).MessageTriggerId;
+                int messageId = int.Parse(row.Cells[0].Value.ToString());
+                messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
+            }
+            messageData = [.. messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId)];
+            SaveBattleMessages(messageData, progress);
+            RepointBattleMessageOffsets(messageData, progress);
+        }
+
         public void BeginSaveBattleMessages(IProgress<int> progress)
         {
             List<BattleMessage> messageData = [];
@@ -64,21 +83,7 @@ namespace Main
             }
 
             messageData = messageData.OrderBy(x => x.MessageId).ToList();
-            List<string> messageTexts = messageData.Select(x => x.MessageText).ToList();
-            var writeData = fileSystemMethods.WriteBattleMessageTableData(messageData, progress);
-            if (!writeData.Success)
-            {
-                MessageBox.Show(writeData.ErrorMessage, "Unable to Save Battle Message Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                var writeText = fileSystemMethods.WriteBattleMessageTexts(messageTexts, LoadedRom.BattleMessageTextNumber);
-                if (!writeText.Success)
-                {
-                    MessageBox.Show(writeText.ErrorMessage, "Unable to Save Battle Message Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                progress?.Report(messageData.Count + 10);
-            }
+            SaveBattleMessages(messageData, progress);
         }
 
         public void BeginSaveRomChanges(IProgress<int> progress, string filePath)
@@ -1072,6 +1077,34 @@ namespace Main
 
         private void battleMessages_SortBtn_Click(object sender, EventArgs e)
         {
+            IsLoadingData = true;
+
+            battleMessage_MessageTableDataGrid.EndEdit();
+            var verify = VerifyBattleMessageTable();
+            if (!verify.Valid)
+            {
+                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + verify.Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = verify.Row;
+                battleMessage_MessageTableDataGrid.ClearSelection();
+                battleMessage_MessageTableDataGrid.Rows[verify.Row].Selected = true;
+            }
+            else
+            {
+                var dialogResult = MessageBox.Show("This will sort the Battle Message table to group Trainers.\n\nThe Battle Messagex lookup table will also be sorted.\nThis allows for more efficient loading in-game.\n\nAll changes will be saved.", "Sort and Repoint", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    BattleMessageCount = battleMessage_MessageTableDataGrid.Rows.Count;
+                    OpenLoadingDialog(LoadType.RepointTextTable);
+                    LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
+                    LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
+                    MainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
+                    battleMessage_MessageTableDataGrid.Rows.Clear();
+                    LoadBattleMessages();
+                    EditedBattleMessage(false);
+                }
+            }
+            IsLoadingData = false;
         }
     }
 }

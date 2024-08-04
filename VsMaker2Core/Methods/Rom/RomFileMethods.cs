@@ -64,7 +64,7 @@ namespace VsMaker2Core.Methods
             {
                 while (reader.BaseStream.Position != reader.BaseStream.Length)
                 {
-                    uint offset = reader.ReadUInt16();
+                    ushort offset = reader.ReadUInt16();
                     battleMessageOffsetData.Add(new BattleMessageOffsetData(BattleMessageOffsetData.OffsetToMessageId(offset)));
                 }
                 reader.Close();

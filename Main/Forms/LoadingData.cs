@@ -84,6 +84,16 @@ namespace Main.Forms
             Close();
         }
 
+        public async Task RepointTrainerTable()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            await Task.Run(() => mainForm.BeginSortRepointTrainerText(progress, progressBar.Maximum));
+            progressBar.Value = progressBar.Maximum;
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
         private void LoadData()
         {
             progressBar.Value = 0;
@@ -110,9 +120,20 @@ namespace Main.Forms
                     SaveRom();
                     break;
                 case LoadType.SaveTrainerTextTable:
-                    Text = "Saving Trainer Text Table";
+                    Text = "Saving Battle Message Table";
                     progressBar.Maximum = mainForm.BattleMessageCount + 10;
                     SaveTrainerTextTable();
+                    break;
+
+                case LoadType.RepointTextTable:
+                    Text = "Sorting & Repointing Battle Message Table";
+                    progressBar.Maximum = mainForm.BattleMessageCount + 10;
+                    RepointTrainerTable();
+                    break;
+
+                default:
+                    FormClosing -= LoadingData_FormClosing;
+                    Close();
                     break;
             }
         }

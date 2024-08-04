@@ -174,27 +174,51 @@ namespace Main
             return Task.CompletedTask;
         }
 
-        private bool SaveBattleMessageTexts()
+        private void SaveBattleMessages(List<BattleMessage> messageData, IProgress<int> progress)
         {
-            string[] battleMessages = new string[battleMessage_MessageTableDataGrid.RowCount];
-            for (int i = 0; i < battleMessage_MessageTableDataGrid.RowCount; i++)
+            List<string> messageTexts = messageData.ConvertAll(x => x.MessageText);
+            var writeData = fileSystemMethods.WriteBattleMessageTableData(messageData, progress);
+            if (!writeData.Success)
             {
-                var row = battleMessage_MessageTableDataGrid.Rows[i];
-                // Set by message ID to not change sorting.
-                battleMessages[(int)row.Cells[0].Value] = (string)row.Cells[3].Value;
-            }
-            var saveBattleMessages = fileSystemMethods.WriteBattleMessageTexts([.. battleMessages], LoadedRom.BattleMessageTextNumber);
-
-            if (!saveBattleMessages.Success)
-            {
-                MessageBox.Show(saveBattleMessages.ErrorMessage, "Unable to Save Message");
-                return false;
+                MessageBox.Show(writeData.ErrorMessage, "Unable to Save Battle Message Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                MessageBox.Show("Battle Message texts updated!", "Success");
-                return true;
+                var writeText = fileSystemMethods.WriteBattleMessageTexts(messageTexts, LoadedRom.BattleMessageTextNumber);
+                if (!writeText.Success)
+                {
+                    MessageBox.Show(writeText.ErrorMessage, "Unable to Save Battle Message Text", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
+            progress?.Report(messageData.Count + 10);
+        }
+
+        private void RepointBattleMessageOffsets(List<BattleMessage> messageData, IProgress<int> progress)
+        {
+            progress?.Report(0);
+            List<ushort> offsets = [];
+            // Increase count by 1 to account for player trainer data.
+            offsets.Add(0);
+            for (int i = 1; i < MainEditorModel.Trainers.Count + 1; i++)
+            {
+                int index = 0;
+                var trainer = MainEditorModel.Trainers[i - 1];
+                List<BattleMessage> trainerMessages = messageData.Where(x => x.TrainerId == trainer.TrainerId).ToList();
+                if (trainerMessages.Count > 0)
+                {
+                    var firstMessage = trainerMessages[0];
+                    index = messageData.FindIndex(x => x.TrainerId == firstMessage.TrainerId && x.MessageTriggerId == firstMessage.MessageTriggerId);
+                    index *= 4;
+                }
+
+                offsets.Add((ushort)index);
+            }
+            var writeOffsets = fileSystemMethods.WriteBattleMessageOffsetData(offsets, progress);
+            if (!writeOffsets.Success)
+            {
+                MessageBox.Show(writeOffsets.ErrorMessage, "Unable to Save Battle Offset Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            progress?.Report(100);
         }
 
         private void LoadBattleMessages()

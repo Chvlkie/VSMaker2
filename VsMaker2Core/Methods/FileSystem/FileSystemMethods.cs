@@ -122,9 +122,45 @@ namespace VsMaker2Core.Methods
 
                 wr.Seek(0, SeekOrigin.Begin);
 
-                using (FileStream fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
+                if (File.Exists(directory))
                 {
-                    wr.CopyTo(fileStream);
+                    File.Delete(directory);
+                }
+                using (FileStream fileStream = new(directory, FileMode.Create, FileAccess.Write))
+                {
+                    wr.WriteTo(fileStream);
+                }
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress)
+        {
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory}\\{0:D4}";
+            int increment = 100 / offsets.Count;
+            try
+            {
+                using MemoryStream wr = new();
+                for (int i = 0; i < offsets.Count; i++)
+                {
+                  //  wr.Position = 2 * i;
+                    wr.Write(BitConverter.GetBytes(offsets[i]), 0, sizeof(ushort));
+
+                    progress?.Report(increment);
+                }
+
+                wr.Seek(0, SeekOrigin.Begin);
+                if (File.Exists(directory))
+                {
+                    File.Delete(directory);
+                }
+                using (FileStream fileStream = new(directory, FileMode.Create, FileAccess.Write))
+                {
+                    wr.WriteTo(fileStream);
                 }
                 return (true, "");
             }
