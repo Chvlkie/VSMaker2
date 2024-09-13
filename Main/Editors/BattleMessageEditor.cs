@@ -7,7 +7,8 @@ namespace Main
     {
         private readonly string Seperator = @"\r";
         private bool UnsavedBattleMessageChanges;
-        public int BattleMessageCount;
+        public int BattleMessageCount => battleMessage_MessageTableDataGrid.RowCount;
+
 
         private static string? ReadLine(string text, int lineNumber)
         {
@@ -232,7 +233,6 @@ namespace Main
             battleMessage_MessageTableDataGrid.SuspendLayout();
             BeginPopulateBattleMessages();
             battleMessage_MessageTableDataGrid.ResumeLayout();
-            BattleMessageCount = battleMessage_MessageTableDataGrid.RowCount;
         }
 
         private void SetupBattleMessageEditor()

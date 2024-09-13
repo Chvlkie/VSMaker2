@@ -4066,6 +4066,7 @@
             battleMessages_ExportBtn.Name = "battleMessages_ExportBtn";
             battleMessages_ExportBtn.Size = new Size(61, 22);
             battleMessages_ExportBtn.Text = "Export";
+            battleMessages_ExportBtn.Click += battleMessages_ExportBtn_Click;
             // 
             // toolStripSeparator18
             // 

@@ -1,14 +1,17 @@
 using Main.Forms;
 using Main.Models;
 using System.Buffers;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Forms;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
 using VsMaker2Core.RomFiles;
+using static System.Net.Mime.MediaTypeNames;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -68,6 +71,29 @@ namespace Main
             messageData = [.. messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId)];
             SaveBattleMessages(messageData, progress);
             RepointBattleMessageOffsets(messageData, progress);
+        }
+        public void BeginExportBattleMessages(IProgress<int> progress, string filePath)
+        {
+            var export = new StringBuilder();
+            var headers = battleMessage_MessageTableDataGrid.Columns.Cast<DataGridViewColumn>();
+            export.AppendLine(string.Join(",", headers.Select(column => "\"" + column.HeaderText + "\"").ToArray()));
+            int messageCount = 0;
+            foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
+            {
+                string messageId = messageCount.ToString();
+                string trainerId = Trainer.ListNameToTrainerId(row.Cells[1].Value.ToString()).ToString();
+                string messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(row.Cells[2].Value.ToString()).ToString();
+                string messageText = row.Cells[3].Value.ToString();
+
+                export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}"",");
+                messageCount++;
+                progress?.Report(messageCount);
+            }
+            StreamWriter outputFile = new(filePath, false, new UTF8Encoding(true));
+            outputFile.WriteLine(export.ToString());
+            outputFile.Close();
+            progress?.Report(messageCount + 50);
+            MessageBox.Show("Battle Messge exported successfully.", "Success!");
         }
 
         public void BeginSaveBattleMessages(IProgress<int> progress)
@@ -615,7 +641,7 @@ namespace Main
 
         private void menu_File_Exit_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            System.Windows.Forms.Application.Exit();
         }
 
         private void menu_File_OpenFolder_Click(object sender, EventArgs e)
@@ -1064,7 +1090,6 @@ namespace Main
                 }
                 else if (dialogResult == DialogResult.Yes)
                 {
-                    BattleMessageCount = battleMessage_MessageTableDataGrid.RowCount;
                     OpenLoadingDialog(LoadType.SaveTrainerTextTable);
                     LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                     LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
@@ -1096,7 +1121,6 @@ namespace Main
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    BattleMessageCount = battleMessage_MessageTableDataGrid.Rows.Count;
                     OpenLoadingDialog(LoadType.RepointTextTable);
                     LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                     LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
@@ -1131,7 +1155,7 @@ namespace Main
             }
         }
 
-       
+
 
         private void AppendBattleMessage(RichTextBox messageText, string appendText)
         {
@@ -1142,12 +1166,12 @@ namespace Main
 
         private void trainer_InsertN_btn_Click(object sender, EventArgs e)
         {
-          AppendBattleMessage(trainer_MessageTextBox, "\\n");
+            AppendBattleMessage(trainer_MessageTextBox, "\\n");
         }
 
         private void trainer_InsertF_Btn_Click(object sender, EventArgs e)
         {
-           AppendBattleMessage(trainer_MessageTextBox, "\\f");
+            AppendBattleMessage(trainer_MessageTextBox, "\\f");
         }
 
         private void trainer_InsertR_btn_Click(object sender, EventArgs e)
@@ -1157,25 +1181,41 @@ namespace Main
 
         private void trainer_InsertE_btn_Click(object sender, EventArgs e)
         {
-       AppendBattleMessage(trainer_MessageTextBox, "é");
+            AppendBattleMessage(trainer_MessageTextBox, "é");
         }
         private void battleMessage_InsertN_btn_Click(object sender, EventArgs e)
         {
-         AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
+            AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
         }
         private void battleMessage_InsertF_btn_Click(object sender, EventArgs e)
         {
-         AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
+            AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
         }
 
         private void battleMessage_InsertR_btn_Click(object sender, EventArgs e)
         {
-           AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
+            AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
         }
 
         private void battleMessage_InsertE_Btn_Click(object sender, EventArgs e)
         {
-          AppendBattleMessage(battleMessages_MessageTextBox, "é");
+            AppendBattleMessage(battleMessages_MessageTextBox, "é");
+        }
+
+        private void battleMessages_ExportBtn_Click(object sender, EventArgs e)
+        {
+            ExportBattleMessagesAsCsv();
+        }
+
+        private void ExportBattleMessagesAsCsv()
+        {
+            var exportFile = new SaveFileDialog { FileName = "Battle Messages", Filter = "CSV files (*.csv)|*.csv" };
+            if (exportFile.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+            OpenLoadingDialog(LoadType.ExportTextTable, exportFile.FileName);
+
         }
     }
 }

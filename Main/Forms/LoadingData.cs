@@ -94,6 +94,16 @@ namespace Main.Forms
             Close();
         }
 
+        public async Task ExportTrainerTextTable()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            await Task.Run(() => mainForm.BeginExportBattleMessages(progress, FilePath));
+            progressBar.Value = progressBar.Maximum;
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
         private void LoadData()
         {
             progressBar.Value = 0;
@@ -121,13 +131,19 @@ namespace Main.Forms
                     break;
                 case LoadType.SaveTrainerTextTable:
                     Text = "Saving Battle Message Table";
-                    progressBar.Maximum = mainForm.BattleMessageCount + 10;
+                    progressBar.Maximum = mainForm.BattleMessageCount + 25;
                     SaveTrainerTextTable();
+                    break;
+
+                case LoadType.ExportTextTable:
+                    Text = "Exporting Battle Messages";
+                    progressBar.Maximum = mainForm.BattleMessageCount +50;
+                    ExportTrainerTextTable();
                     break;
 
                 case LoadType.RepointTextTable:
                     Text = "Sorting & Repointing Battle Message Table";
-                    progressBar.Maximum = mainForm.BattleMessageCount + 10;
+                    progressBar.Maximum = mainForm.BattleMessageCount + 25;
                     RepointTrainerTable();
                     break;
 
