@@ -251,7 +251,7 @@ namespace Main
 
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
             progressCount += increment;
-            progress?.Report(progressCount); MainEditorModel.PokemonNames = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
+            progress?.Report(progressCount); MainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
 
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
             progressCount += increment;
@@ -499,7 +499,7 @@ namespace Main
 
         private string GetPokemonNameById(int pokemonId)
         {
-            return MainEditorModel.PokemonNames[pokemonId];
+            return MainEditorModel.PokemonNamesFull[pokemonId];
         }
 
         #region Event Handlers

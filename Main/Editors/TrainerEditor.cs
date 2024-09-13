@@ -1,4 +1,5 @@
-﻿using Main.Forms;
+﻿using Main.CustomUi.Extensions;
+using Main.Forms;
 using Main.Models;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
@@ -798,7 +799,9 @@ namespace Main
         {
             if (comboBox.Items.Count == 0)
             {
-                foreach (var item in MainEditorModel.ItemNames) { comboBox.Items.Add(item); }
+                comboBox.PopulateItems(MainEditorModel.ItemNames);
+                comboBox.MakeSearchable(() => MainEditorModel.ItemNames);
+                comboBox.SetSelectedIndexSafely(0, () => MainEditorModel.ItemNames);
             }
         }
 
@@ -814,12 +817,15 @@ namespace Main
         {
             foreach (var comboBox in pokeComboBoxes)
             {
-                comboBox.Items.Clear();
-                comboBox.Items.Add("---------");
-                for (int i = 1; i < MainEditorModel.PokemonNames.Count; i++)
-                {
-                    comboBox.Items.Add($"[{i:D4}] {MainEditorModel.PokemonNames[i]}");
-                }
+                // Populate the ComboBox with Pokémon names
+                comboBox.PopulateItems(MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
+
+                // Make the ComboBox searchable (without TextChanged)
+                comboBox.MakeSearchable(() => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
+
+                // Set the selected index after population (e.g., index 1)
+                comboBox.SetSelectedIndexSafely(0, () => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
+
             }
         }
 
@@ -1107,7 +1113,7 @@ namespace Main
         {
             if (!index.HasValue)
             {
-                return -1;
+                return 0;
             }
             else if (index.Value == 0xFFFF)
             {
@@ -1124,12 +1130,12 @@ namespace Main
             for (int i = 0; i < teamSize; i++)
             {
                 var species = GetSpeciesBySpeciesId(trainerParty.Pokemons[i].SpeciesId);
-                pokeComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].PokemonId;
+                pokeComboBoxes[i].SetSelectedIndexSafely(trainerParty.Pokemons[i].PokemonId, () => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
                 pokeLevelNums[i].Value = trainerParty.Pokemons[i].Level;
                 pokeDVNums[i].Value = trainerParty.Pokemons[i].DifficultyValue;
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
-                pokeHeldItemComboBoxes[i].SelectedIndex = GetIndex(trainerParty.Pokemons[i].HeldItemId);
+                pokeHeldItemComboBoxes[i].SetSelectedIndexSafely(GetIndex(trainerParty.Pokemons[i].HeldItemId), () => MainEditorModel.ItemNames);
                 pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.GameFamily != GameFamily.DiamondPearl ? GetIndex(trainerParty.Pokemons[i].BallCapsuleId) : -1;
                 if (chooseMoves)
                 {
