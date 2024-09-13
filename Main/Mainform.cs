@@ -1,8 +1,10 @@
 using Main.Forms;
 using Main.Models;
+using Microsoft.VisualBasic.FileIO;
 using System.Buffers;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows.Forms;
 using VsMaker2Core;
@@ -85,7 +87,7 @@ namespace Main
                 string messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(row.Cells[2].Value.ToString()).ToString();
                 string messageText = row.Cells[3].Value.ToString();
 
-                export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}"",");
+                export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}""");
                 messageCount++;
                 progress?.Report(messageCount);
             }
@@ -1209,12 +1211,87 @@ namespace Main
 
         private void ExportBattleMessagesAsCsv()
         {
-            var exportFile = new SaveFileDialog { FileName = "Battle Messages", Filter = "CSV files (*.csv)|*.csv" };
+            var exportFile = new SaveFileDialog
+            {
+                FileName = "Battle Messages",
+                Filter = "CSV files (*.csv)|*.csv",
+                Title = "Save CSV File" +
+                "",
+            };
             if (exportFile.ShowDialog(this) != DialogResult.OK)
             {
                 return;
             }
             OpenLoadingDialog(LoadType.ExportTextTable, exportFile.FileName);
+
+        }
+
+        private void battleMessages_ImportBtn_Click(object sender, EventArgs e)
+        {
+            var confirmImport = MessageBox.Show("Importing a CSV will overwrite existing data.\n\nAre you sure?", "Import CSV", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmImport == DialogResult.Yes)
+            {
+                ImportBattleMessageCsv();
+            }
+        }
+
+        public void BeginReadCsvFile(string filePath)
+        {
+            try
+            {
+                var newMessages = new List<BattleMessage>();
+                using TextFieldParser parser = new(filePath);
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+                // Skip the first line (header)
+                if (!parser.EndOfData)
+                {
+                    parser.ReadLine();
+                }
+                while (!parser.EndOfData)
+                {
+                    string[] fields = parser.ReadFields();
+
+                    if (fields.Length != 4)
+                    {
+                        throw new Exception("Unexpected number of columns");
+                    }
+                    int messageId = int.Parse(fields[0]);
+                    int trainerId = int.Parse(fields[1]);
+                    int messageTriggerId = int.Parse(fields[2]);
+                    string messageText = fields[3];
+                    var battleMessage = new BattleMessage(trainerId, messageId, messageTriggerId, messageText);
+                    newMessages.Add(battleMessage);
+
+                }
+                MainEditorModel.BattleMessages = newMessages;
+                LoadBattleMessages();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while reading the file:\n" + ex.Message, "Unable to Import CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
+
+        public void ImportBattleMessageCsv()
+        {
+            var importFile = new OpenFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv",
+                Title = "Open CSV File"
+            };
+
+            if (importFile.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            BeginReadCsvFile(importFile.FileName);
+        }
+
+        private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
+        {
 
         }
     }

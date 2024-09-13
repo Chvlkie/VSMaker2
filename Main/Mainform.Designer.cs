@@ -372,8 +372,6 @@
             battleMessages_AddLineBtn = new ToolStripButton();
             battleMessages_RemoveBtn = new ToolStripButton();
             toolStripSeparator23 = new ToolStripSeparator();
-            battleMessages_CopyBtn = new ToolStripButton();
-            battleMessages_PasteBtn = new ToolStripButton();
             toolStripSeparator17 = new ToolStripSeparator();
             battleMessages_ImportBtn = new ToolStripButton();
             battleMessages_ExportBtn = new ToolStripButton();
@@ -3849,6 +3847,7 @@
             battleMessages_UndoMessageBtn.Name = "battleMessages_UndoMessageBtn";
             battleMessages_UndoMessageBtn.Size = new Size(23, 22);
             battleMessages_UndoMessageBtn.Text = "Undo";
+            battleMessages_UndoMessageBtn.Click += battleMessages_UndoMessageBtn_Click;
             // 
             // battleMessages_RedoMessageBtn
             // 
@@ -3974,7 +3973,7 @@
             // 
             // battleMessages_Table_toolStrip
             // 
-            battleMessages_Table_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_SaveBtn, battleMessages_UndoAllBtn, toolStripSeparator19, battleMessages_AddLineBtn, battleMessages_RemoveBtn, toolStripSeparator23, battleMessages_CopyBtn, battleMessages_PasteBtn, toolStripSeparator17, battleMessages_ImportBtn, battleMessages_ExportBtn, toolStripSeparator18, battleMessages_SortBtn });
+            battleMessages_Table_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_SaveBtn, battleMessages_UndoAllBtn, toolStripSeparator19, battleMessages_AddLineBtn, battleMessages_RemoveBtn, toolStripSeparator23, toolStripSeparator17, battleMessages_ImportBtn, battleMessages_ExportBtn, toolStripSeparator18, battleMessages_SortBtn });
             battleMessages_Table_toolStrip.Location = new Point(0, 0);
             battleMessages_Table_toolStrip.Name = "battleMessages_Table_toolStrip";
             battleMessages_Table_toolStrip.Size = new Size(1242, 25);
@@ -4030,22 +4029,6 @@
             toolStripSeparator23.Name = "toolStripSeparator23";
             toolStripSeparator23.Size = new Size(6, 25);
             // 
-            // battleMessages_CopyBtn
-            // 
-            battleMessages_CopyBtn.Image = Properties.Resources.copy_ico;
-            battleMessages_CopyBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_CopyBtn.Name = "battleMessages_CopyBtn";
-            battleMessages_CopyBtn.Size = new Size(55, 22);
-            battleMessages_CopyBtn.Text = "Copy";
-            // 
-            // battleMessages_PasteBtn
-            // 
-            battleMessages_PasteBtn.Image = Properties.Resources.paste_ico;
-            battleMessages_PasteBtn.ImageTransparentColor = Color.Magenta;
-            battleMessages_PasteBtn.Name = "battleMessages_PasteBtn";
-            battleMessages_PasteBtn.Size = new Size(55, 22);
-            battleMessages_PasteBtn.Text = "Paste";
-            // 
             // toolStripSeparator17
             // 
             toolStripSeparator17.Name = "toolStripSeparator17";
@@ -4058,6 +4041,7 @@
             battleMessages_ImportBtn.Name = "battleMessages_ImportBtn";
             battleMessages_ImportBtn.Size = new Size(63, 22);
             battleMessages_ImportBtn.Text = "Import";
+            battleMessages_ImportBtn.Click += battleMessages_ImportBtn_Click;
             // 
             // battleMessages_ExportBtn
             // 
@@ -4656,8 +4640,6 @@
         private Panel panel8;
         private DataGridView battleMessage_MessageTableDataGrid;
         private ToolStrip battleMessages_Table_toolStrip;
-        private ToolStripButton battleMessages_CopyBtn;
-        private ToolStripButton battleMessages_PasteBtn;
         private ToolStripSeparator toolStripSeparator17;
         private ToolStripButton battleMessages_ImportBtn;
         private ToolStripButton battleMessages_ExportBtn;
