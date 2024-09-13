@@ -73,6 +73,7 @@ namespace Main
             messageData = [.. messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId)];
             SaveBattleMessages(messageData, progress);
             RepointBattleMessageOffsets(messageData, progress);
+            progress?.Report(max);
         }
         public void BeginExportBattleMessages(IProgress<int> progress, string filePath)
         {
@@ -1228,14 +1229,10 @@ namespace Main
 
         private void battleMessages_ImportBtn_Click(object sender, EventArgs e)
         {
-            var confirmImport = MessageBox.Show("Importing a CSV will overwrite existing data.\n\nAre you sure?", "Import CSV", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirmImport == DialogResult.Yes)
-            {
-                ImportBattleMessageCsv();
-            }
+            ImportBattleMessageCsv();
         }
 
-        public void BeginReadCsvFile(string filePath)
+        public void BeginImportBattleMessages(string filePath)
         {
             try
             {
@@ -1266,6 +1263,8 @@ namespace Main
                 }
                 MainEditorModel.BattleMessages = newMessages;
                 LoadBattleMessages();
+                LoadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
+                MessageBox.Show("Battle messages imported successfully!", "Success");
             }
             catch (Exception ex)
             {
@@ -1276,23 +1275,41 @@ namespace Main
 
         public void ImportBattleMessageCsv()
         {
-            var importFile = new OpenFileDialog
+            var confirmImport = MessageBox.Show("Importing a CSV will overwrite existing data.\n\nAre you sure?", "Import CSV", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmImport == DialogResult.Yes)
             {
-                Filter = "CSV files (*.csv)|*.csv",
-                Title = "Open CSV File"
-            };
+                var importFile = new OpenFileDialog
+                {
+                    Filter = "CSV files (*.csv)|*.csv",
+                    Title = "Open CSV File"
+                };
 
-            if (importFile.ShowDialog(this) != DialogResult.OK)
-            {
-                return;
+                if (importFile.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+                OpenLoadingDialog(LoadType.ImportTextTable, importFile.FileName);
             }
-
-            BeginReadCsvFile(importFile.FileName);
         }
 
         private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void menu_Export_BattleMessages_Click(object sender, EventArgs e)
+        {
+            if (battleMessage_MessageTableDataGrid.RowCount == 0)
+            {
+                LoadBattleMessages();
+            }
+            ExportBattleMessagesAsCsv();
+
+        }
+
+        private void menu_Import_BattleMessages_Click(object sender, EventArgs e)
+        {
+            ImportBattleMessageCsv();
         }
     }
 }

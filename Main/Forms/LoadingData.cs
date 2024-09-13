@@ -59,9 +59,9 @@ namespace Main.Forms
         public async Task UnpackRom()
         {
             await Task.Delay(500);
-            await Task.Run(() => mainForm.BeginUnpackRomData());
             progressBar.Style = ProgressBarStyle.Continuous;
             progressBar.Value = 100;
+            await Task.Run(() => mainForm.BeginUnpackRomData());
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -89,7 +89,6 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await Task.Run(() => mainForm.BeginSortRepointTrainerText(progress, progressBar.Maximum));
-            progressBar.Value = progressBar.Maximum;
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -99,7 +98,15 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await Task.Run(() => mainForm.BeginExportBattleMessages(progress, FilePath));
-            progressBar.Value = progressBar.Maximum;
+            FormClosing -= LoadingData_FormClosing;
+            Close();
+        }
+
+        public async Task ImportTrainerTextTable()
+        {
+            await Task.Delay(500);
+            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            await Task.Run(() => mainForm.BeginImportBattleMessages(FilePath));
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -141,6 +148,13 @@ namespace Main.Forms
                     ExportTrainerTextTable();
                     break;
 
+                case LoadType.ImportTextTable:
+                    Text = "Importing Battle Messages";
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                    progressBar.Value = 100;
+                    ImportTrainerTextTable();
+                    break;
+
                 case LoadType.RepointTextTable:
                     Text = "Sorting & Repointing Battle Message Table";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
@@ -157,5 +171,33 @@ namespace Main.Forms
         {
             e.Cancel = true;
         }
+
+        public void UpdateProgressBarStyle(ProgressBarStyle style)
+        {
+            if (progressBar.InvokeRequired)
+            {
+                // We are not on the UI thread, so use Invoke to update the ProgressBar style
+                progressBar.Invoke(new Action<ProgressBarStyle>(UpdateProgressBarStyle), style);
+            }
+            else
+            {
+                // We are on the UI thread, so update the ProgressBar style directly
+                progressBar.Style = style;
+            }
+        }
+        public void UpdateProgressBar(int value)
+        {
+            if (progressBar.InvokeRequired)
+            {
+                // We are not on the UI thread, so use Invoke to update the ProgressBar
+                progressBar.Invoke(new Action<int>(UpdateProgressBar), value);
+            }
+            else
+            {
+                // We are on the UI thread, so update the ProgressBar directly
+                progressBar.Value = value;
+            }
+        }
+
     }
 }

@@ -108,13 +108,11 @@ namespace Main
             battleMessage_MessageTableDataGrid.Enabled = false;
             battleMessage_MessageTableDataGrid.Rows.Clear();
             battleMessages_AddLineBtn.Enabled = false;
-            battleMessages_CopyBtn.Enabled = false;
             battleMessages_ExportBtn.Enabled = false;
             battleMessages_ImportBtn.Enabled = false;
             battleMessages_MessageDownBtn.Enabled = false;
             battleMessages_MessageTextBox.Enabled = false;
             battleMessages_MessageUpBtn.Enabled = false;
-            battleMessages_PasteBtn.Enabled = false;
             battleMessages_RedoMessageBtn.Enabled = false;
             battleMessages_RemoveBtn.Enabled = false;
             battleMessages_SaveBtn.Enabled = false;

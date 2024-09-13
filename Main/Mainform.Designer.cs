@@ -567,6 +567,7 @@
             menu_Import_BattleMessages.Name = "menu_Import_BattleMessages";
             menu_Import_BattleMessages.Size = new Size(197, 22);
             menu_Import_BattleMessages.Text = "Import Battle Messages";
+            menu_Import_BattleMessages.Click += menu_Import_BattleMessages_Click;
             // 
             // menu_Export
             // 
@@ -594,6 +595,7 @@
             menu_Export_BattleMessages.Name = "menu_Export_BattleMessages";
             menu_Export_BattleMessages.Size = new Size(195, 22);
             menu_Export_BattleMessages.Text = "Export Battle Messages";
+            menu_Export_BattleMessages.Click += menu_Export_BattleMessages_Click;
             // 
             // menu_Tools
             // 

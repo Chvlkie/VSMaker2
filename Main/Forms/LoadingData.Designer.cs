@@ -71,7 +71,7 @@
 
         #endregion
 
-        private ProgressBar progressBar;
+        public ProgressBar progressBar;
         private Label label1;
     }
 }
