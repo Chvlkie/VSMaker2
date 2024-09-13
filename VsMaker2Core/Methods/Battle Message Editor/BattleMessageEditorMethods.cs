@@ -16,11 +16,11 @@ namespace VsMaker2Core.Methods
         {
             List<BattleMessage> battleMessages = [];
             var messages = romFileMethods.GetBattleMessages(battleMessageArchive);
-            foreach (var tableData in tableDatas)
+            for (int i = 0; i < messages.Count(); i++)
             {
+                var tableData = tableDatas[i];
                 battleMessages.Add(new BattleMessage((int)tableData.TrainerId, tableData.MessageId, tableData.MessageTriggerId, messages[tableData.MessageId]));
             }
-
             return battleMessages;
         }
     }
