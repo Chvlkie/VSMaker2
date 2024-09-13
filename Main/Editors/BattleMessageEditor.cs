@@ -45,7 +45,7 @@ namespace Main
             }
         }
 
-        private void battleMessages_MessageDOwnBtn_Click(object sender, EventArgs e)
+        private void battleMessages_MessageDownBtn_Click(object sender, EventArgs e)
         {
             MessagePreviewNext(battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
         }
@@ -54,6 +54,7 @@ namespace Main
         {
             if (!IsLoadingData)
             {
+                battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
                 UpdateTextPreview(battleMessages_MessageTextBox.Text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
             }
         }

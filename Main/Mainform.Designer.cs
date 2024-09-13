@@ -345,8 +345,6 @@
             battleMessages_MessageTextBox = new RichTextBox();
             battleMessage_PreviewText = new Label();
             battleMessages_MessageText_toolStrip = new ToolStrip();
-            battleMessages_UpdateText = new ToolStripButton();
-            toolStripSeparator24 = new ToolStripSeparator();
             battleMessages_UndoMessageBtn = new ToolStripButton();
             battleMessages_RedoMessageBtn = new ToolStripButton();
             label63 = new Label();
@@ -3714,7 +3712,6 @@
             messageText.HeaderText = "Text";
             messageText.MinimumWidth = 8;
             messageText.Name = "messageText";
-            messageText.ReadOnly = true;
             // 
             // panel6
             // 
@@ -3754,7 +3751,7 @@
             battleMessages_MessageTextBox.Size = new Size(648, 91);
             battleMessages_MessageTextBox.TabIndex = 1;
             battleMessages_MessageTextBox.Text = "";
-            battleMessages_MessageTextBox.TextChanged += battleMessages_MessageTextBox_TextChanged;
+            battleMessages_MessageTextBox.TextChanged += this.battleMessages_MessageTextBox_TextChanged;
             // 
             // battleMessage_PreviewText
             // 
@@ -3769,26 +3766,12 @@
             // 
             // battleMessages_MessageText_toolStrip
             // 
-            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_UpdateText, toolStripSeparator24, battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn });
+            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn });
             battleMessages_MessageText_toolStrip.Location = new Point(0, 0);
             battleMessages_MessageText_toolStrip.Name = "battleMessages_MessageText_toolStrip";
             battleMessages_MessageText_toolStrip.Size = new Size(1242, 25);
             battleMessages_MessageText_toolStrip.TabIndex = 0;
             battleMessages_MessageText_toolStrip.Text = "toolStrip1";
-            // 
-            // battleMessages_UpdateText
-            // 
-            battleMessages_UpdateText.Image = Properties.Resources.save_ico;
-            battleMessages_UpdateText.ImageTransparentColor = Color.Magenta;
-            battleMessages_UpdateText.Name = "battleMessages_UpdateText";
-            battleMessages_UpdateText.Size = new Size(147, 22);
-            battleMessages_UpdateText.Text = "Update Battle Message";
-            battleMessages_UpdateText.Click += battleMessages_UpdateText_Click;
-            // 
-            // toolStripSeparator24
-            // 
-            toolStripSeparator24.Name = "toolStripSeparator24";
-            toolStripSeparator24.Size = new Size(6, 25);
             // 
             // battleMessages_UndoMessageBtn
             // 
@@ -3852,7 +3835,7 @@
             battleMessages_MessageDownBtn.TabIndex = 13;
             battleMessages_MessageDownBtn.Text = "🔽";
             battleMessages_MessageDownBtn.UseVisualStyleBackColor = true;
-            battleMessages_MessageDownBtn.Click += battleMessages_MessageDOwnBtn_Click;
+            battleMessages_MessageDownBtn.Click += battleMessages_MessageDownBtn_Click;
             // 
             // battleMessages_PreviewPicBox
             // 
@@ -4564,16 +4547,14 @@
         private ToolStripButton battleMessages_SortBtn;
         private Panel panel7;
         private ToolStripSeparator toolStripSeparator23;
-        private DataGridViewTextBoxColumn messageId;
-        private DataGridViewTextBoxColumn trainerId;
-        private DataGridViewTextBoxColumn messageTrigger;
-        private DataGridViewTextBoxColumn messageText;
-        private ToolStripButton battleMessages_UpdateText;
-        private ToolStripSeparator toolStripSeparator24;
         private TabPage trainer_UsesTab;
         private Label label62;
         private Label label60;
         private ListBox trainer_EventUsage;
         private ListBox trainer_ScriptUsage;
+        private DataGridViewTextBoxColumn messageId;
+        private DataGridViewTextBoxColumn trainerId;
+        private DataGridViewTextBoxColumn messageTrigger;
+        private DataGridViewTextBoxColumn messageText;
     }
 }
