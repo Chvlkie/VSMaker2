@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mainform));
             mainMenu = new MenuStrip();
             menu_File = new ToolStripMenuItem();
             menu_File_OpenRom = new ToolStripMenuItem();
@@ -212,9 +213,15 @@
             panel12 = new Panel();
             trainer_MessageTextBox = new RichTextBox();
             trainer_MessageText_toolStrip = new ToolStrip();
-            toolStripButton5 = new ToolStripButton();
+            trainerEditor_SaveMessage = new ToolStripButton();
             toolStripButton6 = new ToolStripButton();
             toolStripButton7 = new ToolStripButton();
+            toolStripSeparator24 = new ToolStripSeparator();
+            trainer_InsertN_btn = new ToolStripButton();
+            trainer_InsertF_Btn = new ToolStripButton();
+            trainer_InsertR_btn = new ToolStripButton();
+            toolStripSeparator25 = new ToolStripSeparator();
+            trainer_InsertE_btn = new ToolStripButton();
             trainer_MessageUpBtn = new Button();
             trainer_MessageDownBtn = new Button();
             trainer_MessagePreviewPicBox = new PictureBox();
@@ -347,6 +354,12 @@
             battleMessages_MessageText_toolStrip = new ToolStrip();
             battleMessages_UndoMessageBtn = new ToolStripButton();
             battleMessages_RedoMessageBtn = new ToolStripButton();
+            toolStripSeparator27 = new ToolStripSeparator();
+            battleMessage_InsertN_btn = new ToolStripButton();
+            battleMessage_InsertF_btn = new ToolStripButton();
+            battleMessage_InsertR_btn = new ToolStripButton();
+            toolStripSeparator26 = new ToolStripSeparator();
+            battleMessage_InsertE_Btn = new ToolStripButton();
             label63 = new Label();
             label61 = new Label();
             battleMessages_MessageUpBtn = new Button();
@@ -2399,22 +2412,23 @@
             // 
             // trainer_MessageText_toolStrip
             // 
-            trainer_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton5, toolStripButton6, toolStripButton7 });
+            trainer_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { trainerEditor_SaveMessage, toolStripButton6, toolStripButton7, toolStripSeparator24, trainer_InsertN_btn, trainer_InsertF_Btn, trainer_InsertR_btn, toolStripSeparator25, trainer_InsertE_btn });
             trainer_MessageText_toolStrip.Location = new Point(0, 0);
             trainer_MessageText_toolStrip.Name = "trainer_MessageText_toolStrip";
             trainer_MessageText_toolStrip.Size = new Size(563, 25);
             trainer_MessageText_toolStrip.TabIndex = 0;
             trainer_MessageText_toolStrip.Text = "toolStrip1";
             // 
-            // toolStripButton5
+            // trainerEditor_SaveMessage
             // 
-            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripButton5.Enabled = false;
-            toolStripButton5.Image = Properties.Resources.save_ico;
-            toolStripButton5.ImageTransparentColor = Color.Magenta;
-            toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(23, 22);
-            toolStripButton5.Text = "Save Battle Message";
+            trainerEditor_SaveMessage.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            trainerEditor_SaveMessage.Enabled = false;
+            trainerEditor_SaveMessage.Image = Properties.Resources.save_ico;
+            trainerEditor_SaveMessage.ImageTransparentColor = Color.Magenta;
+            trainerEditor_SaveMessage.Name = "trainerEditor_SaveMessage";
+            trainerEditor_SaveMessage.Size = new Size(23, 22);
+            trainerEditor_SaveMessage.Text = "Save Battle Message";
+            trainerEditor_SaveMessage.Click += trainerEditor_SaveMessage_Click;
             // 
             // toolStripButton6
             // 
@@ -2435,6 +2449,60 @@
             toolStripButton7.Name = "toolStripButton7";
             toolStripButton7.Size = new Size(23, 22);
             toolStripButton7.Text = "Redo";
+            // 
+            // toolStripSeparator24
+            // 
+            toolStripSeparator24.Name = "toolStripSeparator24";
+            toolStripSeparator24.Size = new Size(6, 25);
+            // 
+            // trainer_InsertN_btn
+            // 
+            trainer_InsertN_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            trainer_InsertN_btn.Image = (Image)resources.GetObject("trainer_InsertN_btn.Image");
+            trainer_InsertN_btn.ImageTransparentColor = Color.Magenta;
+            trainer_InsertN_btn.Name = "trainer_InsertN_btn";
+            trainer_InsertN_btn.Size = new Size(55, 22);
+            trainer_InsertN_btn.Text = "Insert \\n";
+            trainer_InsertN_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            trainer_InsertN_btn.Click += trainer_InsertN_btn_Click;
+            // 
+            // trainer_InsertF_Btn
+            // 
+            trainer_InsertF_Btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            trainer_InsertF_Btn.Image = (Image)resources.GetObject("trainer_InsertF_Btn.Image");
+            trainer_InsertF_Btn.ImageTransparentColor = Color.Magenta;
+            trainer_InsertF_Btn.Name = "trainer_InsertF_Btn";
+            trainer_InsertF_Btn.Size = new Size(52, 22);
+            trainer_InsertF_Btn.Text = "Insert \\f";
+            trainer_InsertF_Btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            trainer_InsertF_Btn.Click += trainer_InsertF_Btn_Click;
+            // 
+            // trainer_InsertR_btn
+            // 
+            trainer_InsertR_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            trainer_InsertR_btn.Image = (Image)resources.GetObject("trainer_InsertR_btn.Image");
+            trainer_InsertR_btn.ImageTransparentColor = Color.Magenta;
+            trainer_InsertR_btn.Name = "trainer_InsertR_btn";
+            trainer_InsertR_btn.Size = new Size(52, 22);
+            trainer_InsertR_btn.Text = "Insert \\r";
+            trainer_InsertR_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            trainer_InsertR_btn.Click += trainer_InsertR_btn_Click;
+            // 
+            // toolStripSeparator25
+            // 
+            toolStripSeparator25.Name = "toolStripSeparator25";
+            toolStripSeparator25.Size = new Size(6, 25);
+            // 
+            // trainer_InsertE_btn
+            // 
+            trainer_InsertE_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            trainer_InsertE_btn.Image = (Image)resources.GetObject("trainer_InsertE_btn.Image");
+            trainer_InsertE_btn.ImageTransparentColor = Color.Magenta;
+            trainer_InsertE_btn.Name = "trainer_InsertE_btn";
+            trainer_InsertE_btn.Size = new Size(49, 22);
+            trainer_InsertE_btn.Text = "Insert é";
+            trainer_InsertE_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            trainer_InsertE_btn.Click += trainer_InsertE_btn_Click;
             // 
             // trainer_MessageUpBtn
             // 
@@ -3751,7 +3819,7 @@
             battleMessages_MessageTextBox.Size = new Size(648, 91);
             battleMessages_MessageTextBox.TabIndex = 1;
             battleMessages_MessageTextBox.Text = "";
-            battleMessages_MessageTextBox.TextChanged += this.battleMessages_MessageTextBox_TextChanged;
+            battleMessages_MessageTextBox.TextChanged += battleMessages_MessageTextBox_TextChanged;
             // 
             // battleMessage_PreviewText
             // 
@@ -3766,7 +3834,7 @@
             // 
             // battleMessages_MessageText_toolStrip
             // 
-            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn });
+            battleMessages_MessageText_toolStrip.Items.AddRange(new ToolStripItem[] { battleMessages_UndoMessageBtn, battleMessages_RedoMessageBtn, toolStripSeparator27, battleMessage_InsertN_btn, battleMessage_InsertF_btn, battleMessage_InsertR_btn, toolStripSeparator26, battleMessage_InsertE_Btn });
             battleMessages_MessageText_toolStrip.Location = new Point(0, 0);
             battleMessages_MessageText_toolStrip.Name = "battleMessages_MessageText_toolStrip";
             battleMessages_MessageText_toolStrip.Size = new Size(1242, 25);
@@ -3790,6 +3858,60 @@
             battleMessages_RedoMessageBtn.Name = "battleMessages_RedoMessageBtn";
             battleMessages_RedoMessageBtn.Size = new Size(23, 22);
             battleMessages_RedoMessageBtn.Text = "Redo";
+            // 
+            // toolStripSeparator27
+            // 
+            toolStripSeparator27.Name = "toolStripSeparator27";
+            toolStripSeparator27.Size = new Size(6, 25);
+            // 
+            // battleMessage_InsertN_btn
+            // 
+            battleMessage_InsertN_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            battleMessage_InsertN_btn.Image = (Image)resources.GetObject("battleMessage_InsertN_btn.Image");
+            battleMessage_InsertN_btn.ImageTransparentColor = Color.Magenta;
+            battleMessage_InsertN_btn.Name = "battleMessage_InsertN_btn";
+            battleMessage_InsertN_btn.Size = new Size(55, 22);
+            battleMessage_InsertN_btn.Text = "Insert \\n";
+            battleMessage_InsertN_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            battleMessage_InsertN_btn.Click += battleMessage_InsertN_btn_Click;
+            // 
+            // battleMessage_InsertF_btn
+            // 
+            battleMessage_InsertF_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            battleMessage_InsertF_btn.Image = (Image)resources.GetObject("battleMessage_InsertF_btn.Image");
+            battleMessage_InsertF_btn.ImageTransparentColor = Color.Magenta;
+            battleMessage_InsertF_btn.Name = "battleMessage_InsertF_btn";
+            battleMessage_InsertF_btn.Size = new Size(52, 22);
+            battleMessage_InsertF_btn.Text = "Insert \\f";
+            battleMessage_InsertF_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            battleMessage_InsertF_btn.Click += battleMessage_InsertF_btn_Click;
+            // 
+            // battleMessage_InsertR_btn
+            // 
+            battleMessage_InsertR_btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            battleMessage_InsertR_btn.Image = (Image)resources.GetObject("battleMessage_InsertR_btn.Image");
+            battleMessage_InsertR_btn.ImageTransparentColor = Color.Magenta;
+            battleMessage_InsertR_btn.Name = "battleMessage_InsertR_btn";
+            battleMessage_InsertR_btn.Size = new Size(52, 22);
+            battleMessage_InsertR_btn.Text = "Insert \\r";
+            battleMessage_InsertR_btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            battleMessage_InsertR_btn.Click += battleMessage_InsertR_btn_Click;
+            // 
+            // toolStripSeparator26
+            // 
+            toolStripSeparator26.Name = "toolStripSeparator26";
+            toolStripSeparator26.Size = new Size(6, 25);
+            // 
+            // battleMessage_InsertE_Btn
+            // 
+            battleMessage_InsertE_Btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            battleMessage_InsertE_Btn.Image = (Image)resources.GetObject("battleMessage_InsertE_Btn.Image");
+            battleMessage_InsertE_Btn.ImageTransparentColor = Color.Magenta;
+            battleMessage_InsertE_Btn.Name = "battleMessage_InsertE_Btn";
+            battleMessage_InsertE_Btn.Size = new Size(49, 22);
+            battleMessage_InsertE_Btn.Text = "Insert é";
+            battleMessage_InsertE_Btn.TextImageRelation = TextImageRelation.ImageAboveText;
+            battleMessage_InsertE_Btn.Click += battleMessage_InsertE_Btn_Click;
             // 
             // label63
             // 
@@ -4476,7 +4598,7 @@
         private Panel panel9;
         private RichTextBox trainer_MessageTextBox;
         private ToolStrip trainer_MessageText_toolStrip;
-        private ToolStripButton toolStripButton5;
+        private ToolStripButton trainerEditor_SaveMessage;
         private ToolStripButton toolStripButton6;
         private ToolStripButton toolStripButton7;
         private Button trainer_MessageUpBtn;
@@ -4556,5 +4678,17 @@
         private DataGridViewTextBoxColumn trainerId;
         private DataGridViewTextBoxColumn messageTrigger;
         private DataGridViewTextBoxColumn messageText;
+        private ToolStripSeparator toolStripSeparator24;
+        private ToolStripButton trainer_InsertE_btn;
+        private ToolStripButton trainer_InsertN_btn;
+        private ToolStripButton trainer_InsertF_Btn;
+        private ToolStripButton trainer_InsertR_btn;
+        private ToolStripSeparator toolStripSeparator25;
+        private ToolStripSeparator toolStripSeparator27;
+        private ToolStripButton battleMessage_InsertN_btn;
+        private ToolStripButton battleMessage_InsertF_btn;
+        private ToolStripButton battleMessage_InsertR_btn;
+        private ToolStripSeparator toolStripSeparator26;
+        private ToolStripButton battleMessage_InsertE_Btn;
     }
 }

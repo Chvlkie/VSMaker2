@@ -56,5 +56,6 @@ namespace VsMaker2Core.Methods
         (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive);
         (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress);
         (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress);
+        (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive);
     }
 }

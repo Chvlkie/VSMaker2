@@ -902,6 +902,27 @@ namespace Main
             return saveTrainerName.Success;
         }
 
+        private bool SaveTrainerMessage(int messageId)
+        {
+            var battleMessages = MainEditorModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
+            var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, LoadedRom.BattleMessageTextNumber);
+            if (!saveMessage.Success)
+            {
+                MessageBox.Show(saveMessage.ErrorMessage, "Unable to Save Battle Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
+                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                if (message != default)
+                {
+                    message.MessageText = trainer_MessageTextBox.Text;
+                }
+            }
+            return saveMessage.Success;
+        }
+
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
             List<Pokemon> newPokemons = [];
@@ -1690,10 +1711,12 @@ namespace Main
                 if (message != default)
                 {
                     trainer_MessageTextBox.Text = message.MessageText;
+                    trainerEditor_SaveMessage.Enabled = true;
                 }
                 else
                 {
                     trainer_MessageTextBox.Text = "";
+                    trainerEditor_SaveMessage.Enabled = false;
                 }
             }
         }

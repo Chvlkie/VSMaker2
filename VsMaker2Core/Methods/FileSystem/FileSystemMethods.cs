@@ -290,6 +290,12 @@ namespace VsMaker2Core.Methods
             return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
 
+        public (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive)
+        {
+            battleMessages[messageId] = newMessage;
+            return WriteMessage(battleMessages, battleMessageArchive, false);
+        }
+
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";

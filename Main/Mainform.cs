@@ -1,5 +1,7 @@
 using Main.Forms;
 using Main.Models;
+using System.Buffers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
@@ -1105,6 +1107,75 @@ namespace Main
                 }
             }
             IsLoadingData = false;
+        }
+
+        private void trainerEditor_SaveMessage_Click(object sender, EventArgs e)
+        {
+            int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
+            int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+            var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+            if (SaveTrainerMessage(message.MessageId))
+            {
+
+                if (battleMessage_MessageTableDataGrid.Rows.Count > 0)
+                {
+                    var row = battleMessage_MessageTableDataGrid.Rows.Cast<DataGridViewRow>()
+                        .SingleOrDefault(x => x.Cells[1].Value.ToString() == MainEditorModel.SelectedTrainer.ListName
+                        && x.Cells[2].Value.ToString() == trainer_MessageTriggerListBox!.SelectedItem.ToString());
+
+                    if (row != default)
+                    {
+                        row.Cells[3].Value = message.MessageText;
+                    }
+                }
+            }
+        }
+
+       
+
+        private void AppendBattleMessage(RichTextBox messageText, string appendText)
+        {
+            int selectionIndex = messageText.SelectionStart;
+            messageText.Text = messageText.Text.Insert(selectionIndex, appendText);
+            messageText.SelectionStart = selectionIndex + appendText.Length;
+        }
+
+        private void trainer_InsertN_btn_Click(object sender, EventArgs e)
+        {
+          AppendBattleMessage(trainer_MessageTextBox, "\\n");
+        }
+
+        private void trainer_InsertF_Btn_Click(object sender, EventArgs e)
+        {
+           AppendBattleMessage(trainer_MessageTextBox, "\\f");
+        }
+
+        private void trainer_InsertR_btn_Click(object sender, EventArgs e)
+        {
+            AppendBattleMessage(trainer_MessageTextBox, "\\r");
+        }
+
+        private void trainer_InsertE_btn_Click(object sender, EventArgs e)
+        {
+       AppendBattleMessage(trainer_MessageTextBox, "é");
+        }
+        private void battleMessage_InsertN_btn_Click(object sender, EventArgs e)
+        {
+         AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
+        }
+        private void battleMessage_InsertF_btn_Click(object sender, EventArgs e)
+        {
+         AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
+        }
+
+        private void battleMessage_InsertR_btn_Click(object sender, EventArgs e)
+        {
+           AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
+        }
+
+        private void battleMessage_InsertE_Btn_Click(object sender, EventArgs e)
+        {
+          AppendBattleMessage(battleMessages_MessageTextBox, "é");
         }
     }
 }
