@@ -817,15 +817,12 @@ namespace Main
         {
             foreach (var comboBox in pokeComboBoxes)
             {
-                // Populate the ComboBox with Pokémon names
-                comboBox.PopulateItems(MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
-
-                // Make the ComboBox searchable (without TextChanged)
-                comboBox.MakeSearchable(() => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
-
-                // Set the selected index after population (e.g., index 1)
-                comboBox.SetSelectedIndexSafely(0, () => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
-
+                comboBox.Items.Clear();
+                comboBox.Items.Add("---------");
+                for (int i = 1; i < MainEditorModel.PokemonNamesFull.Count; i++)
+                {
+                    comboBox.Items.Add($"[{i:D4}] {MainEditorModel.PokemonNamesFull[i]}");
+                }
             }
         }
 
@@ -1168,32 +1165,6 @@ namespace Main
                             }
                             break;
                     }
-                }
-
-                if (RomFile.GameFamily != GameFamily.DiamondPearl)
-                {
-                    SetPokemonForms(trainerParty.Pokemons[i].PokemonId, i);
-                    pokeFormsComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].FormId;
-                }
-
-                if (species.Ability1 > 0 && species.Ability2 > 0)
-                {
-                    pokeAbilityComboBoxes[i].Items.Add("-");
-                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
-                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
-                    pokeAbilityComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].AbilityOverride
-                               switch
-                    {
-                        AbilityOverride.None => 0,
-                        AbilityOverride.Ability1 => 1,
-                        AbilityOverride.Ability2 => 2,
-                        _ => 0
-                    };
-                }
-                else
-                {
-                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
-                    pokeAbilityComboBoxes[i].SelectedIndex = 0;
                 }
             }
         }

@@ -88,4 +88,8 @@
 		</EmbeddedResource>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="CustomUi\Extensions\ComboBox\" />
+	</ItemGroup>
+
 </Project>
