@@ -48,7 +48,7 @@ namespace Main
 
         private void battleMessages_MessageDownBtn_Click(object sender, EventArgs e)
         {
-            MessagePreviewNext(battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
+            MessagePreviewNavigate(true, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
         }
 
         private void battleMessages_MessageTextBox_TextChanged(object sender, EventArgs e)
@@ -66,7 +66,8 @@ namespace Main
 
         private void battleMessages_MessageUpBtn_Click(object sender, EventArgs e)
         {
-            MessagePreviewBack(battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
+            MessagePreviewNavigate(false, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
+
         }
 
         private void battleMessages_UndoAllBtn_Click(object sender, EventArgs e)
@@ -121,43 +122,35 @@ namespace Main
             battleMessages_UndoMessageBtn.Enabled = false;
         }
 
-        private void MessagePreviewBack(Button nextButton, Button backButton, Label previewText)
+        private void MessagePreviewNavigate(bool isNext, Button nextButton, Button backButton, Label previewText)
         {
-            MainEditorModel.BattleMessageDisplayIndex--;
-            backButton.Enabled = MainEditorModel.BattleMessageDisplayIndex > 0;
-            backButton.Visible = backButton.Enabled;
-
-            nextButton.Enabled = MainEditorModel.BattleMessageDisplayIndex >= 0;
-            nextButton.Visible = nextButton.Enabled;
-
-            if (MainEditorModel.BattleMessageDisplayIndex >= 0)
-            {
-                previewText.Text = MainEditorModel.DisplayBattleMessageText[MainEditorModel.BattleMessageDisplayIndex];
-            }
-            else
+            if (isNext)
             {
                 MainEditorModel.BattleMessageDisplayIndex++;
             }
-        }
+            else
+            {
+                MainEditorModel.BattleMessageDisplayIndex--;
+            }
 
-        private void MessagePreviewNext(Button nextButton, Button backButton, Label previewText)
-        {
-            MainEditorModel.BattleMessageDisplayIndex++;
             backButton.Enabled = MainEditorModel.BattleMessageDisplayIndex > 0;
             backButton.Visible = backButton.Enabled;
 
             nextButton.Enabled = MainEditorModel.BattleMessageDisplayIndex < MainEditorModel.DisplayBattleMessageText.Count - 1;
             nextButton.Visible = nextButton.Enabled;
 
-            if (MainEditorModel.BattleMessageDisplayIndex < MainEditorModel.DisplayBattleMessageText.Count)
+            if (MainEditorModel.BattleMessageDisplayIndex >= 0 &&
+                MainEditorModel.BattleMessageDisplayIndex < MainEditorModel.DisplayBattleMessageText.Count)
             {
                 previewText.Text = MainEditorModel.DisplayBattleMessageText[MainEditorModel.BattleMessageDisplayIndex];
             }
             else
             {
-                MainEditorModel.BattleMessageDisplayIndex++;
+                // If index is out of range, revert the index change
+                MainEditorModel.BattleMessageDisplayIndex = isNext ? MainEditorModel.BattleMessageDisplayIndex - 1 : MainEditorModel.BattleMessageDisplayIndex + 1;
             }
         }
+
 
         private Task PopulateBattleMessages()
         {

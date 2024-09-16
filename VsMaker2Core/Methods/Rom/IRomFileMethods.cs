@@ -1,4 +1,5 @@
-﻿using VsMaker2Core.DataModels;
+﻿using System.Threading.Tasks;
+using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -12,10 +13,24 @@ namespace VsMaker2Core.Methods
         /// <param name="workingDirectory"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        (bool Success, string ExceptionMessage) ExtractRomContents(string workingDirectory, string fileName);
+        Task<(bool Success, string ExceptionMessage)> ExtractRomContentsAsync(string workingDirectory, string fileName);
+
+        List<string> GetAbilityNames(int abilityNameArchive);
+
+        List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath);
+
+        List<string> GetBattleMessages(int battleMessageArchive);
+
+        List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath);
+
+        List<string> GetClassDescriptions(int classDescriptionsArchive);
+
+        List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
 
         List<string> GetClassNames(int classNamesArchive);
-        List<string> GetClassDescriptions(int classDescriptionsArchive);
+        List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
+
+        List<string> GetItemNames(int itemNameArchive);
 
         /// <summary>
         /// Get the contents of a Message Archive for given messageArchiveId.
@@ -25,10 +40,12 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false);
 
-        List<string> GetMoveNames(int moveTextArchive);
-        List<string> GetAbilityNames(int abilityNameArchive);
+        int GetMessageInitialKey(int messageArchive);
 
+        List<string> GetMoveNames(int moveTextArchive);
         List<string> GetPokemonNames(int pokemonNameArchive);
+
+        List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom);
 
         /// <summary>
         /// Get all Pokemon Species data from extracted ROM Files.
@@ -36,9 +53,9 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         List<Species> GetSpecies();
 
-        int GetTotalNumberOfTrainers(int trainerNameArchive);
         int GetTotalNumberOfTrainerClassess(int trainerClassNameArchive);
 
+        int GetTotalNumberOfTrainers(int trainerNameArchive);
         /// <summary>
         /// Get the TrainerNames from the trainerNameMessageArchive.
         /// </summary>
@@ -54,6 +71,8 @@ namespace VsMaker2Core.Methods
 
         TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
 
+        Task RepackRomAsync(string ndsFileName);
+
         /// <summary>
         /// Setup the required NarcDirectory paths for opened ROM File.
         /// </summary>
@@ -63,22 +82,14 @@ namespace VsMaker2Core.Methods
         /// <param name="gameLanguage"></param>
         void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage);
 
+        int SetTrainerNameMax(int trainerNameOffset);
+
         /// <summary>
         /// Unpack required NARCs from a ROM's Extracted data.
         /// </summary>
         /// <param name="narcs"></param>
         /// <param name="progress"></param>
         /// <returns></returns>
-        (bool Success, string ExceptionMessage) UnpackNarcs(List<NarcDirectory> narcs, IProgress<int> progress);
-        List<string> GetItemNames(int itemNameArchive);
-        int GetMessageInitialKey(int messageArchive);
-        int SetTrainerNameMax(int trainerNameOffset);
-        List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
-        List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
-        List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom);
-        List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath);
-        List<string> GetBattleMessages(int battleMessageArchive);
-        List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath);
-        Task RepackRom(string ndsFileName);
+       Task<(bool Success, string ExceptionMessage)> UnpackNarcsAsync(List<NarcDirectory> narcs, IProgress<int> progress);
     }
 }

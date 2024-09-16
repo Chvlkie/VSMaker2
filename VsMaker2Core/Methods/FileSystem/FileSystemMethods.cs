@@ -41,44 +41,40 @@ namespace VsMaker2Core.Methods
             try
             {
                 var originalScriptData = scriptFileMethods.GetScriptFileData(RomFile.TrainerScriptFile);
-                List<ScriptData> newScripts = [];
-                int trainerScriptCount = totalNumberOfTrainers >= RomFile.OriginalTrainerEncounterScript
-                    ? totalNumberOfTrainers
-                    : RomFile.OriginalTrainerEncounterScript;
+                List<ScriptData> newScripts = new List<ScriptData>(totalNumberOfTrainers);
+                int trainerScriptCount = Math.Max(totalNumberOfTrainers, RomFile.OriginalTrainerEncounterScript);
 
-                //Add Script#1 for Trainer Scripts
+                // Add the first script (same as original) and all trainer scripts
                 newScripts.Add(originalScriptData.Scripts[0]);
-                //Add the "UseScript_#1" Trainer Script for each TrainerId
                 for (int i = 0; i < trainerScriptCount - 2; i++)
                 {
                     newScripts.Add(new ScriptData(originalScriptData.Scripts[1], (uint)(i + 2)));
                 }
-                //Add the Encounter Script to the last script
+                // Add the encounter script
                 newScripts.Add(new ScriptData(originalScriptData.Scripts.Last(), (uint)trainerScriptCount));
 
-                //Write new Trainer Scripts
                 var newScriptData = new ScriptFileData(originalScriptData, newScripts);
-
                 var writeScripts = scriptFileMethods.WriteScriptData(newScriptData);
                 if (!writeScripts.Success)
                 {
                     return (false, writeScripts.ErrorMessage);
                 }
 
-                //Change Encounter Script call in ARM9 file
+                // Write the updated encounter script ID
                 uint encounterScriptId = (uint)(2999 + newScriptData.Scripts.Count);
+                using (var writer = new Arm9.Arm9Writer(RomFile.TrainerEncounterScriptOffset))
+                {
+                    writer.Write(encounterScriptId);
+                }
 
-                using Arm9.Arm9Writer writer = new(RomFile.TrainerEncounterScriptOffset);
-                writer.Write(encounterScriptId);
-                writer.Close();
                 return (true, "");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 return (false, ex.Message);
             }
         }
+
 
         public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
         {
@@ -108,27 +104,23 @@ namespace VsMaker2Core.Methods
         public (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable].unpackedDirectory}\\{0:D4}";
+
             try
             {
-                using MemoryStream wr = new();
-                for (int i = 0; i < messageData.Count; i++)
+                using (var fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
+                using (var bufferedStream = new BufferedStream(fileStream, 8192))
+                using (var binaryWriter = new BinaryWriter(bufferedStream))
                 {
-                    wr.Position = 4 * i;
-                    wr.Write(BitConverter.GetBytes(messageData[i].TrainerId), 0, sizeof(ushort));
-                    wr.Write(BitConverter.GetBytes(messageData[i].MessageTriggerId), 0, sizeof(ushort));
+                    for (int i = 0; i < messageData.Count; i++)
+                    {
+                        binaryWriter.Write((ushort)messageData[i].TrainerId);
+                        binaryWriter.Write((ushort)messageData[i].MessageTriggerId);
 
-                    progress?.Report(i);
-                }
-
-                wr.Seek(0, SeekOrigin.Begin);
-
-                if (File.Exists(directory))
-                {
-                    File.Delete(directory);
-                }
-                using (FileStream fileStream = new(directory, FileMode.Create, FileAccess.Write))
-                {
-                    wr.WriteTo(fileStream);
+                        if (i % 5 == 0) // Report progress every 5%
+                        {
+                            progress?.Report((i + 1) * 100 / messageData.Count);
+                        }
+                    }
                 }
                 return (true, "");
             }
@@ -137,31 +129,25 @@ namespace VsMaker2Core.Methods
                 return (false, ex.Message);
             }
         }
+
 
         public (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory}\\{0:D4}";
-            int increment = 100 / offsets.Count;
+
             try
             {
-                using MemoryStream wr = new();
-                for (int i = 0; i < offsets.Count; i++)
+                using (var fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
+                using (var bufferedStream = new BufferedStream(fileStream, 8192))
+                using (var binaryWriter = new BinaryWriter(bufferedStream))
                 {
-                  //  wr.Position = 2 * i;
-                    wr.Write(BitConverter.GetBytes(offsets[i]), 0, sizeof(ushort));
-
-                    progress?.Report(increment);
+                    for (int i = 0; i < offsets.Count; i++)
+                    {
+                        binaryWriter.Write(offsets[i]);
+                        progress?.Report((i + 1) * 100 / offsets.Count);
+                    }
                 }
 
-                wr.Seek(0, SeekOrigin.Begin);
-                if (File.Exists(directory))
-                {
-                    File.Delete(directory);
-                }
-                using (FileStream fileStream = new(directory, FileMode.Create, FileAccess.Write))
-                {
-                    wr.WriteTo(fileStream);
-                }
                 return (true, "");
             }
             catch (Exception ex)
@@ -169,6 +155,7 @@ namespace VsMaker2Core.Methods
                 return (false, ex.Message);
             }
         }
+
 
         public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
         {
@@ -410,19 +397,23 @@ namespace VsMaker2Core.Methods
 
         private List<byte[]> GetAllTrainerPartyFiles(int trainerCount)
         {
-            List<byte[]> trainerFiles = [];
+            List<byte[]> trainerFiles = new List<byte[]>(trainerCount);
 
             for (int i = 0; i < trainerCount; i++)
             {
                 string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{i:D4}";
-                var fileStream = new FileStream(directory, FileMode.Open);
-                using var stream = new MemoryStream();
-                fileStream.CopyTo(stream);
-                trainerFiles.Add(stream.ToArray());
+
+                using (var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read))
+                using (var stream = new MemoryStream((int)fileStream.Length))
+                {
+                    fileStream.CopyTo(stream);
+                    trainerFiles.Add(stream.ToArray());
+                }
             }
 
             return trainerFiles;
         }
+
 
         private List<byte[]> GetAllTrainerPropertyFiles(int trainerCount)
         {

@@ -227,6 +227,22 @@ namespace Main
 
         #endregion Get
 
+        private int GetIndex(ushort? index)
+        {
+            if (!index.HasValue)
+            {
+                return 0;
+            }
+            else if (index.Value == 0xFFFF)
+            {
+                return 0;
+            }
+            else
+            {
+                return index.Value;
+            }
+        }
+
         private void GoToSelectedClass(int classId)
         {
             class_FilterTextBox.Text = "";
@@ -338,13 +354,7 @@ namespace Main
 
         private void poke1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(0);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(0);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(0);
         }
 
         private void poke1DVNum_ValueChanged(object sender, EventArgs e)
@@ -417,13 +427,7 @@ namespace Main
 
         private void poke2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(1);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(1);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(1);
         }
 
         private void poke2DVNum_ValueChanged(object sender, EventArgs e)
@@ -496,13 +500,7 @@ namespace Main
 
         private void poke3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(2);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(2);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(2);
         }
 
         private void poke3DVNum_ValueChanged(object sender, EventArgs e)
@@ -575,13 +573,7 @@ namespace Main
 
         private void poke4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(3);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(3);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(3);
         }
 
         private void poke4DVNum_ValueChanged(object sender, EventArgs e)
@@ -654,13 +646,7 @@ namespace Main
 
         private void poke5ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(4);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(4);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(4);
         }
 
         private void poke5DVNum_ValueChanged(object sender, EventArgs e)
@@ -733,13 +719,7 @@ namespace Main
 
         private void poke6ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ResetPokeComboBoxValidation(5);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(5);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
+            PokeComboBox_SelectedIndexChanged(5);
         }
 
         private void poke6DVNum_ValueChanged(object sender, EventArgs e)
@@ -794,6 +774,26 @@ namespace Main
             }
         }
 
+        private void PokeComboBox_SelectedIndexChanged(int partyIndex)
+        {
+            ResetPokeComboBoxValidation(partyIndex);
+            if (!IsLoadingData)
+            {
+                SetPokemonSpecialData(partyIndex);
+                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+                EditedTrainerParty(true);
+            }
+        }
+        private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
+        {
+            trainer_ScriptUsage.Items.Clear();
+            trainer_EventUsage.Items.Clear();
+            foreach (var item in trainerUsage.Where(x => x.TrainerUsageType == TrainerUsageType.Script || x.TrainerUsageType == TrainerUsageType.Function).OrderBy(x => x.FileId))
+            {
+                trainer_ScriptUsage.Items.Add(item.ListItemName);
+            }
+        }
+
         private void PopulateItemComboBox(ComboBox comboBox)
         {
             if (comboBox.Items.Count == 0)
@@ -835,14 +835,31 @@ namespace Main
             }
         }
 
+        private void PopulateTrainerBattleMessageTriggers(Trainer trainer)
+        {
+            IsLoadingData = true;
+            trainer_MessageTriggerListBox.Items.Clear();
+            trainer_MessagePreviewText.Text = "";
+            trainer_MessageTextBox.Text = "";
+            List<string> messageTriggers = [];
+            foreach (var item in MainEditorModel.BattleMessages.Where(x => x.TrainerId == trainer.TrainerId))
+            {
+                messageTriggers.Add(MessageTrigger.MessageTriggers.Find(x => x.MessageTriggerId == item.MessageTriggerId).ListName);
+            }
+            messageTriggers.Sort();
+            messageTriggers.ForEach(x => trainer_MessageTriggerListBox.Items.Add(x));
+            trainer_MessageUpBtn.Enabled = false;
+            trainer_MessageUpBtn.Visible = false;
+            trainer_MessageDownBtn.Enabled = false;
+            trainer_MessageDownBtn.Visible = false;
+            IsLoadingData = false;
+        }
+
         private void PopulateTrainerClassList(List<TrainerClass> classes)
         {
-            trainer_ClassListBox.Items.Clear();
-            foreach (var item in classes)
-            {
-                trainer_ClassListBox.Items.Add(item.ListName);
-            }
+            trainer_ClassListBox.Items.AddRange(classes.Select(c => c.ListName).ToArray());
         }
+
 
         private void PopulateTrainerData(Trainer trainer)
         {
@@ -878,6 +895,27 @@ namespace Main
             }
         }
 
+        private bool SaveTrainerMessage(int messageId)
+        {
+            var battleMessages = MainEditorModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
+            var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, LoadedRom.BattleMessageTextNumber);
+            if (!saveMessage.Success)
+            {
+                MessageBox.Show(saveMessage.ErrorMessage, "Unable to Save Battle Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
+                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                if (message != default)
+                {
+                    message.MessageText = trainer_MessageTextBox.Text;
+                }
+            }
+            return saveMessage.Success;
+        }
+
         private bool SaveTrainerName(int trainerId)
         {
             var saveTrainerName = fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
@@ -901,28 +939,6 @@ namespace Main
             }
             return saveTrainerName.Success;
         }
-
-        private bool SaveTrainerMessage(int messageId)
-        {
-            var battleMessages = MainEditorModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
-            var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, LoadedRom.BattleMessageTextNumber);
-            if (!saveMessage.Success)
-            {
-                MessageBox.Show(saveMessage.ErrorMessage, "Unable to Save Battle Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
-                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
-                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
-                if (message != default)
-                {
-                    message.MessageText = trainer_MessageTextBox.Text;
-                }
-            }
-            return saveMessage.Success;
-        }
-
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
             List<Pokemon> newPokemons = [];
@@ -1102,23 +1118,6 @@ namespace Main
         {
             trainer_NameTextBox.Text = trainer.TrainerName;
         }
-
-        private int GetIndex(ushort? index)
-        {
-            if (!index.HasValue)
-            {
-                return 0;
-            }
-            else if (index.Value == 0xFFFF)
-            {
-                return 0;
-            }
-            else
-            {
-                return index.Value;
-            }
-        }
-
         private void SetTrainerParty(TrainerParty trainerParty, int teamSize, bool chooseMoves)
         {
             for (int i = 0; i < teamSize; i++)
@@ -1191,6 +1190,7 @@ namespace Main
                 }
             }
         }
+
         private void SetTrainerPartyProperties(TrainerProperty trainerProperties)
         {
             trainer_TeamSizeNum.Maximum = trainerProperties.DoubleBattle ? 3 : 6;
@@ -1224,115 +1224,27 @@ namespace Main
 
         private void SetupPartyEditorFields()
         {
-            pokeComboBoxes =
-            [
-                poke1ComboBox,
-                poke2ComboBox,
-                poke3ComboBox,
-                poke4ComboBox,
-                poke5ComboBox,
-                poke6ComboBox
-            ];
+            pokeComboBoxes = [poke1ComboBox, poke2ComboBox, poke3ComboBox, poke4ComboBox, poke5ComboBox, poke6ComboBox];
 
-            pokeIconsPictureBoxes =
-            [
-                poke1IconPicBox,
-                poke2IconPicBox,
-                poke3IconPicBox,
-                poke4IconPicBox,
-                poke5IconPicBox,
-                poke6IconPicBox,
-            ];
+            pokeIconsPictureBoxes = [poke1IconPicBox, poke2IconPicBox, poke3IconPicBox, poke4IconPicBox, poke5IconPicBox, poke6IconPicBox,];
 
-            pokeLevelNums =
-            [
-                poke1LevelNum,
-                poke2LevelNum,
-                poke3LevelNum,
-                poke4LevelNum,
-                poke5LevelNum,
-                poke6LevelNum,
-            ];
+            pokeLevelNums = [poke1LevelNum, poke2LevelNum, poke3LevelNum, poke4LevelNum, poke5LevelNum, poke6LevelNum,];
 
-            pokeDVNums =
-            [
-                poke1DVNum,
-                poke2DVNum,
-                poke3DVNum,
-                poke4DVNum,
-                poke5DVNum,
-                poke6DVNum,
-            ];
+            pokeDVNums = [poke1DVNum, poke2DVNum, poke3DVNum, poke4DVNum, poke5DVNum, poke6DVNum,];
 
-            pokeGenderComboBoxes =
-                [
-                poke1GenderComboBox,
-                poke2GenderComboBox,
-                poke3GenderComboBox,
-                poke4GenderComboBox,
-                poke5GenderComboBox,
-                poke6GenderComboBox,
-            ];
+            pokeGenderComboBoxes = [poke1GenderComboBox, poke2GenderComboBox, poke3GenderComboBox, poke4GenderComboBox, poke5GenderComboBox, poke6GenderComboBox,];
 
-            pokeAbilityComboBoxes =
-                [
-                poke1AbilityComboBox,
-                poke2AbilityComboBox,
-                poke3AbilityComboBox,
-                poke4AbilityComboBox,
-                poke5AbilityComboBox,
-                poke6AbilityComboBox,
-                ];
+            pokeAbilityComboBoxes = [poke1AbilityComboBox, poke2AbilityComboBox, poke3AbilityComboBox, poke4AbilityComboBox, poke5AbilityComboBox, poke6AbilityComboBox,];
 
-            pokeBallCapsuleComboBoxes =
-                [
-                poke1BallCapsuleComboBox,
-                poke2BallCapsuleComboBox,
-                poke3BallCapsuleComboBox,
-                poke4BallCapsuleComboBox,
-                poke5BallCapsuleComboBox,
-                poke6BallCapsuleComboBox,
-                ];
+            pokeBallCapsuleComboBoxes = [poke1BallCapsuleComboBox, poke2BallCapsuleComboBox, poke3BallCapsuleComboBox, poke4BallCapsuleComboBox, poke5BallCapsuleComboBox, poke6BallCapsuleComboBox,];
 
-            pokeFormsComboBoxes =
-                [
-                poke1FormComboBox,
-                poke2FormComboBox,
-                poke3FormComboBox,
-                poke4FormComboBox,
-                poke5FormComboBox,
-                poke6FormComboBox,
-                ];
+            pokeFormsComboBoxes = [poke1FormComboBox, poke2FormComboBox, poke3FormComboBox, poke4FormComboBox, poke5FormComboBox, poke6FormComboBox,];
 
-            pokeHeldItemComboBoxes =
-                [
-                poke1HeldItemComboBox,
-                poke2HeldItemComboBox,
-                poke3HeldItemComboBox,
-                poke4HeldItemComboBox,
-                poke5HeldItemComboBox,
-                poke6HeldItemComboBox,
-                ];
+            pokeHeldItemComboBoxes = [poke1HeldItemComboBox, poke2HeldItemComboBox, poke3HeldItemComboBox, poke4HeldItemComboBox, poke5HeldItemComboBox, poke6HeldItemComboBox,];
 
-            pokeMoveButtons =
-                [
-                poke1MoveBtn,
-                poke2MoveBtn,
-                poke3MoveBtn,
-                poke4MoveBtn,
-                poke5MoveBtn,
-                poke6MoveBtn,
-                ];
+            pokeMoveButtons = [poke1MoveBtn, poke2MoveBtn, poke3MoveBtn, poke4MoveBtn, poke5MoveBtn, poke6MoveBtn,];
 
-            pokeMoves =
-                [
-                poke1Moves,
-                poke2Moves,
-                poke3Moves,
-                poke4Moves,
-                poke5Moves,
-                poke6Moves,
-                ];
+            pokeMoves = [poke1Moves, poke2Moves, poke3Moves, poke4Moves, poke5Moves, poke6Moves,];
         }
 
         private void SetupTrainerEditor()
@@ -1503,6 +1415,44 @@ namespace Main
             }
         }
 
+        private void trainer_MessageDownBtn_Click(object sender, EventArgs e)
+        {
+            MessagePreviewNavigate(true, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
+        }
+
+        private void trainer_MessageTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                UpdateTextPreview(trainer_MessageTextBox.Text, trainer_MessagePreviewText, trainer_MessageUpBtn, trainer_MessageDownBtn);
+            }
+        }
+
+        private void trainer_MessageTriggerListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
+                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                if (message != default)
+                {
+                    trainer_MessageTextBox.Text = message.MessageText;
+                    trainerEditor_SaveMessage.Enabled = true;
+                }
+                else
+                {
+                    trainer_MessageTextBox.Text = "";
+                    trainerEditor_SaveMessage.Enabled = false;
+                }
+            }
+        }
+
+        private void trainer_MessageUpBtn_Click(object sender, EventArgs e)
+        {
+            MessagePreviewNavigate(false, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
+        }
+
         private void trainer_NameTextBox_TextChanged(object sender, EventArgs e)
         {
             if (trainer_NameTextBox.BackColor == Color.PaleVioletRed)
@@ -1645,17 +1595,6 @@ namespace Main
                 EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
             }
         }
-
-        private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
-        {
-            trainer_ScriptUsage.Items.Clear();
-            trainer_EventUsage.Items.Clear();
-            foreach (var item in trainerUsage.Where(x => x.TrainerUsageType == TrainerUsageType.Script || x.TrainerUsageType == TrainerUsageType.Function).OrderBy(x => x.FileId))
-            {
-                trainer_ScriptUsage.Items.Add(item.ListItemName);
-            }
-        }
-
         private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && trainer_TrainersListBox.SelectedIndex > -1)
@@ -1699,65 +1638,6 @@ namespace Main
                 }
             }
         }
-
-        private void trainer_MessageTriggerListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
-                int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
-                var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
-                if (message != default)
-                {
-                    trainer_MessageTextBox.Text = message.MessageText;
-                    trainerEditor_SaveMessage.Enabled = true;
-                }
-                else
-                {
-                    trainer_MessageTextBox.Text = "";
-                    trainerEditor_SaveMessage.Enabled = false;
-                }
-            }
-        }
-
-        private void trainer_MessageTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                UpdateTextPreview(trainer_MessageTextBox.Text, trainer_MessagePreviewText, trainer_MessageUpBtn, trainer_MessageDownBtn);
-            }
-        }
-
-        private void trainer_MessageUpBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewBack(trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
-        }
-
-        private void trainer_MessageDownBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewNext(trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
-        }
-
-        private void PopulateTrainerBattleMessageTriggers(Trainer trainer)
-        {
-            IsLoadingData = true;
-            trainer_MessageTriggerListBox.Items.Clear();
-            trainer_MessagePreviewText.Text = "";
-            trainer_MessageTextBox.Text = "";
-            List<string> messageTriggers = [];
-            foreach (var item in MainEditorModel.BattleMessages.Where(x => x.TrainerId == trainer.TrainerId))
-            {
-                messageTriggers.Add(MessageTrigger.MessageTriggers.Find(x => x.MessageTriggerId == item.MessageTriggerId).ListName);
-            }
-            messageTriggers.Sort();
-            messageTriggers.ForEach(x => trainer_MessageTriggerListBox.Items.Add(x));
-            trainer_MessageUpBtn.Enabled = false;
-            trainer_MessageUpBtn.Visible = false;
-            trainer_MessageDownBtn.Enabled = false;
-            trainer_MessageDownBtn.Visible = false;
-            IsLoadingData = false;
-        }
-
         private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)
         {
             UndoTrainerChanges();
@@ -1830,21 +1710,24 @@ namespace Main
 
         private bool ValidatePokemon()
         {
-            bool valid = true;
-            for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
+            var invalidCombos = pokeComboBoxes.Take((int)trainer_TeamSizeNum.Value)
+                                .Where(cb => cb.SelectedIndex <= 0)
+                                .ToList();
+
+            foreach (var combo in invalidCombos)
             {
-                if (pokeComboBoxes[i].SelectedIndex <= 0)
-                {
-                    pokeComboBoxes[i].BackColor = Color.PaleVioletRed;
-                    valid = false;
-                }
+                combo.BackColor = Color.PaleVioletRed;
             }
-            if (!valid)
+
+            if (invalidCombos.Any())
             {
                 MessageBox.Show("You must select a Pokemon", "Unable to Save Trainer Party", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
-            return valid;
+
+            return true;
         }
+
 
         private bool ValidatePokemonMoves()
         {

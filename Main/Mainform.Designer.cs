@@ -2,10 +2,764 @@
 {
     partial class Mainform
     {
+        private ToolStripButton battleMessage_InsertE_Btn;
+
+        private ToolStripButton battleMessage_InsertF_btn;
+
+        private ToolStripButton battleMessage_InsertN_btn;
+
+        private ToolStripButton battleMessage_InsertR_btn;
+
+        private DataGridView battleMessage_MessageTableDataGrid;
+
+        private Label battleMessage_PreviewText;
+
+        private ToolStripButton battleMessages_AddLineBtn;
+
+        private ToolStripButton battleMessages_ExportBtn;
+
+        private ToolStripButton battleMessages_ImportBtn;
+
+        private Button battleMessages_MessageDownBtn;
+
+        private ToolStrip battleMessages_MessageText_toolStrip;
+
+        private RichTextBox battleMessages_MessageTextBox;
+
+        private Button battleMessages_MessageUpBtn;
+
+        private PictureBox battleMessages_PreviewPicBox;
+
+        private ToolStripButton battleMessages_RedoMessageBtn;
+
+        private ToolStripButton battleMessages_RemoveBtn;
+
+        private ToolStripButton battleMessages_SaveBtn;
+
+        private ToolStripButton battleMessages_SortBtn;
+
+        private ToolStrip battleMessages_Table_toolStrip;
+
+        private ToolStripButton battleMessages_UndoAllBtn;
+
+        private ToolStripButton battleMessages_UndoMessageBtn;
+
+        private Button class_AddClassBtn;
+
+        private ToolStrip class_ClassEditor_toolStrip;
+
+        private ListBox class_ClassListBox;
+
+        private Button class_ClearFilterBtn;
+
+        private ToolStripButton class_CopyBtn;
+
+        private Label class_DescriptionLbl;
+
+        private TextBox class_DescriptionTextBox;
+
+        private Button class_ExportAllBtn;
+
+        private ToolStripButton class_ExportBtn;
+
+        private ComboBox class_EyeContactDayComboBox;
+
+        private Button class_EyeContactDaySoundBtn;
+
+        private Button class_EyeContactHelpBtn;
+
+        private ComboBox class_EyeContactNightComboBox;
+
+        private Button class_EyeContactNightPlayBtn;
+
+        private TextBox class_FilterTextBox;
+
+        private ComboBox class_GenderComboBox;
+
+        private Button class_ImportAllBtn;
+
+        private ToolStripButton class_ImportBtn;
+
+        private Button class_InBattleMusicPlayBtn;
+
+        private TextBox class_InBattleMusicTextBox;
+
+        private TextBox class_NameTextBox;
+
+        private Button class_NewClassInfoBtn;
+
+        private ToolStripButton class_PasteBtn;
+
+        private Button class_PrizeMoneyHelpBtn;
+
+        private NumericUpDown class_PrizeMoneyNum;
+
+        private ToolStrip class_Properties_toolStrip;
+
+        private ToolStripButton class_PropertyCopyBtn;
+
+        private ToolStripButton class_PropertyExportBtn;
+
+        private ToolStripButton class_PropertyImportBtn;
+
+        private ToolStripButton class_PropertyPasteBtn;
+
+        private Button class_RemoveBtn;
+
+        private ToolStripButton class_SaveClassBtn;
+
+        private ToolStripButton class_SavePropertyBtn;
+
+        private Button class_SpriteExportBtn;
+
+        private NumericUpDown class_SpriteFrameNum;
+
+        private Button class_SpriteImportBtn;
+
+        private PictureBox class_SpritePicBox;
+
+        private ListBox class_TrainersListBox;
+
+        private ToolStripButton class_UndoAllBtn;
+
+        private ToolStripButton class_UndoPropertiesBtn;
+
+        private Button class_ViewTrainerBtn;
+
+        private ListBox class_VSEffectsListBox;
+
+        private PictureBox class_VsEffectsPictureBox;
+
         /// <summary>
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        private Label label1;
+
+        private Label label10;
+
+        private Label label11;
+
+        private Label label12;
+
+        private Label label13;
+
+        private Label label14;
+
+        private Label label15;
+
+        private Label label16;
+
+        private Label label17;
+
+        private Label label18;
+
+        private Label label19;
+
+        private Label label2;
+
+        private Label label20;
+
+        private Label label21;
+
+        private Label label22;
+
+        private Label label23;
+
+        private Label label24;
+
+        private Label label25;
+
+        private Label label26;
+
+        private Label label27;
+
+        private Label label28;
+
+        private Label label29;
+
+        private Label label3;
+
+        private Label label30;
+
+        private Label label31;
+
+        private Label label32;
+
+        private Label label33;
+
+        private Label label34;
+
+        private Label label35;
+
+        private Label label36;
+
+        private Label label37;
+
+        private Label label38;
+
+        private Label label39;
+
+        private Label label4;
+
+        private Label label40;
+
+        private Label label41;
+
+        private Label label42;
+
+        private Label label43;
+
+        private Label label44;
+
+        private Label label45;
+
+        private Label label46;
+
+        private Label label47;
+
+        private Label label48;
+
+        private Label label49;
+
+        private Label label5;
+
+        private Label label50;
+
+        private Label label51;
+
+        private Label label52;
+
+        private Label label53;
+
+        private Label label54;
+
+        private Label label55;
+
+        private Label label56;
+
+        private Label label57;
+
+        private Label label58;
+
+        private Label label59;
+
+        private Label label6;
+
+        private Label label60;
+
+        private Label label61;
+
+        private Label label62;
+
+        private Label label63;
+
+        private Label label64;
+
+        private Label label65;
+
+        private Label label66;
+
+        private Label label67;
+
+        private Label label68;
+
+        private Label label69;
+
+        private Label label7;
+
+        private Label label70;
+
+        private Label label71;
+
+        private Label label8;
+
+        private Label label9;
+
+        private TabControl main_MainTab;
+
+        private TabPage main_MainTab_ClassTab;
+
+        private TabPage main_MainTab_TrainerTab;
+
+        private TabPage main_MainTable_BattleMessageTab;
+
+        private ToolStripButton main_OpenFolderBtn;
+
+        private ToolStripButton main_OpenPatchesBtn;
+
+        private ToolStripButton main_OpenRomBtn;
+
+        private ToolStripButton main_SaveRomBtn;
+
+        private ToolStripButton main_SettingsBtn;
+
+        private MenuStrip mainMenu;
+
+        private TabPage mainPage;
+
+        private StatusStrip mainStatusStrip;
+
+        private ToolStrip mainToolStrip;
+
+        private ToolStripMenuItem menu_Export;
+
+        private ToolStripMenuItem menu_Export_BattleMessages;
+
+        private ToolStripMenuItem menu_Export_Classes;
+
+        private ToolStripMenuItem menu_Export_Trainers;
+
+        private ToolStripMenuItem menu_File;
+
+        private ToolStripMenuItem menu_File_Close;
+
+        private ToolStripMenuItem menu_File_Exit;
+
+        private ToolStripMenuItem menu_File_OpenFolder;
+
+        private ToolStripMenuItem menu_File_OpenRecent;
+
+        private ToolStripMenuItem menu_File_OpenRom;
+
+        private ToolStripMenuItem menu_File_Save;
+
+        private ToolStripMenuItem menu_File_SaveAs;
+
+        private ToolStripMenuItem menu_Help;
+
+        private ToolStripMenuItem menu_Help_About;
+
+        private ToolStripMenuItem menu_Help_CheckUpdate;
+
+        private ToolStripMenuItem menu_Help_ViewHelp;
+
+        private ToolStripMenuItem menu_Import;
+
+        private ToolStripMenuItem menu_Import_BattleMessages;
+
+        private ToolStripMenuItem menu_Import_Classes;
+
+        private ToolStripMenuItem menu_Import_Trainers;
+
+        private ToolStripMenuItem menu_Tools;
+
+        private ToolStripMenuItem menu_Tools_RomPatcher;
+
+        private ToolStripMenuItem menu_Tools_Settings;
+
+        private DataGridViewTextBoxColumn messageId;
+
+        private DataGridViewTextBoxColumn messageText;
+
+        private DataGridViewTextBoxColumn messageTrigger;
+
+        private Panel panel1;
+
+        private Panel panel10;
+
+        private Panel panel11;
+
+        private Panel panel12;
+
+        private Panel panel2;
+
+        private Panel panel3;
+
+        private Panel panel4;
+
+        private Panel panel5;
+
+        private Panel panel6;
+
+        private Panel panel7;
+
+        private Panel panel8;
+
+        private Panel panel9;
+
+        private Label poke_Slot1_Pokemon_lbl;
+
+        private ComboBox poke1AbilityComboBox;
+
+        private ComboBox poke1BallCapsuleComboBox;
+
+        private ComboBox poke1ComboBox;
+
+        private NumericUpDown poke1DVNum;
+
+        private ComboBox poke1FormComboBox;
+
+        private ComboBox poke1GenderComboBox;
+
+        private ComboBox poke1HeldItemComboBox;
+
+        private PictureBox poke1IconPicBox;
+
+        private NumericUpDown poke1LevelNum;
+
+        private Button poke1MoveBtn;
+
+        private ComboBox poke2AbilityComboBox;
+
+        private ComboBox poke2BallCapsuleComboBox;
+
+        private ComboBox poke2ComboBox;
+
+        private NumericUpDown poke2DVNum;
+
+        private ComboBox poke2FormComboBox;
+
+        private ComboBox poke2GenderComboBox;
+
+        private ComboBox poke2HeldItemComboBox;
+
+        private PictureBox poke2IconPicBox;
+
+        private NumericUpDown poke2LevelNum;
+
+        private Button poke2MoveBtn;
+
+        private ComboBox poke3AbilityComboBox;
+
+        private ComboBox poke3BallCapsuleComboBox;
+
+        private ComboBox poke3ComboBox;
+
+        private NumericUpDown poke3DVNum;
+
+        private ComboBox poke3FormComboBox;
+
+        private ComboBox poke3GenderComboBox;
+
+        private ComboBox poke3HeldItemComboBox;
+
+        private PictureBox poke3IconPicBox;
+
+        private NumericUpDown poke3LevelNum;
+
+        private Button poke3MoveBtn;
+
+        private ComboBox poke4AbilityComboBox;
+
+        private ComboBox poke4BallCapsuleComboBox;
+
+        private ComboBox poke4ComboBox;
+
+        private NumericUpDown poke4DVNum;
+
+        private ComboBox poke4FormComboBox;
+
+        private ComboBox poke4GenderComboBox;
+
+        private ComboBox poke4HeldItemComboBox;
+
+        private PictureBox poke4IconPicBox;
+
+        private NumericUpDown poke4LevelNum;
+
+        private Button poke4MoveBtn;
+
+        private ComboBox poke5AbilityComboBox;
+
+        private ComboBox poke5BallCapsuleComboBox;
+
+        private ComboBox poke5ComboBox;
+
+        private NumericUpDown poke5DVNum;
+
+        private ComboBox poke5FormComboBox;
+
+        private ComboBox poke5GenderComboBox;
+
+        private ComboBox poke5HeldItemComboBox;
+
+        private PictureBox poke5IconPicBox;
+
+        private NumericUpDown poke5LevelNum;
+
+        private Button poke5MoveBtn;
+
+        private ComboBox poke6AbilityComboBox;
+
+        private ComboBox poke6BallCapsuleComboBox;
+
+        private ComboBox poke6ComboBox;
+
+        private NumericUpDown poke6DVNum;
+
+        private ComboBox poke6FormComboBox;
+
+        private ComboBox poke6GenderComboBox;
+
+        private ComboBox poke6HeldItemComboBox;
+
+        private PictureBox poke6IconPicBox;
+
+        private NumericUpDown poke6LevelNum;
+
+        private Button poke6MoveBtn;
+
+        private PictureBox romIcon_PicBox;
+
+        private Label romName_Label;
+
+        private Label startupLabel;
+
+        private TabPage startupPage;
+
+        private TabControl startupTab;
+
+        private ToolStripButton toolStripButton1;
+
+        private ToolStripButton toolStripButton12;
+
+        private ToolStripButton toolStripButton13;
+
+        private ToolStripButton toolStripButton2;
+
+        private ToolStripButton toolStripButton3;
+
+        private ToolStripButton toolStripButton4;
+
+        private ToolStripButton toolStripButton6;
+
+        private ToolStripButton toolStripButton7;
+
+        private SplitContainer toolstripContainer;
+
+        private ToolStripSeparator toolStripSeparator1;
+
+        private ToolStripSeparator toolStripSeparator10;
+
+        private ToolStripSeparator toolStripSeparator11;
+
+        private ToolStripSeparator toolStripSeparator12;
+
+        private ToolStripSeparator toolStripSeparator13;
+
+        private ToolStripSeparator toolStripSeparator14;
+
+        private ToolStripSeparator toolStripSeparator15;
+
+        private ToolStripSeparator toolStripSeparator16;
+
+        private ToolStripSeparator toolStripSeparator17;
+
+        private ToolStripSeparator toolStripSeparator18;
+
+        private ToolStripSeparator toolStripSeparator19;
+
+        private ToolStripSeparator toolStripSeparator2;
+
+        private ToolStripSeparator toolStripSeparator20;
+
+        private ToolStripSeparator toolStripSeparator21;
+
+        private ToolStripSeparator toolStripSeparator22;
+
+        private ToolStripSeparator toolStripSeparator23;
+
+        private ToolStripSeparator toolStripSeparator24;
+
+        private ToolStripSeparator toolStripSeparator25;
+
+        private ToolStripSeparator toolStripSeparator26;
+
+        private ToolStripSeparator toolStripSeparator27;
+
+        private ToolStripSeparator toolStripSeparator3;
+
+        private ToolStripSeparator toolStripSeparator4;
+
+        private ToolStripSeparator toolStripSeparator5;
+
+        private ToolStripSeparator toolStripSeparator6;
+
+        private ToolStripSeparator toolStripSeparator7;
+
+        private ToolStripSeparator toolStripSeparator8;
+
+        private ToolStripSeparator toolStripSeparator9;
+
+        private Button trainer_AddTrainerBtn;
+
+        private CheckedListBox trainer_AiFlags_listbox;
+
+        private ToolStrip trainer_BattleMessages_toolStrip;
+
+        private TabPage trainer_BattleMessageTab;
+
+        private CheckBox trainer_ChooseMovesCheckbox;
+
+        private Label trainer_Class_Lbl;
+
+        private Panel trainer_Class_Panel;
+
+        private ListBox trainer_ClassListBox;
+
+        private Button trainer_ClearFilterBtn;
+
+        private ToolStripButton trainer_Copy_Btn;
+
+        private ToolStripButton trainer_CopyParty_btn;
+
+        private ToolStripButton trainer_CopyProperties_btn;
+
+        private CheckBox trainer_DblBattleCheckBox;
+
+        private ListBox trainer_EventUsage;
+
+        private ToolStripButton trainer_Export_Btn;
+
+        private Button trainer_ExportAllBtn;
+
+        private ToolStripButton trainer_ExportParty_btn;
+
+        private ToolStripButton trainer_ExportProperties_btn;
+
+        private TextBox trainer_FilterBox;
+
+        private CheckBox trainer_HeldItemsCheckbox;
+
+        private ToolStripButton trainer_Import_Btn;
+
+        private Button trainer_ImportAllBtn;
+
+        private ToolStripButton trainer_ImportParty_btn;
+
+        private ToolStripButton trainer_ImportProperties_btn;
+
+        private ToolStripButton trainer_InsertE_btn;
+
+        private ToolStripButton trainer_InsertF_Btn;
+
+        private ToolStripButton trainer_InsertN_btn;
+
+        private ToolStripButton trainer_InsertR_btn;
+
+        private ComboBox trainer_ItemComboBox1;
+
+        private ComboBox trainer_ItemComboBox2;
+
+        private ComboBox trainer_ItemComboBox3;
+
+        private ComboBox trainer_ItemComboBox4;
+
+        private Panel trainer_List_Buttons;
+
+        private Panel trainer_List_Panel;
+
+        private Panel trainer_MessaageEditor_Panel;
+
+        private ToolStrip trainer_Message_Toolstrip;
+
+        private ToolStripButton trainer_MessageCopyBtn;
+
+        private Button trainer_MessageDownBtn;
+
+        private ToolStripButton trainer_MessageEditRedoBtn;
+
+        private ToolStripButton trainer_MessageEditSaveBtn;
+
+        private ToolStrip trainer_MessageEditToolstrip;
+
+        private ToolStripButton trainer_MessageEditUndoBtn;
+
+        private PictureBox trainer_MessagePreviewPicBox;
+
+        private Label trainer_MessagePreviewText;
+
+        private ToolStripButton trainer_MessageSaveBtn;
+
+        private ToolStripButton trainer_MessagesExportBtn;
+
+        private ToolStripButton trainer_MessagesPasteBtn;
+
+        private ToolStrip trainer_MessageText_toolStrip;
+
+        private RichTextBox trainer_MessageTextBox;
+
+        private Label trainer_MessageTrigger_lbl;
+
+        private ListBox trainer_MessageTriggerListBox;
+
+        private ListBox trainer_MessageTriggersListBox;
+
+        private ToolStripButton trainer_MessageUndoBtn;
+
+        private Button trainer_MessageUpBtn;
+
+        private Label trainer_Msg_Text_lbl;
+
+        private Label trainer_MsgPreview_lbl;
+
+        private Label trainer_Name_Label;
+
+        private TextBox trainer_NameTextBox;
+
+        private ToolStrip trainer_Party_toolStrip;
+
+        private ToolStripButton trainer_Paste_Btn;
+
+        private ToolStripButton trainer_PasteParty_btn;
+
+        private ToolStripButton trainer_PastePropeties_btn;
+
+        private ToolStrip trainer_Properties_toolStrip;
+
+        private TabControl trainer_PropertiesTabControl;
+
+        private Button trainer_RemoveBtn;
+
+        private ToolStripButton trainer_SaveBtn;
+
+        private ToolStripButton trainer_SaveParty_btn;
+
+        private ToolStripButton trainer_SaveProperties_btn;
+
+        private ListBox trainer_ScriptUsage;
+
+        private Label trainer_Sprite_Frame_lbl;
+
+        private Label trainer_Sprite_Label;
+
+        private Button trainer_SpriteExportBtn;
+
+        private NumericUpDown trainer_SpriteFrameNum;
+
+        private Button trainer_SpriteImportBtn;
+
+        private PictureBox trainer_SpritePicBox;
+
+        private NumericUpDown trainer_TeamSizeNum;
+
+        private ToolStrip trainer_Toolstrip;
+
+        private Label trainer_Trainer_Lbl;
+
+        private TabPage trainer_TrainerData_tab;
+
+        private ListBox trainer_TrainersListBox;
+
+        private ToolStripButton trainer_UndoAll_Btn;
+
+        private ToolStripButton trainer_UndoParty_btn;
+
+        private ToolStripButton trainer_UndoProperties_btn;
+
+        private TabPage trainer_UsesTab;
+
+        private Button trainer_ViewClassBtn;
+
+        private Button trainer_ViewMessageTableBtn;
+
+        private ToolStripButton trainerEditor_SaveMessage;
+
+        private DataGridViewTextBoxColumn trainerId;
+
+        private ToolStripButton traioner_MessagesImportBtn;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -4297,383 +5051,5 @@
         }
 
         #endregion
-
-        private MenuStrip mainMenu;
-        private ToolStripMenuItem menu_File;
-        private ToolStripMenuItem menu_File_OpenRom;
-        private ToolStripMenuItem menu_File_OpenFolder;
-        private ToolStripMenuItem menu_File_OpenRecent;
-        private ToolStripSeparator toolStripSeparator3;
-        private ToolStripMenuItem menu_File_Save;
-        private ToolStripMenuItem menu_File_SaveAs;
-        private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem menu_File_Close;
-        private ToolStripSeparator toolStripSeparator2;
-        private ToolStripMenuItem menu_File_Exit;
-        private ToolStripMenuItem menu_Import;
-        private ToolStripMenuItem menu_Import_Trainers;
-        private ToolStripMenuItem menu_Import_Classes;
-        private ToolStripMenuItem menu_Import_BattleMessages;
-        private ToolStripMenuItem menu_Export;
-        private ToolStripMenuItem menu_Export_Trainers;
-        private ToolStripMenuItem menu_Export_Classes;
-        private ToolStripMenuItem menu_Export_BattleMessages;
-        private ToolStripMenuItem menu_Tools;
-        private ToolStripMenuItem menu_Help;
-        private ToolStripMenuItem menu_Tools_RomPatcher;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem menu_Tools_Settings;
-        private ToolStripMenuItem menu_Help_ViewHelp;
-        private ToolStripSeparator toolStripSeparator6;
-        private ToolStripMenuItem menu_Help_About;
-        private ToolStripMenuItem menu_Help_CheckUpdate;
-        private TabControl startupTab;
-        private TabPage startupPage;
-        private TabPage mainPage;
-        private Label startupLabel;
-        private StatusStrip mainStatusStrip;
-        private SplitContainer toolstripContainer;
-        private ToolStrip mainToolStrip;
-        private ToolStripButton main_OpenRomBtn;
-        private ToolStripButton main_OpenFolderBtn;
-        private ToolStripSeparator toolStripSeparator7;
-        private ToolStripButton main_SaveRomBtn;
-        private Label romName_Label;
-        private PictureBox romIcon_PicBox;
-        private TabControl main_MainTab;
-        private TabPage main_MainTab_TrainerTab;
-        private TabPage main_MainTable_BattleMessageTab;
-        private Panel trainer_List_Buttons;
-        private Panel trainer_List_Panel;
-        private Button trainer_ExportAllBtn;
-        private Button trainer_ImportAllBtn;
-        private Button trainer_RemoveBtn;
-        private Button trainer_AddTrainerBtn;
-        private Panel trainer_Class_Panel;
-        private ListBox trainer_TrainersListBox;
-        private Label trainer_Trainer_Lbl;
-        private Label trainer_Sprite_Label;
-        private PictureBox trainer_SpritePicBox;
-        private Label trainer_Sprite_Frame_lbl;
-        private NumericUpDown trainer_SpriteFrameNum;
-        private Button trainer_SpriteExportBtn;
-        private Button trainer_SpriteImportBtn;
-        private Button trainer_ViewClassBtn;
-        private ListBox trainer_ClassListBox;
-        private Label trainer_Class_Lbl;
-        private TextBox trainer_NameTextBox;
-        private Label trainer_Name_Label;
-        private ToolStrip trainer_Toolstrip;
-        private ToolStripButton trainer_Export_Btn;
-        private ToolStripButton trainer_Import_Btn;
-        private ToolStripButton trainer_Paste_Btn;
-        private ToolStripButton trainer_Copy_Btn;
-        private ToolStripButton trainer_UndoAll_Btn;
-        private ToolStripButton trainer_SaveBtn;
-        private ToolStripSeparator toolStripSeparator9;
-        private ToolStripSeparator toolStripSeparator8;
-        private ToolStrip trainer_Message_Toolstrip;
-        private ToolStripButton trainer_MessageSaveBtn;
-        private ToolStripButton trainer_MessageUndoBtn;
-        private ToolStripButton trainer_MessageCopyBtn;
-        private ToolStripButton trainer_MessagesPasteBtn;
-        private ToolStripButton traioner_MessagesImportBtn;
-        private ToolStripButton trainer_MessagesExportBtn;
-        private Label trainer_MsgPreview_lbl;
-        private Label trainer_MessageTrigger_lbl;
-        private ListBox trainer_MessageTriggersListBox;
-        private Label trainer_Msg_Text_lbl;
-        private Panel trainer_MessaageEditor_Panel;
-        private Button trainer_ViewMessageTableBtn;
-        private ToolStrip trainer_MessageEditToolstrip;
-        private ToolStripButton trainer_MessageEditSaveBtn;
-        private ToolStripButton trainer_MessageEditUndoBtn;
-        private ToolStripButton trainer_MessageEditRedoBtn;
-        private TabPage main_MainTab_ClassTab;
-        private Panel panel1;
-        private ListBox class_ClassListBox;
-        private Label label51;
-        private ToolStrip class_ClassEditor_toolStrip;
-        private ToolStripButton class_SaveClassBtn;
-        private ToolStripButton class_UndoAllBtn;
-        private ToolStripSeparator toolStripSeparator14;
-        private ToolStripButton class_CopyBtn;
-        private ToolStripButton class_PasteBtn;
-        private ToolStripSeparator toolStripSeparator15;
-        private ToolStripButton class_ImportBtn;
-        private ToolStripButton class_ExportBtn;
-        private Panel panel4;
-        private ToolStrip class_Properties_toolStrip;
-        private ToolStripButton class_PropertyCopyBtn;
-        private ToolStripButton class_PropertyPasteBtn;
-        private Panel panel3;
-        private Label label52;
-        private TextBox class_NameTextBox;
-        private Button class_ViewTrainerBtn;
-        private ListBox class_TrainersListBox;
-        private Label label53;
-        private Label label54;
-        private NumericUpDown class_SpriteFrameNum;
-        private Button class_SpriteExportBtn;
-        private Button class_SpriteImportBtn;
-        private PictureBox class_SpritePicBox;
-        private Label label55;
-        private Panel panel2;
-        private Button class_RemoveBtn;
-        private Button class_ExportAllBtn;
-        private Button class_ImportAllBtn;
-        private Button class_AddClassBtn;
-        private ToolStripSeparator toolStripSeparator16;
-        private ToolStripButton class_PropertyImportBtn;
-        private ToolStripButton class_PropertyExportBtn;
-        private ComboBox class_EyeContactDayComboBox;
-        private Label label56;
-        private ComboBox class_GenderComboBox;
-        private Label label58;
-        private Label label57;
-        private ComboBox class_EyeContactNightComboBox;
-        private Label label59;
-        private NumericUpDown class_PrizeMoneyNum;
-        private Button class_PrizeMoneyHelpBtn;
-        private Panel panel6;
-        private Button battleMessages_MessageUpBtn;
-        private Button battleMessages_MessageDownBtn;
-        private PictureBox battleMessages_PreviewPicBox;
-        private Label label61;
-        private RichTextBox battleMessages_MessageTextBox;
-        private ToolStrip battleMessages_MessageText_toolStrip;
-        private ToolStripButton battleMessages_UndoMessageBtn;
-        private ToolStripButton battleMessages_RedoMessageBtn;
-        private Label label63;
-        private ToolStripSeparator toolStripSeparator20;
-        private ToolStripButton main_OpenPatchesBtn;
-        private ToolStripButton main_SettingsBtn;
-        private TextBox trainer_FilterBox;
-        private Label label67;
-        private Button trainer_ClearFilterBtn;
-        private Button class_ClearFilterBtn;
-        private Label label68;
-        private TextBox class_FilterTextBox;
-        private Label class_DescriptionLbl;
-        private TextBox class_DescriptionTextBox;
-        private TabControl trainer_PropertiesTabControl;
-        private TabPage trainer_TrainerData_tab;
-        private Panel panel11;
-        private PictureBox poke1IconPicBox;
-        private ComboBox poke1ComboBox;
-        private Label label40;
-        private NumericUpDown poke1LevelNum;
-        private Label label41;
-        private Label poke_Slot1_Pokemon_lbl;
-        private ComboBox poke6AbilityComboBox;
-        private Label label1;
-        private Label label42;
-        private Label label3;
-        private ComboBox poke6FormComboBox;
-        private ComboBox poke1BallCapsuleComboBox;
-        private Label label43;
-        private Button poke1MoveBtn;
-        private ComboBox poke6GenderComboBox;
-        private ComboBox poke1HeldItemComboBox;
-        private Label label44;
-        private NumericUpDown poke1DVNum;
-        private NumericUpDown poke6DVNum;
-        private Label label7;
-        private ComboBox poke6HeldItemComboBox;
-        private ComboBox poke1GenderComboBox;
-        private Button poke6MoveBtn;
-        private Label label8;
-        private ComboBox poke6BallCapsuleComboBox;
-        private ComboBox poke1FormComboBox;
-        private Label label45;
-        private Label label2;
-        private Label label46;
-        private ComboBox poke1AbilityComboBox;
-        private Label label47;
-        private Label label4;
-        private NumericUpDown poke6LevelNum;
-        private Label label5;
-        private PictureBox poke6IconPicBox;
-        private ComboBox poke2ComboBox;
-        private ComboBox poke6ComboBox;
-        private PictureBox poke2IconPicBox;
-        private Label label32;
-        private NumericUpDown poke2LevelNum;
-        private Label label33;
-        private Label label15;
-        private ComboBox poke5AbilityComboBox;
-        private Label label14;
-        private Label label34;
-        private Label label13;
-        private ComboBox poke5FormComboBox;
-        private ComboBox poke2BallCapsuleComboBox;
-        private Label label35;
-        private Button poke2MoveBtn;
-        private ComboBox poke5GenderComboBox;
-        private ComboBox poke2HeldItemComboBox;
-        private Label label36;
-        private NumericUpDown poke2DVNum;
-        private NumericUpDown poke5DVNum;
-        private Label label12;
-        private ComboBox poke5HeldItemComboBox;
-        private ComboBox poke2GenderComboBox;
-        private Button poke5MoveBtn;
-        private Label label11;
-        private ComboBox poke5BallCapsuleComboBox;
-        private ComboBox poke2FormComboBox;
-        private Label label37;
-        private Label label10;
-        private Label label38;
-        private ComboBox poke2AbilityComboBox;
-        private Label label39;
-        private Label label9;
-        private NumericUpDown poke5LevelNum;
-        private Label label6;
-        private PictureBox poke5IconPicBox;
-        private ComboBox poke3ComboBox;
-        private ComboBox poke5ComboBox;
-        private PictureBox poke3IconPicBox;
-        private Label label24;
-        private NumericUpDown poke3LevelNum;
-        private Label label25;
-        private Label label23;
-        private ComboBox poke4AbilityComboBox;
-        private Label label22;
-        private Label label26;
-        private Label label21;
-        private ComboBox poke4FormComboBox;
-        private ComboBox poke3BallCapsuleComboBox;
-        private Label label27;
-        private Button poke3MoveBtn;
-        private ComboBox poke4GenderComboBox;
-        private ComboBox poke3HeldItemComboBox;
-        private Label label28;
-        private NumericUpDown poke3DVNum;
-        private NumericUpDown poke4DVNum;
-        private Label label20;
-        private ComboBox poke4HeldItemComboBox;
-        private ComboBox poke3GenderComboBox;
-        private Button poke4MoveBtn;
-        private Label label19;
-        private ComboBox poke4BallCapsuleComboBox;
-        private ComboBox poke3FormComboBox;
-        private Label label29;
-        private Label label18;
-        private Label label30;
-        private ComboBox poke3AbilityComboBox;
-        private Label label31;
-        private Label label17;
-        private NumericUpDown poke4LevelNum;
-        private Label label16;
-        private PictureBox poke4IconPicBox;
-        private ComboBox poke4ComboBox;
-        private Panel panel10;
-        private ComboBox trainer_ItemComboBox4;
-        private ComboBox trainer_ItemComboBox3;
-        private Label label48;
-        private ComboBox trainer_ItemComboBox2;
-        private NumericUpDown trainer_TeamSizeNum;
-        private CheckBox trainer_DblBattleCheckBox;
-        private ComboBox trainer_ItemComboBox1;
-        private CheckBox trainer_HeldItemsCheckbox;
-        private CheckBox trainer_ChooseMovesCheckbox;
-        private Label label50;
-        private CheckedListBox trainer_AiFlags_listbox;
-        private Label label49;
-        private TabPage trainer_BattleMessageTab;
-        private Label label66;
-        private Panel panel9;
-        private RichTextBox trainer_MessageTextBox;
-        private ToolStrip trainer_MessageText_toolStrip;
-        private ToolStripButton trainerEditor_SaveMessage;
-        private ToolStripButton toolStripButton6;
-        private ToolStripButton toolStripButton7;
-        private Button trainer_MessageUpBtn;
-        private Button trainer_MessageDownBtn;
-        private PictureBox trainer_MessagePreviewPicBox;
-        private ListBox trainer_MessageTriggerListBox;
-        private Label label64;
-        private Label label65;
-        private ToolStrip trainer_BattleMessages_toolStrip;
-        private ToolStripButton toolStripButton13;
-        private ToolStripButton toolStripButton12;
-        private ToolStripSeparator toolStripSeparator11;
-        private ToolStripButton toolStripButton1;
-        private ToolStripButton toolStripButton2;
-        private ToolStripSeparator toolStripSeparator4;
-        private ToolStripButton toolStripButton3;
-        private ToolStripButton toolStripButton4;
-        private ToolStrip trainer_Party_toolStrip;
-        private ToolStripButton trainer_SaveParty_btn;
-        private ToolStripButton trainer_UndoParty_btn;
-        private ToolStripSeparator toolStripSeparator10;
-        private ToolStripButton trainer_CopyParty_btn;
-        private ToolStripButton trainer_PasteParty_btn;
-        private ToolStripSeparator toolStripSeparator12;
-        private ToolStripButton trainer_ImportParty_btn;
-        private ToolStripButton trainer_ExportParty_btn;
-        private ToolStrip trainer_Properties_toolStrip;
-        private ToolStripButton trainer_SaveProperties_btn;
-        private ToolStripButton trainer_UndoProperties_btn;
-        private ToolStripSeparator toolStripSeparator13;
-        private ToolStripButton trainer_CopyProperties_btn;
-        private ToolStripButton trainer_PastePropeties_btn;
-        private ToolStripSeparator toolStripSeparator21;
-        private ToolStripButton trainer_ImportProperties_btn;
-        private ToolStripButton trainer_ExportProperties_btn;
-        private ToolStripButton class_SavePropertyBtn;
-        private ToolStripButton class_UndoPropertiesBtn;
-        private ToolStripSeparator toolStripSeparator22;
-        private ListBox class_VSEffectsListBox;
-        private Button class_EyeContactHelpBtn;
-        private Label label70;
-        private Label label69;
-        private PictureBox class_VsEffectsPictureBox;
-        private Button class_EyeContactDaySoundBtn;
-        private Label label71;
-        private Button class_InBattleMusicPlayBtn;
-        private TextBox class_InBattleMusicTextBox;
-        private Button class_EyeContactNightPlayBtn;
-        private Button class_NewClassInfoBtn;
-        private Label battleMessage_PreviewText;
-        private Label trainer_MessagePreviewText;
-        private Panel panel5;
-        private Panel panel12;
-        private Panel panel8;
-        private DataGridView battleMessage_MessageTableDataGrid;
-        private ToolStrip battleMessages_Table_toolStrip;
-        private ToolStripSeparator toolStripSeparator17;
-        private ToolStripButton battleMessages_ImportBtn;
-        private ToolStripButton battleMessages_ExportBtn;
-        private ToolStripSeparator toolStripSeparator18;
-        private ToolStripButton battleMessages_SaveBtn;
-        private ToolStripButton battleMessages_UndoAllBtn;
-        private ToolStripSeparator toolStripSeparator19;
-        private ToolStripButton battleMessages_AddLineBtn;
-        private ToolStripButton battleMessages_RemoveBtn;
-        private ToolStripButton battleMessages_SortBtn;
-        private Panel panel7;
-        private ToolStripSeparator toolStripSeparator23;
-        private TabPage trainer_UsesTab;
-        private Label label62;
-        private Label label60;
-        private ListBox trainer_EventUsage;
-        private ListBox trainer_ScriptUsage;
-        private DataGridViewTextBoxColumn messageId;
-        private DataGridViewTextBoxColumn trainerId;
-        private DataGridViewTextBoxColumn messageTrigger;
-        private DataGridViewTextBoxColumn messageText;
-        private ToolStripSeparator toolStripSeparator24;
-        private ToolStripButton trainer_InsertE_btn;
-        private ToolStripButton trainer_InsertN_btn;
-        private ToolStripButton trainer_InsertF_Btn;
-        private ToolStripButton trainer_InsertR_btn;
-        private ToolStripSeparator toolStripSeparator25;
-        private ToolStripSeparator toolStripSeparator27;
-        private ToolStripButton battleMessage_InsertN_btn;
-        private ToolStripButton battleMessage_InsertF_btn;
-        private ToolStripButton battleMessage_InsertR_btn;
-        private ToolStripSeparator toolStripSeparator26;
-        private ToolStripButton battleMessage_InsertE_Btn;
     }
 }

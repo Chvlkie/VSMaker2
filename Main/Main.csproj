@@ -89,6 +89,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="CustomUi\ComboBox\" />
 	  <Folder Include="CustomUi\Extensions\ComboBox\" />
 	</ItemGroup>
 

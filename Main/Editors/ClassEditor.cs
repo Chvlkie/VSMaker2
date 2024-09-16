@@ -24,36 +24,25 @@ namespace Main
 
                 if (selectedClass != SelectedClass.ListName)
                 {
-                    if (UnsavedClassChanges && !InhibitClassChange)
+                    if (UnsavedClassChanges && !InhibitClassChange && !ConfirmUnsavedChanges())
                     {
-                        if (ConfirmUnsavedChanges())
-                        {
-                            ClearUnsavedClassChanges();
-                        }
-                        else
-                        {
-                            InhibitClassChange = true;
-                            class_ClassListBox.SelectedIndex = class_ClassListBox.Items.IndexOf(SelectedClass.ListName);
-                        }
+                        InhibitClassChange = true;
+                        class_ClassListBox.SelectedIndex = class_ClassListBox.Items.IndexOf(SelectedClass.ListName);
+                        return;
                     }
 
                     if (!InhibitClassChange)
                     {
-                        selectedClass = class_ClassListBox.SelectedItem.ToString();
-                        SelectedClass = classEditorMethods.GetTrainerClass(MainEditorModel.Classes, TrainerClass.ListNameToTrainerClassId(selectedClass));
+                        SelectedClass = classEditorMethods.GetTrainerClass(
+                            MainEditorModel.Classes,
+                            TrainerClass.ListNameToTrainerClassId(selectedClass)
+                        );
                         class_ViewTrainerBtn.Enabled = false;
-
-                        if (SelectedClass.TrainerClassId > 0)
-                        {
-                            PopulateTrainerClassData();
-                            PopulateUsedByTrainers(SelectedClass.UsedByTrainers);
-                            EnableClassEditor();
-                        }
+                        PopulateTrainerClassData();
+                        PopulateUsedByTrainers(SelectedClass.UsedByTrainers);
+                        EnableClassEditor();
                     }
-                    else
-                    {
-                        InhibitClassChange = false;
-                    }
+                    InhibitClassChange = false;
                 }
             }
         }
@@ -297,32 +286,21 @@ namespace Main
         private void PopulateClassList(List<TrainerClass> classes)
         {
             class_ClassListBox.Items.Clear();
-            UnfilteredClasses = [];
-            foreach (var item in classes)
-            {
-                class_ClassListBox.Items.Add(item.ListName);
-                UnfilteredClasses.Add(item.ListName);
-            }
+            UnfilteredClasses = classes.Select(item => item.ListName).ToList();
+            class_ClassListBox.Items.AddRange(UnfilteredClasses.ToArray());
         }
 
-        private void PopulateEyeContactMusic(ComboBox comboBox)
+        private void PopulateEyeContactMusic(ComboBox comboBox, GameFamily gameFamily)
         {
             comboBox.Items.Clear();
-            switch (RomFile.GameFamily)
+            IEnumerable<string> musicList = gameFamily switch
             {
-                case GameFamily.DiamondPearl:
-                    comboBox.Items.AddRange(EyeContactMusics.DiamondPearl.Select(x => x.ListName).ToArray());
-                    break;
-
-                case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
-                    comboBox.Items.AddRange(EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName).ToArray());
-                    break;
-
-                case GameFamily.Platinum:
-                    comboBox.Items.AddRange(EyeContactMusics.Platinum.Select(x => x.ListName).ToArray());
-                    break;
-            }
+                GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.Select(x => x.ListName),
+                GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName),
+                GameFamily.Platinum => EyeContactMusics.Platinum.Select(x => x.ListName),
+                _ => Enumerable.Empty<string>()
+            };
+            comboBox.Items.AddRange(musicList.ToArray());
         }
 
         private void PopulateTrainerClassData()
@@ -510,11 +488,11 @@ namespace Main
             }
             if (class_EyeContactDayComboBox.Items.Count == 0)
             {
-                PopulateEyeContactMusic(class_EyeContactDayComboBox);
+                PopulateEyeContactMusic(class_EyeContactDayComboBox, RomFile.GameFamily);
             }
             if (class_EyeContactNightComboBox.Items.Count == 0)
             {
-                PopulateEyeContactMusic(class_EyeContactNightComboBox);
+                PopulateEyeContactMusic(class_EyeContactNightComboBox, RomFile.GameFamily);
             }
             class_ClassListBox.Enabled = true;
             class_FilterTextBox.Enabled = true;
@@ -545,30 +523,16 @@ namespace Main
         private bool ValidateClassName()
         {
             string className = class_NameTextBox.Text;
-            int stringLength = className.Length;
-            var charArray = className.ToCharArray();
+            string cleanClassName = className.Replace("[PKMN]", "").Replace("[M]", "");
 
-            // Account for PKMN characters.
-            for (int i = 0; i < charArray.Length; i++)
-            {
-                if (charArray[i] == '[' && charArray[i + 1] == 'P' && charArray[i + 2] == ']')
-                {
-                    stringLength -= 3;
-                }
-                else if (charArray[i] == '[' && charArray[i + 1] == 'M' && charArray[i + 2] == ']')
-                {
-                    stringLength -= 3;
-                }
-            }
-
-            if (string.IsNullOrEmpty(className))
+            if (string.IsNullOrEmpty(cleanClassName))
             {
                 MessageBox.Show("You must enter a class name", "Unable to Save Class", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (stringLength > 16)
+            if (cleanClassName.Length > 16)
             {
-                MessageBox.Show("Important: Class name is longer than 16 characters.\nThere may be issues in-game when displaying this name.", "Long Class Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Class name exceeds 16 characters. This might cause issues.", "Long Class Name", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return true;
         }

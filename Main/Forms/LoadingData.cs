@@ -7,6 +7,7 @@ namespace Main.Forms
         private LoadType loadType;
         private Mainform mainForm;
         private string FilePath;
+
         public LoadingData()
         {
             InitializeComponent();
@@ -49,21 +50,37 @@ namespace Main.Forms
 
         public async Task UnpackNarcs()
         {
-            await Task.Delay(500);
+            await Task.Delay(500);  // Simulate delay if needed, remove if not required
+
             var progress = new Progress<int>(value => progressBar.Value = value);
-            await Task.Run(() => mainForm.BeginUnpackNarcs(progress));
-            FormClosing -= LoadingData_FormClosing;
-            Close();
+
+            // Await the async method directly
+            await mainForm.BeginUnpackNarcsAsync(progress);
+
+            FormClosing -= LoadingData_FormClosing;  // Unsubscribe from event handler if needed
+            Close();  // Close the form
         }
 
         public async Task UnpackRom()
         {
-            await Task.Delay(500);
+            await Task.Delay(500);  // Simulate delay if needed, remove if not required
+
             progressBar.Style = ProgressBarStyle.Continuous;
-            progressBar.Value = 100;
-            await Task.Run(() => mainForm.BeginUnpackRomData());
-            FormClosing -= LoadingData_FormClosing;
-            Close();
+
+            try
+            {
+                // Await the async method directly
+                await mainForm.BeginUnpackRomDataAsync();
+                progressBar.Value = 100;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, e.g., show an error message
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            FormClosing -= LoadingData_FormClosing;  // Unsubscribe from event handler if needed
+            Close();  // Close the form
         }
 
         public async Task SaveRom()
@@ -114,28 +131,33 @@ namespace Main.Forms
         private void LoadData()
         {
             progressBar.Value = 0;
-            switch(loadType)
+            switch (loadType)
             {
                 case LoadType.UnpackRom:
                     Text = "Unpacking ROM Data";
                     UnpackRom();
                     break;
+
                 case LoadType.LoadRomData:
                     Text = "Loading ROM Data";
                     LoadRomData();
                     break;
+
                 case LoadType.SetupEditor:
                     Text = "Setting up VS Maker";
                     SetupEditor();
                     break;
+
                 case LoadType.UnpackNarcs:
                     Text = "Unpacking Essential NARCs";
                     UnpackNarcs();
                     break;
+
                 case LoadType.SaveRom:
                     Text = "Saving ROM";
                     SaveRom();
                     break;
+
                 case LoadType.SaveTrainerTextTable:
                     Text = "Saving Battle Message Table";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
@@ -144,7 +166,7 @@ namespace Main.Forms
 
                 case LoadType.ExportTextTable:
                     Text = "Exporting Battle Messages";
-                    progressBar.Maximum = mainForm.BattleMessageCount +50;
+                    progressBar.Maximum = mainForm.BattleMessageCount + 50;
                     ExportTrainerTextTable();
                     break;
 
@@ -167,6 +189,7 @@ namespace Main.Forms
                     break;
             }
         }
+
         private void LoadingData_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
@@ -185,6 +208,7 @@ namespace Main.Forms
                 progressBar.Style = style;
             }
         }
+
         public void UpdateProgressBar(int value)
         {
             if (progressBar.InvokeRequired)
@@ -198,6 +222,5 @@ namespace Main.Forms
                 progressBar.Value = value;
             }
         }
-
     }
 }
