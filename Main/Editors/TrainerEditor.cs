@@ -1,5 +1,4 @@
-﻿using Main.CustomUi.Extensions;
-using Main.Forms;
+﻿using Main.Forms;
 using Main.Models;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
@@ -799,9 +798,7 @@ namespace Main
         {
             if (comboBox.Items.Count == 0)
             {
-                comboBox.PopulateItems(MainEditorModel.ItemNames);
-                comboBox.MakeSearchable(() => MainEditorModel.ItemNames);
-                comboBox.SetSelectedIndexSafely(0, () => MainEditorModel.ItemNames);
+                foreach (var item in MainEditorModel.ItemNames) { comboBox.Items.Add(item); }
             }
         }
 
@@ -1127,12 +1124,12 @@ namespace Main
             for (int i = 0; i < teamSize; i++)
             {
                 var species = GetSpeciesBySpeciesId(trainerParty.Pokemons[i].SpeciesId);
-                pokeComboBoxes[i].SetSelectedIndexSafely(trainerParty.Pokemons[i].PokemonId, () => MainEditorModel.PokemonNames(MainEditorModel.PokemonNamesFull));
+                pokeComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].PokemonId;
                 pokeLevelNums[i].Value = trainerParty.Pokemons[i].Level;
                 pokeDVNums[i].Value = trainerParty.Pokemons[i].DifficultyValue;
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
-                pokeHeldItemComboBoxes[i].SetSelectedIndexSafely(GetIndex(trainerParty.Pokemons[i].HeldItemId), () => MainEditorModel.ItemNames);
+                pokeHeldItemComboBoxes[i].SelectedIndex = GetIndex(trainerParty.Pokemons[i].HeldItemId);
                 pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.GameFamily != GameFamily.DiamondPearl ? GetIndex(trainerParty.Pokemons[i].BallCapsuleId) : -1;
                 if (chooseMoves)
                 {
@@ -1166,9 +1163,34 @@ namespace Main
                             break;
                     }
                 }
+
+                if (RomFile.GameFamily != GameFamily.DiamondPearl)
+                {
+                    SetPokemonForms(trainerParty.Pokemons[i].PokemonId, i);
+                    pokeFormsComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].FormId;
+                }
+
+                if (species.Ability1 > 0 && species.Ability2 > 0)
+                {
+                    pokeAbilityComboBoxes[i].Items.Add("-");
+                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
+                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
+                    pokeAbilityComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].AbilityOverride
+                               switch
+                    {
+                        AbilityOverride.None => 0,
+                        AbilityOverride.Ability1 => 1,
+                        AbilityOverride.Ability2 => 2,
+                        _ => 0
+                    };
+                }
+                else
+                {
+                    pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
+                    pokeAbilityComboBoxes[i].SelectedIndex = 0;
+                }
             }
         }
-
         private void SetTrainerPartyProperties(TrainerProperty trainerProperties)
         {
             trainer_TeamSizeNum.Maximum = trainerProperties.DoubleBattle ? 3 : 6;
