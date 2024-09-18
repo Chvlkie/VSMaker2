@@ -162,8 +162,8 @@ namespace Main
 
         private void EnableDisableParty(int partySize, bool chooseItems, bool chooseMoves)
         {
-            // Firstly Disable All
             pokeComboBoxes.ForEach(x => x.Enabled = false);
+            pokeComboBoxes.ForEach(x => x.BackColor = Color.White);
             pokeIconsPictureBoxes.ForEach(x => x.Enabled = false);
             pokeLevelNums.ForEach(x => x.Enabled = false);
             pokeDVNums.ForEach(x => x.Enabled = false);
@@ -1817,73 +1817,21 @@ namespace Main
         private bool isUpdatingComboBox = false;
 
         private object previousSelection;
-
+      
         private void EnablePokemonComboBoxFiltering(ComboBox pokeComboBox, int partyIndex)
         {
-            // Detach previous event handlers to avoid multiple subscriptions
             pokeComboBox.TextUpdate -= HandleTextUpdate;
             pokeComboBox.KeyDown -= HandleKeyDown;
             pokeComboBox.Leave -= (s, e) => ResetComboBoxOnFocusLoss(pokeComboBox);
             pokeComboBox.SelectedIndexChanged -= (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
 
-            // Allow typing in ComboBox
             pokeComboBox.DropDownStyle = ComboBoxStyle.DropDown;
-
-            // Handle filtering when the text is updated
             pokeComboBox.TextUpdate += HandleTextUpdate;
-
-            // Handle key presses for opening the dropdown
             pokeComboBox.KeyDown += HandleKeyDown;
-
-            // Reset logic when the ComboBox loses focus
             pokeComboBox.Leave += (s, e) => ResetComboBoxOnFocusLoss(pokeComboBox);
-
-            // Attach the combined event handler for selection changes
             pokeComboBox.SelectedIndexChanged += (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
         }
-
-        private void FilterPokemonComboBoxItems(ComboBox pokeComboBox)
-        {
-            if (isUpdatingComboBox) return; // Avoid filtering during updates
-            isUpdatingComboBox = true;
-
-            try
-            {
-                // Use BeginInvoke to ensure UI updates are on the UI thread
-                pokeComboBox.BeginInvoke((MethodInvoker)delegate
-                {
-                    string userInput = pokeComboBox.Text.ToLower();
-                    var allPokemon = MainEditorModel.PokemonNames;
-
-                    // Filter the Pokémon list by name
-                    var filteredPokemon = allPokemon
-                        .Where(pokemon =>
-                        {
-                            var parts = pokemon.Split(']');
-                            if (parts.Length > 1)
-                            {
-                                return parts[1].TrimStart().ToLower().Contains(userInput);
-                            }
-                            return pokemon.ToLower().Contains(userInput);
-                        })
-                        .ToArray();
-
-                    pokeComboBox.BeginUpdate();
-                    pokeComboBox.Items.Clear(); // Clear current items
-                    pokeComboBox.Items.AddRange(filteredPokemon); // Add filtered items
-                    pokeComboBox.EndUpdate();
-
-                    // Restore user input
-                    pokeComboBox.Text = userInput;
-                    pokeComboBox.SelectionStart = userInput.Length;
-                });
-            }
-            finally
-            {
-                isUpdatingComboBox = false; // Ensure flag is reset
-            }
-        }
-
+      
         private int GetPokemonIdFromComboBoxText(string selectedItemText)
         {
             // Check if the input text is not null or empty
@@ -1928,39 +1876,32 @@ namespace Main
         private void HandleTextUpdate(object sender, EventArgs e)
         {
             var pokeComboBox = sender as ComboBox;
-
-            // This flag is used to prevent issues during updates
             isUpdatingComboBox = true;
 
-            // Get the user input for filtering
             string userInput = pokeComboBox.Text.ToLower();
+          
             var allPokemon = MainEditorModel.PokemonNames;
 
-            // Filter the Pokémon list by name, ignoring the ID
             var filteredPokemon = allPokemon
                 .Where(pokemon => pokemon.ToLower().Contains(userInput))
                 .ToArray();
 
-            // Update the ComboBox items
             pokeComboBox.BeginUpdate();
-            pokeComboBox.Items.Clear(); // Clear current items
-            pokeComboBox.Items.AddRange(filteredPokemon); // Add filtered items
+            pokeComboBox.Items.Clear(); 
+            pokeComboBox.Items.AddRange(filteredPokemon);
             pokeComboBox.EndUpdate();
 
-            // Open the dropdown if there are matching items
             if (pokeComboBox.Items.Count > 0)
             {
-                pokeComboBox.DroppedDown = true; // Keep dropdown open
+                pokeComboBox.DroppedDown = true;
             }
 
-            // Set the text back to the user's input to avoid overwriting
             if (pokeComboBox.Items.Count > 0)
             {
-                pokeComboBox.Text = userInput; // Keep the input intact
-                pokeComboBox.SelectionStart = userInput.Length; // Keep the caret at the end
+                pokeComboBox.Text = userInput;
+                pokeComboBox.SelectionStart = userInput.Length; 
             }
-
-            isUpdatingComboBox = false; // Reset flag after updating
+            isUpdatingComboBox = false; 
         }
 
         private void PopulatePokemonComboBoxes()
@@ -1969,16 +1910,12 @@ namespace Main
             {
                 var comboBox = pokeComboBoxes[i];
 
-                comboBox.BeginUpdate(); // Prevents flickering during update
-
-                // Clear existing items and populate with the full Pokémon list
+                comboBox.BeginUpdate();
                 comboBox.Items.Clear();
                 comboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
-
-                // Enable filtering for the ComboBox and pass the index
                 EnablePokemonComboBoxFiltering(comboBox, i);
 
-                comboBox.EndUpdate(); // Ends update and refreshes the ComboBox display
+                comboBox.EndUpdate(); 
             }
         }
 
@@ -1986,11 +1923,11 @@ namespace Main
         {
             if (!isUpdatingComboBox)
             {
-                isUpdatingComboBox = true; // Prevent re-entrance while updating
+                isUpdatingComboBox = true; 
 
                 pokeComboBox.BeginUpdate();
                 pokeComboBox.Items.Clear();
-                pokeComboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray()); // Repopulate the full list
+                pokeComboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray()); 
                 pokeComboBox.EndUpdate();
 
                 isUpdatingComboBox = false;
@@ -2001,9 +1938,8 @@ namespace Main
         {
             if (pokeComboBox.SelectedItem == null && !string.IsNullOrWhiteSpace(pokeComboBox.Text))
             {
-                // Restore the previous selection or reset the ComboBox to the full list
                 ResetComboBoxItems(pokeComboBox);
-                pokeComboBox.SelectedItem = previousSelection; // Restore previous selected item
+                pokeComboBox.SelectedItem = previousSelection; 
             }
         }
 
