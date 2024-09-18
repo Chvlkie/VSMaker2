@@ -20,6 +20,9 @@ namespace Main
 {
     public partial class Mainform : Form
     {
+        private System.Windows.Forms.Timer filterTimer;
+        private const int debounceDelay = 300; // Delay in milliseconds
+
         #region Forms
 
         private LoadingData LoadingData;
@@ -49,6 +52,10 @@ namespace Main
         public Mainform()
         {
             InitializeComponent();
+            filterTimer = new System.Windows.Forms.Timer();
+            filterTimer.Interval = debounceDelay;
+            filterTimer.Tick += FilterTimer_Tick;
+
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
             RomLoaded = false;
             romName_Label.Text = "";

@@ -10,6 +10,7 @@ namespace Main
     // TRAINER EDITOR
     public partial class Mainform : Form
     {
+
         public ushort[] poke1Moves;
         public ushort[] poke2Moves;
         public ushort[] poke3Moves;
@@ -1876,10 +1877,25 @@ namespace Main
         private void HandleTextUpdate(object sender, EventArgs e)
         {
             var pokeComboBox = sender as ComboBox;
+
+            // If the timer is already running, stop it
+            if (filterTimer.Enabled)
+            {
+                filterTimer.Stop();
+            }
+
+            // Set the last input to the timer's Tag property
+            filterTimer.Tag = pokeComboBox;
+            filterTimer.Start(); // Start the timer
+        }
+
+        private void PerformFiltering(ComboBox pokeComboBox)
+        {
+            if (isUpdatingComboBox) return;
+
             isUpdatingComboBox = true;
 
             string userInput = pokeComboBox.Text.ToLower();
-          
             var allPokemon = MainEditorModel.PokemonNames;
 
             var filteredPokemon = allPokemon
@@ -1887,7 +1903,7 @@ namespace Main
                 .ToArray();
 
             pokeComboBox.BeginUpdate();
-            pokeComboBox.Items.Clear(); 
+            pokeComboBox.Items.Clear();
             pokeComboBox.Items.AddRange(filteredPokemon);
             pokeComboBox.EndUpdate();
 
@@ -1896,13 +1912,13 @@ namespace Main
                 pokeComboBox.DroppedDown = true;
             }
 
-            if (pokeComboBox.Items.Count > 0)
-            {
-                pokeComboBox.Text = userInput;
-                pokeComboBox.SelectionStart = userInput.Length; 
-            }
-            isUpdatingComboBox = false; 
+            // Set caret position to the end to avoid highlighting
+            pokeComboBox.Text = userInput; // Ensure the text remains intact
+            pokeComboBox.SelectionStart = userInput.Length; // Move caret to the end
+
+            isUpdatingComboBox = false;
         }
+
 
         private void PopulatePokemonComboBoxes()
         {
@@ -1941,6 +1957,13 @@ namespace Main
                 ResetComboBoxItems(pokeComboBox);
                 pokeComboBox.SelectedItem = previousSelection; 
             }
+        }
+
+        private void FilterTimer_Tick(object sender, EventArgs e)
+        {
+            filterTimer.Stop(); // Stop the timer
+            var pokeComboBox = (ComboBox)filterTimer.Tag; // Get the last input
+            PerformFiltering(pokeComboBox); // Call the update method with the last input
         }
 
         #endregion PokemonComboBoxes
