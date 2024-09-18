@@ -173,23 +173,42 @@ namespace Main
             pokeMoveButtons.ForEach(x => x.Enabled = false);
             pokeGenderComboBoxes.ForEach(x => x.Enabled = false);
             pokeAbilityComboBoxes.ForEach(x => x.Enabled = false);
+
             // Enable by Party Size
             for (int i = 0; i < partySize; i++)
             {
-                var species = GetSpeciesBySpeciesId(pokeComboBoxes[i].SelectedIndex);
-                pokeComboBoxes[i].Enabled = true;
-                pokeIconsPictureBoxes[i].Enabled = true;
-                pokeLevelNums[i].Enabled = true;
-                pokeDVNums[i].Enabled = true;
-                pokeBallCapsuleComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl;
-                pokeAbilityComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneAbility;
-                pokeFormsComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokeComboBoxes[i].SelectedIndex);
-                pokeHeldItemComboBoxes[i].Enabled = chooseItems;
-                pokeMoveButtons[i].Enabled = chooseMoves;
-                pokeGenderComboBoxes[i].Enabled = LoadedRom.IsHeartGoldSoulSilver
-                    && species.HasMoreThanOneGender;
+                // Get the selected Pokémon name
+                var selectedPokemonName = pokeComboBoxes[i].Text;
+
+                if (!string.IsNullOrWhiteSpace(selectedPokemonName))
+                {
+                    int pokemonId = GetPokemonIdFromComboBoxText(selectedPokemonName);
+                    if (pokemonId >= 0)
+                    {
+                        ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, 0);
+                        var species = GetSpeciesBySpeciesId(speciesId);
+
+                        // Check if species is valid
+                        if (species != null)
+                        {
+                            // Enable controls for this party slot
+                            pokeComboBoxes[i].Enabled = true;
+                            pokeIconsPictureBoxes[i].Enabled = true;
+                            pokeLevelNums[i].Enabled = true;
+                            pokeDVNums[i].Enabled = true;
+                            pokeBallCapsuleComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl;
+                            pokeAbilityComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneAbility;
+                            pokeFormsComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokemonId);
+                            pokeHeldItemComboBoxes[i].Enabled = chooseItems;
+                            pokeMoveButtons[i].Enabled = chooseMoves;
+                            pokeGenderComboBoxes[i].Enabled = LoadedRom.IsHeartGoldSoulSilver && species.HasMoreThanOneGender;
+                        }
+                    }
+                }
             }
         }
+
+
 
         private void EnableTrainerEditor()
         {
@@ -352,11 +371,7 @@ namespace Main
             }
         }
 
-        private void poke1ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(0);
-        }
-
+      
         private void poke1DVNum_ValueChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -425,10 +440,7 @@ namespace Main
             }
         }
 
-        private void poke2ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(1);
-        }
+      
 
         private void poke2DVNum_ValueChanged(object sender, EventArgs e)
         {
@@ -498,10 +510,7 @@ namespace Main
             }
         }
 
-        private void poke3ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(2);
-        }
+      
 
         private void poke3DVNum_ValueChanged(object sender, EventArgs e)
         {
@@ -571,10 +580,7 @@ namespace Main
             }
         }
 
-        private void poke4ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(3);
-        }
+  
 
         private void poke4DVNum_ValueChanged(object sender, EventArgs e)
         {
@@ -644,10 +650,7 @@ namespace Main
             }
         }
 
-        private void poke5ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(4);
-        }
+       
 
         private void poke5DVNum_ValueChanged(object sender, EventArgs e)
         {
@@ -717,10 +720,7 @@ namespace Main
             }
         }
 
-        private void poke6ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            PokeComboBox_SelectedIndexChanged(5);
-        }
+    
 
         private void poke6DVNum_ValueChanged(object sender, EventArgs e)
         {
@@ -774,16 +774,8 @@ namespace Main
             }
         }
 
-        private void PokeComboBox_SelectedIndexChanged(int partyIndex)
-        {
-            ResetPokeComboBoxValidation(partyIndex);
-            if (!IsLoadingData)
-            {
-                SetPokemonSpecialData(partyIndex);
-                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
-                EditedTrainerParty(true);
-            }
-        }
+      
+
         private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
         {
             trainer_ScriptUsage.Items.Clear();
@@ -808,15 +800,6 @@ namespace Main
             InitializePartyEditor();
             SetTrainerParty(trainerParty, teamSize, chooseMoves);
             IsLoadingData = false;
-        }
-
-        private void PopulatePokemonComboBoxes()
-        {
-            foreach (var comboBox in pokeComboBoxes)
-            {
-                comboBox.Items.Clear();
-                comboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
-            }
         }
 
         private void PopulatePokemonGenderComboBoxes()
@@ -855,7 +838,6 @@ namespace Main
         {
             trainer_ClassListBox.Items.AddRange(classes.Select(c => c.ListName).ToArray());
         }
-
 
         private void PopulateTrainerData(Trainer trainer)
         {
@@ -935,16 +917,18 @@ namespace Main
             }
             return saveTrainerName.Success;
         }
+
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
             List<Pokemon> newPokemons = [];
             TrainerPartyPokemonData[] newPokemonDatas = new TrainerPartyPokemonData[(int)trainer_TeamSizeNum.Value];
             for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
             {
-                var species = GetSpeciesBySpeciesId(pokeComboBoxes[i].SelectedIndex);
-
+                int pokemonId = GetPokemonIdFromComboBoxText(pokeComboBoxes[i].Text);
+                ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, 0);
+                var species = GetSpeciesBySpeciesId(speciesId);
                 byte genderAbilityOverride = species.HasMoreThanOneGender ? (byte)(pokeGenderComboBoxes[i].SelectedIndex + (pokeAbilityComboBoxes[i].SelectedIndex << 4)) : (byte)(pokeAbilityComboBoxes[i].SelectedIndex << 4);
-                var newPokemon = new Pokemon((byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeLevelNums[i].Value, (ushort)pokeComboBoxes[i].SelectedIndex, (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i], (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex);
+                var newPokemon = new Pokemon((byte)pokeDVNums[i].Value, genderAbilityOverride, (ushort)pokeLevelNums[i].Value, (ushort)pokemonId , (ushort)pokeFormsComboBoxes[i].SelectedIndex, (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex, pokeMoves[i], (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex);
                 var newPokemonData = trainerEditorMethods.NewTrainerPartyPokemonData(newPokemon, trainer_ChooseMovesCheckbox.Checked, trainer_HeldItemsCheckbox.Checked, RomFile.GameFamily != GameFamily.DiamondPearl);
                 newPokemons.Add(newPokemon);
                 newPokemonDatas[i] = newPokemonData;
@@ -1069,57 +1053,91 @@ namespace Main
 
         private void SetPokemonSpecialData(int partyIndex)
         {
-            if (pokeComboBoxes[partyIndex].SelectedIndex > -1)
+            var selectedPokemonName = pokeComboBoxes[partyIndex].Text;
+
+            if (!string.IsNullOrWhiteSpace(selectedPokemonName))
             {
-                ushort speciesId = Species.GetSpecialSpecies((ushort)pokeComboBoxes[partyIndex].SelectedIndex, 0);
+                int pokemonId = GetPokemonIdFromComboBoxText(selectedPokemonName);
+                ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, 0);
                 var species = GetSpeciesBySpeciesId(speciesId);
+
+                // Clear and configure the ability ComboBox
                 pokeAbilityComboBoxes[partyIndex].Enabled = false;
                 pokeAbilityComboBoxes[partyIndex].Items.Clear();
                 pokeAbilityComboBoxes[partyIndex].SelectedIndex = -1;
 
-                if (LoadedRom.IsHeartGoldSoulSilver)
+                if (species != null) // Ensure species is valid
                 {
-                    pokeGenderComboBoxes[partyIndex].SelectedIndex = species.GenderRatio switch
+                    // Handle gender settings for HeartGold/SoulSilver
+                    if (LoadedRom.IsHeartGoldSoulSilver)
                     {
-                        Species.Constants.GenderRatioGenderless => 0,
-                        Species.Constants.GenderRatioMale => 1,
-                        Species.Constants.GenderRatioFemale => 2,
-                        _ => 0,
-                    };
-                    pokeGenderComboBoxes[partyIndex].Enabled = species.HasMoreThanOneGender;
-                }
-                pokeAbilityComboBoxes[partyIndex].Items.Add("-");
+                        pokeGenderComboBoxes[partyIndex].SelectedIndex = species.GenderRatio switch
+                        {
+                            Species.Constants.GenderRatioGenderless => 0,
+                            Species.Constants.GenderRatioMale => 1,
+                            Species.Constants.GenderRatioFemale => 2,
+                            _ => 0,
+                        };
+                        pokeGenderComboBoxes[partyIndex].Enabled = species.HasMoreThanOneGender;
+                    }
 
-                if (species.Ability1 > 0)
-                {
-                    pokeAbilityComboBoxes[partyIndex].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
-                }
-                if (species.Ability2 > 0)
-                {
-                    pokeAbilityComboBoxes[partyIndex].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
-                }
-                pokeAbilityComboBoxes[partyIndex].SelectedIndex = 0;
-                pokeAbilityComboBoxes[partyIndex].Enabled = species.HasMoreThanOneAbility;
+                    // Populate abilities
+                    pokeAbilityComboBoxes[partyIndex].Items.Add("-");
+                    if (species.Ability1 > 0)
+                    {
+                        pokeAbilityComboBoxes[partyIndex].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
+                    }
+                    if (species.Ability2 > 0)
+                    {
+                        pokeAbilityComboBoxes[partyIndex].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
+                    }
 
-                if (RomFile.GameFamily != GameFamily.DiamondPearl)
-                {
-                    SetPokemonForms(pokeComboBoxes[partyIndex].SelectedIndex, partyIndex);
-                    pokeFormsComboBoxes[partyIndex].SelectedIndex = 0;
-                    pokeFormsComboBoxes[partyIndex].Enabled = Species.HasMoreThanOneForm(pokeComboBoxes[partyIndex].SelectedIndex);
+                    // Set the selected index based on ability availability
+                    pokeAbilityComboBoxes[partyIndex].SelectedIndex = species.HasNoAbilities ? 0 : species.HasMoreThanOneAbility ? 0 : 1;
+                    pokeAbilityComboBoxes[partyIndex].Enabled = !species.HasNoAbilities && species.HasMoreThanOneAbility;
+
+                    // Handle forms for non-Diamond/Pearl games
+                    if (RomFile.GameFamily != GameFamily.DiamondPearl)
+                    {
+                        SetPokemonForms(pokemonId, partyIndex);
+                        pokeFormsComboBoxes[partyIndex].SelectedIndex = 0;
+                        pokeFormsComboBoxes[partyIndex].Enabled = Species.HasMoreThanOneForm(pokemonId);
+                    }
                 }
             }
         }
-
         private void SetTrainerName(Trainer trainer)
         {
             trainer_NameTextBox.Text = trainer.TrainerName;
         }
+
         private void SetTrainerParty(TrainerParty trainerParty, int teamSize, bool chooseMoves)
         {
             for (int i = 0; i < teamSize; i++)
             {
+                pokeComboBoxes[i].BeginUpdate();
+                pokeComboBoxes[i].Items.Clear();
+                pokeComboBoxes[i].Items.AddRange(MainEditorModel.PokemonNames.ToArray());
+                pokeComboBoxes[i].EndUpdate();
+
+                // Use pokemonId as an index into MainEditorModel.PokemonNames
+                int pokemonId = trainerParty.Pokemons[i].PokemonId;
+
+                // Ensure pokemonId is within bounds
+                if (pokemonId >= 0 && pokemonId < MainEditorModel.PokemonNames.Count)
+                {
+                    // Set the selected item directly to match the Pokémon name
+                    pokeComboBoxes[i].SelectedItem = MainEditorModel.PokemonNames[pokemonId];
+                }
+                else
+                {
+                    // Handle invalid Pokémon ID gracefully
+                    pokeComboBoxes[i].SelectedItem = null; // Deselect if ID is out of range
+                }
                 var species = GetSpeciesBySpeciesId(trainerParty.Pokemons[i].SpeciesId);
-                pokeComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].PokemonId;
+
+                // Enable filtering and handle events for the ComboBox
+                EnablePokemonComboBoxFiltering(pokeComboBoxes[i], i);
                 pokeLevelNums[i].Value = trainerParty.Pokemons[i].Level;
                 pokeDVNums[i].Value = trainerParty.Pokemons[i].DifficultyValue;
                 pokeAbilityComboBoxes[i].Items.Clear();
@@ -1591,6 +1609,7 @@ namespace Main
                 EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
             }
         }
+
         private void trainer_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && trainer_TrainersListBox.SelectedIndex > -1)
@@ -1634,6 +1653,7 @@ namespace Main
                 }
             }
         }
+
         private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)
         {
             UndoTrainerChanges();
@@ -1724,7 +1744,6 @@ namespace Main
             return true;
         }
 
-
         private bool ValidatePokemonMoves()
         {
             if (trainer_ChooseMovesCheckbox.Checked)
@@ -1796,5 +1815,208 @@ namespace Main
                 return true;
             }
         }
+        #region PokemonComboBoxes
+
+        private bool isUpdatingComboBox = false;
+
+        private object previousSelection;
+
+        private void EnablePokemonComboBoxFiltering(ComboBox pokeComboBox, int partyIndex)
+        {
+            // Detach previous event handlers to avoid multiple subscriptions
+            pokeComboBox.TextUpdate -= HandleTextUpdate;
+            pokeComboBox.KeyDown -= HandleKeyDown;
+            pokeComboBox.Leave -= (s, e) => ResetComboBoxOnFocusLoss(pokeComboBox);
+            pokeComboBox.SelectedIndexChanged -= (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
+
+            // Allow typing in ComboBox
+            pokeComboBox.DropDownStyle = ComboBoxStyle.DropDown;
+
+            // Handle filtering when the text is updated
+            pokeComboBox.TextUpdate += HandleTextUpdate;
+
+            // Handle key presses for opening the dropdown
+            pokeComboBox.KeyDown += HandleKeyDown;
+
+            // Reset logic when the ComboBox loses focus
+            pokeComboBox.Leave += (s, e) => ResetComboBoxOnFocusLoss(pokeComboBox);
+
+            // Attach the combined event handler for selection changes
+            pokeComboBox.SelectedIndexChanged += (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
+        }
+
+        private void HandleTextUpdate(object sender, EventArgs e)
+        {
+            var pokeComboBox = sender as ComboBox;
+
+            // This flag is used to prevent issues during updates
+            isUpdatingComboBox = true;
+
+            // Get the user input for filtering
+            string userInput = pokeComboBox.Text.ToLower();
+            var allPokemon = MainEditorModel.PokemonNames;
+
+            // Filter the Pokémon list by name, ignoring the ID
+            var filteredPokemon = allPokemon
+                .Where(pokemon => pokemon.ToLower().Contains(userInput))
+                .ToArray();
+
+            // Update the ComboBox items
+            pokeComboBox.BeginUpdate();
+            pokeComboBox.Items.Clear(); // Clear current items
+            pokeComboBox.Items.AddRange(filteredPokemon); // Add filtered items
+            pokeComboBox.EndUpdate();
+
+            // Open the dropdown if there are matching items
+            if (pokeComboBox.Items.Count > 0)
+            {
+                pokeComboBox.DroppedDown = true; // Keep dropdown open
+            }
+
+            // Set the text back to the user's input to avoid overwriting
+            if (pokeComboBox.Items.Count > 0)
+            {
+                pokeComboBox.Text = userInput; // Keep the input intact
+                pokeComboBox.SelectionStart = userInput.Length; // Keep the caret at the end
+            }
+
+            isUpdatingComboBox = false; // Reset flag after updating
+        }
+
+        private void HandleKeyDown(object sender, KeyEventArgs e)
+        {
+            var pokeComboBox = sender as ComboBox;
+
+            // Open dropdown on any key press except Enter
+            if (e.KeyCode != Keys.Enter)
+            {
+                pokeComboBox.DroppedDown = true; // Keep dropdown open
+            }
+        }
+
+
+
+        private void FilterPokemonComboBoxItems(ComboBox pokeComboBox)
+        {
+            if (isUpdatingComboBox) return; // Avoid filtering during updates
+            isUpdatingComboBox = true;
+
+            try
+            {
+                // Use BeginInvoke to ensure UI updates are on the UI thread
+                pokeComboBox.BeginInvoke((MethodInvoker)delegate
+                {
+                    string userInput = pokeComboBox.Text.ToLower();
+                    var allPokemon = MainEditorModel.PokemonNames;
+
+                    // Filter the Pokémon list by name
+                    var filteredPokemon = allPokemon
+                        .Where(pokemon =>
+                        {
+                            var parts = pokemon.Split(']');
+                            if (parts.Length > 1)
+                            {
+                                return parts[1].TrimStart().ToLower().Contains(userInput);
+                            }
+                            return pokemon.ToLower().Contains(userInput);
+                        })
+                        .ToArray();
+
+                    pokeComboBox.BeginUpdate();
+                    pokeComboBox.Items.Clear(); // Clear current items
+                    pokeComboBox.Items.AddRange(filteredPokemon); // Add filtered items
+                    pokeComboBox.EndUpdate();
+
+                    // Restore user input
+                    pokeComboBox.Text = userInput;
+                    pokeComboBox.SelectionStart = userInput.Length;
+                });
+            }
+            finally
+            {
+                isUpdatingComboBox = false; // Ensure flag is reset
+            }
+        }
+
+        private void PopulatePokemonComboBoxes()
+        {
+            for (int i = 0; i < pokeComboBoxes.Count; i++)
+            {
+                var comboBox = pokeComboBoxes[i];
+
+                comboBox.BeginUpdate(); // Prevents flickering during update
+
+                // Clear existing items and populate with the full Pokémon list
+                comboBox.Items.Clear();
+                comboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
+
+                // Enable filtering for the ComboBox and pass the index
+                EnablePokemonComboBoxFiltering(comboBox, i);
+
+                comboBox.EndUpdate(); // Ends update and refreshes the ComboBox display
+            }
+        }
+
+
+        private void ResetComboBoxItems(ComboBox pokeComboBox)
+        {
+            if (!isUpdatingComboBox)
+            {
+                isUpdatingComboBox = true; // Prevent re-entrance while updating
+
+                pokeComboBox.BeginUpdate();
+                pokeComboBox.Items.Clear();
+                pokeComboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray()); // Repopulate the full list
+                pokeComboBox.EndUpdate();
+
+                isUpdatingComboBox = false;
+            }
+        }
+
+
+        private void ResetComboBoxOnFocusLoss(ComboBox pokeComboBox)
+        {
+            if (pokeComboBox.SelectedItem == null && !string.IsNullOrWhiteSpace(pokeComboBox.Text))
+            {
+                // Restore the previous selection or reset the ComboBox to the full list
+                ResetComboBoxItems(pokeComboBox);
+                pokeComboBox.SelectedItem = previousSelection; // Restore previous selected item
+            }
+        }
+
+        private void HandlePokeComboBoxSelectionChanged(ComboBox pokeComboBox, int partyIndex)
+        {
+            // Store the previously selected item
+            previousSelection = pokeComboBox.SelectedItem;
+
+            // Call the method that handles additional logic when the selection changes
+            if (!IsLoadingData)
+            {
+                // Execute your additional logic for the Pokémon selection
+                SetPokemonSpecialData(partyIndex);
+                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+                EditedTrainerParty(true);
+            }
+        }
+
+        private int GetPokemonIdFromComboBoxText(string selectedItemText)
+        {
+            // Check if the input text is not null or empty
+            if (string.IsNullOrWhiteSpace(selectedItemText))
+            {
+                return -1; // Return -1 if the input is invalid
+            }
+
+            // Find the index of the selected item in the PokemonNames list
+            int pokemonId = MainEditorModel.PokemonNames.IndexOf(selectedItemText);
+
+            // Return the found index or -1 if not found
+            return pokemonId;
+        }
+
+
+        #endregion PokemonComboBoxes
+
+
     }
 }

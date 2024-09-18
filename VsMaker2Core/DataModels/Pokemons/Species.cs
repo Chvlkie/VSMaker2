@@ -15,6 +15,7 @@ namespace VsMaker2Core.DataModels
             _ => true,
         };
 
+        public bool HasNoAbilities => Ability1 == 0 && Ability2 == 0;
         public bool HasMoreThanOneAbility => Ability2 > 0;
 
         public static bool HasMoreThanOneForm(int pokemonId) => pokemonId switch

@@ -1722,7 +1722,6 @@
             poke1ComboBox.Name = "poke1ComboBox";
             poke1ComboBox.Size = new Size(144, 21);
             poke1ComboBox.TabIndex = 5;
-            poke1ComboBox.SelectedIndexChanged += poke1ComboBox_SelectedIndexChanged;
             // 
             // label40
             // 
@@ -2082,7 +2081,6 @@
             poke2ComboBox.Name = "poke2ComboBox";
             poke2ComboBox.Size = new Size(144, 21);
             poke2ComboBox.TabIndex = 64;
-            poke2ComboBox.SelectedIndexChanged += poke2ComboBox_SelectedIndexChanged;
             // 
             // poke6ComboBox
             // 
@@ -2094,7 +2092,6 @@
             poke6ComboBox.Name = "poke6ComboBox";
             poke6ComboBox.Size = new Size(144, 21);
             poke6ComboBox.TabIndex = 136;
-            poke6ComboBox.SelectedIndexChanged += poke6ComboBox_SelectedIndexChanged;
             // 
             // poke2IconPicBox
             // 
@@ -2464,7 +2461,6 @@
             poke3ComboBox.Name = "poke3ComboBox";
             poke3ComboBox.Size = new Size(144, 21);
             poke3ComboBox.TabIndex = 82;
-            poke3ComboBox.SelectedIndexChanged += poke3ComboBox_SelectedIndexChanged;
             // 
             // poke5ComboBox
             // 
@@ -2476,7 +2472,6 @@
             poke5ComboBox.Name = "poke5ComboBox";
             poke5ComboBox.Size = new Size(144, 21);
             poke5ComboBox.TabIndex = 118;
-            poke5ComboBox.SelectedIndexChanged += poke5ComboBox_SelectedIndexChanged;
             // 
             // poke3IconPicBox
             // 
@@ -2846,7 +2841,6 @@
             poke4ComboBox.Name = "poke4ComboBox";
             poke4ComboBox.Size = new Size(144, 21);
             poke4ComboBox.TabIndex = 100;
-            poke4ComboBox.SelectedIndexChanged += poke4ComboBox_SelectedIndexChanged;
             // 
             // panel10
             // 
