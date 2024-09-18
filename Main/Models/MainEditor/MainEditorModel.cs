@@ -15,14 +15,15 @@ namespace Main.Models
         public List<Trainer> Trainers { get; set; }
         public List<TrainerClass> Classes { get; set; }
         public List<BattleMessage> BattleMessages { get; set; }
+        public List<string> PokemonNames { get; set; }
 
         // Method to get formatted Pokémon names with improved loop
-        public List<string> PokemonNames()
+        public static List<string> SetPokemonNames(List<string> pokemonNamesFull)
         {
-            var names = new List<string>(PokemonNamesFull.Count + 1) { "----------" };
-            for (int i = 1; i < PokemonNamesFull.Count; i++)
+            var names = new List<string>(pokemonNamesFull.Count + 1) { "----------" };
+            for (int i = 1; i < pokemonNamesFull.Count; i++)
             {
-                names.Add($"[{i:D4}] {PokemonNamesFull[i]}");
+                names.Add($"[{i:D4}] {pokemonNamesFull[i]}");
             }
             return names;
         }

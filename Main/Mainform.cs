@@ -251,7 +251,7 @@ namespace Main
         {
             IsLoadingData = true;
             int progressCount = 0;
-            const int increment = 10;
+            const int increment = 100 / 11;
 
             MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
             progressCount += increment;
@@ -275,7 +275,12 @@ namespace Main
 
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
             progressCount += increment;
-            progress?.Report(progressCount); MainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
+            progress?.Report(progressCount); 
+            
+            MainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
+            MainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(MainEditorModel.PokemonNamesFull);
+            progressCount += increment;
+            progress?.Report(progressCount);
 
             MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
             progressCount += increment;

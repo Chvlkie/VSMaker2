@@ -815,11 +815,7 @@ namespace Main
             foreach (var comboBox in pokeComboBoxes)
             {
                 comboBox.Items.Clear();
-                comboBox.Items.Add("---------");
-                for (int i = 1; i < MainEditorModel.PokemonNamesFull.Count; i++)
-                {
-                    comboBox.Items.Add($"[{i:D4}] {MainEditorModel.PokemonNamesFull[i]}");
-                }
+                comboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
             }
         }
 
