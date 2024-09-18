@@ -90,6 +90,8 @@
             // 
             // move04ComboBox
             // 
+            move04ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            move04ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             move04ComboBox.FormattingEnabled = true;
             move04ComboBox.Location = new Point(12, 264);
             move04ComboBox.Name = "move04ComboBox";
@@ -109,6 +111,8 @@
             // 
             // move03ComboBox
             // 
+            move03ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            move03ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             move03ComboBox.FormattingEnabled = true;
             move03ComboBox.Location = new Point(12, 208);
             move03ComboBox.Name = "move03ComboBox";
@@ -128,6 +132,8 @@
             // 
             // move02ComboBox
             // 
+            move02ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            move02ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             move02ComboBox.FormattingEnabled = true;
             move02ComboBox.Location = new Point(12, 152);
             move02ComboBox.Name = "move02ComboBox";
@@ -147,6 +153,8 @@
             // 
             // move01ComboBox
             // 
+            move01ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            move01ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             move01ComboBox.FormattingEnabled = true;
             move01ComboBox.Location = new Point(12, 96);
             move01ComboBox.Name = "move01ComboBox";

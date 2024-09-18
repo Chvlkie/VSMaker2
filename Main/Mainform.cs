@@ -37,6 +37,7 @@ namespace Main
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
+
         #endregion Methods
 
         private bool InhibitTabChange = false;
@@ -209,6 +210,7 @@ namespace Main
             RepointBattleMessageOffsets(messageData, progress);
             progress?.Report(max);
         }
+
         public async Task BeginUnpackNarcsAsync(IProgress<int> progress)
         {
             var narcs = GameFamilyNarcs.GetGameFamilyNarcs(RomFile.GameFamily);
@@ -223,7 +225,6 @@ namespace Main
             progress?.Report(100);
         }
 
-
         public async Task BeginUnpackRomDataAsync()
         {
             var unpack = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, LoadedRom.FileName);
@@ -236,15 +237,16 @@ namespace Main
             RomLoaded = true;
         }
 
-
         public void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
         {
+            listBox.BeginUpdate();
             var filteredList = unfiltered
                 .Where(item => item.Contains(filter, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             listBox.Items.Clear();
             listBox.Items.AddRange(filteredList.ToArray());
+            listBox.EndUpdate();
         }
 
         public void GetInitialData(IProgress<int> progress = null)
@@ -275,8 +277,8 @@ namespace Main
 
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
             progressCount += increment;
-            progress?.Report(progressCount); 
-            
+            progress?.Report(progressCount);
+
             MainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
             MainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(MainEditorModel.PokemonNamesFull);
             progressCount += increment;
@@ -581,7 +583,6 @@ namespace Main
             startupTab.SelectedTab = startupPage;
             MainEditorModel = new();
             ClearTrainerEditorData();
-
             class_ClassListBox.SelectedIndex = -1;
             class_ClassListBox.Items.Clear();
             EnableDisableMenu(false);
@@ -750,6 +751,7 @@ namespace Main
                 Overlay.CompressOverlay(LoadedRom.InitialMoneyOverlayNumber);
             }
         }
+
         #region Event Handlers
 
         private void HandleTabChange(TabPage selectedTab)
@@ -786,6 +788,7 @@ namespace Main
                 HandleTabChange(main_MainTab.SelectedTab);
             }
         }
+
         private void main_OpenFolderBtn_Click(object sender, EventArgs e)
         {
             IsLoadingData = true;
@@ -1270,6 +1273,7 @@ namespace Main
             EditedTrainerParty(true);
             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
         }
+
         private void trainerEditor_SaveMessage_Click(object sender, EventArgs e)
         {
             int trainerId = MainEditorModel.SelectedTrainer.TrainerId;

@@ -285,22 +285,26 @@ namespace Main
 
         private void PopulateClassList(List<TrainerClass> classes)
         {
+            class_ClassListBox.BeginUpdate();
             class_ClassListBox.Items.Clear();
             UnfilteredClasses = classes.Select(item => item.ListName).ToList();
             class_ClassListBox.Items.AddRange(UnfilteredClasses.ToArray());
+            class_ClassListBox.EndUpdate();
         }
 
         private void PopulateEyeContactMusic(ComboBox comboBox, GameFamily gameFamily)
         {
+            comboBox.BeginUpdate();
             comboBox.Items.Clear();
             IEnumerable<string> musicList = gameFamily switch
             {
                 GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.Select(x => x.ListName),
                 GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName),
                 GameFamily.Platinum => EyeContactMusics.Platinum.Select(x => x.ListName),
-                _ => Enumerable.Empty<string>()
+                _ => []
             };
             comboBox.Items.AddRange(musicList.ToArray());
+            comboBox.EndUpdate();
         }
 
         private void PopulateTrainerClassData()
@@ -313,11 +317,13 @@ namespace Main
 
         private void PopulateUsedByTrainers(List<Trainer> usedByTrainers)
         {
+            class_TrainersListBox.BeginUpdate();
             class_TrainersListBox.Items.Clear();
             foreach (var trainer in usedByTrainers)
             {
                 class_TrainersListBox.Items.Add(trainer.ListName);
             }
+            class_TrainersListBox.EndUpdate();
         }
 
         private bool SaveClassGender(int classId, int classGender)

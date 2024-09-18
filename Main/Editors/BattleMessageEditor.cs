@@ -88,11 +88,13 @@ namespace Main
             battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
         }
 
-        private async void BeginPopulateBattleMessages()
+        private async Task BeginPopulateBattleMessages()
         {
             battleMessage_MessageTableDataGrid.AllowUserToAddRows = true;
             battleMessage_MessageTableDataGrid.Enabled = false;
-            await Task.Run(() => PopulateBattleMessages().Wait());
+
+            await PopulateBattleMessages(); 
+
             battleMessage_MessageTableDataGrid.AllowUserToAddRows = false;
             battleMessage_MessageTableDataGrid.Enabled = true;
         }
@@ -152,24 +154,39 @@ namespace Main
         }
 
 
-        private Task PopulateBattleMessages()
+        private async Task PopulateBattleMessages()
         {
             string[] currentTrainers = MainEditorModel.Trainers.Select(x => x.ListName).ToArray();
             string[] messageTriggers = MessageTrigger.MessageTriggers.Select(x => x.ListName).ToArray();
 
+            // Suspend layout logic to prevent flickering
+            battleMessage_MessageTableDataGrid.SuspendLayout();
+
+            // Clear existing rows if necessary
+            battleMessage_MessageTableDataGrid.Rows.Clear();
+
+            // Use a loop to add the battle messages
             for (int i = 0; i < MainEditorModel.BattleMessages.Count; i++)
             {
+                // Access the current message data
                 int trainerId = MainEditorModel.BattleMessages[i].TrainerId - 1;
                 int messageTriggerIndex = MainEditorModel.BattleMessages[i].MessageTriggerId;
+
+                // Clone the row and set its values
                 DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
                 row.Cells[0].Value = i;
                 row.Cells[1] = new DataGridViewComboBoxCell { DataSource = currentTrainers, Value = currentTrainers[trainerId] };
                 row.Cells[2] = new DataGridViewComboBoxCell { DataSource = messageTriggers, Value = messageTriggers[messageTriggerIndex] };
                 row.Cells[3].Value = MainEditorModel.BattleMessages[i].MessageText;
+
+                // Use your ThreadSafeDataTable method to add the row
                 ThreadSafeDataTable(row);
             }
-            return Task.CompletedTask;
+
+            // Resume layout logic after all updates
+            battleMessage_MessageTableDataGrid.ResumeLayout();
         }
+
 
         private void SaveBattleMessages(List<BattleMessage> messageData, IProgress<int> progress)
         {
@@ -218,12 +235,9 @@ namespace Main
             progress?.Report(100);
         }
 
-        private void LoadBattleMessages()
+        private async void LoadBattleMessages()
         {
-            battleMessage_MessageTableDataGrid.Rows.Clear();
-            battleMessage_MessageTableDataGrid.SuspendLayout();
-            BeginPopulateBattleMessages();
-            battleMessage_MessageTableDataGrid.ResumeLayout();
+            await BeginPopulateBattleMessages();
         }
 
         private void SetupBattleMessageEditor()
