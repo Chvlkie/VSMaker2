@@ -1859,7 +1859,7 @@
             poke1MoveBtn.TabIndex = 40;
             poke1MoveBtn.Text = "Moves";
             poke1MoveBtn.UseVisualStyleBackColor = true;
-            poke1MoveBtn.Click += poke1MoveBtn_Click;
+            poke1MoveBtn.Click += MoveBtn_Click;
             // 
             // poke6GenderComboBox
             // 
@@ -1944,7 +1944,7 @@
             poke6MoveBtn.TabIndex = 143;
             poke6MoveBtn.Text = "Moves";
             poke6MoveBtn.UseVisualStyleBackColor = true;
-            poke6MoveBtn.Click += poke6MoveBtn_Click;
+            poke6MoveBtn.Click += MoveBtn_Click;
             // 
             // label8
             // 
@@ -2227,7 +2227,7 @@
             poke2MoveBtn.TabIndex = 71;
             poke2MoveBtn.Text = "Moves";
             poke2MoveBtn.UseVisualStyleBackColor = true;
-            poke2MoveBtn.Click += poke2MoveBtn_Click;
+            poke2MoveBtn.Click += MoveBtn_Click;
             // 
             // poke5GenderComboBox
             // 
@@ -2324,7 +2324,7 @@
             poke5MoveBtn.TabIndex = 125;
             poke5MoveBtn.Text = "Moves";
             poke5MoveBtn.UseVisualStyleBackColor = true;
-            poke5MoveBtn.Click += poke5MoveBtn_Click;
+            poke5MoveBtn.Click += MoveBtn_Click;
             // 
             // label11
             // 
@@ -2607,7 +2607,7 @@
             poke3MoveBtn.TabIndex = 89;
             poke3MoveBtn.Text = "Moves";
             poke3MoveBtn.UseVisualStyleBackColor = true;
-            poke3MoveBtn.Click += poke3MoveBtn_Click;
+            poke3MoveBtn.Click += MoveBtn_Click;
             // 
             // poke4GenderComboBox
             // 
@@ -2704,7 +2704,7 @@
             poke4MoveBtn.TabIndex = 107;
             poke4MoveBtn.Text = "Moves";
             poke4MoveBtn.UseVisualStyleBackColor = true;
-            poke4MoveBtn.Click += poke4MoveBtn_Click;
+            poke4MoveBtn.Click += MoveBtn_Click;
             // 
             // label19
             // 

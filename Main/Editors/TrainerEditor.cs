@@ -410,15 +410,27 @@ namespace Main
             }
         }
 
-        private void poke1MoveBtn_Click(object sender, EventArgs e)
+
+        private void MoveBtn_Click(object sender, EventArgs e)
         {
-            if (poke1ComboBox.SelectedIndex > 0)
+            // Determine which button was clicked
+            var clickedButton = sender as Button;
+            int buttonIndex = pokeMoveButtons.IndexOf(clickedButton);
+
+            if (buttonIndex >= 0 && buttonIndex < pokeComboBoxes.Count)
             {
-                OpenMoveSelector(0, poke1ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
+                var selectedItem = pokeComboBoxes[buttonIndex].SelectedItem?.ToString();
+
+                // Check if the selected item is valid
+                var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > 0)
+                {
+                    OpenMoveSelector(buttonIndex, pokeComboBoxes[buttonIndex].SelectedIndex);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a valid Pokémon.", "Cannot Set Moves", MessageBoxButtons.OK);
+                }
             }
         }
 
@@ -478,17 +490,7 @@ namespace Main
             }
         }
 
-        private void poke2MoveBtn_Click(object sender, EventArgs e)
-        {
-            if (poke2ComboBox.SelectedIndex > 0)
-            {
-                OpenMoveSelector(1, poke2ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
-            }
-        }
+      
 
         private void poke3AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -546,18 +548,7 @@ namespace Main
             }
         }
 
-        private void poke3MoveBtn_Click(object sender, EventArgs e)
-        {
-            if (poke3ComboBox.SelectedIndex > 0)
-            {
-                OpenMoveSelector(2, poke3ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
-            }
-        }
-
+      
         private void poke4AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -614,17 +605,7 @@ namespace Main
             }
         }
 
-        private void poke4MoveBtn_Click(object sender, EventArgs e)
-        {
-            if (poke4ComboBox.SelectedIndex > 0)
-            {
-                OpenMoveSelector(3, poke4ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
-            }
-        }
+      
 
         private void poke5AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -682,17 +663,7 @@ namespace Main
             }
         }
 
-        private void poke5MoveBtn_Click(object sender, EventArgs e)
-        {
-            if (poke5ComboBox.SelectedIndex > 0)
-            {
-                OpenMoveSelector(4, poke5ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
-            }
-        }
+      
 
         private void poke6AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -750,17 +721,7 @@ namespace Main
             }
         }
 
-        private void poke6MoveBtn_Click(object sender, EventArgs e)
-        {
-            if (poke6ComboBox.SelectedIndex > 0)
-            {
-                OpenMoveSelector(5, poke6ComboBox.SelectedIndex);
-            }
-            else
-            {
-                MessageBox.Show("Please select a Pokemon.", "Cannot Set Moves", MessageBoxButtons.OK);
-            }
-        }
+      
 
         private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
         {
@@ -1216,7 +1177,7 @@ namespace Main
         {
             for (int i = 0; i < 4; i++)
             {
-                trainerItemsComboBoxes[i].SelectedIndex = trainerProperties.Items[i];
+                trainerItemsComboBoxes[i].SelectedIndex = trainerProperties.Items[i] == 0xFFFF ? 0 : trainerProperties.Items[i];
             }
             var trainerClass = GetTrainerClassByTrainerClassId(trainerProperties.TrainerClassId);
             trainer_ClassListBox.SelectedIndex = trainer_ClassListBox.Items.IndexOf(trainerClass.ListName);
@@ -1724,8 +1685,26 @@ namespace Main
         private bool ValidatePokemon()
         {
             var invalidCombos = pokeComboBoxes.Take((int)trainer_TeamSizeNum.Value)
-                                .Where(cb => cb.SelectedIndex <= 0)
-                                .ToList();
+                .Where(cb =>
+                {
+                    var selectedItem = cb.SelectedItem?.ToString();
+                    if (string.IsNullOrEmpty(selectedItem)) return true;
+
+                    // Check if the format matches "[0000] xxxxx"
+                    var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
+                    if (match.Success)
+                    {
+                        if (int.TryParse(match.Groups[1].Value, out int number))
+                        {
+                            // Valid if number is greater than 0
+                            return number <= 0;
+                        }
+                    }
+
+                    // If the format is invalid or number parsing fails, it's an invalid combo
+                    return true;
+                })
+                .ToList();
 
             foreach (var combo in invalidCombos)
             {
