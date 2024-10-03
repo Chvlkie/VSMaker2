@@ -324,58 +324,73 @@ namespace VsMaker2Core.MessageEncrypt
             }
             return initialKey;
         }
-
         public static bool WriteMessageArchive(int messageArchiveId, List<string> messages, bool isTrainerName = false)
         {
             string filePath = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchiveId:D4}";
             int initialKey = GetInitialKey(filePath);
 
-            var stream = new MemoryStream();
-            using BinaryWriter writer = new(stream);
+            // Create a memory stream for in-memory writing
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
             try
             {
+                // Encode the messages first
                 List<int[]> encoded = EncodeMessages(messages, isTrainerName);
                 int encodedSize = encoded.Count;
+
+                // Write encoded size and initial key
                 writer.Write((ushort)encodedSize);
                 writer.Write((ushort)initialKey);
+
+                // Initialize keys
                 int key = (initialKey * 0x2FD) & 0xFFFF;
-                int key2 = 0;
-                int actualKey = 0;
-                int offset = 0x4 + (encodedSize * 8);
+                int offset = 0x4 + (encodedSize * 8); // Starting offset for string lengths
                 int[] stringLengths = new int[encodedSize];
 
+                // First loop: Write offsets and lengths
                 for (int i = 0; i < encodedSize; i++)
                 {
-                    key2 = (key * (i + 1) & 0xFFFF);
-                    actualKey = key2 | (key2 << 16);
+                    int key2 = (key * (i + 1)) & 0xFFFF;
+                    int actualKey = key2 | (key2 << 16);
+
                     writer.Write(offset ^ actualKey);
+
                     int[] currentString = encoded[i];
-                    int length = encoded[i].Length;
+                    int length = currentString.Length;
                     stringLengths[i] = length;
+
                     writer.Write(length ^ actualKey);
-                    offset += length * 2;
+                    offset += length * 2; // Length is in words (2 bytes per word)
                 }
+
+                // Second loop: Write the actual messages with key transformations
                 for (int i = 0; i < encodedSize; i++)
                 {
                     key = (0x91BD3 * (i + 1)) & 0xFFFF;
                     int[] currentMessage = encoded[i];
+
                     for (int j = 0; j < stringLengths[i] - 1; j++)
                     {
                         writer.Write((ushort)(currentMessage[j] ^ key));
-                        key += 0x493D;
-                        key &= 0xFFFF;
+                        key = (key + 0x493D) & 0xFFFF; // Ensure the key remains 16-bit
                     }
+
+                    // Write the termination character
                     writer.Write((ushort)(0xFFFF ^ key));
-                    File.WriteAllBytes(filePath, stream.ToArray());
                 }
+
+                // Write all bytes to the file, wiping the existing content first
+                File.WriteAllBytes(filePath, stream.ToArray());
             }
             catch (Exception ex)
             {
-                writer.Close();
+                // Log the error and return false
                 Console.WriteLine(ex.Message);
                 return false;
-                throw;
             }
+
+            // Return true if successful
             return true;
         }
     }

@@ -5,7 +5,6 @@ using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.MessageEncrypt;
 using VsMaker2Core.RomFiles;
-using static System.Net.Mime.MediaTypeNames;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
@@ -16,33 +15,49 @@ namespace VsMaker2Core.Methods
 
         public async Task<(bool Success, string ExceptionMessage)> ExtractRomContentsAsync(string workingDirectory, string fileName)
         {
-            Process unpack = new Process
+            var arguments = $"-x \"{fileName}\" -9 \"{RomFile.Arm9Path}\" -7 \"{Path.Combine(workingDirectory, Common.Arm7FilePath)}\" " +
+                            $"-y9 \"{Path.Combine(workingDirectory, Common.Y9FilePath)}\" -y7 \"{Path.Combine(workingDirectory, Common.Y7FilePath)}\" " +
+                            $"-d \"{Path.Combine(workingDirectory, Common.DataFilePath)}\" -y \"{Path.Combine(workingDirectory, Common.OverlayFilePath)}\" " +
+                            $"-t \"{Path.Combine(workingDirectory, Common.BannerFilePath)}\" -h \"{Path.Combine(workingDirectory, Common.HeaderFilePath)}\"";
+
+            using var unpack = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = Common.NdsToolsFilePath,
-                    Arguments = $"-x \"{fileName}\" -9 \"{RomFile.Arm9Path}\" -7 \"{Path.Combine(workingDirectory, Common.Arm7FilePath)}\" " +
-                                $"-y9 \"{Path.Combine(workingDirectory, Common.Y9FilePath)}\" -y7 \"{Path.Combine(workingDirectory, Common.Y7FilePath)}\" " +
-                                $"-d \"{Path.Combine(workingDirectory, Common.DataFilePath)}\" -y \"{Path.Combine(workingDirectory, Common.OverlayFilePath)}\" " +
-                                $"-t \"{Path.Combine(workingDirectory, Common.BannerFilePath)}\" -h \"{Path.Combine(workingDirectory, Common.HeaderFilePath)}\"",
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true
+                    Arguments = arguments,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
                 }
             };
 
             try
             {
                 unpack.Start();
+
+                var outputTask = unpack.StandardOutput.ReadToEndAsync();
+                var errorTask = unpack.StandardError.ReadToEndAsync();
+
                 await unpack.WaitForExitAsync();
+
+                string output = await outputTask;
+                string error = await errorTask;
+
                 if (unpack.ExitCode == 0)
                 {
                     return (true, string.Empty);
                 }
-                return (false, "Process failed with exit code: " + unpack.ExitCode);
+                else
+                {
+                    return (false, $"Process failed with exit code: {unpack.ExitCode}. Error: {error}. Output: {output}");
+                }
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (false, $"Exception occurred: {ex.Message}");
             }
         }
 
@@ -52,16 +67,14 @@ namespace VsMaker2Core.Methods
 
         public List<string> GetAbilityNames(int abilityNameArchive)
         {
-            // Get message archives from the specified archive
             var messageArchives = GetMessageArchiveContents(abilityNameArchive, false);
 
-            // Initialize the list with the expected number of elements for better performance
-            var abilityNames = new List<string>(messageArchives.Count);
+            if (messageArchives == null || messageArchives.Count == 0)
+            {
+                return [];
+            }
 
-            // Use LINQ to project message texts if applicable
-            abilityNames.AddRange(messageArchives.Select(item => item.MessageText));
-
-            return abilityNames;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
 
         public List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath)
@@ -70,19 +83,31 @@ namespace VsMaker2Core.Methods
 
             try
             {
-                using (BinaryReader reader = new BinaryReader(new FileStream(battleMessageOffsetPath, FileMode.Open, FileAccess.Read)))
+                if (string.IsNullOrWhiteSpace(battleMessageOffsetPath) || !File.Exists(battleMessageOffsetPath))
                 {
-                    while (reader.BaseStream.Position < reader.BaseStream.Length)
-                    {
-                        ushort offset = reader.ReadUInt16();
-                        battleMessageOffsetData.Add(new BattleMessageOffsetData(BattleMessageOffsetData.OffsetToMessageId(offset)));
-                    }
+                    Console.WriteLine($"Invalid or missing file path: {battleMessageOffsetPath}");
+                    return battleMessageOffsetData;
                 }
+
+                using BinaryReader reader = new(new FileStream(battleMessageOffsetPath, FileMode.Open, FileAccess.Read));
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                {
+                    ushort offset = reader.ReadUInt16();
+                    battleMessageOffsetData.Add(new BattleMessageOffsetData(BattleMessageOffsetData.OffsetToMessageId(offset)));
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO exception while reading the file: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw; // Re-throw the exception to handle it at a higher level if needed
+                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                throw;
             }
 
             return battleMessageOffsetData;
@@ -91,14 +116,13 @@ namespace VsMaker2Core.Methods
         public List<string> GetBattleMessages(int battleMessageArchive)
         {
             var messageArchives = GetMessageArchiveContents(battleMessageArchive, false);
-            var battleMessages = new List<string>(messageArchives.Count); // Initialize with the expected count
 
-            foreach (var item in messageArchives)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                battleMessages.Add(item.MessageText);
+                return [];
             }
 
-            return battleMessages;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
 
         public List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath)
@@ -107,6 +131,12 @@ namespace VsMaker2Core.Methods
 
             try
             {
+                if (string.IsNullOrWhiteSpace(trainerTextTablePath) || !File.Exists(trainerTextTablePath))
+                {
+                    Console.WriteLine($"Invalid or missing file path: {trainerTextTablePath}");
+                    return trainerTextTableDatas;
+                }
+
                 using FileStream fileStream = new(trainerTextTablePath, FileMode.Open, FileAccess.Read);
                 using BinaryReader reader = new(fileStream);
 
@@ -118,9 +148,17 @@ namespace VsMaker2Core.Methods
                     trainerTextTableDatas.Add(new BattleMessageTableData(messageId++, trainerId, messageTriggerId));
                 }
             }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO error while reading the file: {ex.Message}");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"An error occurred: {ex.Message}");
                 throw;
             }
 
@@ -130,34 +168,40 @@ namespace VsMaker2Core.Methods
         public List<string> GetClassDescriptions(int classDescriptionsArchive)
         {
             var messageArchives = GetMessageArchiveContents(classDescriptionsArchive, false);
+
+            if (messageArchives == null || messageArchives.Count == 0)
+            {
+                return [];
+            }
+
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
         public List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam)
         {
-            // Read the start address for the gender table
-            uint test = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0);
-            uint tableStartAddress = test - Arm9.Address;
+            if (numberOfClasses <= 0)
+            {
+                Console.WriteLine("Invalid number of classes.");
+                return [];
+            }
 
-            // Initialize the list with the expected number of elements
+            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0) - Arm9.Address;
+
             var classGenders = new List<ClassGenderData>(numberOfClasses);
 
-            // Use the Arm9Reader inside a using statement for proper disposal
             using (var reader = new Arm9.Arm9Reader(tableStartAddress))
             {
                 try
                 {
                     for (int i = 0; i < numberOfClasses; i++)
                     {
-                        // Read gender and add to list
                         byte gender = reader.ReadByte();
                         classGenders.Add(new ClassGenderData(reader.BaseStream.Position, gender, i));
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Log and rethrow the exception
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine($"An error occurred while reading class genders: {ex.Message}");
                     throw;
                 }
             }
@@ -169,27 +213,26 @@ namespace VsMaker2Core.Methods
         {
             var messageArchives = GetMessageArchiveContents(classNamesArchive, false);
 
-            // Ensure messageArchives is not null
-            if (messageArchives == null)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                throw new ArgumentNullException(nameof(messageArchives), "Message archives cannot be null.");
+                return [];
             }
 
-            var classNames = new List<string>(messageArchives.Count); // Initialize with the expected capacity
-            foreach (var item in messageArchives)
-            {
-                classNames.Add(item.MessageText);
-            }
-            return classNames;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
+
 
         public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
         {
-            List<EyeContactMusicData> eyeContactMusic = [];
+            var eyeContactMusic = new List<EyeContactMusicData>();
+
             uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
             uint tableSizeOffset = (uint)(gameFamily == GameFamily.HeartGoldSoulSilver || gameFamily == GameFamily.HgEngine ? 12 : 10);
+
             byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
+
             using Arm9.Arm9Reader reader = new(tableStartAddress);
+
             try
             {
                 for (int i = 0; i < tableSize; i++)
@@ -198,42 +241,38 @@ namespace VsMaker2Core.Methods
                     ushort trainerClassId = reader.ReadUInt16();
                     ushort musicDayId = reader.ReadUInt16();
                     ushort? musicNightId = null;
+
                     if (gameFamily == GameFamily.HgEngine || gameFamily == GameFamily.HeartGoldSoulSilver)
                     {
                         musicNightId = reader.ReadUInt16();
                     }
+
                     var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
                     eyeContactMusic.Add(eyeContactMusicData);
                 }
-                reader.Close();
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                reader.Close();
-
+                Console.WriteLine($"Error reading eye contact music data: {ex.Message}");
                 throw;
             }
 
             return eyeContactMusic;
         }
 
+
         public List<string> GetItemNames(int itemNameArchive)
         {
-            // Retrieve the message archives
             var messageArchives = GetMessageArchiveContents(itemNameArchive, false);
 
-            // Initialize list with an estimated capacity if possible
-            var itemNames = new List<string>(messageArchives.Count);
-
-            // Add message texts to the list
-            foreach (var item in messageArchives)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                itemNames.Add(item.MessageText);
+                return [];
             }
 
-            return itemNames;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
+
 
         public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
         {
@@ -241,30 +280,36 @@ namespace VsMaker2Core.Methods
 
             try
             {
-                // Construct file path
                 string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchiveId:D4}";
 
-                // Open file stream with using statement for automatic disposal
-                using (var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read))
+                if (!File.Exists(directory))
                 {
-                    // Read messages
-                    var messages = EncryptText.ReadMessageArchive(fileStream, discardLines);
-
-                    // Initialize list with the number of messages if count is available
-                    messageArchives = new List<MessageArchive>(messages.Count);
-
-                    // Populate list with MessageArchive objects
-                    for (int i = 0; i < messages.Count; i++)
-                    {
-                        messageArchives.Add(new MessageArchive(i, messages[i]));
-                    }
+                    Console.WriteLine($"File not found: {directory}");
+                    return messageArchives;
                 }
+
+                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                var messages = EncryptText.ReadMessageArchive(fileStream, discardLines);
+
+                messageArchives = new List<MessageArchive>(messages.Count);
+
+                for (int i = 0; i < messages.Count; i++)
+                {
+                    messageArchives.Add(new MessageArchive(i, messages[i]));
+                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found exception: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO exception occurred while reading the message archive: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Handle or log the exception
                 Console.WriteLine($"An error occurred while reading the message archive: {ex.Message}");
-                throw; // Re-throw the exception if necessary
+                throw;
             }
 
             return messageArchives;
