@@ -13,8 +13,9 @@ namespace Main
 {
     public partial class Mainform : Form
     {
+        private const int debounceDelay = 300;
         private System.Windows.Forms.Timer filterTimer;
-        private const int debounceDelay = 300; // Delay in milliseconds
+        // Delay in milliseconds
 
         #region Forms
 
@@ -39,6 +40,7 @@ namespace Main
         private bool InhibitTabChange = false;
         private bool IsLoadingData;
         private RomFile LoadedRom;
+        private bool LoadingError = false;
         private MainEditorModel MainEditorModel;
         private bool RomLoaded;
 
@@ -56,15 +58,19 @@ namespace Main
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
-        private bool LoadingError = false;
 
-        public void BeginExportBattleMessages(IProgress<int> progress, string filePath)
+        public async Task BeginExportBattleMessagesAsync(IProgress<int> progress, string filePath)
         {
-            using (StreamWriter outputFile = new(filePath, false, new UTF8Encoding(true)))
+            try
             {
+                using StreamWriter outputFile = new(filePath, false, new UTF8Encoding(true));
                 var export = new StringBuilder();
                 var headers = battleMessage_MessageTableDataGrid.Columns.Cast<DataGridViewColumn>();
+
                 export.AppendLine(string.Join(",", headers.Select(column => $"\"{column.HeaderText}\"")));
+                await outputFile.WriteLineAsync(export.ToString());
+
+                export.Clear();
 
                 foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
                 {
@@ -74,68 +80,85 @@ namespace Main
                     string messageText = row.Cells[3].Value.ToString();
 
                     export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}""");
+
+                    await outputFile.WriteLineAsync(export.ToString());
+
+                    export.Clear();
+
                     progress?.Report(row.Index + 1);
+
+                    await Task.Yield();  
                 }
-                outputFile.WriteLine(export.ToString());
+
+                progress?.Report(100);
+                await Task.Yield();  
+                await Task.Delay(100);
+                MessageBox.Show("Battle Message exported successfully.", "Success!");
             }
-            progress?.Report(50);
-            MessageBox.Show("Battle Message exported successfully.", "Success!");
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while exporting: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        public void BeginImportBattleMessages(string filePath)
+
+        public async Task BeginImportBattleMessagesAsync(string filePath)
         {
             try
             {
                 var newMessages = new List<BattleMessage>();
-                using TextFieldParser parser = new(filePath);
-                parser.TextFieldType = FieldType.Delimited;
-                parser.SetDelimiters(",");
 
-                // Skip the first line (header)
-                if (!parser.EndOfData)
+                using (var parser = new TextFieldParser(filePath))
                 {
-                    parser.ReadLine();
-                }
+                    parser.TextFieldType = FieldType.Delimited;
+                    parser.SetDelimiters(",");
 
-                while (!parser.EndOfData)
-                {
-                    string[] fields = parser.ReadFields();
-
-                    if (fields.Length != 4)
+                    if (!parser.EndOfData)
                     {
-                        throw new Exception("Unexpected number of columns");
+                        parser.ReadLine();
                     }
 
-                    int messageId = int.Parse(fields[0]);
-                    int trainerId = int.Parse(fields[1]);
-                    int messageTriggerId = int.Parse(fields[2]);
-                    string messageText = fields[3];
-                    var battleMessage = new BattleMessage(trainerId, messageId, messageTriggerId, messageText);
-                    newMessages.Add(battleMessage);
+                    while (!parser.EndOfData)
+                    {
+                        string[] fields = parser.ReadFields();
+
+                        if (fields.Length != 4)
+                        {
+                            throw new Exception("Unexpected number of columns");
+                        }
+
+                        int messageId = int.Parse(fields[0]);
+                        int trainerId = int.Parse(fields[1]);
+                        int messageTriggerId = int.Parse(fields[2]);
+                        string messageText = fields[3];
+
+                        newMessages.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
+                    }
                 }
 
-                // Invoke to ensure UI updates happen on the main thread
-                if (InvokeRequired)
+                await Task.Run(() =>
                 {
-                    Invoke(new Action(() =>
+                    if (InvokeRequired)
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            MainEditorModel.BattleMessages = newMessages;
+                            LoadBattleMessages();
+                            LoadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
+                            MessageBox.Show("Battle messages imported successfully!", "Success");
+                        }));
+                    }
+                    else
                     {
                         MainEditorModel.BattleMessages = newMessages;
                         LoadBattleMessages();
                         LoadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
                         MessageBox.Show("Battle messages imported successfully!", "Success");
-                    }));
-                }
-                else
-                {
-                    MainEditorModel.BattleMessages = newMessages;
-                    LoadBattleMessages();
-                    LoadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
-                    MessageBox.Show("Battle messages imported successfully!", "Success");
-                }
+                    }
+                });
             }
             catch (Exception ex)
             {
-                // Invoke to ensure UI updates happen on the main thread
                 if (InvokeRequired)
                 {
                     Invoke(new Action(() =>
@@ -185,7 +208,7 @@ namespace Main
             }
 
             HandleArm9Compression(progress);
-            HandleOverlayCompression(progress);
+            HandleOverlayCompressionAsync(progress);
 
             romFileMethods.RepackRomAsync(filePath);
             progress?.Report(100);
@@ -260,25 +283,25 @@ namespace Main
             listBox.EndUpdate();
         }
 
-        public void GetInitialData(IProgress<int> progress = null)
+        public async void GetInitialData(IProgress<int> progress = null)
         {
             IsLoadingData = true;
             int progressCount = 0;
             const int increment = 100 / 11;
 
-            MainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
+            MainEditorModel.PokemonSpecies = await romFileMethods.GetSpeciesAsync();
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(LoadedRom.TrainerNamesTextNumber);
+            MainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(LoadedRom.TrainerNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ClassNames = romFileMethods.GetClassNames(LoadedRom.ClassNamesTextNumber);
+            MainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(LoadedRom.ClassNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(LoadedRom.ClassDescriptionMessageNumber);
+            MainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(LoadedRom.ClassDescriptionMessageNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -290,24 +313,24 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(LoadedRom.PokemonNamesTextNumber);
+            MainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(LoadedRom.PokemonNamesTextNumber);
             MainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(MainEditorModel.PokemonNamesFull);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.MoveNames = romFileMethods.GetMoveNames(LoadedRom.MoveNameTextNumber);
+            MainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(LoadedRom.MoveNameTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(LoadedRom.AbilityNamesTextNumber);
+            MainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(LoadedRom.AbilityNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ItemNames = romFileMethods.GetItemNames(LoadedRom.ItemNamesTextNumber);
+            MainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(LoadedRom.ItemNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
+            MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -334,7 +357,7 @@ namespace Main
             }
         }
 
-        public void LoadRomData(IProgress<int> progress)
+        public async void LoadRomData(IProgress<int> progress)
         {
             IsLoadingData = true;
             int progressCount = 0;
@@ -344,23 +367,23 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(LoadedRom.TrainerNamesTextNumber);
+            LoadedRom.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(LoadedRom.TrainerNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
+            LoadedRom.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
+            LoadedRom.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainersData = romFileMethods.GetTrainersData(LoadedRom.TotalNumberOfTrainers);
+            LoadedRom.TrainersData = await romFileMethods.GetTrainersDataAsync(LoadedRom.TotalNumberOfTrainers);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainersPartyData = romFileMethods.GetTrainersPartyData(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, RomFile.GameFamily);
+            LoadedRom.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -368,19 +391,19 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClasses(LoadedRom.ClassNamesTextNumber);
+            LoadedRom.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(LoadedRom.ClassNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? romFileMethods.GetClassGenders(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
+            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(LoadedRom.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+            LoadedRom.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(LoadedRom.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.PrizeMoneyData = romFileMethods.GetPrizeMoneyData(LoadedRom);
+            LoadedRom.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync(LoadedRom);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -411,168 +434,6 @@ namespace Main
                 byte europeByte = reader.ReadByte();
                 return (europeByte, gameCode);
             }
-        }
-
-        private void AppendBattleMessage(RichTextBox messageText, string appendText)
-        {
-            int selectionIndex = messageText.SelectionStart;
-            messageText.Text = messageText.Text.Insert(selectionIndex, appendText);
-            messageText.SelectionStart = selectionIndex + appendText.Length;
-        }
-
-        private void battleMessage_InsertE_Btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "é");
-        }
-
-        private void battleMessage_InsertF_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
-        }
-
-        private void battleMessage_InsertN_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
-        }
-
-        private void battleMessage_InsertR_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
-        }
-
-        private void battleMessages_AddLineBtn_Click(object sender, EventArgs e)
-        {
-            int index = battleMessage_MessageTableDataGrid.Rows.Count - 1;
-
-            // Get current selected row index - Can't multi-select
-            if (battleMessage_MessageTableDataGrid.SelectedRows.Count > 0)
-            {
-                index = battleMessage_MessageTableDataGrid.SelectedRows[0].Index;
-            }
-            else if (battleMessage_MessageTableDataGrid.SelectedCells.Count > 0)
-            {
-                index = battleMessage_MessageTableDataGrid.SelectedCells[0].RowIndex;
-            }
-            string[] currentTrainers = new string[MainEditorModel.Trainers.Count];
-            string[] currentMessageTriggers = new string[MessageTrigger.MessageTriggers.Count];
-
-            for (int i = 0; i < MainEditorModel.Trainers.Count; i++)
-            {
-                currentTrainers[i] = MainEditorModel.Trainers[i].ListName;
-            }
-
-            for (int i = 0; i < MessageTrigger.MessageTriggers.Count; i++)
-            {
-                currentMessageTriggers[i] = MessageTrigger.MessageTriggers[i].ListName;
-            }
-
-            DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
-            row.Cells[0].Value = battleMessage_MessageTableDataGrid.Rows.Count;
-            row.Cells[1] = new DataGridViewComboBoxCell { DataSource = currentTrainers, Value = currentTrainers[0] };
-            row.Cells[2] = new DataGridViewComboBoxCell { DataSource = currentMessageTriggers, Value = currentMessageTriggers[0] };
-            row.Cells[3].Value = "";
-            ThreadSafeDataTable(row, index + 1);
-            battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
-            battleMessage_MessageTableDataGrid.ClearSelection();
-            battleMessage_MessageTableDataGrid.Rows[index + 1].Selected = true;
-            EditedBattleMessage(true);
-        }
-
-        private void battleMessages_ExportBtn_Click(object sender, EventArgs e)
-        {
-            ExportBattleMessagesAsCsv();
-        }
-
-        private void battleMessages_ImportBtn_Click(object sender, EventArgs e)
-        {
-            ImportBattleMessageCsv();
-        }
-
-        private void battleMessages_RemoveBtn_Click(object sender, EventArgs e)
-        {
-            int index = 0;
-
-            if (battleMessage_MessageTableDataGrid.SelectedRows.Count > 0)
-            {
-                index = battleMessage_MessageTableDataGrid.SelectedRows[0].Index;
-            }
-            else if (battleMessage_MessageTableDataGrid.SelectedCells.Count > 0)
-            {
-                index = battleMessage_MessageTableDataGrid.SelectedCells[0].RowIndex;
-            }
-            battleMessage_MessageTableDataGrid.Rows.RemoveAt(index);
-            battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = index > 0 ? index - 1 : index;
-            battleMessage_MessageTableDataGrid.ClearSelection();
-            EditedBattleMessage(true);
-            battleMessages_RemoveBtn.Enabled = false;
-        }
-
-        private void battleMessages_SaveBtn_Click(object sender, EventArgs e)
-        {
-            IsLoadingData = true;
-            battleMessage_MessageTableDataGrid.EndEdit();
-            var verify = VerifyBattleMessageTable();
-            if (!verify.Valid)
-            {
-                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + verify.Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = verify.Row;
-                battleMessage_MessageTableDataGrid.ClearSelection();
-                battleMessage_MessageTableDataGrid.Rows[verify.Row].Selected = true;
-            }
-            else
-            {
-                var dialogResult = MessageBox.Show("Save all changes to Battle Messsage Table?\nThis might take some time...", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (dialogResult == DialogResult.No)
-                {
-                }
-                else if (dialogResult == DialogResult.Yes)
-                {
-                    OpenLoadingDialog(LoadType.SaveTrainerTextTable);
-                    LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
-                    LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
-                    MainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
-                    battleMessage_MessageTableDataGrid.Rows.Clear();
-                    LoadBattleMessages();
-                    EditedBattleMessage(false);
-                }
-            }
-            IsLoadingData = false;
-        }
-
-        private void battleMessages_SortBtn_Click(object sender, EventArgs e)
-        {
-            IsLoadingData = true;
-
-            battleMessage_MessageTableDataGrid.EndEdit();
-            var verify = VerifyBattleMessageTable();
-            if (!verify.Valid)
-            {
-                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + verify.Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = verify.Row;
-                battleMessage_MessageTableDataGrid.ClearSelection();
-                battleMessage_MessageTableDataGrid.Rows[verify.Row].Selected = true;
-            }
-            else
-            {
-                var dialogResult = MessageBox.Show("This will sort the Battle Message table to group Trainers.\n\nThe Battle Messagex lookup table will also be sorted.\nThis allows for more efficient loading in-game.\n\nAll changes will be saved.", "Sort and Repoint", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-
-                if (dialogResult == DialogResult.OK)
-                {
-                    OpenLoadingDialog(LoadType.RepointTextTable);
-                    LoadedRom.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
-                    LoadedRom.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
-                    MainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
-                    battleMessage_MessageTableDataGrid.Rows.Clear();
-                    LoadBattleMessages();
-                    EditedBattleMessage(false);
-                }
-            }
-            IsLoadingData = false;
-        }
-
-        private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
-        {
         }
 
         private void BeginExtractRomData()
@@ -739,27 +600,28 @@ namespace Main
             }
         }
 
-        private void HandleOverlayCompression(IProgress<int> progress)
+        private async Task HandleOverlayCompressionAsync(IProgress<int> progress)
         {
             if (Overlay.CheckOverlayHasCompressionFlag(1))
             {
                 if (RomPatches.LoadOverlay1FromBackup)
                 {
-                    var restore = Overlay.RestoreOverlayFromCompressedBackup(1, false);
+                    var restore = await Overlay.RestoreOverlayFromCompressedBackupAsync(1, false);
                     if (!restore.Success)
                     {
                         MessageBox.Show(restore.Error, "Unable to Restore Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else if (!Overlay.CheckOverlayIsCompressed(1))
+                else if (!await Overlay.CheckOverlayIsCompressedAsync(1))
                 {
-                    Overlay.CompressOverlay(1);
+                    await Overlay.CompressOverlayAsync(1);
                 }
             }
 
-            if (Overlay.CheckOverlayHasCompressionFlag(LoadedRom.InitialMoneyOverlayNumber) && !Overlay.CheckOverlayIsCompressed(LoadedRom.InitialMoneyOverlayNumber))
+            if (Overlay.CheckOverlayHasCompressionFlag(LoadedRom.InitialMoneyOverlayNumber) &&
+                !await Overlay.CheckOverlayIsCompressedAsync(LoadedRom.InitialMoneyOverlayNumber))
             {
-                Overlay.CompressOverlay(LoadedRom.InitialMoneyOverlayNumber);
+                await Overlay.CompressOverlayAsync(LoadedRom.InitialMoneyOverlayNumber);
             }
         }
 
@@ -826,7 +688,7 @@ namespace Main
             OpenRomPatchesWindow();
         }
 
-        private void main_OpenRomBtn_Click(object sender, EventArgs e)
+        private async void main_OpenRomBtn_Click(object sender, EventArgs e)
         {
             if (UnsavedChanges)
             {
@@ -835,12 +697,12 @@ namespace Main
                         "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (saveChanges == DialogResult.Yes)
                 {
-                    OpenRom();
+                    await OpenRomAsync();
                 }
             }
             else
             {
-                OpenRom();
+                OpenRomAsync();
             }
         }
 
@@ -928,7 +790,7 @@ namespace Main
             }
         }
 
-        private void menu_File_OpenRom_Click(object sender, EventArgs e)
+        private async void menu_File_OpenRom_Click(object sender, EventArgs e)
         {
             if (UnsavedChanges)
             {
@@ -937,12 +799,12 @@ namespace Main
                         "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (saveChanges == DialogResult.Yes)
                 {
-                    OpenRom();
+                    OpenRomAsync();
                 }
             }
             else
             {
-                OpenRom();
+                OpenRomAsync();
             }
         }
 
@@ -1000,7 +862,7 @@ namespace Main
             UseWaitCursor = false;
         }
 
-        private void OpenRom()
+        private async Task OpenRomAsync()
         {
             OpenFileDialog openRom = new()
             {
@@ -1009,7 +871,8 @@ namespace Main
 
             if (openRom.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(openRom.FileName))
             {
-                SelectWorkingFolderDirectory(openRom.FileName);
+                // Await the asynchronous SelectWorkingFolderDirectoryAsync method
+                await SelectWorkingFolderDirectoryAsync(openRom.FileName);
             }
         }
 
@@ -1099,9 +962,9 @@ namespace Main
             }
         }
 
-        private void SelectWorkingFolderDirectory(string fileName)
+        private async Task SelectWorkingFolderDirectoryAsync(string fileName)
         {
-            FolderBrowserDialog selectFolder = new()
+            using FolderBrowserDialog selectFolder = new()
             {
                 Description = "Choose Where to Extract ROM Contents",
                 UseDescriptionForTitle = true,
@@ -1111,6 +974,7 @@ namespace Main
             {
                 CloseProject();
                 string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
+
                 if (Directory.Exists(workingDirectory))
                 {
                     var directoryExists = MessageBox.Show("An extracted contents folder for this ROM has been found." +
@@ -1133,7 +997,8 @@ namespace Main
                         }
                         else
                         {
-                            SelectWorkingFolderDirectory(fileName);
+                            await SelectWorkingFolderDirectoryAsync(fileName);
+                            return;
                         }
                     }
                 }
@@ -1147,20 +1012,25 @@ namespace Main
                     if (ReadRomFile(workingDirectory, fileName))
                     {
                         OpenLoadingDialog(LoadType.UnpackRom);
+
                         if (RomLoaded && !LoadingError)
                         {
                             Arm9.Arm9EditSize(-12);
 
+                            // Check for compression mark and await the asynchronous decompression
                             if (Arm9.CheckCompressionMark(RomFile.GameFamily))
                             {
-                                if (!Arm9.Arm9Decompress(RomFile.Arm9Path))
+                                // Await the Arm9DecompressAsync method
+                                if (!await Arm9.Arm9DecompressAsync(RomFile.Arm9Path))
                                 {
                                     MessageBox.Show("Unable to decompress Arm9");
                                     return;
                                 }
                             }
+
                             BeginExtractRomData();
                         }
+
                         if (!LoadingError)
                         {
                             InitializeTrainerEditor();

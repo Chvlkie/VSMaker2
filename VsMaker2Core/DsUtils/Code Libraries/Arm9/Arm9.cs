@@ -10,7 +10,8 @@ namespace VsMaker2Core.DSUtils
 
         public static byte ReadByte(uint startOffset)
         {
-            return ReadFromFile(RomFile.Arm9Path, startOffset, 1)[0];
+            using EasyReader reader = new(RomFile.Arm9Path, startOffset);
+            return reader.ReadByte();
         }
 
         public static byte[] ReadBytes(uint startOffset, long numberOfBytes = 0)
@@ -20,77 +21,214 @@ namespace VsMaker2Core.DSUtils
 
         public static byte[] ReadFromFile(string filePath, long startOffset = 0, long numberOfBytes = 0)
         {
-            byte[] buffer = null;
+            byte[] buffer;
+
             using (EasyReader reader = new(filePath, startOffset))
             {
                 try
                 {
-                    buffer = reader.ReadBytes(numberOfBytes == 0 ? (int)(reader.BaseStream.Length - reader.BaseStream.Position) : (int)numberOfBytes);
+                    long bytesToRead = numberOfBytes == 0 ? reader.BaseStream.Length - reader.BaseStream.Position : numberOfBytes;
+
+                    buffer = new byte[bytesToRead];
+                    reader.Read(buffer, 0, (int)bytesToRead);
                 }
-                catch (EndOfStreamException)
+                catch (EndOfStreamException ex)
                 {
-                    Console.WriteLine("End of FileStream");
+                    Console.WriteLine($"End of FileStream encountered: {ex.Message}");
+                    buffer = [];
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"I/O error occurred while reading: {ex.Message}");
+                    buffer = [];
                 }
             }
+
             return buffer;
         }
 
         public static void WriteToFile(string filePath, byte[] toOutput, uint writeAt = 0, int indexFirstByteToWrite = 0, int? indexLastByteToWrite = null, FileMode fileMode = FileMode.OpenOrCreate)
         {
-            using EasyWriter writer = new(filePath, writeAt, fileMode);
-            writer.Write(toOutput, indexFirstByteToWrite, indexLastByteToWrite is null ? toOutput.Length - indexFirstByteToWrite : (int)indexLastByteToWrite);
+            int lastByteIndex = indexLastByteToWrite ?? toOutput.Length;
+            if (indexFirstByteToWrite < 0 || indexFirstByteToWrite >= toOutput.Length || lastByteIndex > toOutput.Length)
+            {
+                throw new ArgumentOutOfRangeException("Invalid byte range specified for writing.");
+            }
+
+            try
+            {
+                using EasyWriter writer = new(filePath, writeAt, fileMode);
+
+                int count = lastByteIndex - indexFirstByteToWrite;
+                writer.Write(toOutput, indexFirstByteToWrite, count);
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"I/O error occurred while writing to file: {ex.Message}");
+                throw;
+            }
         }
 
-        public static bool Arm9Compress(string path)
+        public static async Task<bool> Arm9CompressAsync(string path)
         {
-            Process compress = new();
-            compress.StartInfo.FileName = Common.BlzFilePath;
-            compress.StartInfo.Arguments = @" -en9 " + '"' + path + '"';
-            compress.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            compress.StartInfo.CreateNoWindow = true;
-            compress.Start();
-            compress.WaitForExit();
+            try
+            {
+                using Process compress = new()
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = Common.BlzFilePath,
+                        Arguments = @" -en9 " + '"' + path + '"',
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    }
+                };
 
-            return new FileInfo(RomFile.Arm9Path).Length <= 0xBC000;
+                compress.Start();
+
+                await compress.WaitForExitAsync();
+
+                if (compress.ExitCode != 0)
+                {
+                    Console.WriteLine($"Compression process failed with exit code {compress.ExitCode}.");
+                    return false;
+                }
+
+                FileInfo fileInfo = new(RomFile.Arm9Path);
+                if (!fileInfo.Exists)
+                {
+                    Console.WriteLine("ARM9 file not found after compression.");
+                    return false;
+                }
+
+                return fileInfo.Length <= 0xBC000;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during ARM9 compression: {ex.Message}");
+                return false;
+            }
         }
 
-        public static bool Arm9Decompress(string path)
+        public static async Task<bool> Arm9DecompressAsync(string path)
         {
-            Process decompress = new();
-            decompress.StartInfo.FileName = Common.BlzFilePath;
-            decompress.StartInfo.Arguments = @" -d " + '"' + path + '"';
-            decompress.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            decompress.StartInfo.CreateNoWindow = false;
-            decompress.Start();
-            decompress.WaitForExit();
+            try
+            {
+                using Process decompress = new()
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = Common.BlzFilePath,
+                        Arguments = @" -d " + '"' + path + '"',
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    }
+                };
 
-            return new FileInfo(RomFile.Arm9Path).Length > 0xBC000;
+                decompress.Start();
+
+                await decompress.WaitForExitAsync();
+
+                if (decompress.ExitCode != 0)
+                {
+                    Console.WriteLine($"Decompression process failed with exit code {decompress.ExitCode}.");
+                    return false;
+                }
+
+                FileInfo fileInfo = new(RomFile.Arm9Path);
+                if (!fileInfo.Exists)
+                {
+                    Console.WriteLine("ARM9 file not found after decompression.");
+                    return false;
+                }
+
+                return fileInfo.Length > 0xBC000;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during ARM9 decompression: {ex.Message}");
+                return false;
+            }
         }
 
         public static void Arm9EditSize(int increment)
         {
-            using Arm9Writer writer = new();
-            writer.EditSize(increment);
+            try
+            {
+                if (increment == 0)
+                {
+                    Console.WriteLine("No size change requested.");
+                    return;
+                }
+
+                using Arm9Writer writer = new();
+                writer.EditSize(increment);
+
+                Console.WriteLine($"Successfully edited ARM9 size by {increment} bytes.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while editing ARM9 size: {ex.Message}");
+                throw;
+            }
         }
+
         public static bool CheckCompressionMark(GameFamily gameFamily)
         {
-            return BitConverter.ToInt32(ReadBytes((uint)(gameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4), 4), 0) != 0;
+            const uint DiamondPearlOffset = 0xB7C;
+            const uint OtherGamesOffset = 0xBB4;
+
+            uint offset = gameFamily == GameFamily.DiamondPearl ? DiamondPearlOffset : OtherGamesOffset;
+
+            try
+            {
+                byte[] bytes = ReadBytes(offset, 4);
+
+                if (bytes.Length != 4)
+                {
+                    Console.WriteLine($"Failed to read 4 bytes from offset {offset:X}");
+                    return false;
+                }
+
+                return BitConverter.ToInt32(bytes, 0) != 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking compression mark: {ex.Message}");
+                return false;
+            }
         }
+
         public static void WriteByte(byte value, uint destinationOffset)
         {
-            WriteToFile(RomFile.Arm9Path, BitConverter.GetBytes((short)value), destinationOffset, 0);
+            WriteToFile(RomFile.Arm9Path, new[] { value }, destinationOffset);
         }
 
         public static void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)
         {
-            WriteToFile(RomFile.Arm9Path, bytesToWrite, destinationOffset, indexFirstByte, indexLastByte);
+            int lastByteIndex = indexLastByte ?? bytesToWrite.Length;
+
+            if (indexFirstByte < 0 || indexFirstByte >= bytesToWrite.Length || lastByteIndex > bytesToWrite.Length)
+            {
+                throw new ArgumentOutOfRangeException("Invalid byte range specified for writing.");
+            }
+
+            WriteToFile(RomFile.Arm9Path, bytesToWrite, destinationOffset, indexFirstByte, lastByteIndex);
         }
 
         public class Arm9Reader : EasyReader
         {
             public Arm9Reader(long position = 0) : base(RomFile.Arm9Path, position)
             {
-                BaseStream.Position = position;
+                try
+                {
+                    BaseStream.Position = position;
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"Error opening arm9.bin for reading: {ex.Message}");
+                    throw;
+                }
             }
         }
 
@@ -98,7 +236,15 @@ namespace VsMaker2Core.DSUtils
         {
             public Arm9Writer(long position = 0) : base(RomFile.Arm9Path, position)
             {
-                BaseStream.Position = position;
+                try
+                {
+                    BaseStream.Position = position;
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"Error opening arm9.bin for writing: {ex.Message}");
+                    throw;
+                }
             }
         }
     }

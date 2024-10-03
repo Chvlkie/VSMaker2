@@ -112,75 +112,75 @@ namespace Main.Forms
 
         public async Task ExportTrainerTextTable()
         {
-            await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
-            await Task.Run(() => mainForm.BeginExportBattleMessages(progress, FilePath));
+            await mainForm.BeginExportBattleMessagesAsync(progress, FilePath);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
 
         public async Task ImportTrainerTextTable()
         {
-            await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
-            await Task.Run(() => mainForm.BeginImportBattleMessages(FilePath));
+            await mainForm.BeginImportBattleMessagesAsync(FilePath);
+
             FormClosing -= LoadingData_FormClosing;
+
             Close();
         }
 
-        private void LoadData()
+        private async void LoadData()
         {
             progressBar.Value = 0;
             switch (loadType)
             {
                 case LoadType.UnpackRom:
                     Text = "Unpacking ROM Data";
-                    UnpackRom();
+                    await UnpackRom();
                     break;
 
                 case LoadType.LoadRomData:
                     Text = "Loading ROM Data";
-                    LoadRomData();
+                    await LoadRomData();
                     break;
 
                 case LoadType.SetupEditor:
                     Text = "Setting up VS Maker";
-                    SetupEditor();
+                    await SetupEditor();
                     break;
 
                 case LoadType.UnpackNarcs:
                     Text = "Unpacking Essential NARCs";
-                    UnpackNarcs();
+                    await UnpackNarcs();
                     break;
 
                 case LoadType.SaveRom:
                     Text = "Saving ROM";
-                    SaveRom();
+                    await SaveRom();
                     break;
 
                 case LoadType.SaveTrainerTextTable:
                     Text = "Saving Battle Message Table";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
-                    SaveTrainerTextTable();
+                    await SaveTrainerTextTable();
                     break;
 
                 case LoadType.ExportTextTable:
                     Text = "Exporting Battle Messages";
                     progressBar.Maximum = mainForm.BattleMessageCount + 50;
-                    ExportTrainerTextTable();
+                    await ExportTrainerTextTable();
                     break;
 
                 case LoadType.ImportTextTable:
                     Text = "Importing Battle Messages";
                     progressBar.Style = ProgressBarStyle.Marquee;
                     progressBar.Value = 100;
-                    ImportTrainerTextTable();
+                    await ImportTrainerTextTable();
                     break;
 
                 case LoadType.RepointTextTable:
                     Text = "Sorting & Repointing Battle Message Table";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
-                    RepointTrainerTable();
+                    await RepointTrainerTable();
                     break;
 
                 default:

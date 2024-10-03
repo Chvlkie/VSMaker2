@@ -15,22 +15,70 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         Task<(bool Success, string ExceptionMessage)> ExtractRomContentsAsync(string workingDirectory, string fileName);
 
-        List<string> GetAbilityNames(int abilityNameArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="abilityNameArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetAbilityNamesAsync(int abilityNameArchive);
 
-        List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="battleMessageOffsetPath"></param>
+        /// <returns></returns>
+        Task<List<BattleMessageOffsetData>> GetBattleMessageOffsetDataAsync(string battleMessageOffsetPath);
 
-        List<string> GetBattleMessages(int battleMessageArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="battleMessageArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetBattleMessagesAsync(int battleMessageArchive);
 
-        List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerTextTablePath"></param>
+        /// <returns></returns>
+        Task<List<BattleMessageTableData>> GetBattleMessageTableDataAsync(string trainerTextTablePath);
 
-        List<string> GetClassDescriptions(int classDescriptionsArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="classDescriptionsArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetClassDescriptionsAsync(int classDescriptionsArchive);
 
-        List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="numberOfClasses"></param>
+        /// <param name="classGenderOffsetToRam"></param>
+        /// <returns></returns>
+        Task<List<ClassGenderData>> GetClassGendersAsync(int numberOfClasses, uint classGenderOffsetToRam);
 
-        List<string> GetClassNames(int classNamesArchive);
-        List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="classNamesArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetClassNamesAsync(int classNamesArchive);
 
-        List<string> GetItemNames(int itemNameArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="eyeContactMusicTableOffsetToRam"></param>
+        /// <param name="gameFamily"></param>
+        /// <returns></returns>
+        Task<List<EyeContactMusicData>> GetEyeContactMusicDataAsync(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="itemNameArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetItemNamesAsync(int itemNameArchive);
 
         /// <summary>
         /// Get the contents of a Message Archive for given messageArchiveId.
@@ -38,39 +86,102 @@ namespace VsMaker2Core.Methods
         /// <param name="messageArchiveId"></param>
         /// <param name="discardLines"></param>
         /// <returns></returns>
-        List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false);
+        Task<List<MessageArchive>> GetMessageArchiveContentsAsync(int messageArchiveId, bool discardLines = false);
 
-        int GetMessageInitialKey(int messageArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="messageArchive"></param>
+        /// <returns></returns>
+        Task<int> GetMessageInitialKeyAsync(int messageArchive);
 
-        List<string> GetMoveNames(int moveTextArchive);
-        List<string> GetPokemonNames(int pokemonNameArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="moveTextArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetMoveNamesAsync(int moveTextArchive);
 
-        List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="pokemonNameArchive"></param>
+        /// <returns></returns>
+        Task<List<string>> GetPokemonNamesAsync(int pokemonNameArchive);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="loadedRom"></param>
+        /// <returns></returns>
+        Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync(RomFile loadedRom);
 
         /// <summary>
         /// Get all Pokemon Species data from extracted ROM Files.
         /// </summary>
         /// <returns></returns>
-        List<Species> GetSpecies();
+        Task<List<Species>> GetSpeciesAsync();
 
-        int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerClassNameArchive"></param>
+        /// <returns></returns>
+        Task<int> GetTotalNumberOfTrainerClassesAsync(int trainerClassNameArchive);
 
-        int GetTotalNumberOfTrainers(int trainerNameArchive);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerNameArchive"></param>
+        /// <returns></returns>
+        Task<int> GetTotalNumberOfTrainersAsync(int trainerNameArchive);
+
         /// <summary>
         /// Get the TrainerNames from the trainerNameMessageArchive.
         /// </summary>
         /// <param name="trainerNameMessageArchive"></param>
         /// <returns></returns>
-        List<string> GetTrainerNames(int trainerNameMessageArchive);
+        Task<List<string>> GetTrainerNamesAsync(int trainerNameMessageArchive);
 
-        List<TrainerData> GetTrainersData(int numberOfTrainers);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="numberOfTrainers"></param>
+        /// <returns></returns>
+        Task<List<TrainerData>> GetTrainersDataAsync(int numberOfTrainers);
 
-        List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="numberOfTrainers"></param>
+        /// <param name="trainerData"></param>
+        /// <param name="gameFamily"></param>
+        /// <returns></returns>
+        Task<List<TrainerPartyData>> GetTrainersPartyDataAsync(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily);
 
-        TrainerData ReadTrainerData(int trainerId);
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerId"></param>
+        /// <returns></returns>
 
-        TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
+        Task<TrainerData> ReadTrainerDataAsync(int trainerId);
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerId"></param>
+        /// <param name="teamSize"></param>
+        /// <param name="trainerType"></param>
+        /// <param name="hasBallCapsule"></param>
+        /// <returns></returns>
+       Task<TrainerPartyData> ReadTrainerPartyDataAsync(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ndsFileName"></param>
+        /// <returns></returns>
         Task RepackRomAsync(string ndsFileName);
 
         /// <summary>
@@ -82,6 +193,11 @@ namespace VsMaker2Core.Methods
         /// <param name="gameLanguage"></param>
         void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage);
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="trainerNameOffset"></param>
+        /// <returns></returns>
         int SetTrainerNameMax(int trainerNameOffset);
 
         /// <summary>
@@ -90,6 +206,6 @@ namespace VsMaker2Core.Methods
         /// <param name="narcs"></param>
         /// <param name="progress"></param>
         /// <returns></returns>
-       Task<(bool Success, string ExceptionMessage)> UnpackNarcsAsync(List<NarcDirectory> narcs, IProgress<int> progress);
+        Task<(bool Success, string ExceptionMessage)> UnpackNarcsAsync(List<NarcDirectory> narcs, IProgress<int> progress);
     }
 }

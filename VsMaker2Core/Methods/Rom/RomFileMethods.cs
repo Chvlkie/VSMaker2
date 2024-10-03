@@ -65,19 +65,19 @@ namespace VsMaker2Core.Methods
 
         #region Get
 
-        public List<string> GetAbilityNames(int abilityNameArchive)
+        public async Task<List<string>> GetAbilityNamesAsync(int abilityNameArchive)
         {
-            var messageArchives = GetMessageArchiveContents(abilityNameArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(abilityNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return [];
+                return new List<string>();
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath)
+        public async Task<List<BattleMessageOffsetData>> GetBattleMessageOffsetDataAsync(string battleMessageOffsetPath)
         {
             var battleMessageOffsetData = new List<BattleMessageOffsetData>();
 
@@ -89,7 +89,9 @@ namespace VsMaker2Core.Methods
                     return battleMessageOffsetData;
                 }
 
-                using BinaryReader reader = new(new FileStream(battleMessageOffsetPath, FileMode.Open, FileAccess.Read));
+                using var fileStream = new FileStream(battleMessageOffsetPath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true);
+                using var reader = new BinaryReader(fileStream);
+
                 while (reader.BaseStream.Position < reader.BaseStream.Length)
                 {
                     ushort offset = reader.ReadUInt16();
@@ -113,19 +115,19 @@ namespace VsMaker2Core.Methods
             return battleMessageOffsetData;
         }
 
-        public List<string> GetBattleMessages(int battleMessageArchive)
+        public async Task<List<string>> GetBattleMessagesAsync(int battleMessageArchive)
         {
-            var messageArchives = GetMessageArchiveContents(battleMessageArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(battleMessageArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return [];
+                return new List<string>();
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath)
+        public async Task<List<BattleMessageTableData>> GetBattleMessageTableDataAsync(string trainerTextTablePath)
         {
             var trainerTextTableDatas = new List<BattleMessageTableData>();
 
@@ -165,19 +167,19 @@ namespace VsMaker2Core.Methods
             return trainerTextTableDatas;
         }
 
-        public List<string> GetClassDescriptions(int classDescriptionsArchive)
+        public async Task<List<string>> GetClassDescriptionsAsync(int classDescriptionsArchive)
         {
-            var messageArchives = GetMessageArchiveContents(classDescriptionsArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(classDescriptionsArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return [];
+                return new List<string>();
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam)
+        public async Task<List<ClassGenderData>> GetClassGendersAsync(int numberOfClasses, uint classGenderOffsetToRam)
         {
             if (numberOfClasses <= 0)
             {
@@ -209,9 +211,9 @@ namespace VsMaker2Core.Methods
             return classGenders;
         }
 
-        public List<string> GetClassNames(int classNamesArchive)
+        public async Task<List<string>> GetClassNamesAsync(int classNamesArchive)
         {
-            var messageArchives = GetMessageArchiveContents(classNamesArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(classNamesArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -221,7 +223,7 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
+        public async Task<List<EyeContactMusicData>> GetEyeContactMusicDataAsync(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
         {
             var eyeContactMusic = new List<EyeContactMusicData>();
 
@@ -259,9 +261,9 @@ namespace VsMaker2Core.Methods
             return eyeContactMusic;
         }
 
-        public List<string> GetItemNames(int itemNameArchive)
+        public async Task<List<string>> GetItemNamesAsync(int itemNameArchive)
         {
-            var messageArchives = GetMessageArchiveContents(itemNameArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(itemNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -271,7 +273,7 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
+        public async Task<List<MessageArchive>> GetMessageArchiveContentsAsync(int messageArchiveId, bool discardLines = false)
         {
             var messageArchives = new List<MessageArchive>();
 
@@ -285,7 +287,7 @@ namespace VsMaker2Core.Methods
                     return messageArchives;
                 }
 
-                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true);
                 var messages = EncryptText.ReadMessageArchive(fileStream, discardLines);
 
                 messageArchives = new List<MessageArchive>(messages.Count);
@@ -312,7 +314,7 @@ namespace VsMaker2Core.Methods
             return messageArchives;
         }
 
-        public int GetMessageInitialKey(int messageArchive)
+        public async Task<int> GetMessageInitialKeyAsync(int messageArchive)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchive:D4}";
 
@@ -348,9 +350,9 @@ namespace VsMaker2Core.Methods
             }
         }
 
-        public List<string> GetMoveNames(int moveTextArchive)
+        public async Task<List<string>> GetMoveNamesAsync(int moveTextArchive)
         {
-            var messageArchives = GetMessageArchiveContents(moveTextArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(moveTextArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -360,9 +362,9 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<string> GetPokemonNames(int pokemonNameArchive)
+        public async Task<List<string>> GetPokemonNamesAsync(int pokemonNameArchive)
         {
-            var messageArchives = GetMessageArchiveContents(pokemonNameArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(pokemonNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -372,17 +374,20 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom)
+        public async Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync(RomFile loadedRom)
         {
             var prizeMoneyData = new List<PrizeMoneyData>();
 
             try
             {
-                if (loadedRom.IsHeartGoldSoulSilver &&
-                    Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
+                if (loadedRom.IsHeartGoldSoulSilver)
                 {
-                    Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
-                    Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                    bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(loadedRom.PrizeMoneyTableOverlayNumber);
+                    if (isCompressed)
+                    {
+                        await Overlay.DecompressOverlayAsync(loadedRom.PrizeMoneyTableOverlayNumber);
+                        Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                    }
                 }
 
                 string filePath = Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber);
@@ -434,7 +439,7 @@ namespace VsMaker2Core.Methods
             return prizeMoneyData;
         }
 
-        public List<Species> GetSpecies()
+        public async Task<List<Species>> GetSpeciesAsync()
         {
             var allSpecies = new List<Species>();
 
@@ -447,7 +452,6 @@ namespace VsMaker2Core.Methods
             }
 
             int numberOfSpecies = Directory.GetFiles(unpackedDirectory, "*").Length;
-
             allSpecies.Capacity = numberOfSpecies;
 
             for (int i = 0; i < numberOfSpecies; i++)
@@ -458,15 +462,14 @@ namespace VsMaker2Core.Methods
                 {
                     var species = new Species { SpeciesId = (ushort)i };
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                    using (var reader = new BinaryReader(fileStream))
-                    {
-                        reader.BaseStream.Position = Species.Constants.GenderRatioByteOffset;
-                        species.GenderRatio = reader.ReadByte();
-                        reader.BaseStream.Position = Species.Constants.AbilitySlot1ByteOffset;
-                        species.Ability1 = reader.ReadByte();
-                        species.Ability2 = reader.ReadByte();
-                    }
+                    using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, useAsync: true);
+                    using var reader = new BinaryReader(fileStream);
+
+                    reader.BaseStream.Position = Species.Constants.GenderRatioByteOffset;
+                    species.GenderRatio = reader.ReadByte();
+                    reader.BaseStream.Position = Species.Constants.AbilitySlot1ByteOffset;
+                    species.Ability1 = reader.ReadByte();
+                    species.Ability2 = reader.ReadByte();
 
                     allSpecies.Add(species);
                 }
@@ -487,26 +490,26 @@ namespace VsMaker2Core.Methods
             return allSpecies;
         }
 
-        public int GetTotalNumberOfItemsInArchive(int archiveId)
+        public async Task<int> GetTotalNumberOfItemsInArchiveAsync(int archiveId)
         {
-            var messageArchives = GetMessageArchiveContents(archiveId, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(archiveId, false);
 
             return messageArchives?.Count ?? 0;
         }
 
-        public int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive)
+        public async Task<int> GetTotalNumberOfTrainerClassesAsync(int trainerClassNameArchive)
         {
-            return GetTotalNumberOfItemsInArchive(trainerClassNameArchive);
+            return await GetTotalNumberOfItemsInArchiveAsync(trainerClassNameArchive);
         }
 
-        public int GetTotalNumberOfTrainers(int trainerNameArchive)
+        public async Task<int> GetTotalNumberOfTrainersAsync(int trainerNameArchive)
         {
-            return GetTotalNumberOfItemsInArchive(trainerNameArchive);
+            return await GetTotalNumberOfItemsInArchiveAsync(trainerNameArchive);
         }
 
-        public List<string> GetTrainerNames(int trainerNameMessageArchive)
+        public async Task<List<string>> GetTrainerNamesAsync(int trainerNameMessageArchive)
         {
-            var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
+            var messageArchives = await GetMessageArchiveContentsAsync(trainerNameMessageArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -519,7 +522,7 @@ namespace VsMaker2Core.Methods
                    .ToList();
         }
 
-        public List<TrainerData> GetTrainersData(int numberOfTrainers)
+        public async Task<List<TrainerData>> GetTrainersDataAsync(int numberOfTrainers)
         {
             var trainersData = new List<TrainerData>(numberOfTrainers);
 
@@ -527,7 +530,8 @@ namespace VsMaker2Core.Methods
             {
                 try
                 {
-                    trainersData.Add(ReadTrainerData(i));
+                    var trainerData = await ReadTrainerDataAsync(i);
+                    trainersData.Add(trainerData);
                 }
                 catch (Exception ex)
                 {
@@ -538,7 +542,7 @@ namespace VsMaker2Core.Methods
             return trainersData;
         }
 
-        public List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
+        public async Task<List<TrainerPartyData>> GetTrainersPartyDataAsync(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
         {
             var trainersPartyData = new List<TrainerPartyData>(numberOfTrainers);
 
@@ -555,7 +559,8 @@ namespace VsMaker2Core.Methods
 
                 try
                 {
-                    trainersPartyData.Add(ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl));
+                    var partyData = await ReadTrainerPartyDataAsync(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
+                    trainersPartyData.Add(partyData);
                 }
                 catch (Exception ex)
                 {
@@ -570,7 +575,7 @@ namespace VsMaker2Core.Methods
 
         #region Read
 
-        public TrainerData ReadTrainerData(int trainerId)
+        public async Task<TrainerData> ReadTrainerDataAsync(int trainerId)
         {
             var trainerData = new TrainerData();
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
@@ -618,7 +623,7 @@ namespace VsMaker2Core.Methods
             return trainerData;
         }
 
-        public TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule)
+        public async Task<TrainerPartyData> ReadTrainerPartyDataAsync(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule)
         {
             var trainerPartyData = new TrainerPartyData
             {
@@ -694,31 +699,6 @@ namespace VsMaker2Core.Methods
 
         #region Set
 
-        public int SetTrainerNameMax(int trainerNameOffset)
-        {
-            if (trainerNameOffset <= 0)
-            {
-                return 8;
-            }
-
-            try
-            {
-                using var ar = new Arm9.Arm9Reader(trainerNameOffset);
-                if (ar.BaseStream.Length == 0)
-                {
-                    Console.WriteLine("Stream length is zero, cannot read trainer name length.");
-                    return 8;
-                }
-
-                return ar.ReadByte();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while reading trainer name length: {ex.Message}");
-                return 8;
-            }
-        }
-
         public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
         {
             Dictionary<NarcDirectory, string> packedDirectories = gameFamily switch
@@ -787,7 +767,30 @@ namespace VsMaker2Core.Methods
             VsMakerDatabase.RomData.GameDirectories = directories;
         }
 
+        public int SetTrainerNameMax(int trainerNameOffset)
+        {
+            if (trainerNameOffset <= 0)
+            {
+                return 8;
+            }
 
+            try
+            {
+                using var ar = new Arm9.Arm9Reader(trainerNameOffset);
+                if (ar.BaseStream.Length == 0)
+                {
+                    Console.WriteLine("Stream length is zero, cannot read trainer name length.");
+                    return 8;
+                }
+
+                return ar.ReadByte();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while reading trainer name length: {ex.Message}");
+                return 8;
+            }
+        }
 
         #endregion Set
 

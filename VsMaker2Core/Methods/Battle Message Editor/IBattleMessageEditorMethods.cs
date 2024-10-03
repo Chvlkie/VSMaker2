@@ -5,6 +5,6 @@ namespace VsMaker2Core.Methods
 {
     public interface IBattleMessageEditorMethods
     {
-        List<BattleMessage> GetBattleMessages(List<BattleMessageTableData> tableDatas, int battleMessageArchive);
+        Task<List<BattleMessage>> GetBattleMessagesAsync(List<BattleMessageTableData> tableDatas, int battleMessageArchive);
     }
 }

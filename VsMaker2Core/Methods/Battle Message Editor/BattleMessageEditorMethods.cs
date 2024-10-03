@@ -12,10 +12,10 @@ namespace VsMaker2Core.Methods
             romFileMethods = new RomFileMethods();
         }
 
-        public List<BattleMessage> GetBattleMessages(List<BattleMessageTableData> tableDatas, int battleMessageArchive)
+        public async Task<List<BattleMessage>> GetBattleMessagesAsync(List<BattleMessageTableData> tableDatas, int battleMessageArchive)
         {
             List<BattleMessage> battleMessages = [];
-            var messages = romFileMethods.GetBattleMessages(battleMessageArchive);
+            var messages = await romFileMethods.GetBattleMessagesAsync(battleMessageArchive);
             for (int i = 0; i < messages.Count(); i++)
             {
                 var tableData = tableDatas[i];

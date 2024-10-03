@@ -130,12 +130,12 @@ namespace Main
             }
         }
 
-        private void class_SaveClassBtn_Click(object sender, EventArgs e)
+        private async void class_SaveClassBtn_Click(object sender, EventArgs e)
         {
             if (!IsLoadingData)
             {
                 IsLoadingData = true;
-                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId) && SaveTrainerClassProperties(SelectedClass.TrainerClassId))
+                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId) && await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId))
                 {
                     MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -143,9 +143,9 @@ namespace Main
             }
         }
 
-        private void class_SavePropertyBtn_Click(object sender, EventArgs e)
+        private async void class_SavePropertyBtn_Click(object sender, EventArgs e)
         {
-            if (SaveTrainerClassProperties(SelectedClass.TrainerClassId))
+            if (await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId))
             {
                 EditedTrainerClassProperties(false);
                 MessageBox.Show("Class Properties updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -398,19 +398,22 @@ namespace Main
             return true;
         }
 
-        private bool SavePrizeMoneyData(int classId, int prizeMoneyMultiplier)
+        private async Task<bool> SavePrizeMoneyDataAsync(int classId, int prizeMoneyMultiplier)
         {
             var index = LoadedRom.PrizeMoneyData.FindIndex(x => x.TrainerClassId == classId);
+
             if (index > -1)
             {
                 var prizeMoneyData = new PrizeMoneyData(LoadedRom.PrizeMoneyData[index].Offset, (ushort)classId, (ushort)prizeMoneyMultiplier);
 
-                var writePrizeMoney = fileSystemMethods.WritePrizeMoneyData(prizeMoneyData, LoadedRom);
+                var writePrizeMoney = await fileSystemMethods.WritePrizeMoneyDataAsync(prizeMoneyData, LoadedRom);
+
                 if (writePrizeMoney.Success)
                 {
                     SelectedClass.ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     LoadedRom.PrizeMoneyData[index] = prizeMoneyData;
+
                     return true;
                 }
                 else
@@ -419,6 +422,7 @@ namespace Main
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -433,7 +437,7 @@ namespace Main
             else { return false; }
         }
 
-        private bool SaveTrainerClassProperties(int classId)
+        private async Task<bool> SaveTrainerClassPropertiesAsync(int classId)
         {
             int gender = class_GenderComboBox.SelectedIndex;
             int prizeMoneyMultiplier = (int)class_PrizeMoneyNum.Value;
@@ -441,10 +445,12 @@ namespace Main
             int eyeContactMusicDay = class_EyeContactDayComboBox.Enabled ? EyeContactMusic.ListNameToId(class_EyeContactDayComboBox.SelectedItem.ToString()) : -1;
             int? eyeContactMusicNight = LoadedRom.IsHeartGoldSoulSilver && class_EyeContactNightComboBox.Enabled ? EyeContactMusic.ListNameToId(class_EyeContactNightComboBox.SelectedItem.ToString()) : null;
 
-            if (SavePrizeMoneyData(classId, prizeMoneyMultiplier)
-                && SaveEyeContactData(classId, eyeContactMusicDay, eyeContactMusicNight)
-                && SaveClassGender(classId, gender)
-                && SaveTrainerClassDescription(classId, newDescription))
+            bool prizeMoneySaved = await SavePrizeMoneyDataAsync(classId, prizeMoneyMultiplier);
+            bool eyeContactSaved = SaveEyeContactData(classId, eyeContactMusicDay, eyeContactMusicNight); // Assuming this is sync
+            bool genderSaved = SaveClassGender(classId, gender); // Assuming this is sync
+            bool descriptionSaved = SaveTrainerClassDescription(classId, newDescription); // Assuming this is sync
+
+            if (prizeMoneySaved && eyeContactSaved && genderSaved && descriptionSaved)
             {
                 MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties = new TrainerClassProperty(gender, prizeMoneyMultiplier, newDescription, eyeContactMusicDay, eyeContactMusicNight);
                 EditedTrainerClassProperties(false);

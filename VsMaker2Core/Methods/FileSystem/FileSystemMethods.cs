@@ -199,15 +199,17 @@ namespace VsMaker2Core.Methods
             return (true, "");
         }
 
-        public (bool Success, string ErrorMessage) WritePrizeMoneyData(PrizeMoneyData prizeMoneyData, RomFile loadedRom)
+        public async Task<(bool Success, string ErrorMessage)> WritePrizeMoneyDataAsync(PrizeMoneyData prizeMoneyData, RomFile loadedRom)
         {
             if (loadedRom.IsHeartGoldSoulSilver)
             {
-                if (Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
+                bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(loadedRom.PrizeMoneyTableOverlayNumber);
+                if (isCompressed)
                 {
-                    Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
+                    await Overlay.DecompressOverlayAsync(loadedRom.PrizeMoneyTableOverlayNumber);
                     Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
                 }
+
                 using EasyWriter writer = new(Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber), prizeMoneyData.Offset);
                 try
                 {
@@ -237,8 +239,10 @@ namespace VsMaker2Core.Methods
                     return (false, ex.Message);
                 }
             }
+
             return (true, "");
         }
+
 
         public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
         {
