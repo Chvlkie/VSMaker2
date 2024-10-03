@@ -1,19 +1,12 @@
 using Main.Forms;
 using Main.Models;
 using Microsoft.VisualBasic.FileIO;
-using System.Buffers;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Windows.Forms;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
-using VsMaker2Core.RomFiles;
-using static System.Net.Mime.MediaTypeNames;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -63,6 +56,7 @@ namespace Main
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
+        private bool LoadingError = false;
 
         public void BeginExportBattleMessages(IProgress<int> progress, string filePath)
         {
@@ -226,10 +220,15 @@ namespace Main
             if (!success)
             {
                 MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                progress?.Report(100);
-                return;
+                LoadingError = true;
+                CloseProject();
+            }
+            else
+            {
+                LoadingError = false;
             }
             progress?.Report(100);
+            return;
         }
 
         public async Task BeginUnpackRomDataAsync()
@@ -238,10 +237,15 @@ namespace Main
             if (!unpack.Success)
             {
                 MessageBox.Show($"{unpack.ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LoadingError = true;
                 CloseProject();
-                return;
+            }
+            else
+            {
+                LoadingError = false;
             }
             RomLoaded = true;
+            return;
         }
 
         public void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
@@ -364,7 +368,7 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClassess(LoadedRom.ClassNamesTextNumber);
+            LoadedRom.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClasses(LoadedRom.ClassNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -1143,7 +1147,7 @@ namespace Main
                     if (ReadRomFile(workingDirectory, fileName))
                     {
                         OpenLoadingDialog(LoadType.UnpackRom);
-                        if (RomLoaded)
+                        if (RomLoaded && !LoadingError)
                         {
                             Arm9.Arm9EditSize(-12);
 
@@ -1156,9 +1160,16 @@ namespace Main
                                 }
                             }
                             BeginExtractRomData();
+                        }
+                        if (!LoadingError)
+                        {
                             InitializeTrainerEditor();
                             InitializeClassEditor();
                             EndOpenRom();
+                        }
+                        else
+                        {
+                            CloseProject();
                         }
                     }
                     else

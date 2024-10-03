@@ -53,7 +53,7 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         List<Species> GetSpecies();
 
-        int GetTotalNumberOfTrainerClassess(int trainerClassNameArchive);
+        int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive);
 
         int GetTotalNumberOfTrainers(int trainerNameArchive);
         /// <summary>

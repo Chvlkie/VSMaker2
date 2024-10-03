@@ -221,7 +221,6 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-
         public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
         {
             var eyeContactMusic = new List<EyeContactMusicData>();
@@ -260,7 +259,6 @@ namespace VsMaker2Core.Methods
             return eyeContactMusic;
         }
 
-
         public List<string> GetItemNames(int itemNameArchive)
         {
             var messageArchives = GetMessageArchiveContents(itemNameArchive, false);
@@ -272,7 +270,6 @@ namespace VsMaker2Core.Methods
 
             return messageArchives.Select(item => item.MessageText).ToList();
         }
-
 
         public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
         {
@@ -317,27 +314,37 @@ namespace VsMaker2Core.Methods
 
         public int GetMessageInitialKey(int messageArchive)
         {
-            // Construct file path
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchive:D4}";
 
             try
             {
-                // Open file stream with using statement for automatic disposal
-                using (var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read))
-                using (var reader = new BinaryReader(fileStream))
+                if (!File.Exists(directory))
                 {
-                    // Set the position and read the initial key
-                    reader.BaseStream.Position = 2;
-                    int initialKey = reader.ReadUInt16();
-
-                    return initialKey;
+                    Console.WriteLine($"File not found: {directory}");
+                    return -1;
                 }
+
+                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                using var reader = new BinaryReader(fileStream);
+                reader.BaseStream.Position = 2;
+                int initialKey = reader.ReadUInt16();
+
+                return initialKey;
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"File not found: {ex.Message}");
+                return -1;
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO error while reading file: {ex.Message}");
+                return -1;
             }
             catch (Exception ex)
             {
-                // Handle or log the exception
                 Console.WriteLine($"An error occurred while reading the message initial key: {ex.Message}");
-                throw; // Re-throw the exception if necessary
+                return -1;
             }
         }
 
@@ -345,82 +352,83 @@ namespace VsMaker2Core.Methods
         {
             var messageArchives = GetMessageArchiveContents(moveTextArchive, false);
 
-            if (messageArchives == null)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                // Handle the case where messageArchives is null, if necessary
-                throw new InvalidOperationException("Message archives cannot be null.");
+                return [];
             }
 
-            // Use LINQ to project MessageText from each MessageArchive
-            var moveNames = messageArchives.Select(item => item.MessageText).ToList();
-
-            return moveNames;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
 
         public List<string> GetPokemonNames(int pokemonNameArchive)
         {
             var messageArchives = GetMessageArchiveContents(pokemonNameArchive, false);
 
-            if (messageArchives == null)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                // Handle the case where messageArchives is null, if necessary
-                throw new InvalidOperationException("Message archives cannot be null.");
+                return [];
             }
 
-            // Use LINQ to project MessageText from each MessageArchive
-            var pokemonNames = messageArchives.Select(item => item.MessageText).ToList();
-
-            return pokemonNames;
+            return messageArchives.Select(item => item.MessageText).ToList();
         }
 
         public List<PrizeMoneyData> GetPrizeMoneyData(RomFile loadedRom)
         {
             var prizeMoneyData = new List<PrizeMoneyData>();
 
-            // Check if the overlay needs to be decompressed
-            if (loadedRom.IsHeartGoldSoulSilver &&
-                Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
+            try
             {
-                Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
-                Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
-            }
-
-            string filePath = Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            using (var reader = new BinaryReader(fileStream))
-            {
-                try
+                if (loadedRom.IsHeartGoldSoulSilver &&
+                    Overlay.CheckOverlayIsCompressed(loadedRom.PrizeMoneyTableOverlayNumber))
                 {
-                    reader.BaseStream.Position = loadedRom.PrizeMoneyTableOffset;
-                    long streamSize = reader.BaseStream.Position + loadedRom.PrizeMoneyTableSize;
-                    ushort count = 0;
+                    Overlay.DecompressOverlay(loadedRom.PrizeMoneyTableOverlayNumber);
+                    Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                }
 
-                    while (reader.BaseStream.Position <= streamSize)
+                string filePath = Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber);
+
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"File not found: {filePath}");
+                    return prizeMoneyData;
+                }
+
+                using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                using var reader = new BinaryReader(fileStream);
+                reader.BaseStream.Position = loadedRom.PrizeMoneyTableOffset;
+                long streamEndPosition = reader.BaseStream.Position + loadedRom.PrizeMoneyTableSize;
+                ushort count = 0;
+
+                while (reader.BaseStream.Position < streamEndPosition)
+                {
+                    long offset = reader.BaseStream.Position;
+
+                    if (loadedRom.IsHeartGoldSoulSilver)
                     {
-                        long offset = reader.BaseStream.Position;
-
-                        if (loadedRom.IsHeartGoldSoulSilver)
-                        {
-                            ushort trainerClassId = reader.ReadUInt16();
-                            ushort prizeMoney = reader.ReadUInt16();
-                            var item = new PrizeMoneyData(offset, trainerClassId, prizeMoney);
-                            prizeMoneyData.Add(item);
-                        }
-                        else
-                        {
-                            byte prizeMoney = reader.ReadByte();
-                            var item = new PrizeMoneyData(offset, count, prizeMoney);
-                            prizeMoneyData.Add(item);
-                            count++;
-                        }
+                        ushort trainerClassId = reader.ReadUInt16();
+                        ushort prizeMoney = reader.ReadUInt16();
+                        prizeMoneyData.Add(new PrizeMoneyData(offset, trainerClassId, prizeMoney));
+                    }
+                    else
+                    {
+                        byte prizeMoney = reader.ReadByte();
+                        prizeMoneyData.Add(new PrizeMoneyData(offset, count, prizeMoney));
+                        count++;
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    throw; // Rethrow exception to maintain stack trace
-                }
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"Error: File not found - {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO Error while reading prize money data: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while processing prize money data: {ex.Message}");
+                throw;
             }
 
             return prizeMoneyData;
@@ -429,10 +437,18 @@ namespace VsMaker2Core.Methods
         public List<Species> GetSpecies()
         {
             var allSpecies = new List<Species>();
+
             string unpackedDirectory = VsMakerDatabase.RomData.GameDirectories[NarcDirectory.personalPokeData].unpackedDirectory;
 
-            // Get the number of species based on the number of files in the directory
+            if (!Directory.Exists(unpackedDirectory))
+            {
+                Console.WriteLine($"Directory not found: {unpackedDirectory}");
+                return allSpecies;
+            }
+
             int numberOfSpecies = Directory.GetFiles(unpackedDirectory, "*").Length;
+
+            allSpecies.Capacity = numberOfSpecies;
 
             for (int i = 0; i < numberOfSpecies; i++)
             {
@@ -442,7 +458,6 @@ namespace VsMaker2Core.Methods
                 {
                     var species = new Species { SpeciesId = (ushort)i };
 
-                    // Use using statements to ensure resources are disposed of properly
                     using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                     using (var reader = new BinaryReader(fileStream))
                     {
@@ -455,65 +470,69 @@ namespace VsMaker2Core.Methods
 
                     allSpecies.Add(species);
                 }
-                catch (Exception ex) // General exception handling, consider handling specific exceptions
+                catch (FileNotFoundException ex)
                 {
-                    Console.WriteLine($"Error processing file {i:D4}: {ex.Message}");
-                    // Optionally, you can choose to continue processing other files even if one fails
+                    Console.WriteLine($"File not found: {filePath}. Skipping. Error: {ex.Message}");
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"IO error while reading file {filePath}. Skipping. Error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error processing file {filePath}: {ex.Message}");
                 }
             }
+
             return allSpecies;
         }
 
-        public int GetTotalNumberOfTrainerClassess(int trainerClassNameArchive)
+        public int GetTotalNumberOfItemsInArchive(int archiveId)
         {
-            return GetMessageArchiveContents(trainerClassNameArchive, false).Count;
+            var messageArchives = GetMessageArchiveContents(archiveId, false);
+
+            return messageArchives?.Count ?? 0;
+        }
+
+        public int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive)
+        {
+            return GetTotalNumberOfItemsInArchive(trainerClassNameArchive);
         }
 
         public int GetTotalNumberOfTrainers(int trainerNameArchive)
         {
-            return GetMessageArchiveContents(trainerNameArchive, false).Count;
+            return GetTotalNumberOfItemsInArchive(trainerNameArchive);
         }
 
         public List<string> GetTrainerNames(int trainerNameMessageArchive)
         {
             var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
 
-            // Handle potential null values
-            if (messageArchives == null)
+            if (messageArchives == null || messageArchives.Count == 0)
             {
-                throw new InvalidOperationException("Failed to retrieve message archives.");
+                return [];
             }
 
-            // Initialize the list and add the message texts
-            var trainerNames = new List<string>(messageArchives.Count);
-
-            foreach (var item in messageArchives)
-            {
-                if (item?.MessageText != null) // Check for null MessageText if needed
-                {
-                    trainerNames.Add(item.MessageText);
-                }
-            }
-
-            return trainerNames;
+            return messageArchives
+                   .Where(item => item?.MessageText != null)
+                   .Select(item => item.MessageText)
+                   .ToList();
         }
 
         public List<TrainerData> GetTrainersData(int numberOfTrainers)
         {
             var trainersData = new List<TrainerData>(numberOfTrainers);
 
-            try
+            for (int i = 0; i < numberOfTrainers; i++)
             {
-                for (int i = 0; i < numberOfTrainers; i++)
+                try
                 {
                     trainersData.Add(ReadTrainerData(i));
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while reading trainer data: {ex.Message}");
-                // Handle the exception or rethrow as needed
-                throw;
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while reading data for trainer {i}: {ex.Message}");
+                }
             }
 
             return trainersData;
@@ -523,59 +542,28 @@ namespace VsMaker2Core.Methods
         {
             var trainersPartyData = new List<TrainerPartyData>(numberOfTrainers);
 
-            try
+            for (int i = 0; i < numberOfTrainers; i++)
             {
-                for (int i = 0; i < numberOfTrainers; i++)
+                if (i >= trainerData.Count)
                 {
-                    // Ensure trainerData[i] is valid
-                    if (i >= trainerData.Count)
-                    {
-                        throw new IndexOutOfRangeException($"Index {i} is out of range for trainerData list.");
-                    }
+                    Console.WriteLine($"Warning: Trainer data index {i} exceeds available entries in trainerData list.");
+                    break;
+                }
 
-                    var trainer = trainerData[i];
-                    bool isNotDiamondPearl = gameFamily != GameFamily.DiamondPearl;
+                var trainer = trainerData[i];
+                bool isNotDiamondPearl = gameFamily != GameFamily.DiamondPearl;
+
+                try
+                {
                     trainersPartyData.Add(ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl));
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while reading trainer party data: {ex.Message}");
-                // Handle the exception or rethrow as needed
-                throw;
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while reading party data for trainer {i}: {ex.Message}");
+                }
             }
 
             return trainersPartyData;
-        }
-
-        public int SetTrainerNameMax(int trainerNameOffset)
-        {
-            if (trainerNameOffset <= 0)
-            {
-                return 8;
-            }
-
-            try
-            {
-                using (var ar = new Arm9.Arm9Reader(trainerNameOffset))
-                {
-                    // Ensure that reading from the stream is safe
-                    if (ar.BaseStream.Length > 0)
-                    {
-                        int trainerNameLength = ar.ReadByte();
-                        return trainerNameLength;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Stream length is zero, cannot read trainer name length.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while reading trainer name length: {ex.Message}");
-                return 0; // Default value or rethrow
-            }
         }
 
         #endregion Get
@@ -596,6 +584,7 @@ namespace VsMaker2Core.Methods
             {
                 using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
                 using var reader = new BinaryReader(fileStream);
+
                 trainerData.TrainerType = reader.ReadByte();
                 trainerData.TrainerClassId = reader.ReadByte();
                 trainerData.Padding = reader.ReadByte();
@@ -612,17 +601,17 @@ namespace VsMaker2Core.Methods
             }
             catch (EndOfStreamException ex)
             {
-                Console.WriteLine($"Unexpected end of stream while reading trainer data: {ex.Message}");
+                Console.WriteLine($"Unexpected end of stream while reading trainer data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"An IO error occurred while reading trainer data: {ex.Message}");
+                Console.WriteLine($"IO error occurred while reading trainer data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while reading trainer data: {ex.Message}");
+                Console.WriteLine($"An unexpected error occurred while reading trainer data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
 
@@ -648,57 +637,53 @@ namespace VsMaker2Core.Methods
 
             try
             {
-                using (var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read))
-                using (var reader = new BinaryReader(fileStream))
+                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                using var reader = new BinaryReader(fileStream);
+                for (int i = 0; i < teamSize; i++)
                 {
-                    for (int i = 0; i < teamSize; i++)
+                    var trainerPartyPokemonData = new TrainerPartyPokemonData
                     {
-                        var trainerPartyPokemonData = new TrainerPartyPokemonData
-                        {
-                            Difficulty = reader.ReadByte(),
-                            GenderAbilityOverride = reader.ReadByte(),
-                            Level = reader.ReadUInt16(),
-                            Species = reader.ReadUInt16()
-                        };
+                        Difficulty = reader.ReadByte(),
+                        GenderAbilityOverride = reader.ReadByte(),
+                        Level = reader.ReadUInt16(),
+                        Species = reader.ReadUInt16(),
+                    };
 
-                        if (heldItems)
-                        {
-                            trainerPartyPokemonData.ItemId = reader.ReadUInt16();
-                        }
-
-                        if (hasMoves)
-                        {
-                            trainerPartyPokemonData.MoveIds = new ushort[4]
-                            {
-                        reader.ReadUInt16(),
-                        reader.ReadUInt16(),
-                        reader.ReadUInt16(),
-                        reader.ReadUInt16(),
-                            };
-                        }
-
-                        if (hasBallCapsule)
-                        {
-                            trainerPartyPokemonData.BallCapsule = reader.ReadUInt16();
-                        }
-
-                        trainerPartyData.PokemonData[i] = trainerPartyPokemonData;
+                    if (heldItems)
+                    {
+                        trainerPartyPokemonData.ItemId = reader.ReadUInt16();
                     }
+
+                    if (hasMoves)
+                    {
+                        trainerPartyPokemonData.MoveIds = new ushort[4];
+                        for (int j = 0; j < 4; j++)
+                        {
+                            trainerPartyPokemonData.MoveIds[j] = reader.ReadUInt16();
+                        }
+                    }
+
+                    if (hasBallCapsule)
+                    {
+                        trainerPartyPokemonData.BallCapsule = reader.ReadUInt16();
+                    }
+
+                    trainerPartyData.PokemonData[i] = trainerPartyPokemonData;
                 }
             }
             catch (EndOfStreamException ex)
             {
-                Console.WriteLine($"Unexpected end of stream while reading trainer party data: {ex.Message}");
+                Console.WriteLine($"Unexpected end of stream while reading trainer party data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"An IO error occurred while reading trainer party data: {ex.Message}");
+                Console.WriteLine($"An IO error occurred while reading trainer party data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while reading trainer party data: {ex.Message}");
+                Console.WriteLine($"An unexpected error occurred while reading trainer party data for Trainer ID {trainerId}: {ex.Message}");
                 throw;
             }
 
@@ -709,78 +694,88 @@ namespace VsMaker2Core.Methods
 
         #region Set
 
-        public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
+        public int SetTrainerNameMax(int trainerNameOffset)
         {
-            Dictionary<NarcDirectory, string> packedDirectories = new();
-
-            switch (gameFamily)
+            if (trainerNameOffset <= 0)
             {
-                case GameFamily.DiamondPearl:
-                    packedDirectories = new Dictionary<NarcDirectory, string>()
-                    {
-                        [NarcDirectory.monIcons] = @"data\poketool\icongra\poke_icon.narc",
-                        [NarcDirectory.moveData] = @"data\poketool\waza\waza_tbl.narc",
-                        [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl
-                            ? @"data\poketool\personal_pearl\personal.narc"
-                            : @"data\poketool\personal\personal.narc",
-                        [NarcDirectory.scripts] = gameLanguage == GameLanguage.Japanese
-                            ? @"data\fielddata\script\scr_seq_release.narc"
-                            : @"data\fielddata\script\scr_seq.narc",
-                        [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.textArchives] = @"data\msgdata\msg.narc",
-                        [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
-                        [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
-                        [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
-                        [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
-                    };
-                    break;
-
-                case GameFamily.Platinum:
-                    packedDirectories = new Dictionary<NarcDirectory, string>()
-                    {
-                        [NarcDirectory.monIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
-                        [NarcDirectory.moveData] = @"data\poketool\waza\pl_waza_tbl.narc",
-                        [NarcDirectory.personalPokeData] = @"data\poketool\personal\pl_personal.narc",
-                        [NarcDirectory.scripts] = @"data\fielddata\script\scr_seq.narc",
-                        [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
-                        [NarcDirectory.textArchives] = Path.Combine(
-                            @"data\msgdata",
-                            $"{gameVersion.ToString().Substring(0, 2).ToLower()}_msg.narc"),
-                        [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
-                        [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
-                        [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
-                        [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                        [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
-                    };
-                    break;
-
-                case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
-                    packedDirectories = new Dictionary<NarcDirectory, string>()
-                    {
-                        [NarcDirectory.battleStagePokeData] = @"data\a\2\0\4",
-                        [NarcDirectory.battleTowerPokeData] = @"data\a\2\0\3",
-                        [NarcDirectory.battleTowerTrainerData] = @"data\a\2\0\2",
-                        [NarcDirectory.monIcons] = @"data\a\0\2\0",
-                        [NarcDirectory.moveData] = @"data\a\0\1\1",
-                        [NarcDirectory.personalPokeData] = @"data\a\0\0\2",
-                        [NarcDirectory.scripts] = @"data\a\0\1\2",
-                        [NarcDirectory.synthOverlay] = @"data\a\0\2\8",
-                        [NarcDirectory.textArchives] = @"data\a\0\2\7",
-                        [NarcDirectory.trainerGraphics] = @"data\a\0\5\8",
-                        [NarcDirectory.trainerParty] = @"data\a\0\5\6",
-                        [NarcDirectory.trainerProperties] = @"data\a\0\5\5",
-                        [NarcDirectory.trainerTextOffset] = @"data\a\1\3\1",
-                        [NarcDirectory.trainerTextTable] = @"data\a\0\5\7",
-                    };
-                    break;
-
-                default:
-                    throw new ArgumentException($"Unrecognized GameFamily: {gameFamily}");
+                return 8;
             }
 
-            var directories = new Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)>();
+            try
+            {
+                using var ar = new Arm9.Arm9Reader(trainerNameOffset);
+                if (ar.BaseStream.Length == 0)
+                {
+                    Console.WriteLine("Stream length is zero, cannot read trainer name length.");
+                    return 8;
+                }
+
+                return ar.ReadByte();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while reading trainer name length: {ex.Message}");
+                return 8;
+            }
+        }
+
+        public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
+        {
+            Dictionary<NarcDirectory, string> packedDirectories = gameFamily switch
+            {
+                GameFamily.DiamondPearl => new Dictionary<NarcDirectory, string>
+                {
+                    [NarcDirectory.monIcons] = Path.Combine("data", "poketool", "icongra", "poke_icon.narc"),
+                    [NarcDirectory.moveData] = Path.Combine("data", "poketool", "waza", "waza_tbl.narc"),
+                    [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl
+                        ? Path.Combine("data", "poketool", "personal_pearl", "personal.narc")
+                        : Path.Combine("data", "poketool", "personal", "personal.narc"),
+                    [NarcDirectory.scripts] = gameLanguage == GameLanguage.Japanese
+                        ? Path.Combine("data", "fielddata", "script", "scr_seq_release.narc")
+                        : Path.Combine("data", "fielddata", "script", "scr_seq.narc"),
+                    [NarcDirectory.synthOverlay] = Path.Combine("data", "data", "weather_sys.narc"),
+                    [NarcDirectory.textArchives] = Path.Combine("data", "msgdata", "msg.narc"),
+                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "poketool", "trgra", "trfgra.narc"),
+                    [NarcDirectory.trainerParty] = Path.Combine("data", "poketool", "trainer", "trpoke.narc"),
+                    [NarcDirectory.trainerProperties] = Path.Combine("data", "poketool", "trainer", "trdata.narc"),
+                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "poketool", "trmsg", "trtblofs.narc"),
+                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "poketool", "trmsg", "trtbl.narc")
+                },
+                GameFamily.Platinum => new Dictionary<NarcDirectory, string>
+                {
+                    [NarcDirectory.monIcons] = Path.Combine("data", "poketool", "icongra", "pl_poke_icon.narc"),
+                    [NarcDirectory.moveData] = Path.Combine("data", "poketool", "waza", "pl_waza_tbl.narc"),
+                    [NarcDirectory.personalPokeData] = Path.Combine("data", "poketool", "personal", "pl_personal.narc"),
+                    [NarcDirectory.scripts] = Path.Combine("data", "fielddata", "script", "scr_seq.narc"),
+                    [NarcDirectory.synthOverlay] = Path.Combine("data", "data", "weather_sys.narc"),
+                    [NarcDirectory.textArchives] = Path.Combine("data", "msgdata", $"{gameVersion.ToString().Substring(0, 2).ToLower()}_msg.narc"),
+                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "poketool", "trgra", "trfgra.narc"),
+                    [NarcDirectory.trainerParty] = Path.Combine("data", "poketool", "trainer", "trpoke.narc"),
+                    [NarcDirectory.trainerProperties] = Path.Combine("data", "poketool", "trainer", "trdata.narc"),
+                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "poketool", "trmsg", "trtblofs.narc"),
+                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "poketool", "trmsg", "trtbl.narc")
+                },
+                GameFamily.HeartGoldSoulSilver or GameFamily.HgEngine => new Dictionary<NarcDirectory, string>
+                {
+                    [NarcDirectory.battleStagePokeData] = Path.Combine("data", "a", "2", "0", "4"),
+                    [NarcDirectory.battleTowerPokeData] = Path.Combine("data", "a", "2", "0", "3"),
+                    [NarcDirectory.battleTowerTrainerData] = Path.Combine("data", "a", "2", "0", "2"),
+                    [NarcDirectory.monIcons] = Path.Combine("data", "a", "0", "2", "0"),
+                    [NarcDirectory.moveData] = Path.Combine("data", "a", "0", "1", "1"),
+                    [NarcDirectory.personalPokeData] = Path.Combine("data", "a", "0", "0", "2"),
+                    [NarcDirectory.scripts] = Path.Combine("data", "a", "0", "1", "2"),
+                    [NarcDirectory.synthOverlay] = Path.Combine("data", "a", "0", "2", "8"),
+                    [NarcDirectory.textArchives] = Path.Combine("data", "a", "0", "2", "7"),
+                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "a", "0", "5", "8"),
+                    [NarcDirectory.trainerParty] = Path.Combine("data", "a", "0", "5", "6"),
+                    [NarcDirectory.trainerProperties] = Path.Combine("data", "a", "0", "5", "5"),
+                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "a", "1", "3", "1"),
+                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "a", "0", "5", "7")
+                },
+                _ => throw new ArgumentException($"Unrecognized GameFamily: {gameFamily}")
+            };
+
+            var directories = new Dictionary<NarcDirectory, (string packedDirectory, string unpackedDirectory)>(packedDirectories.Count);
             foreach (var kvp in packedDirectories)
             {
                 directories.Add(kvp.Key, (
@@ -792,6 +787,8 @@ namespace VsMaker2Core.Methods
             VsMakerDatabase.RomData.GameDirectories = directories;
         }
 
+
+
         #endregion Set
 
         #region Unpack
@@ -800,12 +797,12 @@ namespace VsMaker2Core.Methods
         {
             if (narcs.Count == 0)
             {
-                progress?.Report(100); // Report 100% if there are no narcs to process
+                progress?.Report(100);
                 return (true, string.Empty);
             }
 
-            int progressStep = 100 / narcs.Count;
-            int count = 0;
+            double progressStep = 100.0 / narcs.Count;
+            double currentProgress = 0;
 
             foreach (var narc in narcs)
             {
@@ -816,44 +813,42 @@ namespace VsMaker2Core.Methods
                     return (false, exceptionMessage);
                 }
 
-                count += progressStep;
-                progress?.Report(count);
+                currentProgress += progressStep;
+                progress?.Report((int)currentProgress);
             }
 
-            progress?.Report(100); // Ensure we report 100% completion at the end
+            progress?.Report(100);
             return (true, string.Empty);
         }
 
-        private async Task<(bool Success, string ExceptionMessage)> UnpackNarcAsync(NarcDirectory narcPath)
+        private static async Task<(bool Success, string ExceptionMessage)> UnpackNarcAsync(NarcDirectory narcPath)
         {
             try
             {
-                if (VsMakerDatabase.RomData.GameDirectories.TryGetValue(narcPath, out (string packedPath, string unpackedPath) paths))
-                {
-                    DirectoryInfo directoryInfo = new(paths.unpackedPath);
-                    if (!directoryInfo.Exists || directoryInfo.GetFiles().Length == 0)
-                    {
-                        Narc openedNarc = await Narc.OpenAsync(paths.packedPath);
-                        if (openedNarc == null)
-                        {
-                            return (false, $"Failed to open NARC at path: {paths.packedPath}");
-                        }
-                        else
-                        {
-                            await openedNarc.ExtractToFolderAsync(paths.unpackedPath);
-                            // Optional: Validate if extraction was successful
-                            if (!Directory.GetFiles(paths.unpackedPath).Any())
-                            {
-                                return (false, $"Extraction failed for NARC at path: {paths.packedPath}");
-                            }
-                        }
-                    }
-                    return (true, string.Empty);
-                }
-                else
+                if (!VsMakerDatabase.RomData.GameDirectories.TryGetValue(narcPath, out (string packedPath, string unpackedPath) paths))
                 {
                     return (false, $"NARC directory not found in dictionary: {narcPath}");
                 }
+
+                DirectoryInfo directoryInfo = new(paths.unpackedPath);
+
+                if (!directoryInfo.Exists || directoryInfo.GetFiles().Length == 0)
+                {
+                    Narc openedNarc = await Narc.OpenAsync(paths.packedPath);
+                    if (openedNarc == null)
+                    {
+                        return (false, $"Failed to open NARC at path: {paths.packedPath}");
+                    }
+
+                    await openedNarc.ExtractToFolderAsync(paths.unpackedPath);
+
+                    if (Directory.GetFiles(paths.unpackedPath).Length == 0)
+                    {
+                        return (false, $"Extraction failed for NARC at path: {paths.packedPath}");
+                    }
+                }
+
+                return (true, string.Empty);
             }
             catch (Exception ex)
             {
@@ -867,7 +862,7 @@ namespace VsMaker2Core.Methods
 
         public async Task RepackRomAsync(string ndsFileName)
         {
-            Process repack = new()
+            using Process repack = new()
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -882,25 +877,18 @@ namespace VsMaker2Core.Methods
                 EnableRaisingEvents = true
             };
 
-            var tcs = new TaskCompletionSource<bool>();
-            repack.Exited += (sender, args) =>
-            {
-                tcs.SetResult(repack.ExitCode == 0);
-                repack.Dispose();
-            };
-
             try
             {
                 repack.Start();
-                bool success = await tcs.Task;
-                if (!success)
+                await repack.WaitForExitAsync();
+
+                if (repack.ExitCode != 0)
                 {
                     throw new InvalidOperationException($"Repack process failed with exit code {repack.ExitCode}.");
                 }
             }
             catch (Exception ex)
             {
-                // Handle exceptions (e.g., log or rethrow)
                 Console.WriteLine($"An error occurred during repacking: {ex.Message}");
                 throw;
             }
@@ -910,7 +898,6 @@ namespace VsMaker2Core.Methods
                 {
                     repack.Kill();
                 }
-                repack.Dispose();
             }
         }
 
