@@ -39,14 +39,14 @@
             checkBox_TrainerNames = new CheckBox();
             label5 = new Label();
             label6 = new Label();
-            button2 = new Button();
+            btn_expandPrizeMoney = new Button();
             checkBox2 = new CheckBox();
             checkBox3 = new CheckBox();
-            button3 = new Button();
+            btn_ExpandEyeContact = new Button();
             label7 = new Label();
             label8 = new Label();
             checkBox4 = new CheckBox();
-            button4 = new Button();
+            btn_expandClassGender = new Button();
             label9 = new Label();
             label10 = new Label();
             panel1 = new Panel();
@@ -61,6 +61,7 @@
             patchArm9Btn.TabIndex = 0;
             patchArm9Btn.Text = "Expand ARM9";
             patchArm9Btn.UseVisualStyleBackColor = true;
+            patchArm9Btn.Click += patchArm9Btn_Click;
             // 
             // label1
             // 
@@ -148,14 +149,15 @@
             label6.TabIndex = 9;
             label6.Text = "Move the Prize Money table from ARM9 and put into the synthetic overlay. This will allow you to insert new classes and set Prize Money. ARM 9 Expansion is required";
             // 
-            // button2
+            // btn_expandPrizeMoney
             // 
-            button2.Location = new Point(277, 127);
-            button2.Name = "button2";
-            button2.Size = new Size(108, 44);
-            button2.TabIndex = 10;
-            button2.Text = "Patch";
-            button2.UseVisualStyleBackColor = true;
+            btn_expandPrizeMoney.Location = new Point(277, 127);
+            btn_expandPrizeMoney.Name = "btn_expandPrizeMoney";
+            btn_expandPrizeMoney.Size = new Size(108, 44);
+            btn_expandPrizeMoney.TabIndex = 10;
+            btn_expandPrizeMoney.Text = "Patch";
+            btn_expandPrizeMoney.UseVisualStyleBackColor = true;
+            btn_expandPrizeMoney.Click += btn_expandPrizeMoney_Click;
             // 
             // checkBox2
             // 
@@ -179,14 +181,14 @@
             checkBox3.Text = "Applied";
             checkBox3.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btn_ExpandEyeContact
             // 
-            button3.Location = new Point(277, 220);
-            button3.Name = "button3";
-            button3.Size = new Size(108, 44);
-            button3.TabIndex = 14;
-            button3.Text = "Patch";
-            button3.UseVisualStyleBackColor = true;
+            btn_ExpandEyeContact.Location = new Point(277, 220);
+            btn_ExpandEyeContact.Name = "btn_ExpandEyeContact";
+            btn_ExpandEyeContact.Size = new Size(108, 44);
+            btn_ExpandEyeContact.TabIndex = 14;
+            btn_ExpandEyeContact.Text = "Patch";
+            btn_ExpandEyeContact.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -217,14 +219,14 @@
             checkBox4.Text = "Applied";
             checkBox4.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // btn_expandClassGender
             // 
-            button4.Location = new Point(277, 328);
-            button4.Name = "button4";
-            button4.Size = new Size(108, 44);
-            button4.TabIndex = 18;
-            button4.Text = "Patch";
-            button4.UseVisualStyleBackColor = true;
+            btn_expandClassGender.Location = new Point(277, 328);
+            btn_expandClassGender.Name = "btn_expandClassGender";
+            btn_expandClassGender.Size = new Size(108, 44);
+            btn_expandClassGender.TabIndex = 18;
+            btn_expandClassGender.Text = "Patch";
+            btn_expandClassGender.UseVisualStyleBackColor = true;
             // 
             // label9
             // 
@@ -249,7 +251,7 @@
             panel1.Controls.Add(label2);
             panel1.Controls.Add(checkBox4);
             panel1.Controls.Add(patchArm9Btn);
-            panel1.Controls.Add(button4);
+            panel1.Controls.Add(btn_expandClassGender);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(label9);
             panel1.Controls.Add(arm9PatchCheckBox);
@@ -257,7 +259,7 @@
             panel1.Controls.Add(label3);
             panel1.Controls.Add(checkBox3);
             panel1.Controls.Add(label4);
-            panel1.Controls.Add(button3);
+            panel1.Controls.Add(btn_ExpandEyeContact);
             panel1.Controls.Add(btn_TrainerName);
             panel1.Controls.Add(label7);
             panel1.Controls.Add(checkBox_TrainerNames);
@@ -265,7 +267,7 @@
             panel1.Controls.Add(label5);
             panel1.Controls.Add(checkBox2);
             panel1.Controls.Add(label6);
-            panel1.Controls.Add(button2);
+            panel1.Controls.Add(btn_expandPrizeMoney);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
@@ -303,14 +305,14 @@
         private CheckBox checkBox_TrainerNames;
         private Label label5;
         private Label label6;
-        private Button button2;
+        private Button btn_expandPrizeMoney;
         private CheckBox checkBox2;
         private CheckBox checkBox3;
-        private Button button3;
+        private Button btn_ExpandEyeContact;
         private Label label7;
         private Label label8;
         private CheckBox checkBox4;
-        private Button button4;
+        private Button btn_expandClassGender;
         private Label label9;
         private Label label10;
         private Panel panel1;

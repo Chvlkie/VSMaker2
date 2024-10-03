@@ -72,8 +72,9 @@ namespace Main
 
                 export.Clear();
 
-                foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
+                for (int i = 0; i < battleMessage_MessageTableDataGrid.Rows.Count; i++)
                 {
+                    DataGridViewRow row = battleMessage_MessageTableDataGrid.Rows[i];
                     string messageId = row.Index.ToString();
                     string trainerId = Trainer.ListNameToTrainerId(row.Cells[1].Value.ToString()).ToString();
                     string messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(row.Cells[2].Value.ToString()).ToString();
@@ -82,17 +83,18 @@ namespace Main
                     export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}""");
 
                     await outputFile.WriteLineAsync(export.ToString());
-
                     export.Clear();
 
-                    progress?.Report(row.Index + 1);
+                    // Report progress
+                    progress?.Report(i + 1);
 
-                    await Task.Yield();  
+                    await Task.Yield();
                 }
 
-                progress?.Report(100);
-                await Task.Yield();  
-                await Task.Delay(100);
+                progress?.Report(battleMessage_MessageTableDataGrid.Rows.Count + 50);
+
+                await Task.Delay(250);
+
                 MessageBox.Show("Battle Message exported successfully.", "Success!");
             }
             catch (Exception ex)
@@ -100,6 +102,7 @@ namespace Main
                 MessageBox.Show($"An error occurred while exporting: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
         public async Task BeginImportBattleMessagesAsync(string filePath)

@@ -232,6 +232,30 @@ namespace VsMaker2Core.DSUtils
             }
         }
 
+        public static byte[] HexStringToByteArray(string hexString)
+        {
+            //FC B5 05 48 C0 46 41 21
+            //09 22 02 4D A8 47 00 20
+            //03 21 FC BD F1 64 00 02
+            //00 80 3C 02
+            if (string.IsNullOrWhiteSpace(hexString))
+                return [];
+
+            hexString = hexString.Replace(" ", "").Trim();
+
+            if (hexString.Length % 2 != 0)
+                throw new ArgumentException("Hex string must have an even number of characters.");
+
+            byte[] byteArray = new byte[hexString.Length / 2];
+
+            for (int i = 0; i < byteArray.Length; i++)
+            {
+                byteArray[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+            }
+
+            return byteArray;
+        }
+
         public class Arm9Writer : EasyWriter
         {
             public Arm9Writer(long position = 0) : base(RomFile.Arm9Path, position)

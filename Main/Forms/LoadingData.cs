@@ -35,6 +35,7 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => progressBar.Value = value);
             await Task.Run(() => mainForm.LoadRomData(progress));
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -44,6 +45,7 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => progressBar.Value = value);
             await Task.Run(() => mainForm.GetInitialData(progress));
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -56,6 +58,7 @@ namespace Main.Forms
 
             // Await the async method directly
             await mainForm.BeginUnpackNarcsAsync(progress);
+            await Task.Delay(500);
 
             FormClosing -= LoadingData_FormClosing;  // Unsubscribe from event handler if needed
             Close();  // Close the form
@@ -78,6 +81,7 @@ namespace Main.Forms
                 // Handle exceptions, e.g., show an error message
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            await Task.Delay(500);
 
             FormClosing -= LoadingData_FormClosing;  // Unsubscribe from event handler if needed
             Close();  // Close the form
@@ -88,6 +92,7 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await Task.Run(() => mainForm.BeginSaveRomChanges(progress, FilePath));
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -97,6 +102,7 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await Task.Run(() => mainForm.BeginSaveBattleMessages(progress));
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
@@ -106,23 +112,31 @@ namespace Main.Forms
             await Task.Delay(500);
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await Task.Run(() => mainForm.BeginSortRepointTrainerText(progress, progressBar.Maximum));
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
         }
 
         public async Task ExportTrainerTextTable()
         {
-            var progress = new Progress<int>(value => { progressBar.Value = value; });
+            var progress = new Progress<int>(value =>
+            {
+                progressBar.Value = value;
+                progressBar.Refresh();
+            });
+
             await mainForm.BeginExportBattleMessagesAsync(progress, FilePath);
-            FormClosing -= LoadingData_FormClosing;
-            Close();
+
+            await Task.Delay(100);
+
+            this.Close();
         }
 
         public async Task ImportTrainerTextTable()
         {
             var progress = new Progress<int>(value => { progressBar.Value = value; });
             await mainForm.BeginImportBattleMessagesAsync(FilePath);
-
+            await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
 
             Close();
@@ -199,12 +213,10 @@ namespace Main.Forms
         {
             if (progressBar.InvokeRequired)
             {
-                // We are not on the UI thread, so use Invoke to update the ProgressBar style
                 progressBar.Invoke(new Action<ProgressBarStyle>(UpdateProgressBarStyle), style);
             }
             else
             {
-                // We are on the UI thread, so update the ProgressBar style directly
                 progressBar.Style = style;
             }
         }
@@ -213,12 +225,10 @@ namespace Main.Forms
         {
             if (progressBar.InvokeRequired)
             {
-                // We are not on the UI thread, so use Invoke to update the ProgressBar
                 progressBar.Invoke(new Action<int>(UpdateProgressBar), value);
             }
             else
             {
-                // We are on the UI thread, so update the ProgressBar directly
                 progressBar.Value = value;
             }
         }

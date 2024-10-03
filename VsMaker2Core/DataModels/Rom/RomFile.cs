@@ -1,4 +1,5 @@
 ﻿using VsMaker2Core.Database;
+using VsMaker2Core.DSUtils;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -95,13 +96,18 @@ namespace VsMaker2Core.DataModels
 
         public static bool TrainerNameExpansion => TrainerNameMaxByte > 8;
         public static int TrainerNameMaxLength => TrainerNameMaxByte + ((TrainerNameMaxByte - 4) / 2);
-
+        public static bool Arm9Expanded { get; set; } = false;
+        public static bool PrizeMoneyExpanded { get; set; } = false;
+        public static bool EyeContactExpanded { get; set; } = false;
+        public static bool ClassGenderExpanded { get; set; } = false;
         public static int TrainerNameMaxByte { get; set; }
 
         public RomFile()
         {
         }
 
+
+       
         public RomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
         {
             ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
