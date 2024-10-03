@@ -1305,6 +1305,7 @@
             // 
             // menu_Import_Trainers
             // 
+            menu_Import_Trainers.Enabled = false;
             menu_Import_Trainers.Name = "menu_Import_Trainers";
             menu_Import_Trainers.Size = new Size(197, 22);
             menu_Import_Trainers.Text = "Import Trainers";
@@ -1312,6 +1313,7 @@
             // 
             // menu_Import_Classes
             // 
+            menu_Import_Classes.Enabled = false;
             menu_Import_Classes.Name = "menu_Import_Classes";
             menu_Import_Classes.Size = new Size(197, 22);
             menu_Import_Classes.Text = "Import Trainer Classes";
@@ -1333,6 +1335,7 @@
             // 
             // menu_Export_Trainers
             // 
+            menu_Export_Trainers.Enabled = false;
             menu_Export_Trainers.Name = "menu_Export_Trainers";
             menu_Export_Trainers.Size = new Size(195, 22);
             menu_Export_Trainers.Text = "Export Trainers";
@@ -1340,6 +1343,7 @@
             // 
             // menu_Export_Classes
             // 
+            menu_Export_Classes.Enabled = false;
             menu_Export_Classes.Name = "menu_Export_Classes";
             menu_Export_Classes.Size = new Size(195, 22);
             menu_Export_Classes.Text = "Export Trainer Classes";
@@ -1362,25 +1366,27 @@
             // 
             menu_Tools_RomPatcher.Enabled = false;
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
-            menu_Tools_RomPatcher.Size = new Size(144, 22);
+            menu_Tools_RomPatcher.Size = new Size(180, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
             menu_Tools_RomPatcher.Click += menu_Tools_RomPatcher_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(141, 6);
+            toolStripSeparator5.Size = new Size(177, 6);
             // 
             // menu_Tools_Settings
             // 
+            menu_Tools_Settings.Enabled = false;
             menu_Tools_Settings.Name = "menu_Tools_Settings";
-            menu_Tools_Settings.Size = new Size(144, 22);
+            menu_Tools_Settings.Size = new Size(180, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
             // 
             // menu_Help
             // 
             menu_Help.DropDownItems.AddRange(new ToolStripItem[] { menu_Help_ViewHelp, toolStripSeparator6, menu_Help_About, menu_Help_CheckUpdate });
+            menu_Help.Enabled = false;
             menu_Help.Name = "menu_Help";
             menu_Help.Size = new Size(44, 20);
             menu_Help.Text = "Help";
@@ -1388,24 +1394,24 @@
             // menu_Help_ViewHelp
             // 
             menu_Help_ViewHelp.Name = "menu_Help_ViewHelp";
-            menu_Help_ViewHelp.Size = new Size(171, 22);
+            menu_Help_ViewHelp.Size = new Size(180, 22);
             menu_Help_ViewHelp.Text = "View Help";
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(168, 6);
+            toolStripSeparator6.Size = new Size(177, 6);
             // 
             // menu_Help_About
             // 
             menu_Help_About.Name = "menu_Help_About";
-            menu_Help_About.Size = new Size(171, 22);
+            menu_Help_About.Size = new Size(180, 22);
             menu_Help_About.Text = "About VS-Maker";
             // 
             // menu_Help_CheckUpdate
             // 
             menu_Help_CheckUpdate.Name = "menu_Help_CheckUpdate";
-            menu_Help_CheckUpdate.Size = new Size(171, 22);
+            menu_Help_CheckUpdate.Size = new Size(180, 22);
             menu_Help_CheckUpdate.Text = "Check for Updates";
             // 
             // startupTab
@@ -3819,12 +3825,14 @@
             // 
             // class_NewClassInfoBtn
             // 
-            class_NewClassInfoBtn.BackColor = SystemColors.Info;
-            class_NewClassInfoBtn.Location = new Point(543, 47);
+            class_NewClassInfoBtn.BackColor = Color.Transparent;
+            class_NewClassInfoBtn.Image = Properties.Resources.add_ico;
+            class_NewClassInfoBtn.Location = new Point(596, 47);
             class_NewClassInfoBtn.Name = "class_NewClassInfoBtn";
-            class_NewClassInfoBtn.Size = new Size(256, 49);
+            class_NewClassInfoBtn.Size = new Size(203, 49);
             class_NewClassInfoBtn.TabIndex = 27;
             class_NewClassInfoBtn.Text = "About Adding New Classes";
+            class_NewClassInfoBtn.TextImageRelation = TextImageRelation.ImageBeforeText;
             class_NewClassInfoBtn.UseVisualStyleBackColor = false;
             class_NewClassInfoBtn.Click += class_NewClassInfoBtn_Click;
             // 
@@ -4904,6 +4912,7 @@
             // main_SettingsBtn
             // 
             main_SettingsBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            main_SettingsBtn.Enabled = false;
             main_SettingsBtn.Image = Properties.Resources.settings_ico;
             main_SettingsBtn.ImageTransparentColor = Color.Magenta;
             main_SettingsBtn.Name = "main_SettingsBtn";

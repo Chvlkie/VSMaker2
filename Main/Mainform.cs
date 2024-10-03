@@ -871,7 +871,6 @@ namespace Main
 
             if (openRom.ShowDialog(this) == DialogResult.OK && !string.IsNullOrEmpty(openRom.FileName))
             {
-                // Await the asynchronous SelectWorkingFolderDirectoryAsync method
                 await SelectWorkingFolderDirectoryAsync(openRom.FileName);
             }
         }
