@@ -7,6 +7,7 @@ using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
+
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -102,8 +103,6 @@ namespace Main
                 MessageBox.Show($"An error occurred while exporting: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         public async Task BeginImportBattleMessagesAsync(string filePath)
         {
@@ -394,15 +393,22 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(LoadedRom.ClassNamesTextNumber);
+            RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(LoadedRom.ClassNamesTextNumber);
+            progressCount += increment;
+            progress?.Report(progressCount);
+            RomFile.Arm9Expanded = RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
+            if (RomFile.Arm9Expanded)
+            {
+                bool prizeMoneyExpanded = await RomFile.CheckForPrizeMoneyExpansionAsync();
+                RomFile.PrizeMoneyExpanded = prizeMoneyExpanded;
+                RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
+                RomFile.EyeContactExpanded = RomFile.CheckForEyeContactExpansion();
+            }
+            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(LoadedRom.TotalNumberOfTrainerClasses, LoadedRom.ClassGenderOffsetToRamAddress) : [];
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            LoadedRom.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(LoadedRom.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+            LoadedRom.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -413,6 +419,13 @@ namespace Main
             IsLoadingData = false;
             progress?.Report(100);
         }
+
+
+        public  void RefreshTrainerClasses()
+        {
+            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
+        }
+
 
         private static void CreateDirectory(string workingDirectory)
         {
@@ -447,6 +460,8 @@ namespace Main
         private void ClearUnsavedChanges()
         {
             ClearUnsavedTrainerChanges();
+            ClearUnsavedClassChanges();
+            ClearUnsavedClassPropertiesChanges();
         }
 
         private void CloseProject()
@@ -880,7 +895,7 @@ namespace Main
 
         private void OpenRomPatchesWindow()
         {
-            RomPatches = new RomPatches(LoadedRom);
+            RomPatches = new RomPatches(this, LoadedRom, romFileMethods);
             RomPatches.ShowDialog();
         }
 

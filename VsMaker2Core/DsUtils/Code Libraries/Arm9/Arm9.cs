@@ -201,7 +201,20 @@ namespace VsMaker2Core.DSUtils
 
         public static void WriteByte(byte value, uint destinationOffset)
         {
-            WriteToFile(RomFile.Arm9Path, new[] { value }, destinationOffset);
+            try
+            {
+                using FileStream arm9Stream = new FileStream(RomFile.Arm9Path, FileMode.Open, FileAccess.Write, FileShare.None);
+                arm9Stream.Position = destinationOffset;
+
+                arm9Stream.WriteByte(value);
+
+                arm9Stream.Flush();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error writing to ARM9: {ex.Message}");
+                throw;  // Re-throw the exception if needed
+            }
         }
 
         public static void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)

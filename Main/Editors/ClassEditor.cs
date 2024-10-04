@@ -215,8 +215,8 @@ namespace Main
 
         private void EnableClassEditor()
         {
-            class_EyeContactNightComboBox.Enabled = LoadedRom.IsHeartGoldSoulSilver;
-            class_EyeContactNightComboBox.Visible = LoadedRom.IsHeartGoldSoulSilver;
+            class_EyeContactNightComboBox.Enabled = RomFile.IsHeartGoldSoulSilver;
+            class_EyeContactNightComboBox.Visible = RomFile.IsHeartGoldSoulSilver;
             class_PrizeMoneyNum.Enabled = true;
             class_TrainersListBox.Enabled = true;
             class_NameTextBox.Enabled = true;
@@ -443,7 +443,7 @@ namespace Main
             int prizeMoneyMultiplier = (int)class_PrizeMoneyNum.Value;
             string newDescription = class_DescriptionTextBox.Text;
             int eyeContactMusicDay = class_EyeContactDayComboBox.Enabled ? EyeContactMusic.ListNameToId(class_EyeContactDayComboBox.SelectedItem.ToString()) : -1;
-            int? eyeContactMusicNight = LoadedRom.IsHeartGoldSoulSilver && class_EyeContactNightComboBox.Enabled ? EyeContactMusic.ListNameToId(class_EyeContactNightComboBox.SelectedItem.ToString()) : null;
+            int? eyeContactMusicNight = RomFile.IsHeartGoldSoulSilver && class_EyeContactNightComboBox.Enabled ? EyeContactMusic.ListNameToId(class_EyeContactNightComboBox.SelectedItem.ToString()) : null;
 
             bool prizeMoneySaved = await SavePrizeMoneyDataAsync(classId, prizeMoneyMultiplier);
             bool eyeContactSaved = SaveEyeContactData(classId, eyeContactMusicDay, eyeContactMusicNight); // Assuming this is sync
@@ -473,7 +473,7 @@ namespace Main
             class_DescriptionTextBox.Text = SelectedClass.ClassProperties.Description;
             class_PrizeMoneyNum.Value = SelectedClass.ClassProperties.PrizeMoneyMultiplier;
             class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(RomFile.GameFamily);
-            class_EyeContactNightComboBox.SelectedIndex = LoadedRom.IsHeartGoldSoulSilver ?
+            class_EyeContactNightComboBox.SelectedIndex = RomFile.IsHeartGoldSoulSilver ?
                 EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicNight)
                 : -1;
         }

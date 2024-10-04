@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using VsMaker2Core.DataModels;
 using static System.Net.Mime.MediaTypeNames;
+using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DsUtils
 {
@@ -9,7 +10,6 @@ namespace VsMaker2Core.DsUtils
         private const string backupSuffix = ".backup";
         public const int ERR_OVERLAY_NOTFOUND = -1;
         public const int ERR_OVERLAY_ALREADY_UNCOMPRESSED = -2;
-
         public static bool CheckOverlayHasCompressionFlag(int overlayNumber)
         {
             const int entrySize = 32;

@@ -1,4 +1,5 @@
 ﻿using VsMaker2Core.Database;
+using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
@@ -14,7 +15,7 @@ namespace VsMaker2Core.DataModels
         public string FileName { get; set; }
         public static string GameCode { get; set; }
 
-        public bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
+        public static bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
 
         public static GameFamily GameFamily => GameVersion switch
         {
@@ -66,7 +67,7 @@ namespace VsMaker2Core.DataModels
 
         public static Dictionary<ushort, byte[]> ScriptCommandParametersDict => BuildCommandParametersDatabase(GameFamily);
         public static GameVersion GameVersion { get; set; }
-        public int TotalNumberOfTrainerClasses { get; set; }
+        public static int TotalNumberOfTrainerClasses { get; set; }
         public int TotalNumberOfTrainers { get; set; }
         public int InitialMoneyOverlayNumber => SetInitialMoneyOverlay().overlayNumber;
         public int InitialMoneyOverlayOffset => SetInitialMoneyOverlay().offset;
@@ -76,7 +77,6 @@ namespace VsMaker2Core.DataModels
         public List<PrizeMoneyData> PrizeMoneyData { get; set; }
         public List<EyeContactMusicData> EyeContactMusicData { get; set; }
         public List<BattleMessageTableData> BattleMessageTableData { get; set; }
-
         public List<BattleMessageOffsetData> BattleMessageOffsetData { get; set; }
 
         public List<ScriptFileData> ScriptFileData { get; set; }
@@ -106,8 +106,6 @@ namespace VsMaker2Core.DataModels
         {
         }
 
-
-       
         public RomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
         {
             ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
@@ -126,6 +124,120 @@ namespace VsMaker2Core.DataModels
             GameCode = romId;
             FileName = romName;
             EuropeByte = europeByte;
+        }
+
+        public static bool CheckForClassGenderExpansion()
+        {
+            try
+            {
+                // Read the 4-byte pointer from arm9.bin at ClassGenderOffsetToRamAddress
+                uint currentPointer = BitConverter.ToUInt32(Arm9.ReadBytes(ClassGenderOffsetToRamAddress, 4), 0);
+
+                // Subtract SynthOverlayLoadAddress to get the offset within the synthetic overlay
+                uint calculatedOffset = currentPointer - SynthOverlayLoadAddress;
+
+                // Return whether the calculated offset matches ClassGenderRepointOffset
+                return calculatedOffset == ClassGenderRepointOffset;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking for class gender expansion: {ex.Message}");
+                throw;
+            }
+        }
+
+        public static bool CheckForEyeContactExpansion()
+        {
+            try
+            {
+                // Read the 4-byte pointer from arm9.bin at ClassGenderOffsetToRamAddress
+                uint currentPointer = BitConverter.ToUInt32(Arm9.ReadBytes(EyeContactMusicTableOffsetToRam, 4), 0);
+
+                // Subtract SynthOverlayLoadAddress to get the offset within the synthetic overlay
+                uint calculatedOffset = currentPointer - SynthOverlayLoadAddress;
+
+                // Return whether the calculated offset matches ClassGenderRepointOffset
+                return calculatedOffset == EyeContactRepointOffset;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking for eye contact expansion: {ex.Message}");
+                throw;
+            }
+        }
+
+        public static async Task<bool> CheckForPrizeMoneyExpansionAsync()
+        {
+            try
+            {
+                string overlayFilePath = Overlay.OverlayFilePath(PrizeMoneyTableOverlayNumber);
+
+                // Check if the overlay needs to be decompressed (only for HGSS)
+                if (IsHeartGoldSoulSilver)
+                {
+                    bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(PrizeMoneyTableOverlayNumber);
+                    if (isCompressed)
+                    {
+                        await Overlay.DecompressOverlayAsync(PrizeMoneyTableOverlayNumber);
+                        Overlay.SetOverlayCompressionInTable(PrizeMoneyTableOverlayNumber, 0);
+                    }
+                }
+
+                // Pointers to check based on game family
+                uint originalPointer = GameFamily switch
+                {
+                    GameFamily.DiamondPearl => 0x0225FF20, // Original pointer for Diamond/Pearl
+                    GameFamily.Platinum => 0x02270B20, // Original pointer for Platinum
+                    GameFamily.HeartGoldSoulSilver => 0x0226C4C4, // Original pointer for HGSS
+                    _ => throw new ArgumentException("Unsupported game family")
+                };
+
+                // Offset locations to check based on game family
+                uint pointerOffset = GameFamily switch
+                {
+                    GameFamily.DiamondPearl => 0x782C,
+                    GameFamily.Platinum => 0x816C,
+                    GameFamily.HeartGoldSoulSilver => 0x8380,
+                    _ => throw new ArgumentException("Unsupported game family")
+                };
+
+                uint? additionalPointerOffsetHGSS = IsHeartGoldSoulSilver ? (uint?)0x8384 : null;
+
+                // Read the current pointers from the overlay file
+                using (FileStream overlayStream = new(overlayFilePath, FileMode.Open, FileAccess.Read))
+                using (BinaryReader reader = new(overlayStream))
+                {
+                    // Check the first pointer
+                    overlayStream.Position = pointerOffset;
+                    uint currentPointer = reader.ReadUInt32();
+
+                    // Compare the current pointer with the original pointer
+                    if (currentPointer != originalPointer)
+                    {
+                        return true; // Pointer is modified, prize money table has been expanded
+                    }
+
+                    // Check the additional pointer for HGSS if it exists
+                    if (additionalPointerOffsetHGSS.HasValue)
+                    {
+                        overlayStream.Position = additionalPointerOffsetHGSS.Value;
+                        uint additionalPointer = reader.ReadUInt32();
+
+                        if (additionalPointer != originalPointer + 2)
+                        {
+                            return true; // Additional pointer is modified in HGSS
+                        }
+                    }
+                }
+
+                // If no changes were found, return false
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error checking for prize money expansion: {ex.Message}");
+                throw;
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace VsMaker2Core.Methods
                         Description = classDescriptions[i],
                         Gender = RomFile.GameFamily != GameFamily.DiamondPearl ? loadedRom.ClassGenderData[i].Gender : null,
                         EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
-                        EyeContactMusicNight = loadedRom.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
+                        EyeContactMusicNight = RomFile.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
                         : null,
                         PrizeMoneyMultiplier = loadedRom.PrizeMoneyData[i].PrizeMoney
                     },

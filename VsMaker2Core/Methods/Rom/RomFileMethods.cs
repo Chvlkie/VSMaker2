@@ -173,7 +173,7 @@ namespace VsMaker2Core.Methods
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return new List<string>();
+                return [];
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();
@@ -187,18 +187,33 @@ namespace VsMaker2Core.Methods
                 return [];
             }
 
-            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0) - Arm9.Address;
-
+            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0);
+            tableStartAddress = RomFile.ClassGenderExpanded ? tableStartAddress - RomFile.SynthOverlayLoadAddress : tableStartAddress - Arm9.Address;
             var classGenders = new List<ClassGenderData>(numberOfClasses);
 
-            using (var reader = new Arm9.Arm9Reader(tableStartAddress))
+            if (RomFile.ClassGenderExpanded)
             {
+                using FileStream fileStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Read);
+                using BinaryReader reader = new(fileStream);
+                fileStream.Position = tableStartAddress;
+
+                for (int i = 0; i < 150; i++)
+                {
+                    long offset = fileStream.Position;
+                    byte gender = reader.ReadByte(); // Read 1 byte for each entry
+                    classGenders.Add(new ClassGenderData(offset, gender, i));
+                }
+            }
+            else
+            {
+                using var reader = new Arm9.Arm9Reader(tableStartAddress);
                 try
                 {
                     for (int i = 0; i < numberOfClasses; i++)
                     {
+                        long offset = reader.BaseStream.Position;
                         byte gender = reader.ReadByte();
-                        classGenders.Add(new ClassGenderData(reader.BaseStream.Position, gender, i));
+                        classGenders.Add(new ClassGenderData(offset, gender, i));
                     }
                 }
                 catch (Exception ex)
@@ -207,7 +222,6 @@ namespace VsMaker2Core.Methods
                     throw;
                 }
             }
-
             return classGenders;
         }
 
@@ -226,36 +240,56 @@ namespace VsMaker2Core.Methods
         public async Task<List<EyeContactMusicData>> GetEyeContactMusicDataAsync(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
         {
             var eyeContactMusic = new List<EyeContactMusicData>();
-
-            uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
-            uint tableSizeOffset = (uint)(gameFamily == GameFamily.HeartGoldSoulSilver || gameFamily == GameFamily.HgEngine ? 12 : 10);
-
-            byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
-
-            using Arm9.Arm9Reader reader = new(tableStartAddress);
-
-            try
+            if (RomFile.EyeContactExpanded)
             {
-                for (int i = 0; i < tableSize; i++)
+                using var overlayStream = new FileStream(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Read);
+                overlayStream.Position = RomFile.EyeContactRepointOffset;
+
+                using var reader = new BinaryReader(overlayStream);
+                try
                 {
-                    uint offset = (uint)reader.BaseStream.Position;
-                    ushort trainerClassId = reader.ReadUInt16();
-                    ushort musicDayId = reader.ReadUInt16();
-                    ushort? musicNightId = null;
-
-                    if (gameFamily == GameFamily.HgEngine || gameFamily == GameFamily.HeartGoldSoulSilver)
+                    for (int i = 0; i < 150; i++)
                     {
-                        musicNightId = reader.ReadUInt16();
-                    }
+                        uint offset = (uint)reader.BaseStream.Position;
+                        ushort trainerClassId = reader.ReadUInt16();
+                        ushort musicDayId = reader.ReadUInt16();
+                        ushort? musicNightId = RomFile.IsHeartGoldSoulSilver ? reader.ReadUInt16() : null;
 
-                    var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
-                    eyeContactMusic.Add(eyeContactMusicData);
+                        var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
+                        eyeContactMusic.Add(eyeContactMusicData);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading eye contact music data: {ex.Message}");
+                    throw;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error reading eye contact music data: {ex.Message}");
-                throw;
+                uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
+                uint tableSizeOffset = (uint)(RomFile.IsHeartGoldSoulSilver ? 12 : 10);
+                byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
+                using Arm9.Arm9Reader reader = new(tableStartAddress);
+
+                try
+                {
+                    for (int i = 0; i < tableSize; i++)
+                    {
+                        uint offset = (uint)reader.BaseStream.Position;
+                        ushort trainerClassId = reader.ReadUInt16();
+                        ushort musicDayId = reader.ReadUInt16();
+                        ushort? musicNightId = RomFile.IsHeartGoldSoulSilver ? reader.ReadUInt16() : null;
+
+                        var eyeContactMusicData = new EyeContactMusicData(offset, trainerClassId, musicDayId, musicNightId);
+                        eyeContactMusic.Add(eyeContactMusicData);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading eye contact music data: {ex.Message}");
+                    throw;
+                }
             }
 
             return eyeContactMusic;
@@ -380,17 +414,17 @@ namespace VsMaker2Core.Methods
 
             try
             {
-                if (loadedRom.IsHeartGoldSoulSilver)
+                if (RomFile.IsHeartGoldSoulSilver && !RomFile.PrizeMoneyExpanded)
                 {
-                    bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(loadedRom.PrizeMoneyTableOverlayNumber);
+                    bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(RomFile.PrizeMoneyTableOverlayNumber);
                     if (isCompressed)
                     {
-                        await Overlay.DecompressOverlayAsync(loadedRom.PrizeMoneyTableOverlayNumber);
-                        Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                        await Overlay.DecompressOverlayAsync(RomFile.PrizeMoneyTableOverlayNumber);
+                        Overlay.SetOverlayCompressionInTable(RomFile.PrizeMoneyTableOverlayNumber, 0);
                     }
                 }
 
-                string filePath = Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber);
+                string filePath = RomFile.PrizeMoneyExpanded ? RomFile.SynthOverlayFilePath : Overlay.OverlayFilePath(RomFile.PrizeMoneyTableOverlayNumber);
 
                 if (!File.Exists(filePath))
                 {
@@ -400,15 +434,15 @@ namespace VsMaker2Core.Methods
 
                 using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 using var reader = new BinaryReader(fileStream);
-                reader.BaseStream.Position = loadedRom.PrizeMoneyTableOffset;
-                long streamEndPosition = reader.BaseStream.Position + loadedRom.PrizeMoneyTableSize;
+                reader.BaseStream.Position = RomFile.PrizeMoneyTableOffset;
+                long streamEndPosition = reader.BaseStream.Position + RomFile.PrizeMoneyTableSize;
                 ushort count = 0;
 
                 while (reader.BaseStream.Position < streamEndPosition)
                 {
                     long offset = reader.BaseStream.Position;
 
-                    if (loadedRom.IsHeartGoldSoulSilver)
+                    if (RomFile.IsHeartGoldSoulSilver)
                     {
                         ushort trainerClassId = reader.ReadUInt16();
                         ushort prizeMoney = reader.ReadUInt16();

@@ -120,4 +120,11 @@
   <data name="label1.Text" xml:space="preserve">
     <value>This patch expands ARM9's usable memory. It expands an unused NARC, turning it into a synthetic overlay. You can then inset new code or data into this overlay. This patch is essential for most advanced edits.</value>
   </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Move the Prize Money, Encounter, and Class Gender tables from ARM9 and put into the synthetic overlay. This will allow you to insert new classes (up to 150).
+ARM 9 Expansion is required
+
+NOTE: 150 is chosen as a "reasonable" amount, and to maintain some space in the synthetic overlay. It is technically possible to have more.
+</value>
+  </data>
 </root>

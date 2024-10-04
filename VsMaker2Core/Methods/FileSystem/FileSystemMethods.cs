@@ -75,7 +75,6 @@ namespace VsMaker2Core.Methods
             }
         }
 
-
         public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
         {
             descriptions[classId] = newDescription;
@@ -86,7 +85,17 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                Arm9.WriteByte(classGenderData.Gender, (uint)classGenderData.Offset);
+                if (RomFile.ClassGenderExpanded)
+                {
+                    using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
+                    using BinaryWriter writer = new(overlayStream);
+                    overlayStream.Position = (uint)classGenderData.Offset;
+                    writer.Write(classGenderData.Gender);
+                }
+                else
+                {
+                    Arm9.WriteByte(classGenderData.Gender, (uint)classGenderData.Offset);
+                };
             }
             catch (Exception ex)
             {
@@ -130,7 +139,6 @@ namespace VsMaker2Core.Methods
             }
         }
 
-
         public (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory}\\{0:D4}";
@@ -156,7 +164,6 @@ namespace VsMaker2Core.Methods
             }
         }
 
-
         public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
         {
             classNames[classId] = newName;
@@ -167,7 +174,7 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                if (loadedRom.IsHeartGoldSoulSilver)
+                if (RomFile.IsHeartGoldSoulSilver)
                 {
                     Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
                     Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0), eyeContactMusicData.Offset + 4);
@@ -201,16 +208,19 @@ namespace VsMaker2Core.Methods
 
         public async Task<(bool Success, string ErrorMessage)> WritePrizeMoneyDataAsync(PrizeMoneyData prizeMoneyData, RomFile loadedRom)
         {
-            if (loadedRom.IsHeartGoldSoulSilver)
+            if (RomFile.IsHeartGoldSoulSilver)
             {
-                bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(loadedRom.PrizeMoneyTableOverlayNumber);
-                if (isCompressed)
+                if (!RomFile.PrizeMoneyExpanded)
                 {
-                    await Overlay.DecompressOverlayAsync(loadedRom.PrizeMoneyTableOverlayNumber);
-                    Overlay.SetOverlayCompressionInTable(loadedRom.PrizeMoneyTableOverlayNumber, 0);
+                    bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(RomFile.PrizeMoneyTableOverlayNumber);
+                    if (isCompressed)
+                    {
+                        await Overlay.DecompressOverlayAsync(RomFile.PrizeMoneyTableOverlayNumber);
+                        Overlay.SetOverlayCompressionInTable(RomFile.PrizeMoneyTableOverlayNumber, 0);
+                    }
                 }
-
-                using EasyWriter writer = new(Overlay.OverlayFilePath(loadedRom.PrizeMoneyTableOverlayNumber), prizeMoneyData.Offset);
+                string filePath = RomFile.PrizeMoneyExpanded ? RomFile.SynthOverlayFilePath : Overlay.OverlayFilePath(RomFile.PrizeMoneyTableOverlayNumber);
+                using EasyWriter writer = new(filePath, prizeMoneyData.Offset);
                 try
                 {
                     writer.Write(prizeMoneyData.TrainerClassId);
@@ -243,12 +253,11 @@ namespace VsMaker2Core.Methods
             return (true, "");
         }
 
-
         public (bool Success, string ErrorMessage) WriteTrainerData(TrainerData trainerData, int trainerId)
         {
-            string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
             var stream = new MemoryStream();
-            using (BinaryWriter writer = new BinaryWriter(stream))
+            using (BinaryWriter writer = new(stream))
             {
                 writer.Write(trainerData.TrainerType);
                 writer.Write(trainerData.TrainerClassId);
@@ -399,27 +408,24 @@ namespace VsMaker2Core.Methods
             return (vsTrainersFile, true, string.Empty);
         }
 
-        private List<byte[]> GetAllTrainerPartyFiles(int trainerCount)
+        private static List<byte[]> GetAllTrainerPartyFiles(int trainerCount)
         {
-            List<byte[]> trainerFiles = new List<byte[]>(trainerCount);
+            List<byte[]> trainerFiles = new(trainerCount);
 
             for (int i = 0; i < trainerCount; i++)
             {
                 string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{i:D4}";
 
-                using (var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read))
-                using (var stream = new MemoryStream((int)fileStream.Length))
-                {
-                    fileStream.CopyTo(stream);
-                    trainerFiles.Add(stream.ToArray());
-                }
+                using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+                using var stream = new MemoryStream((int)fileStream.Length);
+                fileStream.CopyTo(stream);
+                trainerFiles.Add(stream.ToArray());
             }
 
             return trainerFiles;
         }
 
-
-        private List<byte[]> GetAllTrainerPropertyFiles(int trainerCount)
+        private static List<byte[]> GetAllTrainerPropertyFiles(int trainerCount)
         {
             List<byte[]> trainerFiles = [];
 
@@ -435,7 +441,7 @@ namespace VsMaker2Core.Methods
             return trainerFiles;
         }
 
-        private byte[] GetTrainerNamesFile(int trainerNameTextArchiveId)
+        private static byte[] GetTrainerNamesFile(int trainerNameTextArchiveId)
         {
             string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
             var fileStream = new FileStream(directory, FileMode.Open);

@@ -16,6 +16,7 @@ namespace VsMaker2Core.DataModels
 
         public static string OverlayPath => $"{WorkingDirectory}{Common.OverlayFilePath}";
         public static string OverlayTablePath => $"{WorkingDirectory}{Common.Y9FilePath}";
+        public static string SynthOverlayFilePath => Path.Combine(Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.synthOverlay].unpackedDirectory, "0000");
 
         #endregion Overlay
 
@@ -34,7 +35,9 @@ namespace VsMaker2Core.DataModels
 
         #region PrizeMoney
 
-        public uint PrizeMoneyTableOffset => GameFamily switch
+        public static uint PrizeMoneyRepointOffset = 0x1100;
+
+        public static uint PrizeMoneyTableOffset => PrizeMoneyExpanded ? PrizeMoneyRepointOffset : GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
             GameFamily.Platinum => 0x359E0,
@@ -43,7 +46,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int PrizeMoneyTableOverlayNumber => GameFamily switch
+        public static int PrizeMoneyTableOverlayNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 11,
             GameFamily.Platinum => 16,
@@ -52,12 +55,12 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int PrizeMoneyTableSize => GameFamily switch
+        public static int PrizeMoneyTableSize => GameFamily switch
         {
-            GameFamily.DiamondPearl => 98,
-            GameFamily.Platinum => 105,
-            GameFamily.HeartGoldSoulSilver => 516,
-            GameFamily.HgEngine => 516,
+            GameFamily.DiamondPearl => PrizeMoneyExpanded ? 150 : 98,
+            GameFamily.Platinum => PrizeMoneyExpanded ? 150 : 105,
+            GameFamily.HeartGoldSoulSilver => PrizeMoneyExpanded ? 600 : 516,
+            GameFamily.HgEngine => PrizeMoneyExpanded ? 600 : 516,
             _ => 0
         };
 
@@ -65,7 +68,9 @@ namespace VsMaker2Core.DataModels
 
         #region ClassGenders
 
-        public uint ClassGenderOffsetToRamAddress => GameFamily switch
+        public static uint ClassGenderRepointOffset = 0x1400;
+
+        public static uint ClassGenderOffsetToRamAddress => GameFamily switch
 
         {
             GameFamily.HeartGoldSoulSilver =>
@@ -107,8 +112,8 @@ namespace VsMaker2Core.DataModels
         #endregion ClassGenders
 
         #region EyeContactMusic
-
-        public uint EyeContactMusicTableOffsetToRam => GameFamily switch
+        public static uint EyeContactRepointOffset = 0x1600;
+        public static uint EyeContactMusicTableOffsetToRam => GameFamily switch
         {
             GameFamily.HeartGoldSoulSilver => GameLanguage switch
             {

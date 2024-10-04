@@ -6,6 +6,9 @@
         public byte Gender { get; set; }
         public int TrainerClassId { get; set; }
 
+        public ClassGenderData()
+        { }
+
         public ClassGenderData(long offset, byte gender, int trainerClassId)
         {
             Offset = offset;
