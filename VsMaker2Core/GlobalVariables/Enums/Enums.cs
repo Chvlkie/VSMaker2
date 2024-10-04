@@ -41,15 +41,6 @@
             HgEngine
         }
 
-        public enum GenderAbilityOverride
-        {
-            None = 0,
-            IsMale = 0x1,
-            IsFemale = 0x2,
-            Ability1 = 0x10,
-            Ability2 = 0x20,
-        }
-
         public enum GenderOverride
         {
             None = 0,

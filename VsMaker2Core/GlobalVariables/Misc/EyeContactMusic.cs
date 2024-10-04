@@ -6,7 +6,7 @@
 
         public string Name => EyeMusicIdNames.GetNameFromId(MusicId);
 
-        public string ListName => "[" + MusicId + "] - " + Name;
+        public string ListName => "[" + MusicId.ToString("D4") + "] - " + Name;
 
         public static int ListNameToId(string listName) => int.Parse(listName.Substring(1, 4));
 

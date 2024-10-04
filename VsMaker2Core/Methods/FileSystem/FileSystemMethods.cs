@@ -174,14 +174,30 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                if (RomFile.IsHeartGoldSoulSilver)
+                if (RomFile.EyeContactExpanded)
                 {
-                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
-                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0), eyeContactMusicData.Offset + 4);
+                    using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
+                    using BinaryWriter writer = new(overlayStream);
+                    overlayStream.Position = eyeContactMusicData.Offset + 2;
+                    writer.Write(BitConverter.GetBytes(eyeContactMusicData.MusicDayId));
+
+                    if (RomFile.IsHeartGoldSoulSilver)
+                    {
+                        overlayStream.Position = eyeContactMusicData.Offset + 4;
+                        writer.Write(BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0));
+                    }
                 }
                 else
                 {
-                    Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
+                    if (RomFile.IsHeartGoldSoulSilver)
+                    {
+                        Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
+                        Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0), eyeContactMusicData.Offset + 4);
+                    }
+                    else
+                    {
+                        Arm9.WriteBytes(BitConverter.GetBytes(eyeContactMusicData.MusicDayId), eyeContactMusicData.Offset + 2);
+                    }
                 }
             }
             catch (Exception ex)

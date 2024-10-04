@@ -225,7 +225,7 @@ namespace Main
             class_DescriptionTextBox.Enabled = true;
             class_SavePropertyBtn.Enabled = true;
             class_GenderComboBox.Enabled = true;
-
+            class_AddClassBtn.Enabled = RomFile.PrizeMoneyExpanded && RomFile.ClassGenderExpanded && RomFile.EyeContactExpanded;
             if (class_EyeContactDayComboBox.SelectedIndex < 0)
             {
                 class_EyeContactDayComboBox.Enabled = false;
