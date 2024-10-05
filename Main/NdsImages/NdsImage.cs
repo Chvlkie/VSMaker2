@@ -8,6 +8,35 @@ namespace VsMaker2Core.Methods.NdsImages
     {
         private static readonly string TrainerGraphicsPath = Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
 
+        public static void AddNewTrainerClassSprite()
+        {
+            var files = Directory.GetFiles(TrainerGraphicsPath);
+            int totalFiles = files.Length;
+
+            string[] filesToCopy = { "0000", "0001", "0002", "0003", "0004" };
+
+            for (int i = 0; i < filesToCopy.Length; i++)
+            {
+                string sourceFile = Path.Combine(TrainerGraphicsPath, filesToCopy[i]);
+
+                if (File.Exists(sourceFile))
+                {
+                    string newFileName = (totalFiles + i).ToString("D4"); // e.g., "0644" or "0645", etc.
+                    string destinationFile = Path.Combine(TrainerGraphicsPath, newFileName);
+
+                    File.Copy(sourceFile, destinationFile);
+
+                    Console.WriteLine($"Copied {sourceFile} to {destinationFile}");
+                }
+                else
+                {
+                    Console.WriteLine($"File {filesToCopy[i]} does not exist in the directory.");
+                }
+            }
+
+            Console.WriteLine("File duplication complete.");
+        }
+
         public NdsImage()
         { }
 

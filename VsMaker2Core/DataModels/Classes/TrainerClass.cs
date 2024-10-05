@@ -1,5 +1,4 @@
-﻿
-namespace VsMaker2Core.DataModels
+﻿namespace VsMaker2Core.DataModels
 {
     public class TrainerClass : IEquatable<TrainerClass?>
     {
@@ -38,6 +37,22 @@ namespace VsMaker2Core.DataModels
         {
             UsedByTrainers = [];
             ClassProperties = new();
+        }
+
+        // Default New Trainer Class
+        public TrainerClass(int trainerClassId)
+        {
+            TrainerClassId = trainerClassId;
+            TrainerClassName = "-";
+            UsedByTrainers = [];
+            ClassProperties = new TrainerClassProperty
+            { 
+                Gender = 0,
+                PrizeMoneyMultiplier = 0,
+                Description = "-",
+                EyeContactMusicDay = 0,
+                EyeContactMusicNight = 0,
+            };
         }
 
         public TrainerClass(int trainerClassId, string trainerClassName, TrainerClassProperty trainerClassProperty, List<Trainer> usedByTrainers)

@@ -66,8 +66,6 @@
 
         private Button class_EyeContactDaySoundBtn;
 
-        private Button class_EyeContactHelpBtn;
-
         private ComboBox class_EyeContactNightComboBox;
 
         private Button class_EyeContactNightPlayBtn;
@@ -89,8 +87,6 @@
         private Button class_NewClassInfoBtn;
 
         private ToolStripButton class_PasteBtn;
-
-        private Button class_PrizeMoneyHelpBtn;
 
         private NumericUpDown class_PrizeMoneyNum;
 
@@ -1036,8 +1032,6 @@
             class_VSEffectsListBox = new ListBox();
             class_DescriptionLbl = new Label();
             class_DescriptionTextBox = new TextBox();
-            class_EyeContactHelpBtn = new Button();
-            class_PrizeMoneyHelpBtn = new Button();
             class_EyeContactNightComboBox = new ComboBox();
             label56 = new Label();
             label57 = new Label();
@@ -3780,8 +3774,6 @@
             panel4.Controls.Add(class_VSEffectsListBox);
             panel4.Controls.Add(class_DescriptionLbl);
             panel4.Controls.Add(class_DescriptionTextBox);
-            panel4.Controls.Add(class_EyeContactHelpBtn);
-            panel4.Controls.Add(class_PrizeMoneyHelpBtn);
             panel4.Controls.Add(class_EyeContactNightComboBox);
             panel4.Controls.Add(label56);
             panel4.Controls.Add(label57);
@@ -3920,25 +3912,6 @@
             class_DescriptionTextBox.Size = new Size(146, 23);
             class_DescriptionTextBox.TabIndex = 15;
             class_DescriptionTextBox.TextChanged += class_DescriptionTextBox_TextChanged;
-            // 
-            // class_EyeContactHelpBtn
-            // 
-            class_EyeContactHelpBtn.Location = new Point(158, 98);
-            class_EyeContactHelpBtn.Name = "class_EyeContactHelpBtn";
-            class_EyeContactHelpBtn.Size = new Size(23, 23);
-            class_EyeContactHelpBtn.TabIndex = 14;
-            class_EyeContactHelpBtn.Text = "?";
-            class_EyeContactHelpBtn.UseVisualStyleBackColor = true;
-            // 
-            // class_PrizeMoneyHelpBtn
-            // 
-            class_PrizeMoneyHelpBtn.Enabled = false;
-            class_PrizeMoneyHelpBtn.Location = new Point(158, 43);
-            class_PrizeMoneyHelpBtn.Name = "class_PrizeMoneyHelpBtn";
-            class_PrizeMoneyHelpBtn.Size = new Size(23, 23);
-            class_PrizeMoneyHelpBtn.TabIndex = 13;
-            class_PrizeMoneyHelpBtn.Text = "?";
-            class_PrizeMoneyHelpBtn.UseVisualStyleBackColor = true;
             // 
             // class_EyeContactNightComboBox
             // 
@@ -4283,6 +4256,7 @@
             class_AddClassBtn.TabIndex = 0;
             class_AddClassBtn.Text = "New Class";
             class_AddClassBtn.UseVisualStyleBackColor = true;
+            class_AddClassBtn.Click += class_AddClassBtn_Click;
             // 
             // panel1
             // 

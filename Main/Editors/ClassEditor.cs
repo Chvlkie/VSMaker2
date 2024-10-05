@@ -33,6 +33,8 @@ namespace Main
 
                     if (!InhibitClassChange)
                     {
+                       ClearUnsavedClassChanges();
+                       ClearUnsavedClassPropertiesChanges();
                         SelectedClass = classEditorMethods.GetTrainerClass(
                             MainEditorModel.Classes,
                             TrainerClass.ListNameToTrainerClassId(selectedClass)
