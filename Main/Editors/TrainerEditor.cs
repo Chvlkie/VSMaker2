@@ -201,7 +201,7 @@ namespace Main
                             pokeFormsComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && Species.HasMoreThanOneForm(pokemonId);
                             pokeHeldItemComboBoxes[i].Enabled = chooseItems;
                             pokeMoveButtons[i].Enabled = chooseMoves;
-                            pokeGenderComboBoxes[i].Enabled = RomFile.IsHeartGoldSoulSilver && species.HasMoreThanOneGender;
+                            pokeGenderComboBoxes[i].Enabled = RomFile.GameFamily != GameFamily.DiamondPearl && species.HasMoreThanOneGender;
                         }
                     }
                 }
@@ -1008,8 +1008,7 @@ namespace Main
 
                 if (species != null) // Ensure species is valid
                 {
-                    // Handle gender settings for HeartGold/SoulSilver
-                    if (RomFile.IsHeartGoldSoulSilver)
+                    if (RomFile.GameFamily != GameFamily.DiamondPearl)
                     {
                         pokeGenderComboBoxes[partyIndex].SelectedIndex = species.GenderRatio switch
                         {
@@ -1096,7 +1095,7 @@ namespace Main
                     pokeMoves[i][3] = trainerParty.Pokemons[i].Moves[3];
                 }
 
-                if (RomFile.IsHeartGoldSoulSilver)
+                if (RomFile.GameFamily != GameFamily.DiamondPearl)
                 {
                     switch (species.GenderRatio)
                     {
@@ -1233,7 +1232,7 @@ namespace Main
                 pokeComboBoxes?.ForEach(x => x.SelectedIndex = -1);
                 PopulatePokemonComboBoxes();
             }
-            if (poke1GenderComboBox.Items.Count == 0 && RomFile.IsHeartGoldSoulSilver)
+            if (poke1GenderComboBox.Items.Count == 0 && RomFile.GameFamily != GameFamily.DiamondPearl)
             {
                 PopulatePokemonGenderComboBoxes();
                 pokeGenderComboBoxes?.ForEach(x => x.Visible = true);
