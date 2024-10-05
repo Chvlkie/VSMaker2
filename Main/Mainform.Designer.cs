@@ -1366,20 +1366,20 @@
             // 
             menu_Tools_RomPatcher.Enabled = false;
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
-            menu_Tools_RomPatcher.Size = new Size(180, 22);
+            menu_Tools_RomPatcher.Size = new Size(144, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
             menu_Tools_RomPatcher.Click += menu_Tools_RomPatcher_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(177, 6);
+            toolStripSeparator5.Size = new Size(141, 6);
             // 
             // menu_Tools_Settings
             // 
             menu_Tools_Settings.Enabled = false;
             menu_Tools_Settings.Name = "menu_Tools_Settings";
-            menu_Tools_Settings.Size = new Size(180, 22);
+            menu_Tools_Settings.Size = new Size(144, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
             // 
@@ -1394,24 +1394,24 @@
             // menu_Help_ViewHelp
             // 
             menu_Help_ViewHelp.Name = "menu_Help_ViewHelp";
-            menu_Help_ViewHelp.Size = new Size(180, 22);
+            menu_Help_ViewHelp.Size = new Size(171, 22);
             menu_Help_ViewHelp.Text = "View Help";
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(177, 6);
+            toolStripSeparator6.Size = new Size(168, 6);
             // 
             // menu_Help_About
             // 
             menu_Help_About.Name = "menu_Help_About";
-            menu_Help_About.Size = new Size(180, 22);
+            menu_Help_About.Size = new Size(171, 22);
             menu_Help_About.Text = "About VS-Maker";
             // 
             // menu_Help_CheckUpdate
             // 
             menu_Help_CheckUpdate.Name = "menu_Help_CheckUpdate";
-            menu_Help_CheckUpdate.Size = new Size(180, 22);
+            menu_Help_CheckUpdate.Size = new Size(171, 22);
             menu_Help_CheckUpdate.Text = "Check for Updates";
             // 
             // startupTab
@@ -3615,6 +3615,7 @@
             trainer_SpriteFrameNum.Name = "trainer_SpriteFrameNum";
             trainer_SpriteFrameNum.Size = new Size(43, 23);
             trainer_SpriteFrameNum.TabIndex = 5;
+            trainer_SpriteFrameNum.ValueChanged += trainer_SpriteFrameNum_ValueChanged;
             // 
             // trainer_SpriteExportBtn
             // 
@@ -4216,6 +4217,7 @@
             class_SpriteFrameNum.Name = "class_SpriteFrameNum";
             class_SpriteFrameNum.Size = new Size(43, 23);
             class_SpriteFrameNum.TabIndex = 5;
+            class_SpriteFrameNum.ValueChanged += class_SpriteFrameNum_ValueChanged;
             // 
             // class_SpriteExportBtn
             // 

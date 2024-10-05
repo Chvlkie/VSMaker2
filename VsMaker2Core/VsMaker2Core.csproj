@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ekona\Ekona.csproj" />
+    <ProjectReference Include="..\Images\Images.csproj" />
   </ItemGroup>
 
 </Project>

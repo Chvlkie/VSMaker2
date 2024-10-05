@@ -7,7 +7,7 @@ using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
-
+using VsMaker2Core.Methods.NdsImages;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -35,6 +35,7 @@ namespace Main
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
+        private INdsImage imageMethods;
 
         #endregion Methods
 
@@ -420,12 +421,10 @@ namespace Main
             progress?.Report(100);
         }
 
-
-        public  void RefreshTrainerClasses()
+        public void RefreshTrainerClasses()
         {
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
         }
-
 
         private static void CreateDirectory(string workingDirectory)
         {
@@ -720,7 +719,7 @@ namespace Main
             }
             else
             {
-                OpenRomAsync();
+                await OpenRomAsync();
             }
         }
 
@@ -748,6 +747,7 @@ namespace Main
             trainerEditorMethods = new TrainerEditorMethods();
             classEditorMethods = new ClassEditorMethods();
             fileSystemMethods = new FileSystemMethods();
+            imageMethods = new NdsImage();
         }
 
         private void menu_Export_Trainers_Click(object sender, EventArgs e)
@@ -1225,6 +1225,35 @@ namespace Main
             }
 
             return (true, -1);
+        }
+
+        private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
+        {
+            UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);
+        }
+
+        private void UpdateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
+        {
+            var palette = imageMethods.GetTrainerClassPaletteBase(trainerClassId);
+            var image = imageMethods.GetTrainerClassImageBase(trainerClassId);
+            var sprite = imageMethods.GetTrainerClassSpriteBase(trainerClassId);
+            frameNumBox.Enabled = sprite.NumBanks > 1;
+            frameNumBox.Maximum = sprite.NumBanks - 1;
+            if (frameNumBox.Value > frameNumBox.Maximum)
+            {
+                frameNumBox.Value = 0;
+            }
+            int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
+            pictureBox.Image = imageMethods.GetTrainerClassSrite(palette, image, sprite, frame);
+        }
+
+        private void class_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerClassId = TrainerClass.ListNameToTrainerClassId(class_ClassListBox.SelectedItem.ToString());
+                UpdateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, trainerClassId);
+            }
         }
     }
 }

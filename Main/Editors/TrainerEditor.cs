@@ -10,7 +10,6 @@ namespace Main
     // TRAINER EDITOR
     public partial class Mainform : Form
     {
-
         public ushort[] poke1Moves;
         public ushort[] poke2Moves;
         public ushort[] poke3Moves;
@@ -213,7 +212,7 @@ namespace Main
         {
             trainer_RemoveBtn.Enabled = true;
             trainer_SpriteExportBtn.Enabled = true;
-            trainer_SpriteFrameNum.Enabled = true;
+            trainer_SpriteFrameNum.Enabled = false;
             trainer_SpriteImportBtn.Enabled = true;
             trainer_Copy_Btn.Enabled = true;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
@@ -410,7 +409,6 @@ namespace Main
             }
         }
 
-
         private void MoveBtn_Click(object sender, EventArgs e)
         {
             // Determine which button was clicked
@@ -490,8 +488,6 @@ namespace Main
             }
         }
 
-      
-
         private void poke3AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -548,7 +544,6 @@ namespace Main
             }
         }
 
-      
         private void poke4AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -604,8 +599,6 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
-
-      
 
         private void poke5AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -663,8 +656,6 @@ namespace Main
             }
         }
 
-      
-
         private void poke6AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -720,8 +711,6 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
-
-      
 
         private void PopualteTrainerUsages(List<TrainerUsage> trainerUsage)
         {
@@ -1304,12 +1293,24 @@ namespace Main
             }
         }
 
+        private void trainer_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerClassId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
+                UpdateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, trainerClassId);
+            }
+        }
+
         private void trainer_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
             {
                 EditedTrainerProperty(true);
+                int trainerClassId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
+                UpdateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, trainerClassId);
             }
+
             trainer_ViewClassBtn.Enabled = trainer_ClassListBox.SelectedIndex > -1;
         }
 
@@ -1600,6 +1601,7 @@ namespace Main
                             PopulatePartyData(MainEditorModel.SelectedTrainer.TrainerParty, MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);
                             PopulateTrainerBattleMessageTriggers(MainEditorModel.SelectedTrainer);
                             PopualteTrainerUsages(MainEditorModel.SelectedTrainer.TrainerUsages);
+                            PopulateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, MainEditorModel.SelectedTrainer.TrainerProperties.TrainerClassId);
                             EnableTrainerEditor();
                             EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
                         }
@@ -1797,7 +1799,7 @@ namespace Main
         private bool isUpdatingComboBox = false;
 
         private object previousSelection;
-      
+
         private void EnablePokemonComboBoxFiltering(ComboBox pokeComboBox, int partyIndex)
         {
             pokeComboBox.TextUpdate -= HandleTextUpdate;
@@ -1811,7 +1813,7 @@ namespace Main
             pokeComboBox.Leave += (s, e) => ResetComboBoxOnFocusLoss(pokeComboBox);
             pokeComboBox.SelectedIndexChanged += (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
         }
-      
+
         private int GetPokemonIdFromComboBoxText(string selectedItemText)
         {
             // Check if the input text is not null or empty
@@ -1898,7 +1900,6 @@ namespace Main
             isUpdatingComboBox = false;
         }
 
-
         private void PopulatePokemonComboBoxes()
         {
             for (int i = 0; i < pokeComboBoxes.Count; i++)
@@ -1910,7 +1911,7 @@ namespace Main
                 comboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
                 EnablePokemonComboBoxFiltering(comboBox, i);
 
-                comboBox.EndUpdate(); 
+                comboBox.EndUpdate();
             }
         }
 
@@ -1918,11 +1919,11 @@ namespace Main
         {
             if (!isUpdatingComboBox)
             {
-                isUpdatingComboBox = true; 
+                isUpdatingComboBox = true;
 
                 pokeComboBox.BeginUpdate();
                 pokeComboBox.Items.Clear();
-                pokeComboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray()); 
+                pokeComboBox.Items.AddRange(MainEditorModel.PokemonNames.ToArray());
                 pokeComboBox.EndUpdate();
 
                 isUpdatingComboBox = false;
@@ -1934,7 +1935,7 @@ namespace Main
             if (pokeComboBox.SelectedItem == null && !string.IsNullOrWhiteSpace(pokeComboBox.Text))
             {
                 ResetComboBoxItems(pokeComboBox);
-                pokeComboBox.SelectedItem = previousSelection; 
+                pokeComboBox.SelectedItem = previousSelection;
             }
         }
 

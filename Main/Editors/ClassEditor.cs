@@ -40,6 +40,7 @@ namespace Main
                         class_ViewTrainerBtn.Enabled = false;
                         PopulateTrainerClassData();
                         PopulateUsedByTrainers(SelectedClass.UsedByTrainers);
+                        PopulateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, SelectedClass.TrainerClassId);
                         EnableClassEditor();
                     }
                     InhibitClassChange = false;
