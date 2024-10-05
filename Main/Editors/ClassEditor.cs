@@ -275,7 +275,6 @@ namespace Main
             class_PropertyPasteBtn.Enabled = false;
             class_EyeContactDaySoundBtn.Enabled = false;
             class_EyeContactNightPlayBtn.Enabled = false;
-            class_EyeContactHelpBtn.Enabled = false;
             class_VSEffectsListBox.Enabled = false;
             class_InBattleMusicPlayBtn.Enabled = false;
         }
