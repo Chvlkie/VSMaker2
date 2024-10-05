@@ -1,6 +1,7 @@
 using Main.Forms;
 using Main.Models;
 using Microsoft.VisualBasic.FileIO;
+using System.Reflection;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
@@ -57,6 +58,9 @@ namespace Main
             RomLoaded = false;
             romName_Label.Text = "";
             MainEditorModel = new();
+            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3); 
+
+            Text = $"VS Maker 2 v {version}";
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;

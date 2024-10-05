@@ -6,6 +6,14 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<Title>VS Maker 2</Title>
+		<AssemblyName>VsMaker2</AssemblyName>
+		<Version>0.2.0</Version>
+		<AssemblyVersion>0.0.2.0</AssemblyVersion>
+		<FileVersion>0.0.2.0</FileVersion>
+		<VersionPrefix>0.2.0</VersionPrefix>
+		<VersionSuffix>beta</VersionSuffix>
 	</PropertyGroup>
 
 	<ItemGroup>

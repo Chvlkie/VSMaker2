@@ -211,9 +211,7 @@ namespace Main
         private void EnableTrainerEditor()
         {
             trainer_RemoveBtn.Enabled = true;
-            trainer_SpriteExportBtn.Enabled = true;
             trainer_SpriteFrameNum.Enabled = false;
-            trainer_SpriteImportBtn.Enabled = true;
             trainer_Copy_Btn.Enabled = true;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = true;
@@ -311,9 +309,7 @@ namespace Main
             trainer_FilterBox.Enabled = false;
             trainer_ClearFilterBtn.Enabled = false;
             trainer_TrainersListBox.Enabled = false;
-            trainer_SpriteExportBtn.Enabled = false;
             trainer_SpriteFrameNum.Enabled = false;
-            trainer_SpriteImportBtn.Enabled = false;
             trainer_Copy_Btn.Enabled = false;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = false;

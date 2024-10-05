@@ -725,11 +725,7 @@
 
         private Label trainer_Sprite_Label;
 
-        private Button trainer_SpriteExportBtn;
-
         private NumericUpDown trainer_SpriteFrameNum;
-
-        private Button trainer_SpriteImportBtn;
 
         private PictureBox trainer_SpritePicBox;
 
@@ -1013,8 +1009,6 @@
             trainer_Class_Lbl = new Label();
             trainer_Sprite_Frame_lbl = new Label();
             trainer_SpriteFrameNum = new NumericUpDown();
-            trainer_SpriteExportBtn = new Button();
-            trainer_SpriteImportBtn = new Button();
             trainer_SpritePicBox = new PictureBox();
             trainer_Sprite_Label = new Label();
             trainer_List_Buttons = new Panel();
@@ -3540,8 +3534,6 @@
             trainer_Class_Panel.Controls.Add(trainer_Class_Lbl);
             trainer_Class_Panel.Controls.Add(trainer_Sprite_Frame_lbl);
             trainer_Class_Panel.Controls.Add(trainer_SpriteFrameNum);
-            trainer_Class_Panel.Controls.Add(trainer_SpriteExportBtn);
-            trainer_Class_Panel.Controls.Add(trainer_SpriteImportBtn);
             trainer_Class_Panel.Controls.Add(trainer_SpritePicBox);
             trainer_Class_Panel.Controls.Add(trainer_Sprite_Label);
             trainer_Class_Panel.Location = new Point(212, 31);
@@ -3616,26 +3608,6 @@
             trainer_SpriteFrameNum.Size = new Size(43, 23);
             trainer_SpriteFrameNum.TabIndex = 5;
             trainer_SpriteFrameNum.ValueChanged += trainer_SpriteFrameNum_ValueChanged;
-            // 
-            // trainer_SpriteExportBtn
-            // 
-            trainer_SpriteExportBtn.Enabled = false;
-            trainer_SpriteExportBtn.Location = new Point(109, 94);
-            trainer_SpriteExportBtn.Name = "trainer_SpriteExportBtn";
-            trainer_SpriteExportBtn.Size = new Size(88, 23);
-            trainer_SpriteExportBtn.TabIndex = 4;
-            trainer_SpriteExportBtn.Text = "Export";
-            trainer_SpriteExportBtn.UseVisualStyleBackColor = true;
-            // 
-            // trainer_SpriteImportBtn
-            // 
-            trainer_SpriteImportBtn.Enabled = false;
-            trainer_SpriteImportBtn.Location = new Point(109, 65);
-            trainer_SpriteImportBtn.Name = "trainer_SpriteImportBtn";
-            trainer_SpriteImportBtn.Size = new Size(88, 23);
-            trainer_SpriteImportBtn.TabIndex = 3;
-            trainer_SpriteImportBtn.Text = "Import";
-            trainer_SpriteImportBtn.UseVisualStyleBackColor = true;
             // 
             // trainer_SpritePicBox
             // 
