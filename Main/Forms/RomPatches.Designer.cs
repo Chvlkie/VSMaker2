@@ -47,9 +47,9 @@
             // 
             // patchArm9Btn
             // 
-            patchArm9Btn.Location = new Point(277, 24);
+            patchArm9Btn.Location = new Point(277, 21);
             patchArm9Btn.Name = "patchArm9Btn";
-            patchArm9Btn.Size = new Size(108, 44);
+            patchArm9Btn.Size = new Size(108, 50);
             patchArm9Btn.TabIndex = 0;
             patchArm9Btn.Text = "Expand ARM9";
             patchArm9Btn.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@
             // 
             // label1
             // 
-            label1.Location = new Point(12, 24);
+            label1.Location = new Point(12, 42);
             label1.Name = "label1";
             label1.Size = new Size(246, 81);
             label1.TabIndex = 1;
@@ -67,7 +67,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label2.Location = new Point(12, 9);
+            label2.Location = new Point(12, 21);
             label2.Name = "label2";
             label2.Size = new Size(99, 15);
             label2.TabIndex = 2;
@@ -77,7 +77,7 @@
             // 
             arm9PatchCheckBox.AutoSize = true;
             arm9PatchCheckBox.Enabled = false;
-            arm9PatchCheckBox.Location = new Point(401, 38);
+            arm9PatchCheckBox.Location = new Point(277, 77);
             arm9PatchCheckBox.Name = "arm9PatchCheckBox";
             arm9PatchCheckBox.Size = new Size(67, 19);
             arm9PatchCheckBox.TabIndex = 3;
@@ -88,7 +88,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label3.Location = new Point(12, 125);
+            label3.Location = new Point(12, 137);
             label3.Name = "label3";
             label3.Size = new Size(130, 15);
             label3.TabIndex = 4;
@@ -96,17 +96,17 @@
             // 
             // label4
             // 
-            label4.Location = new Point(12, 140);
+            label4.Location = new Point(12, 152);
             label4.Name = "label4";
-            label4.Size = new Size(246, 66);
+            label4.Size = new Size(246, 59);
             label4.TabIndex = 5;
             label4.Text = "This patch expands the character limit for Trainer Names from 10 to 16.";
             // 
             // btn_TrainerName
             // 
-            btn_TrainerName.Location = new Point(277, 140);
+            btn_TrainerName.Location = new Point(277, 137);
             btn_TrainerName.Name = "btn_TrainerName";
-            btn_TrainerName.Size = new Size(108, 44);
+            btn_TrainerName.Size = new Size(108, 45);
             btn_TrainerName.TabIndex = 6;
             btn_TrainerName.Text = "Patch";
             btn_TrainerName.UseVisualStyleBackColor = true;
@@ -116,7 +116,7 @@
             // 
             checkBox_TrainerNames.AutoSize = true;
             checkBox_TrainerNames.Enabled = false;
-            checkBox_TrainerNames.Location = new Point(401, 154);
+            checkBox_TrainerNames.Location = new Point(277, 188);
             checkBox_TrainerNames.Name = "checkBox_TrainerNames";
             checkBox_TrainerNames.Size = new Size(67, 19);
             checkBox_TrainerNames.TabIndex = 7;
@@ -127,7 +127,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label5.Location = new Point(12, 206);
+            label5.Location = new Point(12, 235);
             label5.Name = "label5";
             label5.Size = new Size(130, 15);
             label5.TabIndex = 8;
@@ -135,17 +135,17 @@
             // 
             // label6
             // 
-            label6.Location = new Point(12, 221);
+            label6.Location = new Point(12, 256);
             label6.Name = "label6";
             label6.Size = new Size(246, 158);
             label6.TabIndex = 9;
             label6.Text = resources.GetString("label6.Text");
             // 
-            // btn_expandPrizeMoney
+            // btn_expandTrainerClass
             // 
-            btn_expandTrainerClass.Location = new Point(277, 221);
-            btn_expandTrainerClass.Name = "btn_expandPrizeMoney";
-            btn_expandTrainerClass.Size = new Size(108, 44);
+            btn_expandTrainerClass.Location = new Point(277, 235);
+            btn_expandTrainerClass.Name = "btn_expandTrainerClass";
+            btn_expandTrainerClass.Size = new Size(108, 45);
             btn_expandTrainerClass.TabIndex = 10;
             btn_expandTrainerClass.Text = "Patch";
             btn_expandTrainerClass.UseVisualStyleBackColor = true;
@@ -155,7 +155,7 @@
             // 
             checkBox2.AutoSize = true;
             checkBox2.Enabled = false;
-            checkBox2.Location = new Point(401, 235);
+            checkBox2.Location = new Point(277, 286);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(67, 19);
             checkBox2.TabIndex = 11;
@@ -179,19 +179,19 @@
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(952, 404);
+            panel1.Size = new Size(406, 423);
             panel1.TabIndex = 20;
             // 
             // RomPatches
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 404);
+            ClientSize = new Size(406, 423);
             Controls.Add(panel1);
             MaximizeBox = false;
-            MaximumSize = new Size(968, 443);
+            MaximumSize = new Size(422, 462);
             MinimizeBox = false;
-            MinimumSize = new Size(968, 443);
+            MinimumSize = new Size(422, 462);
             Name = "RomPatches";
             StartPosition = FormStartPosition.WindowsDefaultBounds;
             Text = "ROM Patches";

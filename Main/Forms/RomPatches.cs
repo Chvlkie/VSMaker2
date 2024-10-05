@@ -36,6 +36,7 @@ namespace Main.Forms
                 patchArm9Btn.Enabled = !RomFile.Arm9Expanded;
                 arm9PatchCheckBox.Checked = RomFile.Arm9Expanded;
                 btn_expandTrainerClass.Enabled = RomFile.Arm9Expanded && !RomFile.PrizeMoneyExpanded && !RomFile.EyeContactExpanded && !RomFile.ClassGenderExpanded;
+                checkBox2.Checked = !btn_expandTrainerClass.Enabled;
             }
         }
 
