@@ -1238,17 +1238,21 @@ namespace Main
 
         private void UpdateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
         {
-            var palette = imageMethods.GetTrainerClassPaletteBase(trainerClassId);
-            var image = imageMethods.GetTrainerClassImageBase(trainerClassId);
-            var sprite = imageMethods.GetTrainerClassSpriteBase(trainerClassId);
-            frameNumBox.Enabled = sprite.NumBanks > 1;
-            frameNumBox.Maximum = sprite.NumBanks - 1;
-            if (frameNumBox.Value > frameNumBox.Maximum)
+            if (RomFile.GameFamily != GameFamily.DiamondPearl)
             {
-                frameNumBox.Value = 0;
+
+                var palette = imageMethods.GetTrainerClassPaletteBase(trainerClassId);
+                var image = imageMethods.GetTrainerClassImageBase(trainerClassId);
+                var sprite = imageMethods.GetTrainerClassSpriteBase(trainerClassId);
+                frameNumBox.Enabled = sprite.NumBanks > 1;
+                frameNumBox.Maximum = sprite.NumBanks - 1;
+                if (frameNumBox.Value > frameNumBox.Maximum)
+                {
+                    frameNumBox.Value = 0;
+                }
+                int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
+                pictureBox.Image = imageMethods.GetTrainerClassSrite(palette, image, sprite, frame);
             }
-            int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
-            pictureBox.Image = imageMethods.GetTrainerClassSrite(palette, image, sprite, frame);
         }
 
         private void class_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
@@ -1307,7 +1311,7 @@ namespace Main
             UnfilteredClasses.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
             class_ClassListBox.Items.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
             RomFile.TotalNumberOfTrainerClasses++;
-          
+
             IsLoadingData = false;
             class_ClassListBox.SelectedIndex = newTrainerClassId - 2;
             EditedTrainerClassName(true);

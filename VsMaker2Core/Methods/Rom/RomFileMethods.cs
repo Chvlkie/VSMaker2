@@ -739,52 +739,48 @@ namespace VsMaker2Core.Methods
             {
                 GameFamily.DiamondPearl => new Dictionary<NarcDirectory, string>
                 {
-                    [NarcDirectory.monIcons] = Path.Combine("data", "poketool", "icongra", "poke_icon.narc"),
-                    [NarcDirectory.moveData] = Path.Combine("data", "poketool", "waza", "waza_tbl.narc"),
-                    [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl
-                        ? Path.Combine("data", "poketool", "personal_pearl", "personal.narc")
-                        : Path.Combine("data", "poketool", "personal", "personal.narc"),
-                    [NarcDirectory.scripts] = gameLanguage == GameLanguage.Japanese
-                        ? Path.Combine("data", "fielddata", "script", "scr_seq_release.narc")
-                        : Path.Combine("data", "fielddata", "script", "scr_seq.narc"),
-                    [NarcDirectory.synthOverlay] = Path.Combine("data", "data", "weather_sys.narc"),
-                    [NarcDirectory.textArchives] = Path.Combine("data", "msgdata", "msg.narc"),
-                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "poketool", "trgra", "trfgra.narc"),
-                    [NarcDirectory.trainerParty] = Path.Combine("data", "poketool", "trainer", "trpoke.narc"),
-                    [NarcDirectory.trainerProperties] = Path.Combine("data", "poketool", "trainer", "trdata.narc"),
-                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "poketool", "trmsg", "trtblofs.narc"),
-                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "poketool", "trmsg", "trtbl.narc")
+                    [NarcDirectory.monIcons] = @"data\poketool\icongra\poke_icon.narc",
+                    [NarcDirectory.moveData] = @"data\poketool\waza\waza_tbl.narc",
+                    [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
+                    [NarcDirectory.scripts] =  @"data\fielddata\script\scr_seq_release.narc",
+                    [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
+                    [NarcDirectory.textArchives] = @"data\msgdata\msg.narc",
+                    [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
+                    [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
+                    [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
+                    [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
+                    [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
                 },
                 GameFamily.Platinum => new Dictionary<NarcDirectory, string>
                 {
-                    [NarcDirectory.monIcons] = Path.Combine("data", "poketool", "icongra", "pl_poke_icon.narc"),
-                    [NarcDirectory.moveData] = Path.Combine("data", "poketool", "waza", "pl_waza_tbl.narc"),
-                    [NarcDirectory.personalPokeData] = Path.Combine("data", "poketool", "personal", "pl_personal.narc"),
-                    [NarcDirectory.scripts] = Path.Combine("data", "fielddata", "script", "scr_seq.narc"),
-                    [NarcDirectory.synthOverlay] = Path.Combine("data", "data", "weather_sys.narc"),
-                    [NarcDirectory.textArchives] = Path.Combine("data", "msgdata", $"{gameVersion.ToString().Substring(0, 2).ToLower()}_msg.narc"),
-                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "poketool", "trgra", "trfgra.narc"),
-                    [NarcDirectory.trainerParty] = Path.Combine("data", "poketool", "trainer", "trpoke.narc"),
-                    [NarcDirectory.trainerProperties] = Path.Combine("data", "poketool", "trainer", "trdata.narc"),
-                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "poketool", "trmsg", "trtblofs.narc"),
-                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "poketool", "trmsg", "trtbl.narc")
+                    [NarcDirectory.monIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
+                    [NarcDirectory.moveData] = @"data\poketool\waza\pl_waza_tbl.narc",
+                    [NarcDirectory.personalPokeData] = @"data\poketool\personal\pl_personal.narc",
+                    [NarcDirectory.scripts] = @"data\fielddata\script\scr_seq.narc",
+                    [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
+                    [NarcDirectory.textArchives] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
+                    [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
+                    [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
+                    [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
+                    [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
+                    [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
                 },
                 GameFamily.HeartGoldSoulSilver or GameFamily.HgEngine => new Dictionary<NarcDirectory, string>
                 {
-                    [NarcDirectory.battleStagePokeData] = Path.Combine("data", "a", "2", "0", "4"),
-                    [NarcDirectory.battleTowerPokeData] = Path.Combine("data", "a", "2", "0", "3"),
-                    [NarcDirectory.battleTowerTrainerData] = Path.Combine("data", "a", "2", "0", "2"),
-                    [NarcDirectory.monIcons] = Path.Combine("data", "a", "0", "2", "0"),
-                    [NarcDirectory.moveData] = Path.Combine("data", "a", "0", "1", "1"),
-                    [NarcDirectory.personalPokeData] = Path.Combine("data", "a", "0", "0", "2"),
-                    [NarcDirectory.scripts] = Path.Combine("data", "a", "0", "1", "2"),
-                    [NarcDirectory.synthOverlay] = Path.Combine("data", "a", "0", "2", "8"),
-                    [NarcDirectory.textArchives] = Path.Combine("data", "a", "0", "2", "7"),
-                    [NarcDirectory.trainerGraphics] = Path.Combine("data", "a", "0", "5", "8"),
-                    [NarcDirectory.trainerParty] = Path.Combine("data", "a", "0", "5", "6"),
-                    [NarcDirectory.trainerProperties] = Path.Combine("data", "a", "0", "5", "5"),
-                    [NarcDirectory.trainerTextOffset] = Path.Combine("data", "a", "1", "3", "1"),
-                    [NarcDirectory.trainerTextTable] = Path.Combine("data", "a", "0", "5", "7")
+                    [NarcDirectory.battleStagePokeData] = @"data\a\2\0\4",
+                    [NarcDirectory.battleTowerPokeData] = @"data\a\2\0\3",
+                    [NarcDirectory.battleTowerTrainerData] = @"data\a\2\0\2",
+                    [NarcDirectory.monIcons] = @"data\a\0\2\0",
+                    [NarcDirectory.moveData] = @"data\a\0\1\1",
+                    [NarcDirectory.personalPokeData] = @"data\a\0\0\2",
+                    [NarcDirectory.scripts] = @"data\a\0\1\2",
+                    [NarcDirectory.synthOverlay] = @"data\a\0\2\8",
+                    [NarcDirectory.textArchives] = @"data\a\0\2\7",
+                    [NarcDirectory.trainerGraphics] = @"data\a\0\5\8",
+                    [NarcDirectory.trainerParty] = @"data\a\0\5\6",
+                    [NarcDirectory.trainerProperties] = @"data\a\0\5\5",
+                    [NarcDirectory.trainerTextOffset] = @"data\a\1\3\1",
+                    [NarcDirectory.trainerTextTable] = @"data\a\0\5\7",
                 },
                 _ => throw new ArgumentException($"Unrecognized GameFamily: {gameFamily}")
             };
