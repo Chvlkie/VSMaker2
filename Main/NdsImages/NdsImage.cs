@@ -7,8 +7,7 @@ namespace VsMaker2Core.Methods.NdsImages
 {
     public class NdsImage : INdsImage
     {
-
-      
+        public static string TrainerGraphicsPath = Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
 
         public NdsImage()
         { }
@@ -33,7 +32,7 @@ namespace VsMaker2Core.Methods.NdsImages
 
             int nclrId = baseIndex + 1;
             string nclrFileName = nclrId.ToString("D4");
-            string nclrFilePath = Path.Combine(RomFile.TrainerGraphicsPath, nclrFileName);
+            string nclrFilePath = Path.Combine(TrainerGraphicsPath, nclrFileName);
 
             return new NCLR(nclrFilePath, nclrId, nclrFileName);
         }
@@ -43,7 +42,7 @@ namespace VsMaker2Core.Methods.NdsImages
             int baseIndex = trainerClassId * 5;
             int ncgrId = baseIndex;
             string ncgrFileName = ncgrId.ToString("D4");
-            string ncgrFilePath = Path.Combine(RomFile.TrainerGraphicsPath, ncgrFileName);
+            string ncgrFilePath = Path.Combine(TrainerGraphicsPath, ncgrFileName);
             return new NCGR(ncgrFilePath, ncgrId, ncgrFileName);
         }
 
@@ -53,7 +52,7 @@ namespace VsMaker2Core.Methods.NdsImages
 
             int ncerId = baseIndex + 2;
             string ncerFileName = ncerId.ToString("D4");
-            string ncerFilePath = Path.Combine(RomFile.TrainerGraphicsPath, ncerFileName);
+            string ncerFilePath = Path.Combine(TrainerGraphicsPath, ncerFileName);
 
             return new NCER(ncerFilePath, ncerId, ncerFileName);
         }

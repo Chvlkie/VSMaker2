@@ -12,34 +12,31 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace Ekona.Images
 {
     public partial class PaletteControl : UserControl
     {
-        IPluginHost pluginHost;
-        PaletteBase palette;
-        string[] translation;
+        private IPluginHost pluginHost;
+        private PaletteBase palette;
+        private string[] translation;
 
         public PaletteControl()
         {
             InitializeComponent();
         }
+
         public PaletteControl(IPluginHost pluginHost)
         {
             InitializeComponent();
@@ -51,6 +48,7 @@ namespace Ekona.Images
             ReadLanguage();
             Update_Info();
         }
+
         public PaletteControl(IPluginHost pluginHost, PaletteBase palette)
         {
             InitializeComponent();
@@ -72,7 +70,6 @@ namespace Ekona.Images
             numericStartByte.Maximum = palette.Original.Length - 1;
             comboDepth.SelectedIndex = (palette.Depth == ColorFormat.colors16 ? 0 : 1);
 
-
             if (palette.Depth == ColorFormat.colors16)
                 numFillColors.Value = 16;
             else
@@ -80,6 +77,7 @@ namespace Ekona.Images
 
             checkDuplicated.Checked = palette.Has_DuplicatedColors(0);
         }
+
         private void ReadLanguage()
         {
             try
@@ -112,15 +110,17 @@ namespace Ekona.Images
             picPalette.Image = palette.Get_Image((int)numericPalette.Value);
             checkDuplicated.Checked = palette.Has_DuplicatedColors((int)numericPalette.Value);
         }
+
         private void numericStartByte_ValueChanged(object sender, EventArgs e)
         {
             palette.StartByte = (int)numericStartByte.Value;
             picPalette.Image = palette.Get_Image((int)numericPalette.Value);
-            
+
             numericPalette.Maximum = palette.NumberOfPalettes - 1;
             label3.Text = translation[0] + (palette.NumberOfPalettes - 1).ToString();
             checkDuplicated.Checked = palette.Has_DuplicatedColors((int)numericPalette.Value);
         }
+
         private void comboDepth_SelectedIndexChanged(object sender, EventArgs e)
         {
             palette.Depth = (comboDepth.SelectedIndex == 0 ? ColorFormat.colors16 : ColorFormat.colors256);
@@ -130,7 +130,6 @@ namespace Ekona.Images
             numericPalette.Maximum = palette.NumberOfPalettes - 1;
             label3.Text = translation[0] + (palette.NumberOfPalettes - 1).ToString();
 
-            
             if (palette.Depth == ColorFormat.colors16)
                 numFillColors.Value = 16;
             else
@@ -146,6 +145,7 @@ namespace Ekona.Images
                 lblRGB.Text = "RGB: " + color.R + ", " + color.G + ", " + color.B;
             }
         }
+
         private void btnShow_Click(object sender, EventArgs e)
         {
             Form win = new Form();
@@ -206,7 +206,7 @@ namespace Ekona.Images
             else if (o.FilterIndex == 1 || o.FilterIndex == 2)
             {
                 Formats.PaletteWin palwin = new Formats.PaletteWin(palette.Palette[(int)numericPalette.Value]);
-                if (o.FilterIndex == 1){ palwin.Gimp_Error = true; }
+                if (o.FilterIndex == 1) { palwin.Gimp_Error = true; }
                 palwin.Write(o.FileName);
             }
             else if (o.FilterIndex == 4)
@@ -218,9 +218,10 @@ namespace Ekona.Images
             o.Dispose();
             o = null;
         }
+
         private void btnImport_Click(object sender, EventArgs e)
         {
-			OpenFileDialog o = new OpenFileDialog();
+            OpenFileDialog o = new OpenFileDialog();
             o.CheckFileExists = true;
             o.Filter = "All supported formats|*.pal;*.aco;*.png;*.bmp;*.jpg;*.jpeg;*.tif;*.tiff;*.gif;*.ico;*.icon|" +
                 "Windows Palette (*.pal)|*.pal|" +
@@ -230,14 +231,15 @@ namespace Ekona.Images
                 return;
 
             string ext = Path.GetExtension(o.FileName).ToLower();
-			if (string.IsNullOrEmpty(ext) || ext.Length == 0) {
-				MessageBox.Show("File without extension... Aborting");
-				return;
-			}
+            if (string.IsNullOrEmpty(ext) || ext.Length == 0)
+            {
+                MessageBox.Show("File without extension... Aborting");
+                return;
+            }
 
-			if (ext.Contains("."))
-				ext = ext.Substring(ext.LastIndexOf(".") + 1);
-			Console.WriteLine("File extension:" + ext);
+            if (ext.Contains("."))
+                ext = ext.Substring(ext.LastIndexOf(".") + 1);
+            Console.WriteLine("File extension:" + ext);
             PaletteBase newpal;
 
             if (ext == "pal")
@@ -251,7 +253,7 @@ namespace Ekona.Images
                 Actions.Indexed_Image((Bitmap)Image.FromFile(o.FileName), palette.Depth, out tiles, out newcol);
                 newpal = new RawPalette(newcol, palette.CanEdit, palette.Depth);
             }
-            
+
             if (newpal != null)
                 palette.Set_Palette(newpal);
 
@@ -261,6 +263,7 @@ namespace Ekona.Images
             o.Dispose();
             o = null;
         }
+
         private void Write_File()
         {
             if (palette.ID > 0)

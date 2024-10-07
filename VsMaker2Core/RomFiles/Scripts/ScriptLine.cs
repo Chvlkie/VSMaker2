@@ -5,7 +5,8 @@
         public ushort? ScriptCommandId { get; set; }
         public List<byte[]> Parameters { get; set; }
 
-        public ScriptLine() { }
+        public ScriptLine()
+        { }
 
         public ScriptLine(ushort scriptCommandId, List<byte[]> parameters)
         {
@@ -14,6 +15,7 @@
                 case null:
                     ScriptCommandId = null;
                     break;
+
                 default:
                     ScriptCommandId = scriptCommandId;
                     Parameters = parameters;

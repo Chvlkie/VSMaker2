@@ -1075,8 +1075,6 @@ namespace Main
             }
         }
 
-      
-
         private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
         {
             UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);

@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 
 namespace Images
 {
     public class NCER : SpriteBase
     {
-        sNCER ncer;
+        private sNCER ncer;
 
-        public NCER(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NCER(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string fileIn)
         {
@@ -58,7 +59,7 @@ namespace Images
                 }
             }
 
-            #endregion
+            #endregion Read partitions data
 
             //Console.WriteLine(xml.Element("S0B").Value + ": 0x{0:X}", ncer.cebk.block_size);
             //Console.WriteLine(xml.Element("S0C").Value + ": 0x{0:X}", ncer.cebk.unknown1);
@@ -68,6 +69,7 @@ namespace Images
             br.BaseStream.Position = ncer.header.header_size + ncer.cebk.bank_data_offset + 8;
 
             #region Read banks
+
             for (int i = 0; i < ncer.cebk.nBanks; i++)
             {
                 ncer.cebk.banks[i].nCells = br.ReadUInt16();
@@ -98,6 +100,7 @@ namespace Images
                 ncer.cebk.banks[i].oams = new OAM[ncer.cebk.banks[i].nCells];
 
                 #region Read cells
+
                 for (int j = 0; j < ncer.cebk.banks[i].nCells; j++)
                 {
                     ushort obj0 = br.ReadUInt16();
@@ -127,7 +130,8 @@ namespace Images
                     //Console.WriteLine("    " + xml.Element("S23").Value + ": {0}", ncer.cebk.banks[i].cells[j].obj2.tileOffset.ToString());
                     //Console.WriteLine("    " + "Object priority" + ": {0}", ncer.cebk.banks[i].cells[j].obj2.priority.ToString());
                 }
-                #endregion
+
+                #endregion Read cells
 
                 // Sort the oam using the priority value
                 List<OAM> oams = new List<OAM>();
@@ -139,9 +143,10 @@ namespace Images
                 //Console.WriteLine("--------------");
             }
 
-            #endregion
+            #endregion Read banks
 
             #region LABL
+
             br.BaseStream.Position = ncer.header.header_size + ncer.cebk.section_size;
             List<uint> offsets = new List<uint>();
             List<String> names = new List<string>();
@@ -183,16 +188,19 @@ namespace Images
                     ncer.labl.names[i] = names[i];
                 else
                     ncer.labl.names[i] = i.ToString();
-            #endregion
+
+            #endregion LABL
 
             #region UEXT
+
             ncer.uext.id = br.ReadChars(4);
             if (new String(ncer.uext.id) != "TXEU")
                 goto Fin;
 
             ncer.uext.section_size = br.ReadUInt32();
             ncer.uext.unknown = br.ReadUInt32();
-            #endregion
+
+        #endregion UEXT
 
         Fin:
             br.Close();
@@ -201,7 +209,7 @@ namespace Images
             Set_Banks(Convert_Banks(), ncer.cebk.block_size, true);
         }
 
-        OAM Get_LastOAM(sNCER.Bank bank)
+        private OAM Get_LastOAM(sNCER.Bank bank)
         {
             for (int i = 0; i < bank.oams.Length; i++)
                 if (bank.oams[i].num_cell == bank.oams.Length - 1)
@@ -210,7 +218,7 @@ namespace Images
             return new OAM();
         }
 
-        int Comparision_Cell(OAM c1, OAM c2)
+        private int Comparision_Cell(OAM c1, OAM c2)
         {
             if (c1.obj2.priority < c2.obj2.priority)
                 return 1;
@@ -227,7 +235,7 @@ namespace Images
             }
         }
 
-        int Comparision_Cell2(OAM c1, OAM c2)
+        private int Comparision_Cell2(OAM c1, OAM c2)
         {
             if (c1.num_cell > c2.num_cell)
                 return 1;
@@ -236,7 +244,7 @@ namespace Images
             else return 0;
         }
 
-        Bank[] Convert_Banks()
+        private Bank[] Convert_Banks()
         {
             Bank[] banks = new Bank[ncer.cebk.banks.Length];
             for (int i = 0; i < banks.Length; i++)
@@ -345,7 +353,7 @@ namespace Images
             bw.Close();
         }
 
-        void Update_Struct()
+        private void Update_Struct()
         {
             // Update OAMs and LABL section
             uint offset_cells = 0;
@@ -370,7 +378,7 @@ namespace Images
                 {
                     ncer.cebk.banks[i].partition_offset = Banks[i].data_offset;
                     ncer.cebk.banks[i].partition_size = Banks[i].data_size;
-                    if (ncer.cebk.banks[i].partition_size > max_partition_size){ max_partition_size = ncer.cebk.banks[i].partition_size; }
+                    if (ncer.cebk.banks[i].partition_size > max_partition_size) { max_partition_size = ncer.cebk.banks[i].partition_size; }
                 }
                 else
                 {
@@ -385,7 +393,7 @@ namespace Images
             ncer.cebk.section_size = 0x20 + size;
             if (ncer.cebk.section_size % 4 != 0)
                 ncer.cebk.section_size += (4 - (ncer.cebk.section_size % 4));
-            
+
             // Update partition data info
             if (ncer.cebk.partition_data_offset != 0)
             {
@@ -425,6 +433,7 @@ namespace Images
                 public UInt32 max_partition_size;
                 public UInt32 first_partition_data_offset;
             }
+
             public struct Bank
             {
                 public UInt16 nCells;
@@ -436,6 +445,7 @@ namespace Images
 
                 // Extended mode
                 public short xMax;
+
                 public short yMax;
                 public short xMin;
                 public short yMin;
@@ -448,6 +458,7 @@ namespace Images
                 public UInt32[] offset;
                 public string[] names;
             }
+
             public struct UEXT
             {
                 public char[] id;

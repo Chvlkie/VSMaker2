@@ -12,36 +12,38 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
+using Ekona;
+using Ekona.Images;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Ekona;
-using Ekona.Images;
 
 namespace Images
 {
     public partial class AnimationControl : UserControl
     {
-        IPluginHost pluginHost;
-        PaletteBase palette;
-        ImageBase image;
-        SpriteBase sprite;
-        NANR ani;
+        private IPluginHost pluginHost;
+        private PaletteBase palette;
+        private ImageBase image;
+        private SpriteBase sprite;
+        private NANR ani;
 
-        Bitmap[] bitAni;
-        bool isAni;         // If there are animations
-        int imgShow;
+        private Bitmap[] bitAni;
+        private bool isAni;         // If there are animations
+        private int imgShow;
 
         public AnimationControl()
         {
             InitializeComponent();
             Read_Language();
         }
+
         public AnimationControl(Bitmap[] anis, int interval)
         {
             InitializeComponent();
@@ -68,6 +70,7 @@ namespace Images
             tempo.Enabled = true;
             tempo.Start();
         }
+
         public AnimationControl(IPluginHost pluginHost, NANR ani)
         {
             InitializeComponent();
@@ -99,7 +102,6 @@ namespace Images
                 checkTransparencia.Enabled = false;
             }
 
-
             for (int i = 0; i < ani.Names.Length; i++)
                 comboAni.Items.Add(ani.Names[i]);
             if (isAni)
@@ -129,6 +131,7 @@ namespace Images
             //listProp.Items[4].SubItems.Add("0x" + String.Format("{0:X}", ani.Struct.abnk.padding));
             ShowInfo(0);
         }
+
         private void ShowInfo(int bnk)
         {
             //listProp.Items[6].SubItems[1].Text = bnk.ToString();
@@ -139,6 +142,7 @@ namespace Images
             //listProp.Items[11].SubItems[1].Text = "0x" + String.Format("{0:X}", ani.Struct.abnk.anis[bnk].unknown3);
             ShowInfo(0, 0);
         }
+
         private void ShowInfo(int bnk, int frame)
         {
             //listProp.Items[13].SubItems[1].Text = frame.ToString();
@@ -167,6 +171,7 @@ namespace Images
             Get_Ani();
             aniBox.Image = bitAni[imgShow];
         }
+
         private void comboAni_SelectedIndexChanged(object sender, EventArgs e)
         {
             Get_Ani();
@@ -174,18 +179,21 @@ namespace Images
             aniBox.Image = bitAni[imgShow];
             ShowInfo(comboAni.SelectedIndex);
         }
+
         private void btnStop_Click(object sender, EventArgs e)
         {
             tempo.Stop();
             btnPlay.Enabled = true;
             btnStop.Enabled = false;
         }
+
         private void btnPlay_Click(object sender, EventArgs e)
         {
             tempo.Start();
             btnPlay.Enabled = false;
             btnStop.Enabled = true;
         }
+
         private void tempo_Tick(object sender, EventArgs e)
         {
             imgShow += 1;
@@ -193,6 +201,7 @@ namespace Images
                 imgShow = 0;
             aniBox.Image = bitAni[imgShow];
         }
+
         private void btnNext_Click(object sender, EventArgs e)
         {
             imgShow += 1;
@@ -202,6 +211,7 @@ namespace Images
 
             ShowInfo(comboAni.SelectedIndex, imgShow);
         }
+
         private void btnPrevious_Click(object sender, EventArgs e)
         {
             imgShow -= 1;
@@ -211,11 +221,13 @@ namespace Images
 
             ShowInfo(comboAni.SelectedIndex, imgShow);
         }
+
         private void txtTime_TextChanged(object sender, EventArgs e)
         {
             if (Convert.ToInt32(txtTime.Text) != 0)
                 tempo.Interval = Convert.ToInt32(txtTime.Text);
         }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             SaveFileDialog o = new SaveFileDialog();

@@ -12,18 +12,15 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -31,18 +28,19 @@ namespace Ekona.Images.Dialogs
 {
     public partial class OAMEditor : Form
     {
-        Bank bank;
-        bool stop;
+        private Bank bank;
+        private bool stop;
 
-        bool preview;
-        SpriteBase sprite;
-        ImageBase image;
-        PaletteBase palette;
+        private bool preview;
+        private SpriteBase sprite;
+        private ImageBase image;
+        private PaletteBase palette;
 
         public OAMEditor()
         {
             InitializeComponent();
         }
+
         public OAMEditor(string langxml, Bank bank)
         {
             InitializeComponent();
@@ -55,6 +53,7 @@ namespace Ekona.Images.Dialogs
 
             Read_Language(langxml);
         }
+
         public OAMEditor(string langxml, Bank bank, SpriteBase sprite, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -71,6 +70,7 @@ namespace Ekona.Images.Dialogs
 
             Read_Language(langxml);
         }
+
         public OAMEditor(XElement langxml, Bank bank, SpriteBase sprite, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -87,6 +87,7 @@ namespace Ekona.Images.Dialogs
 
             Read_Language(langxml);
         }
+
         private void OAMEditor_Load(object sender, EventArgs e)
         {
             Read_Info(0);
@@ -103,6 +104,7 @@ namespace Ekona.Images.Dialogs
             }
             catch { throw new Exception("There was an error reading the XML file of language."); }
         }
+
         private void Read_Language(XElement xml)
         {
             try
@@ -206,28 +208,31 @@ namespace Ekona.Images.Dialogs
             switch (oam.obj0.shape)
             {
                 case 0:
-                    if (oam.obj1.size == 0){ comboSize.SelectedIndex = 0; }
-                    else if (oam.obj1.size == 1){ comboSize.SelectedIndex = 1; }
-                    else if (oam.obj1.size == 2){ comboSize.SelectedIndex = 2; }
-                    else if (oam.obj1.size == 3){ comboSize.SelectedIndex = 3; }
+                    if (oam.obj1.size == 0) { comboSize.SelectedIndex = 0; }
+                    else if (oam.obj1.size == 1) { comboSize.SelectedIndex = 1; }
+                    else if (oam.obj1.size == 2) { comboSize.SelectedIndex = 2; }
+                    else if (oam.obj1.size == 3) { comboSize.SelectedIndex = 3; }
                     break;
+
                 case 1:
-                    if (oam.obj1.size == 0){ comboSize.SelectedIndex = 4; }
-                    else if (oam.obj1.size == 1){ comboSize.SelectedIndex = 5; }
-                    else if (oam.obj1.size == 2){ comboSize.SelectedIndex = 6; }
-                    else if (oam.obj1.size == 3){ comboSize.SelectedIndex = 7; }
+                    if (oam.obj1.size == 0) { comboSize.SelectedIndex = 4; }
+                    else if (oam.obj1.size == 1) { comboSize.SelectedIndex = 5; }
+                    else if (oam.obj1.size == 2) { comboSize.SelectedIndex = 6; }
+                    else if (oam.obj1.size == 3) { comboSize.SelectedIndex = 7; }
                     break;
+
                 case 2:
-                    if (oam.obj1.size == 0){ comboSize.SelectedIndex = 8; }
-                    else if (oam.obj1.size == 1){ comboSize.SelectedIndex = 9; }
-                    else if (oam.obj1.size == 2){ comboSize.SelectedIndex = 10; }
-                    else if (oam.obj1.size == 3){ comboSize.SelectedIndex = 11; }
+                    if (oam.obj1.size == 0) { comboSize.SelectedIndex = 8; }
+                    else if (oam.obj1.size == 1) { comboSize.SelectedIndex = 9; }
+                    else if (oam.obj1.size == 2) { comboSize.SelectedIndex = 10; }
+                    else if (oam.obj1.size == 3) { comboSize.SelectedIndex = 11; }
                     break;
             }
 
             numNumOAM.Value = oam.num_cell;
             stop = false;
         }
+
         private void Update_Image()
         {
             stop = true;
@@ -301,6 +306,7 @@ namespace Ekona.Images.Dialogs
 
             Update_Image();
         }
+
         private void Change_OBJ1(object sender, EventArgs e)
         {
             if (stop)
@@ -313,6 +319,7 @@ namespace Ekona.Images.Dialogs
             bank.oams[(int)numOAM.Value].obj1.size = (byte)numSize.Value;
             Update_Image();
         }
+
         private void Change_OBJ2(object sender, EventArgs e)
         {
             if (stop)
@@ -324,10 +331,12 @@ namespace Ekona.Images.Dialogs
 
             Update_Image();
         }
+
         private void Change_Preview(object sender, EventArgs e)
         {
             Update_Image();
         }
+
         private void numNumOAM_ValueChanged(object sender, EventArgs e)
         {
             if (stop)
@@ -359,46 +368,57 @@ namespace Ekona.Images.Dialogs
                     bank.oams[(int)numOAM.Value].obj0.shape = 0;
                     bank.oams[(int)numOAM.Value].obj1.size = 0;
                     break;
+
                 case 1:
                     bank.oams[(int)numOAM.Value].obj0.shape = 0;
                     bank.oams[(int)numOAM.Value].obj1.size = 1;
                     break;
+
                 case 2:
                     bank.oams[(int)numOAM.Value].obj0.shape = 0;
                     bank.oams[(int)numOAM.Value].obj1.size = 2;
                     break;
+
                 case 3:
                     bank.oams[(int)numOAM.Value].obj0.shape = 0;
                     bank.oams[(int)numOAM.Value].obj1.size = 3;
                     break;
+
                 case 4:
                     bank.oams[(int)numOAM.Value].obj0.shape = 1;
                     bank.oams[(int)numOAM.Value].obj1.size = 0;
                     break;
+
                 case 5:
                     bank.oams[(int)numOAM.Value].obj0.shape = 1;
                     bank.oams[(int)numOAM.Value].obj1.size = 1;
                     break;
+
                 case 6:
                     bank.oams[(int)numOAM.Value].obj0.shape = 1;
                     bank.oams[(int)numOAM.Value].obj1.size = 2;
                     break;
+
                 case 7:
                     bank.oams[(int)numOAM.Value].obj0.shape = 1;
                     bank.oams[(int)numOAM.Value].obj1.size = 3;
                     break;
+
                 case 8:
                     bank.oams[(int)numOAM.Value].obj0.shape = 2;
                     bank.oams[(int)numOAM.Value].obj1.size = 0;
                     break;
+
                 case 9:
                     bank.oams[(int)numOAM.Value].obj0.shape = 2;
                     bank.oams[(int)numOAM.Value].obj1.size = 1;
                     break;
+
                 case 10:
                     bank.oams[(int)numOAM.Value].obj0.shape = 2;
                     bank.oams[(int)numOAM.Value].obj1.size = 2;
                     break;
+
                 case 11:
                     bank.oams[(int)numOAM.Value].obj0.shape = 2;
                     bank.oams[(int)numOAM.Value].obj1.size = 3;
@@ -443,6 +463,7 @@ namespace Ekona.Images.Dialogs
             Read_Info((int)numOAM.Value);
             Update_Image();
         }
+
         private void btnRemOAM_Click(object sender, EventArgs e)
         {
             OAM[] newOAM = new OAM[bank.oams.Length - 1];
@@ -471,6 +492,5 @@ namespace Ekona.Images.Dialogs
             Read_Info((int)numOAM.Value);
             Update_Image();
         }
-
     }
 }

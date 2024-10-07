@@ -46,7 +46,7 @@
             TrainerClassName = "-";
             UsedByTrainers = [];
             ClassProperties = new TrainerClassProperty
-            { 
+            {
                 Gender = 0,
                 PrizeMoneyMultiplier = 0,
                 Description = "-",

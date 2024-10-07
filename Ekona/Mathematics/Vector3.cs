@@ -2,17 +2,17 @@
 // <copyright file="Vector3.cs" company="NII">
 //
 //   Copyright (C) 2016 MetLob
-//   
+//
 //      This program is free software: you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
 //      the Free Software Foundation, either version 3 of the License, or
 //      (at your option) any later version.
-//   
+//
 //      This program is distributed in the hope that it will be useful,
 //      but WITHOUT ANY WARRANTY; without even the implied warranty of
 //      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //      GNU General Public License for more details.
-//   
+//
 //      You should have received a copy of the GNU General Public License
 //      along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -22,10 +22,7 @@
 namespace Ekona.Mathematics
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Vector 3D
@@ -34,11 +31,11 @@ namespace Ekona.Mathematics
     {
         #region Fields
 
-        double x;
-        double y;
-        double z;
+        private double x;
+        private double y;
+        private double z;
 
-        #endregion
+        #endregion Fields
 
         #region Initialize
 
@@ -77,7 +74,7 @@ namespace Ekona.Mathematics
             z = vector.Z;
         }
 
-        #endregion
+        #endregion Initialize
 
         #region Contants
 
@@ -113,7 +110,7 @@ namespace Ekona.Mathematics
             get { return new Vector3(0.0, 0.0, 1.0); }
         }
 
-        #endregion
+        #endregion Contants
 
         #region Property
 
@@ -147,7 +144,7 @@ namespace Ekona.Mathematics
             set { z = value; }
         }
 
-        #endregion
+        #endregion Property
 
         #region Static methods
 
@@ -405,10 +402,9 @@ namespace Ekona.Mathematics
             double angle = firstVector.Angle(secondVector);
             Vector3 z = Vector3.CrossProduct(firstVector, secondVector);
             double det = Vector3.DotProduct(z, direction);
-            if (det < 0){ angle = 2 * Math.PI - angle; }
+            if (det < 0) { angle = 2 * Math.PI - angle; }
 
             return angle;
-
         }
 
         /// <summary>
@@ -429,12 +425,12 @@ namespace Ekona.Mathematics
         /// </summary>
         /// <param name="vector">The vector whose coordinates change</param>
         /// <returns>The vector with modified coordinates</returns>
-        static public Vector3 SwapYZ(Vector3 vector)
+        public static Vector3 SwapYZ(Vector3 vector)
         {
             return new Vector3(vector.X, vector.Z, vector.Y);
         }
 
-        #endregion
+        #endregion Static methods
 
         #region Methods of the vector
 
@@ -523,7 +519,7 @@ namespace Ekona.Mathematics
         public Vector3 Unit()
         {
             Vector3 result = new Vector3(this);
-            if (result == Vector3.Zero){ return result; }
+            if (result == Vector3.Zero) { return result; }
             result.Normalize();
             return result;
         }
@@ -554,6 +550,7 @@ namespace Ekona.Mathematics
             double lengthSquared = LengthSquared();
             return lengthSquared == 1.0 ? 1.0 : (double)Math.Sqrt(lengthSquared);
         }
+
         /// <summary>
         /// Get the length squared of the vector
         /// </summary>
@@ -562,6 +559,7 @@ namespace Ekona.Mathematics
         {
             return (x * x + y * y + z * z);
         }
+
         /// <summary>
         /// Clamp the values of the vector at the origin using the given tolerance
         /// </summary>
@@ -619,7 +617,7 @@ namespace Ekona.Mathematics
             return Math.Acos(cosResult);
         }
 
-        #endregion
+        #endregion Methods of the vector
 
         #region Overrided methods
 
@@ -667,7 +665,7 @@ namespace Ekona.Mathematics
             return string.Format(CultureInfo.InvariantCulture, "({0}; {1}; {2})", x, y, z);
         }
 
-        #endregion
+        #endregion Overrided methods
 
         #region Comparison operators
 
@@ -725,7 +723,7 @@ namespace Ekona.Mathematics
                 (u.z <= v.z));
         }
 
-        #endregion
+        #endregion Comparison operators
 
         #region Unary operators
 
@@ -739,7 +737,7 @@ namespace Ekona.Mathematics
             return Vector3.Negate(v);
         }
 
-        #endregion
+        #endregion Unary operators
 
         #region Binary operators
 
@@ -798,7 +796,7 @@ namespace Ekona.Mathematics
             return Vector3.Divide(s, v);
         }
 
-        #endregion
+        #endregion Binary operators
 
         #region Operators access via indexes
 
@@ -813,10 +811,13 @@ namespace Ekona.Mathematics
                 {
                     case 0:
                         return x;
+
                     case 1:
                         return y;
+
                     case 2:
                         return z;
+
                     default:
                         throw new IndexOutOfRangeException();
                 }
@@ -828,20 +829,22 @@ namespace Ekona.Mathematics
                     case 0:
                         x = value;
                         break;
+
                     case 1:
                         y = value;
                         break;
+
                     case 2:
                         z = value;
                         break;
+
                     default:
                         throw new IndexOutOfRangeException();
                 }
             }
-
         }
 
-        #endregion
+        #endregion Operators access via indexes
 
         #region NvVector3
 
@@ -881,6 +884,6 @@ namespace Ekona.Mathematics
             return new Vector3(v1.x * s + t * v2.x, v1.y * s + t * v2.y, v1.z * s + t * v2.z);
         }
 
-        #endregion
+        #endregion NvVector3
     }
 }

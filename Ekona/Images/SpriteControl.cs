@@ -12,35 +12,37 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
+using Ekona.Images.Formats;
 using System;
 using System.Drawing;
-using System.Xml.Linq;
 using System.IO;
 using System.Windows.Forms;
-using Ekona.Images.Formats;
+using System.Xml.Linq;
 
 namespace Ekona.Images
 {
     public partial class SpriteControl : UserControl
     {
-        SpriteBase sprite;
-        ImageBase image;
-        PaletteBase palette;
-        IPluginHost pluginHost;
-        XElement lang;
-        string trans;
+        private SpriteBase sprite;
+        private ImageBase image;
+        private PaletteBase palette;
+        private IPluginHost pluginHost;
+        private XElement lang;
+        private string trans;
 
-        bool selectColor;
+        private bool selectColor;
 
         public SpriteControl()
         {
             InitializeComponent();
         }
+
         public SpriteControl(IPluginHost pluginHost)
         {
             InitializeComponent();
@@ -53,6 +55,7 @@ namespace Ekona.Images
             Read_Language();
             Update_Info();
         }
+
         public SpriteControl(IPluginHost pluginHost, SpriteBase sprite)
         {
             InitializeComponent();
@@ -65,6 +68,7 @@ namespace Ekona.Images
             Read_Language();
             Update_Info();
         }
+
         public SpriteControl(IPluginHost pluginHost, SpriteBase sprite, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -77,6 +81,7 @@ namespace Ekona.Images
             Read_Language();
             Update_Info();
         }
+
         public SpriteControl(XElement lang, SpriteBase sprite, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -90,7 +95,6 @@ namespace Ekona.Images
             Update_Info();
         }
 
-
         private void Read_Language()
         {
             try
@@ -101,6 +105,7 @@ namespace Ekona.Images
             }
             catch { throw new Exception("There was an error reading the XML language file."); }
         }
+
         private void Read_Language(XElement xml)
         {
             try
@@ -145,14 +150,17 @@ namespace Ekona.Images
 
             return sprite.Get_Image(image, palette, comboBank.SelectedIndex, 512, 256,
                 checkGrid.Checked, checkCellBorder.Checked, checkNumber.Checked, checkTransparency.Checked,
-                checkImage.Checked, (checkSelectOAM.Checked ? checkListOAM.SelectedIndex : -1), 
+                checkImage.Checked, (checkSelectOAM.Checked ? checkListOAM.SelectedIndex : -1),
                 index);
         }
-        private Image Update_Image() {
+
+        private Image Update_Image()
+        {
             imgBox.Image = Build_Image();
             Clipboard.SetImage(imgBox.Image);
             return imgBox.Image;
         }
+
         private void Update_Info()
         {
             this.btnImport.Enabled = (sprite.CanEdit && image.CanEdit && palette.CanEdit ? true : false);
@@ -170,6 +178,7 @@ namespace Ekona.Images
 
             Update_BankInfo(0);
         }
+
         private void Update_BankInfo(int i)
         {
             checkListOAM.Items.Clear();
@@ -182,6 +191,7 @@ namespace Ekona.Images
             Update_BankInfo(comboBank.SelectedIndex);
             Update_Image();
         }
+
         private void check_CheckedChanged(object sender, EventArgs e)
         {
             Update_Image();
@@ -230,13 +240,14 @@ namespace Ekona.Images
             win.MaximizeBox = true;
             win.Show();
         }
-        
+
         private void btnBgdTrans_Click(object sender, EventArgs e)
         {
             btnBgdTrans.Enabled = false;
 
             imgBox.BackColor = Color.Transparent;
         }
+
         private void btnBgd_Click(object sender, EventArgs e)
         {
             ColorDialog o = new ColorDialog();
@@ -254,6 +265,7 @@ namespace Ekona.Images
         {
             selectColor = true;
         }
+
         private void SetTransFromImage(Color color)
         {
             int pal_index = sprite.Banks[comboBank.SelectedIndex].oams[0].obj2.index_palette;  // How can I know that? yeah, I'm too lazy to do a new windows ;)
@@ -283,6 +295,7 @@ namespace Ekona.Images
 
             Save_Files();
         }
+
         private void imgBox_MouseClick(object sender, MouseEventArgs e)
         {
             if (selectColor && imgBox.Image is Image)
@@ -299,6 +312,7 @@ namespace Ekona.Images
             else
                 Export_All();
         }
+
         private void Export_Single()
         {
             SaveFileDialog o = new SaveFileDialog();
@@ -330,6 +344,7 @@ namespace Ekona.Images
                     imgBox.Image.Save(o.FileName, System.Drawing.Imaging.ImageFormat.Icon);
             }
         }
+
         private void Export_All()
         {
             if (txtBatch.Text == "" || txtBatch.Text == null || !txtBatch.Text.Contains("%s"))
@@ -372,6 +387,7 @@ namespace Ekona.Images
         {
             txtBatch.Enabled = checkBatch.Checked;
         }
+
         private void btnImport_Click(object sender, EventArgs e)
         {
             if (checkBatch.Checked)
@@ -379,6 +395,7 @@ namespace Ekona.Images
             else
                 Import_Single();
         }
+
         private void Import_Single()
         {
             OpenFileDialog o = new OpenFileDialog();
@@ -403,6 +420,7 @@ namespace Ekona.Images
             Save_Files();
             Update_Image();
         }
+
         private void Import_All()
         {
             //FolderBrowserDialog o = new FolderBrowserDialog();
@@ -440,6 +458,7 @@ namespace Ekona.Images
             o.Dispose();
             o = null;
         }
+
         private void Import_File(string path, int banki)
         {
             Bitmap bitmap = (Bitmap)Image.FromFile(path);
@@ -541,7 +560,8 @@ namespace Ekona.Images
             bitmap.Dispose();
             bitmap = null;
         }
-        void Save_Files()
+
+        private void Save_Files()
         {
             if (sprite.ID >= 0)
             {
@@ -585,7 +605,7 @@ namespace Ekona.Images
                     }
 
                     image.Write(imageFile, palette);
-                    
+
                     if (pluginHost is IPluginHost)
                         pluginHost.ChangeFile(image.ID, imageFile);
                 }
@@ -624,7 +644,7 @@ namespace Ekona.Images
                 editor = new Dialogs.OAMEditor(pluginHost.Get_LangXML(), sprite.Banks[comboBank.SelectedIndex], sprite, image, palette);
             else
                 editor = new Dialogs.OAMEditor(lang.Element("OAMEditor"), sprite.Banks[comboBank.SelectedIndex], sprite, image, palette);
-            
+
             if (editor.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -638,14 +658,17 @@ namespace Ekona.Images
         {
             get { return comboBank.SelectedIndex; }
         }
+
         public SpriteBase Sprite
         {
             get { return sprite; }
         }
+
         public ImageBase Tiles
         {
             get { return image; }
         }
+
         public PaletteBase Palette
         {
             get { return palette; }

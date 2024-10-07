@@ -199,6 +199,7 @@ namespace Main
                 UpdateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, trainerClassId);
             }
         }
+
         private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             class_ViewTrainerBtn.Enabled = !IsLoadingData && class_TrainersListBox.SelectedIndex > -1;
@@ -595,6 +596,7 @@ namespace Main
                 return;
             }
         }
+
         private bool ValidateClassName()
         {
             string className = class_NameTextBox.Text;

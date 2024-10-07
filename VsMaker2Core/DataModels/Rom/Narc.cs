@@ -11,6 +11,7 @@
         private const int NARC_FILE_MAGIC_NUM = 0x4352414E;
         private MemoryStream[] Elements;
         private int FileNameTableOffset, FileImageOffset;
+
         //"NARC" in ascii/unicode
         private Narc(String name)
         {
@@ -18,6 +19,7 @@
         }
 
         public String Name { get; set; }
+
         public MemoryStream this[int elemIndex]
         {
             get
@@ -241,6 +243,7 @@
             }
             return BitConverter.ToUInt32(buffer, 0);
         }
+
         private async Task ReadElementsAsync(BinaryReader br)
         {
             uint numberOfElements;

@@ -1,5 +1,4 @@
-﻿
-namespace VsMaker2Core.RomFiles
+﻿namespace VsMaker2Core.RomFiles
 {
     public class ScriptFileData : IEquatable<ScriptFileData?>
     {

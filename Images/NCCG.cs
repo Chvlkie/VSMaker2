@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using System.Windows.Forms;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
 
 namespace Images
 {
     public class NCCG : ImageBase
     {
-        sNCCG nccg;
+        private sNCCG nccg;
 
-        public NCCG(string file, int id, string fileName) : base(file, id, fileName) { }
+        public NCCG(string file, int id, string fileName) : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string file)
         {
@@ -88,6 +85,7 @@ namespace Images
                 public uint height;
                 public uint depth;
             }
+
             public struct ATTR
             {
                 public char[] type;
@@ -96,12 +94,14 @@ namespace Images
                 public uint height;
                 public byte[] unknown;
             }
+
             public struct LINK
             {
                 public char[] type;
                 public uint size;
                 public string link;
             }
+
             public struct CMNT
             {
                 public char[] type;
@@ -110,5 +110,4 @@ namespace Images
             }
         }
     }
-
 }

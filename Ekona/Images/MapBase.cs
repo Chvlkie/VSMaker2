@@ -12,42 +12,42 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
 
 namespace Ekona.Images
 {
     public abstract class MapBase
     {
-
         #region Variables
+
         protected IPluginHost pluginHost;
         protected int id = -1;
         protected string fileName;
-        bool loaded;
+        private bool loaded;
 
-        Byte[] original;
-        int startByte;
+        private Byte[] original;
+        private int startByte;
 
-        NTFS[] map;
-        int width, height;
-        bool canEdit;
+        private NTFS[] map;
+        private int width, height;
+        private bool canEdit;
 
-        Object obj;
-        #endregion
+        private Object obj;
+
+        #endregion Variables
 
         public MapBase()
         {
         }
+
         public MapBase(string fileIn, int id, string fileName = "")
         {
             this.id = id;
@@ -58,7 +58,8 @@ namespace Ekona.Images
 
             Read(fileIn);
         }
-        public MapBase(string fileIn, int id,  IPluginHost pluginHost, string fileName = "")
+
+        public MapBase(string fileIn, int id, IPluginHost pluginHost, string fileName = "")
         {
             this.pluginHost = pluginHost;
             this.id = id;
@@ -69,6 +70,7 @@ namespace Ekona.Images
 
             Read(fileIn);
         }
+
         public MapBase(NTFS[] mapInfo, bool editable, int width = 0, int height = 0, string fileName = "")
         {
             this.fileName = fileName;
@@ -76,6 +78,7 @@ namespace Ekona.Images
         }
 
         public abstract void Read(string fileIn);
+
         public abstract void Write(string fileOut, ImageBase image, PaletteBase palette);
 
         public Image Get_Image(ImageBase image, PaletteBase palette)
@@ -116,6 +119,7 @@ namespace Ekona.Images
                 data.AddRange(BitConverter.GetBytes(Actions.MapInfo(map[i])));
             original = data.ToArray();
         }
+
         public void Set_Map(MapBase new_map)
         {
             this.map = new_map.Map;
@@ -132,7 +136,6 @@ namespace Ekona.Images
             original = data.ToArray();
         }
 
-
         private void Change_StartByte(int newStart)
         {
             if (newStart < 0 || newStart == startByte || newStart >= original.Length)
@@ -143,26 +146,30 @@ namespace Ekona.Images
             Array.Copy(original, startByte, newData, 0, newData.Length);
             map = new NTFS[newData.Length / 2];
 
-            for (int i = 0; i < map.Length; i ++)
+            for (int i = 0; i < map.Length; i++)
             {
                 map[i] = Actions.MapInfo(BitConverter.ToUInt16(newData, i * 2));
             }
         }
 
         #region Properties
+
         public int ID
         {
             get { return id; }
         }
+
         public String FileName
         {
             get { return fileName; }
             set { fileName = value; }
         }
+
         public bool Loaded
         {
             get { return loaded; }
         }
+
         public bool CanEdit
         {
             get { return canEdit; }
@@ -173,22 +180,24 @@ namespace Ekona.Images
             get { return startByte; }
             set { Change_StartByte(value); }
         }
+
         public int Height
         {
             get { return height; }
             set { height = value; }
         }
+
         public int Width
         {
             get { return width; }
             set { width = value; }
         }
+
         public NTFS[] Map
         {
             get { return map; }
         }
-        #endregion
 
+        #endregion Properties
     }
-
 }

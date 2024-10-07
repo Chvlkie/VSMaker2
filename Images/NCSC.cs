@@ -12,24 +12,24 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+
 using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
 
 namespace Images
 {
     public class NCSC : MapBase
     {
-        public NCSC(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NCSC(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string file)
         {
@@ -119,6 +119,7 @@ namespace Images
             br.Close();
             Set_Map(map, false, (int)ncsc.scrn.width, (int)ncsc.scrn.height);
         }
+
         public override void Write(string fileOut, ImageBase image, PaletteBase palette)
         {
         }
@@ -143,6 +144,7 @@ namespace Images
                 public uint unknown1;
                 public uint unknown2;
             }
+
             public struct ESCR
             {
                 public char[] id;
@@ -154,6 +156,7 @@ namespace Images
 
                 public uint[] unknownData;
             }
+
             public struct CLRF
             {
                 public char[] id;
@@ -162,24 +165,28 @@ namespace Images
                 public uint height;
                 public byte[] unknown;
             }
+
             public struct CLRC
             {
                 public char[] id;
                 public uint size;
                 public byte[] unknown;
             }
+
             public struct GRID
             {
                 public char[] id;
                 public uint size;
                 public byte[] unknown;
             }
+
             public struct LINK
             {
                 public char[] id;
                 public uint size;
                 public string link;
             }
+
             public struct CMNT
             {
                 public char[] id;

@@ -35,6 +35,7 @@ namespace Main
         private bool TrainerPropertyChange;
         private List<string> UnfilteredTrainers = [];
         private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
+
         private void trainer_Copy_Btn_Click(object sender, EventArgs e)
         {
             MainEditorModel.ClipboardTrainer = new Trainer(MainEditorModel.SelectedTrainer);
@@ -163,6 +164,7 @@ namespace Main
                 }
             }
         }
+
         private void AddNewTrainer()
         {
             IsLoadingData = true;
@@ -338,7 +340,6 @@ namespace Main
         private void EnableTrainerEditor()
         {
             trainer_RemoveBtn.Enabled = true;
-            trainer_SpriteFrameNum.Enabled = false;
             trainer_Copy_Btn.Enabled = true;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = true;
@@ -436,7 +437,6 @@ namespace Main
             trainer_FilterBox.Enabled = false;
             trainer_ClearFilterBtn.Enabled = false;
             trainer_TrainersListBox.Enabled = false;
-            trainer_SpriteFrameNum.Enabled = false;
             trainer_Copy_Btn.Enabled = false;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = false;
@@ -554,6 +554,7 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
+
         private void poke2AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -1676,6 +1677,7 @@ namespace Main
                 UpdateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, trainerClassId);
             }
         }
+
         private void trainer_TeamSizeNum_ValueChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -2065,6 +2067,7 @@ namespace Main
                 pokeComboBox.SelectedItem = previousSelection;
             }
         }
+
         #endregion PokemonComboBoxes
     }
 }

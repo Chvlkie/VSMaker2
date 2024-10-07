@@ -24,7 +24,7 @@
             DamagePriority,
             BatonPass,
             TagTeam,
-            CheckHp, 
+            CheckHp,
             WeatherEffect,
             Harassment
             ];

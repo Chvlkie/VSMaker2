@@ -742,7 +742,7 @@ namespace VsMaker2Core.Methods
                     [NarcDirectory.monIcons] = @"data\poketool\icongra\poke_icon.narc",
                     [NarcDirectory.moveData] = @"data\poketool\waza\waza_tbl.narc",
                     [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
-                    [NarcDirectory.scripts] =  @"data\fielddata\script\scr_seq_release.narc",
+                    [NarcDirectory.scripts] = @"data\fielddata\script\scr_seq_release.narc",
                     [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
                     [NarcDirectory.textArchives] = @"data\msgdata\msg.narc",
                     [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",

@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Ekona;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Ekona;
-using Ekona.Images;
+using System.Linq;
 
 namespace Images
 {
     public class NANR
     {
-        IPluginHost pluginHost;
-        string fileName;
-        int id;
+        private IPluginHost pluginHost;
+        private string fileName;
+        private int id;
 
-        sNANR nanr;
+        private sNANR nanr;
 
         public NANR(IPluginHost pluginHost, string file, int id)
         {
@@ -41,6 +39,7 @@ namespace Images
             nanr.header.nSection = br.ReadUInt16();
 
             #region ABNK
+
             // ABNK (Animation BaNK)
             nanr.abnk.id = br.ReadChars(4);
             nanr.abnk.length = br.ReadUInt32();
@@ -85,9 +84,11 @@ namespace Images
 
                 nanr.abnk.anis[i] = ani;
             }
-            #endregion
+
+            #endregion ABNK
 
             #region LABL
+
             br.BaseStream.Position = nanr.header.header_size + nanr.abnk.length;
             List<uint> offsets = new List<uint>();
             List<String> names = new List<string>();
@@ -129,16 +130,19 @@ namespace Images
                     nanr.labl.names[i] = names[i];
                 else
                     nanr.labl.names[i] = i.ToString();
-            #endregion
+
+            #endregion LABL
 
             #region UEXT
+
             nanr.uext.id = br.ReadChars(4);
             if (new String(nanr.uext.id) != "TXEU")
                 goto Fin;
 
             nanr.uext.section_size = br.ReadUInt32();
             nanr.uext.unknown = br.ReadUInt32();
-            #endregion
+
+        #endregion UEXT
 
         Fin:
             br.Close();
@@ -148,6 +152,7 @@ namespace Images
         {
             get { return nanr.labl.names; }
         }
+
         public sNANR Struct
         {
             get { return nanr; }
@@ -172,6 +177,7 @@ namespace Images
                 public ulong padding;
                 public Animation[] anis;
             }
+
             public struct Animation
             {
                 public uint nFrames;
@@ -182,6 +188,7 @@ namespace Images
                 public uint offset_frame;
                 public Frame[] frames;
             }
+
             public struct Frame
             {
                 public uint offset_data;
@@ -189,13 +196,17 @@ namespace Images
                 public ushort constant;
                 public Frame_Data data;
             }
+
             public struct Frame_Data
             {
                 public ushort nCell;
+
                 // DataType 1
                 public ushort[] transform; // See http://nocash.emubase.de/gbatek.htm#lcdiobgrotationscaling
+
                 public short xDisplacement;
                 public short yDisplacement;
+
                 //DataType 2 (the Displacement above)
                 public ushort constant; // 0xBEEF
             }
@@ -207,6 +218,7 @@ namespace Images
                 public UInt32[] offset;
                 public string[] names;
             }
+
             public struct UEXT
             {
                 public char[] id;
@@ -214,6 +226,5 @@ namespace Images
                 public UInt32 unknown;
             }
         }
-
     }
 }

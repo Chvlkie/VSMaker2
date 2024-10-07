@@ -324,6 +324,7 @@ namespace VsMaker2Core.MessageEncrypt
             }
             return initialKey;
         }
+
         public static bool WriteMessageArchive(int messageArchiveId, List<string> messages, bool isTrainerName = false)
         {
             string filePath = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchiveId:D4}";

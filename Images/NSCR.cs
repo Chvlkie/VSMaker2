@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace Images
 {
     public class NSCR : MapBase
     {
-        sNSCR nscr;
+        private sNSCR nscr;
 
-        public NSCR(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NSCR(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string fileIn)
         {
@@ -45,6 +45,7 @@ namespace Images
 
             Set_Map(nscr.nrcs.mapData, true, nscr.nrcs.width, nscr.nrcs.height);
         }
+
         public override void Write(string fileOut, ImageBase image, PaletteBase palette)
         {
             Update_Struct();
@@ -77,7 +78,6 @@ namespace Images
 
             bw.Flush();
             bw.Close();
-
         }
 
         private void Update_Struct()
@@ -105,7 +105,6 @@ namespace Images
                 public UInt32 data_size;
                 public NTFS[] mapData;
             }
-
         }
     }
 }

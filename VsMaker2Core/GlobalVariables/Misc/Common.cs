@@ -19,8 +19,5 @@
         public const string OverlayFilePath = "overlay";
         public const string BannerFilePath = "banner.bin";
         public const string HeaderFilePath = "header.bin";
-
-        
-        
     }
 }

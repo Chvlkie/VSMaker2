@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using VsMaker2Core.DataModels;
+﻿using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
@@ -175,7 +174,7 @@ namespace VsMaker2Core.Methods
         /// <param name="trainerType"></param>
         /// <param name="hasBallCapsule"></param>
         /// <returns></returns>
-       Task<TrainerPartyData> ReadTrainerPartyDataAsync(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
+        Task<TrainerPartyData> ReadTrainerPartyDataAsync(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule);
 
         /// <summary>
         ///

@@ -4,17 +4,17 @@
 // Copyright (C) 2012
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by 
+//   it under the terms of the GNU General Public License as published by
 //   the Free Software Foundation, either version 3 of the License, or
 //   (at your option) any later version.
 //
-//   This program is distributed in the hope that it will be useful, 
+//   This program is distributed in the hope that it will be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details. 
+//   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // </copyright>
 
@@ -24,8 +24,6 @@
 // -----------------------------------------------------------------------
 using System;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 
 namespace Ekona.Images.Formats
 {
@@ -40,6 +38,7 @@ namespace Ekona.Images.Formats
         {
             Read(file);
         }
+
         public ACO(Color[] colors)
             : base()
         {
@@ -71,9 +70,10 @@ namespace Ekona.Images.Formats
                 pal[i] = Color.FromArgb(br.ReadUInt16(), br.ReadUInt16(), br.ReadUInt16());
                 br.ReadUInt16();    // Always 0x00
             }
-            
+
             br.Close();
         }
+
         public override void Write(string fileOut)
         {
             // Only accept one palette
@@ -83,7 +83,6 @@ namespace Ekona.Images.Formats
 
             bw.Write((ushort)0x00);         // Version 0
             bw.Write((ushort)pal.Length);   // Number of colors
-            
 
             for (int i = 0; i < pal.Length; i++)
             {

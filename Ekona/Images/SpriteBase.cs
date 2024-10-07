@@ -12,50 +12,55 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
+using System.IO;
 
 namespace Ekona.Images
 {
     public abstract class SpriteBase
     {
         #region Variables
+
         protected IPluginHost pluginHost;
         protected string fileName;
         protected int id;
-        bool loaded;
-        bool canEdit;
+        private bool loaded;
+        private bool canEdit;
 
-        Bank[] banks;
-        uint block_size;
-        int zoom;
+        private Bank[] banks;
+        private uint block_size;
+        private int zoom;
 
-        Object obj;
-        #endregion
+        private Object obj;
+
+        #endregion Variables
 
         #region Properties
+
         public String FileName
         {
             get { return fileName; }
             set { fileName = value; }
         }
+
         public int ID
         {
             get { return id; }
         }
+
         public bool Loaded
         {
             get { return loaded; }
         }
+
         public bool CanEdit
         {
             get { return canEdit; }
@@ -66,19 +71,23 @@ namespace Ekona.Images
             get { return banks; }
             set { banks = value; }
         }
+
         public int NumBanks
         {
             get { return banks.Length; }
         }
+
         public uint BlockSize
         {
             get { return block_size; }
         }
-        #endregion
+
+        #endregion Properties
 
         public SpriteBase()
         {
         }
+
         public SpriteBase(string file, int id, string fileName = "")
         {
             if (fileName == "")
@@ -89,7 +98,8 @@ namespace Ekona.Images
 
             Read(file);
         }
-        public SpriteBase(string file, int id,  IPluginHost pluginHost, string fileName = "")
+
+        public SpriteBase(string file, int id, IPluginHost pluginHost, string fileName = "")
         {
             this.pluginHost = pluginHost;
             if (fileName == "")
@@ -101,8 +111,8 @@ namespace Ekona.Images
             Read(file);
         }
 
-
         public abstract void Read(string fileIn);
+
         public abstract void Write(string fileOut, ImageBase image, PaletteBase palette);
 
         public void Set_Banks(Bank[] banks, uint block_size, bool editable)
@@ -128,31 +138,34 @@ namespace Ekona.Images
             return Actions.Get_Image(banks[index], block_size, image, pal, width, height,
                                      grid, cell, number, trans, img);
         }
+
         public Image Get_Image(ImageBase image, PaletteBase pal, Bank bank, int width, int height,
                        bool grid, bool cell, bool number, bool trans, bool img)
         {
             return Actions.Get_Image(bank, block_size, image, pal, width, height,
                                      grid, cell, number, trans, img);
         }
+
         public Image Get_Image(ImageBase image, PaletteBase pal, Bank bank, int width, int height,
                bool grid, bool cell, bool number, bool trans, bool img, int currOAM)
         {
             return Actions.Get_Image(bank, block_size, image, pal, width, height,
                                      grid, cell, number, trans, img, currOAM);
         }
+
         public Image Get_Image(ImageBase image, PaletteBase pal, int index, int width, int height,
                bool grid, bool cell, bool number, bool trans, bool img, int currOAM)
         {
             return Actions.Get_Image(banks[index], block_size, image, pal, width, height,
                                      grid, cell, number, trans, img, currOAM);
         }
+
         public Image Get_Image(ImageBase image, PaletteBase pal, int index, int width, int height,
                bool grid, bool cell, bool number, bool trans, bool img, int currOAM, int[] draw_index)
         {
             return Actions.Get_Image(banks[index], block_size, image, pal, width, height,
                                      grid, cell, number, trans, img, currOAM, 1, draw_index);
         }
-
     }
 
     public struct Bank
@@ -166,6 +179,7 @@ namespace Ekona.Images
         public uint data_offset;
         public uint data_size;
     }
+
     public struct OAM
     {
         public Obj0 obj0;
@@ -184,23 +198,27 @@ namespace Ekona.Images
         public byte objDisable;     // Bit9 -> if r/s == 0
         public byte doubleSize;     // Bit9 -> if r/s != 0
         public byte objMode;        // Bit10-11 -> 0 = normal; 1 = semi-trans; 2 = window; 3 = invalid
-        public byte mosaic_flag;    // Bit12 
+        public byte mosaic_flag;    // Bit12
         public byte depth;          // Bit13 -> 0 = 4bit; 1 = 8bit
         public byte shape;          // Bit14-15 -> 0 = square; 1 = horizontal; 2 = vertial; 3 = invalid
     }
+
     public struct Obj1  // 16 bits
     {
         public Int32 xOffset;   // Bit0-8 (unsigned)
 
         // If R/S == 0
         public byte unused; // Bit9-11
+
         public byte flipX;  // Bit12
         public byte flipY;  // Bit13
+
         // If R/S != 0
         public byte select_param;   //Bit9-13 -> Parameter selection
 
         public byte size;   // Bit14-15
     }
+
     public struct Obj2  // 16 bits
     {
         public uint tileOffset;     // Bit0-9

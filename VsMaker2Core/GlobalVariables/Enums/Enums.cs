@@ -60,6 +60,7 @@
             ImportTextTable = 7,
             ExportTextTable = 8,
         }
+
         public enum NarcDirectory : byte
         {
             Unknown,
@@ -85,6 +86,7 @@
             Function,
             Action
         }
+
         public enum TrainerUsageType
         {
             Unknown = 0,

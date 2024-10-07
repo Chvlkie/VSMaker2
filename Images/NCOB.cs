@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
 
 namespace Images
 {
     public class NCOB : SpriteBase
     {
-        sNCOB ncob;
-        ImageBase img;
+        private sNCOB ncob;
+        private ImageBase img;
 
-        public NCOB(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NCOB(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string fileIn)
         {
@@ -131,6 +130,7 @@ namespace Images
                 public uint num_banks;
                 public Ekona.Images.Bank[] banks;
             }
+
             public struct CHAR
             {
                 public char[] type;
@@ -139,6 +139,7 @@ namespace Images
                 public uint data_size;
                 public byte[] data;
             }
+
             public struct GRP
             {
                 public char[] type;
@@ -148,12 +149,14 @@ namespace Images
 
                 public ulong[] data;
             }
+
             public struct ANIM
             {
                 public char[] type;
                 public uint size;
                 public byte[] unknown;
             }
+
             public struct ACTL
             {
                 public char[] type;
@@ -162,6 +165,7 @@ namespace Images
 
                 public byte[][] unknown;    // 0x0C per block
             }
+
             public struct MODE
             {
                 public char[] type;
@@ -169,6 +173,7 @@ namespace Images
                 public uint unknown1;
                 public uint unknown2;
             }
+
             public struct LABL
             {
                 public char[] type;
@@ -176,12 +181,14 @@ namespace Images
                 public uint num_element;
                 public string[] names;  // 0x40 per name
             }
+
             public struct CMNT
             {
                 public char[] type;
                 public uint size;
                 public uint unknown;
             }
+
             public struct CCMT
             {
                 public char[] type;
@@ -190,6 +197,7 @@ namespace Images
 
                 public ulong[] unknown;
             }
+
             public struct ECMT
             {
                 public char[] type;
@@ -199,6 +207,7 @@ namespace Images
                 public uint[] size_e;
                 public string[] name;       // SJIS
             }
+
             public struct FCMT
             {
                 public char[] type;
@@ -206,6 +215,7 @@ namespace Images
 
                 public byte[] data;
             }
+
             public struct CLBL
             {
                 public char[] type;
@@ -213,12 +223,14 @@ namespace Images
                 public uint num_element;
                 public uint[] data;
             }
+
             public struct EXTR
             {
                 public char[] type;
                 public uint size;
                 public uint unknown;
             }
+
             public struct LINK
             {
                 public char[] type;

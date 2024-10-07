@@ -12,35 +12,33 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Text;
-using System.IO;
-using System.Windows.Forms;
+
 using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Images
 {
-	public class Main : IPlugin
-	{
-		IPluginHost pluginHost;
-        NANR nanr;  // TEMP
+    public class Main : IPlugin
+    {
+        private IPluginHost pluginHost;
+        private NANR nanr;  // TEMP
 
-		public void Initialize(IPluginHost pluginHost)
-		{
-			this.pluginHost = pluginHost;
-		}
-		
-		public Format Get_Format(sFile file, byte[] magic)
-		{
+        public void Initialize(IPluginHost pluginHost)
+        {
+            this.pluginHost = pluginHost;
+        }
+
+        public Format Get_Format(sFile file, byte[] magic)
+        {
             file.name = file.name.ToUpper();
 
             string ext = "";
@@ -93,11 +91,11 @@ namespace Images
             if (ext == "RNAN")
                 return Format.Animation;
 
-			return Format.Unknown;
-		}
-		
-		public Control Show_Info(sFile file)
-		{
+            return Format.Unknown;
+        }
+
+        public Control Show_Info(sFile file)
+        {
             Format format = Read2(file);
 
             if (format == Format.Palette)
@@ -114,13 +112,15 @@ namespace Images
 
             if (format == Format.Animation && pluginHost.Get_Palette().Loaded && pluginHost.Get_Image().Loaded && pluginHost.Get_Sprite().Loaded)
                 return new AnimationControl(pluginHost, nanr);
-			
-			return new Control();
-		}		
-		public void Read(sFile file)
-		{
+
+            return new Control();
+        }
+
+        public void Read(sFile file)
+        {
             Read2(file);
-		}
+        }
+
         public Format Read2(sFile file)
         {
             string ext = "";
@@ -165,7 +165,6 @@ namespace Images
                 return Format.Palette;
             }
 
-
             // Tile
             ColorFormat depth = ColorFormat.colors256;
             if (pluginHost.Get_Palette().Loaded)
@@ -173,7 +172,6 @@ namespace Images
 
             if (file.name.ToUpper().EndsWith(".NTFT"))
             {
-
                 RawImage image = new RawImage(file.path, file.id, TileForm.Lineal, depth, true, 0, -1, file.name);
                 pluginHost.Set_Image(image);
                 return Format.Tile;
@@ -254,7 +252,10 @@ namespace Images
             return Format.Unknown;
         }
 
-        public String Pack(ref sFolder unpacked, sFile file) { return null; }
-        public sFolder Unpack(sFile file) { return new sFolder(); }
-	}
+        public String Pack(ref sFolder unpacked, sFile file)
+        { return null; }
+
+        public sFolder Unpack(sFile file)
+        { return new sFolder(); }
+    }
 }

@@ -12,34 +12,36 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
+using Ekona.Images.Formats;
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Linq;
-using Ekona.Images.Formats;
 
 namespace Ekona.Images
 {
     public partial class ImageControl : UserControl
     {
-        IPluginHost pluginHost;
-        ImageBase image;
-        PaletteBase palette;
-        bool isMap;
-        MapBase map;
+        private IPluginHost pluginHost;
+        private ImageBase image;
+        private PaletteBase palette;
+        private bool isMap;
+        private MapBase map;
 
-        bool stop;
+        private bool stop;
 
         public ImageControl()
         {
             InitializeComponent();
         }
+
         public ImageControl(IPluginHost pluginHost, bool isMap)
         {
             InitializeComponent();
@@ -61,6 +63,7 @@ namespace Ekona.Images
             ReadLanguage();
             Update_Image();
         }
+
         public ImageControl(IPluginHost pluginHost, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -80,6 +83,7 @@ namespace Ekona.Images
             ReadLanguage();
             Update_Image();
         }
+
         public ImageControl(IPluginHost pluginHost, ImageBase image, PaletteBase palette, MapBase map)
         {
             InitializeComponent();
@@ -100,6 +104,7 @@ namespace Ekona.Images
             ReadLanguage();
             Update_Image();
         }
+
         public ImageControl(XElement lang, ImageBase image, PaletteBase palette, MapBase map)
         {
             InitializeComponent();
@@ -121,6 +126,7 @@ namespace Ekona.Images
             ReadLanguage(lang);
             Update_Image();
         }
+
         public ImageControl(XElement lang, ImageBase image, PaletteBase palette)
         {
             InitializeComponent();
@@ -148,6 +154,7 @@ namespace Ekona.Images
             xml = xml.Element("Ekona").Element("ImageControl");
             ReadLanguage(xml);
         }
+
         private void ReadLanguage(XElement xml)
         {
             try
@@ -224,6 +231,7 @@ namespace Ekona.Images
                         numericWidth.Increment = 1;
                         numericHeight.Increment = 1;
                         break;
+
                     case TileForm.Horizontal:
                         comboBox1.SelectedIndex = 1;
                         numericHeight.Minimum = image.TileSize;
@@ -241,6 +249,7 @@ namespace Ekona.Images
 
             stop = false;
         }
+
         private void Update_Image()
         {
             Bitmap bitmap;
@@ -274,6 +283,7 @@ namespace Ekona.Images
 
             Update_Image();
         }
+
         private void numTileSize_ValueChanged(object sender, EventArgs e)
         {
             if (stop)
@@ -282,6 +292,7 @@ namespace Ekona.Images
             image.TileSize = (int)numTileSize.Value;
             Update_Image();
         }
+
         private void numericSize_ValueChanged(object sender, EventArgs e)
         {
             if (stop)
@@ -300,6 +311,7 @@ namespace Ekona.Images
 
             Update_Image();
         }
+
         private void comboDepth_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (stop)
@@ -321,6 +333,7 @@ namespace Ekona.Images
 
             Update_Image();
         }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (stop)
@@ -335,6 +348,7 @@ namespace Ekona.Images
                     numericWidth.Increment = 1;
                     numericHeight.Increment = 1;
                     break;
+
                 case 1:
                     image.FormTile = TileForm.Horizontal;
                     numericHeight.Minimum = image.TileSize;
@@ -346,6 +360,7 @@ namespace Ekona.Images
 
             Update_Image();
         }
+
         private void numPal_ValueChanged(object sender, EventArgs e)
         {
             for (int j = 0; j < image.TilesPalette.Length; j++)
@@ -353,6 +368,7 @@ namespace Ekona.Images
 
             Update_Image();
         }
+
         private void checkTransparency_CheckedChanged(object sender, EventArgs e)
         {
             if (checkTransparency.Checked)
@@ -364,10 +380,12 @@ namespace Ekona.Images
             else
                 Update_Image();
         }
+
         private void checkHex_CheckedChanged(object sender, EventArgs e)
         {
             numericStart.Hexadecimal = checkHex.Checked;
         }
+
         private void btnSetTrans_Click(object sender, EventArgs e)
         {
             int pal_index = (int)numPal.Value;
@@ -383,7 +401,6 @@ namespace Ekona.Images
                 if (index == -1)
                 {
                     index = Actions.Remove_NotUsedColors(ref pal, ref tiles);
-
                 }
             }
             else
@@ -448,6 +465,7 @@ namespace Ekona.Images
             }
             o.Dispose();
         }
+
         private void btnImport_Click(object sender, EventArgs e)
         {
             OpenFileDialog o = new OpenFileDialog();
@@ -514,6 +532,7 @@ namespace Ekona.Images
             Update_Image();
             Update_Info();
         }
+
         private void Save_Files()
         {
             if (image.ID >= 0)
@@ -570,6 +589,7 @@ namespace Ekona.Images
             ven.MaximizeBox = false;
             ven.Show();
         }
+
         private void btnBgd_Click(object sender, EventArgs e)
         {
             ColorDialog o = new ColorDialog();
@@ -582,6 +602,7 @@ namespace Ekona.Images
                 btnBgdRem.Enabled = true;
             }
         }
+
         private void btnBgdTrans_Click(object sender, EventArgs e)
         {
             btnBgdRem.Enabled = false;

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System.Drawing;
+using System.IO;
 
 namespace Images
 {
     public class NCCL : PaletteBase
     {
-        sNCCL nccl;
+        private sNCCL nccl;
 
         public NCCL(string file, int id, string fileName = "") : base(file, id, fileName)
         {
@@ -29,7 +25,6 @@ namespace Images
             nccl.generic.file_size = br.ReadUInt32();
             nccl.generic.header_size = br.ReadUInt16();
             nccl.generic.nSection = br.ReadUInt16();
-            
 
             // PALT (PALeTte) section
             nccl.palt.type = br.ReadChars(4);            // Should be PALT
@@ -76,6 +71,7 @@ namespace Images
                 public uint num_colors; // Number of colors per palette
                 public uint num_palette;
             }
+
             public struct CMNT
             {
                 public char[] type;     // Should be CMNT

@@ -11,6 +11,7 @@
             [4] = "GREATER/EQUAL",
             [5] = "DIFFERENT",
         };
+
         public static Dictionary<ushort, string> comparisonOperatorsGenVappendix = new Dictionary<ushort, string>()
         {
             /* GEN V ONLY */
@@ -18,6 +19,7 @@
             [7] = "AND",
             [0xFF] = "TRUEUP"
         };
+
         public static Dictionary<ushort, string> specialOverworlds = new Dictionary<ushort, string>()
         {
             [241] = "Camera",
@@ -25,6 +27,7 @@
             [253] = "Following",
             [255] = "Player"
         };
+
         public static Dictionary<byte, string> overworldDirections = new Dictionary<byte, string>()
         {
             [0] = "Up",
@@ -52,6 +55,7 @@
             0x16,
             0x1B
         };
+
         public static Dictionary<ushort, string> movementsDictIDName = new Dictionary<ushort, string>()
         {
             [0x0000] = "LookUp",
@@ -655,7 +659,6 @@
 
             [0x028F] = "CountLeagueVictories",
 
-
             [0x0297] = "GetBP",
             [0x0298] = "AddBP",
             [0x0299] = "SubBP",
@@ -682,6 +685,7 @@
             [0x02C2] = "HideSaveBox",
             [0x02C3] = "ScopeMode"
         };
+
         public static Dictionary<ushort, byte[]> DPPtScrCmdParameters = new Dictionary<ushort, byte[]>()
         {
             [0x0000] = new byte[1] { 0 },
@@ -1148,19 +1152,19 @@
             [0x01CD] = new byte[] { 2, 2, 2, 2, 2 },
             [0x01CE] = new byte[1] { 0 },
 
-            [0x01CF] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x01CF] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
             },
 
-            [0x01D0] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x01D0] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
             },
 
-            [0x01D1] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x01D1] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
@@ -1275,11 +1279,11 @@
             [0x0234] = new byte[] { 2 },
             [0x0235] = new byte[] { 0xFF, 2,   //0xFF = Variable number of parameters,  2 = size of first parameter
                 0, 1,   2,          //if value is 0, read 1 parameter... which takes up 2 bytes
-                1, 3,   2, 2, 2,    //if value is 1, read 3 parameters... each one takes up 2 bytes 
+                1, 3,   2, 2, 2,    //if value is 1, read 3 parameters... each one takes up 2 bytes
                 2, 0,               //if value is 2, don't read anything
-                3, 3,   2, 2, 2,    //if value is 3, read 3 parameters... each one takes up 2 bytes 
-                4, 2,   2, 2,       //if value is 4, read 2 parameters... each one takes up 2 bytes 
-                5, 3,   2, 2, 2,    //if value is 5, read 3 parameters... each one takes up 2 bytes 
+                3, 3,   2, 2, 2,    //if value is 3, read 3 parameters... each one takes up 2 bytes
+                4, 2,   2, 2,       //if value is 4, read 2 parameters... each one takes up 2 bytes
+                5, 3,   2, 2, 2,    //if value is 5, read 3 parameters... each one takes up 2 bytes
                 6, 1,   2           //if value is 6, read 1 parameter... which takes up 2 bytes
             },
             [0x0236] = new byte[] { 2 },
@@ -1296,7 +1300,7 @@
                 2, 1,   2,          //if value is 2, read 1 parameter... which takes up 2 bytes
                 3, 1,   2,          //if value is 3, read 1 parameter... which takes up 2 bytes
                 4, 0,               //if value is 4, don't read anything
-                5, 2,   2, 2,       //if value is 5, read 2 parameters... each one takes up 2 bytes 
+                5, 2,   2, 2,       //if value is 5, read 2 parameters... each one takes up 2 bytes
                 6, 2,   2, 2,       //if value is 6, read 2 parameters... each one takes up 2 bytes
                 7, 0,               //if value is 7, don't read anything
                 8, 0                //if value is 8, don't read anything
@@ -1440,6 +1444,7 @@
         {
             [0x0264] = "CheckBurmyForms",
         };
+
         public static Dictionary<ushort, byte[]> DPScrCmdParameters = new Dictionary<ushort, byte[]>()
         {
             [0x011D] = new byte[] { 1, 1, 2 },
@@ -2107,7 +2112,6 @@
 
             [0x02D3] = "BoatAnimation",
 
-
             [0x02D9] = "CheckPokemonAlive",
             [0x02DA] = "CheckFollowingPoke",
 
@@ -2137,6 +2141,7 @@
             [0x0353] = "TextCapitalize",
             [0x0354] = "TextFloor"
         };
+
         public static Dictionary<ushort, byte[]> HGSSScrCmdParameters = new Dictionary<ushort, byte[]>()
         {
             [0x0000] = new byte[1] { 0 },
@@ -2540,19 +2545,19 @@
             [0x018E] = new byte[] { 2, 2, 2 },
             [0x018F] = new byte[] { 1, 2, 2 },
 
-            [0x0190] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x0190] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
             },
 
-            [0x0191] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x0191] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
             },
 
-            [0x0192] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par  
+            [0x0192] = new byte[] { 0xFF, 1,  //0xFF signals that this scrcmd takes a variable num of parameters, 1 is the size of the 1st par
                 0, 0,           //if 1st par is 0, read 0 parameters
                 1, 0,           //if 1st par is 1, read 0 parameters
                 2, 1,   2       //if 1st par is 2, read 1 parameter of size = 2 bytes
@@ -2659,7 +2664,7 @@
                 2, 1,   2,          //if value is 2, read 1 parameter... which takes up 2 bytes
                 3, 1,   2,          //if value is 3, read 1 parameter... which takes up 2 bytes
                 4, 0,               //if value is 4, don't read anything
-                5, 2,   2, 2,       //if value is 5, read 2 parameters... each one takes up 2 bytes 
+                5, 2,   2, 2,       //if value is 5, read 2 parameters... each one takes up 2 bytes
                 6, 2,   2, 2,       //if value is 6, read 2 parameters... each one takes up 2 bytes
                 7, 0,               //if value is 7, don't read anything
                 8, 0                //if value is 8, don't read anything

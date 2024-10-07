@@ -53,8 +53,8 @@ namespace VsMaker2Core.DataModels
         {
             GameFamily.DiamondPearl => 588,
             GameFamily.Platinum => 647,
-            GameFamily.HeartGoldSoulSilver => GameLanguage == GameLanguage.Japanese ? 739: 750,
-            GameFamily.HgEngine => GameLanguage == GameLanguage.Japanese ? 739: 750,
+            GameFamily.HeartGoldSoulSilver => GameLanguage == GameLanguage.Japanese ? 739 : 750,
+            GameFamily.HgEngine => GameLanguage == GameLanguage.Japanese ? 739 : 750,
             _ => 0,
         };
 

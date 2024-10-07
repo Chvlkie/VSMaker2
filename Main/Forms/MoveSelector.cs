@@ -38,6 +38,7 @@
                 moveComboBoxes[i].SelectedIndex = moves[i];
             }
         }
+
         private void PopulateMoves()
         {
             foreach (var comboBox in moveComboBoxes)

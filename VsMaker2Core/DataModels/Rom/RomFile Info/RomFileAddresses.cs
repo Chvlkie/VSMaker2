@@ -112,7 +112,9 @@ namespace VsMaker2Core.DataModels
         #endregion ClassGenders
 
         #region EyeContactMusic
+
         public static uint EyeContactRepointOffset = 0x1600;
+
         public static uint EyeContactMusicTableOffsetToRam => GameFamily switch
         {
             GameFamily.HeartGoldSoulSilver => GameLanguage switch
@@ -331,8 +333,6 @@ namespace VsMaker2Core.DataModels
             }
             return (initialMoneyOverlayNumber, initialMoneyOverlayOffset);
         }
-
-        public static string TrainerGraphicsPath = Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
 
     }
 }

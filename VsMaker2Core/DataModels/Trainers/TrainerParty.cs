@@ -1,5 +1,4 @@
-﻿
-namespace VsMaker2Core.DataModels
+﻿namespace VsMaker2Core.DataModels
 {
     public class TrainerParty : IEquatable<TrainerParty?>
     {

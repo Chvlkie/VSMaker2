@@ -1,6 +1,4 @@
-﻿using static VsMaker2Core.Enums;
-
-namespace VsMaker2Core.RomFiles
+﻿namespace VsMaker2Core.RomFiles
 {
     public class ScriptActionData
     {

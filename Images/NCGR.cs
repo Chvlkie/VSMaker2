@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace Images
 {
     public class NCGR : ImageBase
     {
-        sNCGR ncgr;
+        private sNCGR ncgr;
 
-        public NCGR(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NCGR(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string fileIn)
         {
@@ -68,13 +68,14 @@ namespace Images
 
             if (ncgr.rahc.nTilesX == 0xFFFF)
             {
-                System.Drawing.Size size = Actions.Get_Size((int)ncgr.rahc.size_tiledata, BPP); 
+                System.Drawing.Size size = Actions.Get_Size((int)ncgr.rahc.size_tiledata, BPP);
                 ncgr.rahc.nTilesX = (ushort)size.Width;
                 ncgr.rahc.nTilesY = (ushort)size.Height;
                 Height = size.Height;
                 Width = size.Width;
             }
         }
+
         public override void Write(string fileOut, PaletteBase palette)
         {
             Update_Struct();
@@ -143,6 +144,7 @@ namespace Images
             public Object other;
             public UInt32 id;
         }
+
         public struct RAHC  // CHARacter
         {
             public char[] id;               // Always RAHC = 0x52414843
@@ -157,6 +159,7 @@ namespace Images
             public UInt32 unknown3;         // Always 0x18 (24) (data offset?)
             public byte[] data;             // image data
         }
+
         public struct SOPC  // Unknown section
         {
             public char[] id;
@@ -165,6 +168,5 @@ namespace Images
             public UInt16 charSize;
             public UInt16 nChar;
         }
-
     }
 }

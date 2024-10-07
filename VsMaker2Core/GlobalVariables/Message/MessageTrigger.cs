@@ -26,7 +26,7 @@
             new MessageTrigger(19, Descriptions.DoubleRematchTrainer2),
             new MessageTrigger(20, Descriptions.PlayerLost),
             ];
-            
+
         public static class Descriptions
         {
             public const string PreBattleOw = "Pre-Battle OW";

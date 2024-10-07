@@ -4,17 +4,17 @@
 // Copyright (C) 2012
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by 
+//   it under the terms of the GNU General Public License as published by
 //   the Free Software Foundation, either version 3 of the License, or
 //   (at your option) any later version.
 //
-//   This program is distributed in the hope that it will be useful, 
+//   This program is distributed in the hope that it will be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details. 
+//   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // </copyright>
 
@@ -24,8 +24,6 @@
 // -----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Ekona.Helper
 {
@@ -41,6 +39,7 @@ namespace Ekona.Helper
 
             return bits.ToArray();
         }
+
         public static Byte[] ByteToBit2(Byte data)
         {
             Byte[] bit2 = new byte[4];
@@ -52,6 +51,7 @@ namespace Ekona.Helper
 
             return bit2;
         }
+
         public static Byte[] ByteToBit4(Byte data)
         {
             Byte[] bit4 = new Byte[2];
@@ -61,6 +61,7 @@ namespace Ekona.Helper
 
             return bit4;
         }
+
         public static Byte[] BytesToBit4(Byte[] data)
         {
             byte[] bit4 = new byte[data.Length * 2];
@@ -72,6 +73,7 @@ namespace Ekona.Helper
             }
             return bit4;
         }
+
         public static String BytesToHexString(Byte[] bytes)
         {
             string result = "";
@@ -100,14 +102,17 @@ namespace Ekona.Helper
 
             return bytes.ToArray();
         }
+
         public static Byte Bit4ToByte(Byte[] data)
         {
             return (byte)(data[0] + (data[1] << 4));
         }
+
         public static Byte Bit4ToByte(Byte b1, Byte b2)
         {
             return (byte)(b1 + (b2 << 4));
         }
+
         public static Byte[] Bits4ToByte(Byte[] data)
         {
             byte[] b = new byte[data.Length / 2];
@@ -117,6 +122,7 @@ namespace Ekona.Helper
 
             return b;
         }
+
         public static Byte[] StringToBytes(String text, int num_bytes)
         {
             string hexText = text.Replace("-", "");
@@ -128,6 +134,5 @@ namespace Ekona.Helper
 
             return hex.ToArray();
         }
-
     }
 }

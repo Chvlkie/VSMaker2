@@ -1,5 +1,4 @@
-﻿
-namespace VsMaker2Core.DataModels
+﻿namespace VsMaker2Core.DataModels
 {
     public class TrainerClassProperty : IEquatable<TrainerClassProperty?>
     {
@@ -9,7 +8,9 @@ namespace VsMaker2Core.DataModels
         public int? Gender { get; set; }
         public string Description { get; set; }
 
-        public TrainerClassProperty() { }
+        public TrainerClassProperty()
+        { }
+
         public TrainerClassProperty(int gender, int prizeMoney, string description, int eyeContactMusicDay, int? eyeContactMusicNight = null)
         {
             Gender = gender;

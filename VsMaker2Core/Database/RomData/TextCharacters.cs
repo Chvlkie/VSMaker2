@@ -3697,6 +3697,7 @@
                     [0x0E80] = "锥",
                     [0x0E81] = "锹",
                 };
+
                 public static Dictionary<int, int> WriteTextDictionary = new Dictionary<int, int>()
                 {
                     [32] = 0x01DE,

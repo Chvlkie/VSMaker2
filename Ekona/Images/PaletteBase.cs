@@ -12,49 +12,50 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * By: pleoNeX
- * 
+ *
  */
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Ekona.Images
 {
     public abstract class PaletteBase
     {
         #region Variables
+
         protected IPluginHost pluginHost;
         protected String fileName;
         protected int id = -1;
-        bool loaded;
+        private bool loaded;
 
-        Byte[] original;
-        int startByte;
+        private Byte[] original;
+        private int startByte;
 
         protected Color[][] palette;
-        ColorFormat depth;
-        bool canEdit;
+        private ColorFormat depth;
+        private bool canEdit;
 
         protected Object obj;
-        #endregion
+
+        #endregion Variables
 
         public PaletteBase()
         {
             loaded = false;
         }
+
         public PaletteBase(Color[][] pal, bool editable, string fileName = "")
         {
             this.fileName = fileName;
             Set_Palette(pal, editable);
         }
-        public PaletteBase(string fileIn, int id,  IPluginHost pluginHost, string fileName = "")
+
+        public PaletteBase(string fileIn, int id, IPluginHost pluginHost, string fileName = "")
         {
             this.pluginHost = pluginHost;
             if (fileName == "")
@@ -65,6 +66,7 @@ namespace Ekona.Images
 
             Read(fileIn);
         }
+
         public PaletteBase(string fileIn, int id, string fileName = "")
         {
             if (fileName == "")
@@ -76,8 +78,8 @@ namespace Ekona.Images
             Read(fileIn);
         }
 
-
         public abstract void Read(string fileIn);
+
         public abstract void Write(string fileOut);
 
         public Image Get_Image(int index)
@@ -92,6 +94,7 @@ namespace Ekona.Images
         {
             FillColors(maxColors, pal_index, Color.Black);
         }
+
         public void FillColors(int maxColors, int pal_index, Color color)
         {
             int old_length = palette[pal_index].Length;
@@ -118,6 +121,7 @@ namespace Ekona.Images
             else
                 palette = Actions.Palette_256To16(palette);
         }
+
         private void Change_StartByte(int start)
         {
             if (start < 0 || start >= original.Length)
@@ -127,7 +131,7 @@ namespace Ekona.Images
 
             // Get the new palette data
             int size = original.Length - start;
-            if (size > 0x2000){ size = 0x2000; }
+            if (size > 0x2000) { size = 0x2000; }
 
             Byte[] data = new byte[size];
             Array.Copy(original, start, data, 0, data.Length);
@@ -178,6 +182,7 @@ namespace Ekona.Images
             original = Actions.ColorToBGR555(colors.ToArray());
             startByte = 0;
         }
+
         public void Set_Palette(Color[][] palette, ColorFormat depth, bool editable)
         {
             this.palette = palette;
@@ -207,14 +212,17 @@ namespace Ekona.Images
             original = Actions.ColorToBGR555(colors.ToArray());
             startByte = 0;
         }
+
         public void Set_Palette(Color[] palette, ColorFormat depth, bool editable)
         {
             Set_Palette(new Color[][] { palette }, depth, editable);
         }
+
         public void Set_Palette(Color[] palette, int index)
         {
             this.palette[index] = palette;
         }
+
         public void Set_Palette(PaletteBase new_pal)
         {
             this.palette = new_pal.Palette;
@@ -229,6 +237,7 @@ namespace Ekona.Images
             original = Actions.ColorToBGR555(colors.ToArray());
             startByte = 0;
         }
+
         public void Set_Palette(Color[][] palette)
         {
             this.palette = palette;
@@ -238,7 +247,6 @@ namespace Ekona.Images
                 depth = ColorFormat.colors16;
 
             loaded = true;
-
 
             if (depth == ColorFormat.colors16 && (palette.Length == 1 && palette[0].Length > 0x10))
             {
@@ -273,20 +281,24 @@ namespace Ekona.Images
         }
 
         #region Properties
+
         public int StartByte
         {
             get { return startByte; }
             set { Change_StartByte(value); }
         }
+
         public ColorFormat Depth
         {
             get { return depth; }
             set { Change_PaletteDepth(value); }
         }
+
         public int NumberOfPalettes
         {
             get { return palette.Length; }
         }
+
         public int NumberOfColors
         {
             get
@@ -302,33 +314,39 @@ namespace Ekona.Images
                 }
             }
         }
+
         public Color[][] Palette
         {
             get { return palette; }
         }
+
         public bool CanEdit
         {
             get { return canEdit; }
         }
+
         public bool Loaded
         {
             get { return loaded; }
         }
+
         public String FileName
         {
             get { return fileName; }
             set { fileName = value; }
         }
+
         public int ID
         {
             get { return id; }
         }
+
         public Byte[] Original
         {
             set { original = value; }
             get { return original; }
         }
-        #endregion
-    }
 
+        #endregion Properties
+    }
 }

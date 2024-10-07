@@ -4,17 +4,17 @@
 // Copyright (C) 2012
 //
 //   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by 
+//   it under the terms of the GNU General Public License as published by
 //   the Free Software Foundation, either version 3 of the License, or
 //   (at your option) any later version.
 //
-//   This program is distributed in the hope that it will be useful, 
+//   This program is distributed in the hope that it will be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//   GNU General Public License for more details. 
+//   GNU General Public License for more details.
 //
 //   You should have received a copy of the GNU General Public License
-//   along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+//   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // </copyright>
 
@@ -24,9 +24,9 @@
 // -----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace Ekona.Images.Formats
 {
@@ -47,8 +47,9 @@ namespace Ekona.Images.Formats
         {
             byte[] pngSignature = new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 };
             IHDR ihdr = Read_IHDR(pngs[0]);
-            
+
             #region Section acTL
+
             acTL actl = new acTL();
             actl.length = BitConverter.GetBytes(8).Reverse().ToArray();
             actl.id = Encoding.ASCII.GetBytes(new char[] { 'a', 'c', 'T', 'L' });
@@ -60,12 +61,13 @@ namespace Ekona.Images.Formats
             stream.AddRange(actl.num_plays);
             actl.crc = Helper.CRC32.Calculate(stream.ToArray());
             stream.Clear();
-            #endregion
+
+            #endregion Section acTL
 
             List<fcTL> fctl = new List<fcTL>();
             List<fdAT> fdat = new List<fdAT>();
             int i = 0;
-            fctl.Add(Read_fcTL(pngs[0], i, delay)); 
+            fctl.Add(Read_fcTL(pngs[0], i, delay));
             i++;
             byte[] IDAT = Read_IDAT(pngs[0]);
 
@@ -87,6 +89,7 @@ namespace Ekona.Images.Formats
 
             Write(apng, pngSignature, ihdr, actl, IDAT, fctl.ToArray(), fdat.ToArray(), iend);
         }
+
         public static void Create(System.Drawing.Bitmap[] pngs, string apng, int delay, int loops)
         {
             string[] files = new string[pngs.Length];
@@ -187,10 +190,11 @@ namespace Ekona.Images.Formats
             ihdr.filter = br.ReadByte();
             ihdr.interlace = br.ReadByte();
             ihdr.crc = br.ReadBytes(4);
-            
+
             br.Close();
             return ihdr;
         }
+
         private static fcTL Read_fcTL(string png, int seq, int delay)
         {
             BinaryReader br = new BinaryReader(new FileStream(png, FileMode.Open));
@@ -226,6 +230,7 @@ namespace Ekona.Images.Formats
             br.Close();
             return fctl;
         }
+
         private static byte[] Read_IDAT(string png)
         {
             BinaryReader br = new BinaryReader(new FileStream(png, FileMode.Open));
@@ -250,6 +255,7 @@ namespace Ekona.Images.Formats
             br.Close();
             return buffer;
         }
+
         private static fdAT Read_fdAT(string png, int i)
         {
             BinaryReader br = new BinaryReader(new FileStream(png, FileMode.Open));
@@ -271,7 +277,7 @@ namespace Ekona.Images.Formats
 
             br.BaseStream.Position -= 8;
             int length = BitConverter.ToInt32(br.ReadBytes(4).Reverse().ToArray(), 0);
-            fdat.length = BitConverter.GetBytes(length + 4).Reverse().ToArray();         
+            fdat.length = BitConverter.GetBytes(length + 4).Reverse().ToArray();
             br.BaseStream.Position += 4;
             fdat.data = br.ReadBytes(length);
             List<Byte> stream = new List<byte>();
@@ -297,6 +303,7 @@ namespace Ekona.Images.Formats
             public byte interlace;
             public byte[] crc;
         }
+
         private struct acTL
         {
             public byte[] length;
@@ -305,6 +312,7 @@ namespace Ekona.Images.Formats
             public byte[] num_plays;
             public byte[] crc;
         }
+
         private struct fcTL
         {
             public byte[] length;
@@ -320,6 +328,7 @@ namespace Ekona.Images.Formats
             public byte blend_op;
             public byte[] crc;
         }
+
         private struct fdAT
         {
             public byte[] length;
@@ -328,6 +337,7 @@ namespace Ekona.Images.Formats
             public byte[] data;
             public byte[] crc;
         }
+
         private struct IEND
         {
             public byte[] length;

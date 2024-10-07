@@ -12,13 +12,14 @@ namespace VsMaker2Core.RomFiles
         public ScriptData()
         { }
 
-        public ScriptData(ScriptData scriptDataCopy,  uint scriptNumber)
+        public ScriptData(ScriptData scriptDataCopy, uint scriptNumber)
         {
             ScriptNumber = scriptNumber;
             ScriptType = scriptDataCopy.ScriptType;
             UsedScriptId = scriptDataCopy.UsedScriptId;
             Lines = scriptDataCopy.Lines;
         }
+
         public ScriptData(uint scriptNumber, ScriptType scriptType, int? usedByScriptId = null, List<ScriptLine> lines = null)
         {
             ScriptNumber = scriptNumber;

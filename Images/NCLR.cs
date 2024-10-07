@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Drawing;
-using Ekona;
+﻿using Ekona;
 using Ekona.Images;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 
 namespace Images
 {
     public class NCLR : PaletteBase
     {
-        sNCLR nclr;
+        private sNCLR nclr;
 
-        public NCLR(string file, int id, string fileName = "") : base(file, id, fileName) { }
+        public NCLR(string file, int id, string fileName = "") : base(file, id, fileName)
+        {
+        }
 
         public override void Read(string fileIn)
         {
@@ -120,6 +120,7 @@ namespace Images
             public TTLP pltt;
             public PMCP pmcp;
         }
+
         public struct TTLP  // PaLeTTe
         {
             public char[] ID;
@@ -131,6 +132,7 @@ namespace Images
             public UInt32 num_colors;    // Number of colors
             public Color[][] palettes;
         }
+
         public struct PMCP
         {
             public char[] ID;
