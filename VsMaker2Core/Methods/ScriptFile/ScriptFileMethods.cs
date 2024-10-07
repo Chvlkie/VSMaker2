@@ -139,7 +139,6 @@ namespace VsMaker2Core.Methods
             parameters.Add(BitConverter.GetBytes(functionNumber + 1));
         }
 
-
         private static ScriptLine ReadScriptLine(BinaryReader reader, ref List<int> functionOffsets, ref List<int> actionOffsets)
         {
             ushort id = reader.ReadUInt16();
@@ -459,7 +458,6 @@ namespace VsMaker2Core.Methods
             return scripts;
         }
 
-
         public ScriptFileData GetScriptFileData(int scriptFileId)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}\\{scriptFileId:D4}";
@@ -585,13 +583,18 @@ namespace VsMaker2Core.Methods
             return new ScriptFileData(scriptFileId, isLevelScript, scripts, functions, actions);
         }
 
-
         #endregion Get
 
-        private struct ScriptReference(uint id, uint offset)
+        private struct ScriptReference
         {
-            public uint Id = id;
-            public uint Offset = offset;
+            public uint Id { get; set; }
+            public uint Offset { get; set; }
+
+            public ScriptReference(uint id, uint offset)
+            {
+                Id = id;
+                Offset = offset;
+            }
         }
 
         private struct CallerReference(Enums.ScriptType scriptType, uint callerId, Enums.ScriptType invokedType, uint invokedId, int position)
@@ -628,148 +631,189 @@ namespace VsMaker2Core.Methods
                 }
             }
         }
+
         #region Write
 
         public (bool Success, string ErrorMessage) WriteScriptData(ScriptFileData scriptFileData)
         {
+            // Initialize lists properly
             List<ScriptReference> scriptOffsets = [];
             List<ScriptReference> functionOffsets = [];
             List<ScriptReference> actionOffsets = [];
             List<CallerReference> callerReferences = [];
 
-            MemoryStream stream = new();
+            using MemoryStream stream = new();
             using BinaryWriter writer = new(stream);
+
             try
             {
+                // Move writer's position for scripts count
                 writer.BaseStream.Position += scriptFileData.Scripts.Count * 0x4;
                 writer.Write((ushort)0xFD13);
+
                 List<ScriptData> useScripts = [];
 
-                // Write Scripts
-                foreach (var script in scriptFileData.Scripts)
-                {
-                    if (!script.UsedScriptId.HasValue)
-                    {
-                        scriptOffsets.Add(new ScriptReference(script.ScriptNumber, (uint)writer.BaseStream.Position));
-                        foreach (var line in script.Lines)
-                        {
-                            writer.Write((ushort)line.ScriptCommandId);
+                // Write Scripts to Stream
+                WriteScripts(scriptFileData, writer, ref scriptOffsets, ref useScripts, ref callerReferences);
 
-                            List<byte[]> parameters = line.Parameters;
-                            foreach (byte[] parameter in parameters)
-                            {
-                                writer.Write(parameter);
-                            }
-                            AddReference(ref callerReferences, (ushort)line.ScriptCommandId, parameters, (int)writer.BaseStream.Position, script);
-                        }
-                    }
-                    else
-                    {
-                        useScripts.Add(script);
-                    }
+                // Handle UseScripts
+                HandleUseScripts(ref scriptOffsets, ref useScripts);
+
+                // Write Functions to Stream
+                var writeFunctionResult = WriteFunctions(scriptFileData, writer, ref scriptOffsets, ref functionOffsets, ref callerReferences);
+                if (!writeFunctionResult.Success)
+                {
+                    return writeFunctionResult; // Return error if writing functions failed
                 }
 
-                foreach (var useScript in useScripts)
-                {
-                    for (int i = 0; i < scriptOffsets.Count; i++)
-                    {
-                        var scriptReference = scriptOffsets[i];
-                        if (scriptReference.Id == useScript.UsedScriptId)
-                        {
-                            scriptOffsets.Add(new ScriptReference(useScript.ScriptNumber, scriptReference.Offset));
-                        }
-                    }
-                }
+                // Align Actions
+                AlignActions(writer);
 
-                // Write Functions
-                foreach (var function in scriptFileData.Functions)
-                {
-                    if (!function.UsedScriptId.HasValue)
-                    {
-                        functionOffsets.Add(new ScriptReference(function.ScriptNumber, (uint)writer.BaseStream.Position));
-
-                        foreach (var line in function.Lines)
-                        {
-                            writer.Write((ushort)line.ScriptCommandId);
-                            List<byte[]> parameters = line.Parameters;
-                            foreach (byte[] parameter in parameters)
-                            {
-                                writer.Write(parameter);
-                            }
-                            AddReference(ref callerReferences, (ushort)line.ScriptCommandId, parameters, (int)writer.BaseStream.Position, function);
-                        }
-                    }
-                    else
-                    {
-                        int useScript = function.UsedScriptId.Value - 1;
-                        if (useScript >= scriptOffsets.Count)
-                        {
-                            return (false, $"Function #{function.ScriptNumber}refers to Script {function.UsedScriptId}, which does not exist." +
-                                "\nThis Script File cannot be saved.");
-                        }
-                        else
-                        {
-                            functionOffsets.Add(new ScriptReference(function.ScriptNumber, scriptOffsets[function.UsedScriptId.Value - 1].Offset));
-                        }
-                    }
-                }
-
-                //Halfword align Actions
-                if (writer.BaseStream.Position % 2 == 1)
-                {
-                    writer.Write((byte)0x00);//Padding
-                }
-
-                // Write Actions
-                foreach (var action in scriptFileData.Actions)
-                {
-                    actionOffsets.Add(new ScriptReference(action.ActionNumber, (uint)writer.BaseStream.Position));
-                    foreach (var line in action.Lines)
-                    {
-                        writer.Write((ushort)line.ActionCommandId);
-                        writer.Write((ushort)line.Repetitions);
-                    }
-                }
+                // Write Actions to Stream
+                WriteActions(scriptFileData, writer, ref actionOffsets);
 
                 // Write Script Offsets
-                writer.BaseStream.Position = 0x0;
-                scriptOffsets = scriptOffsets.OrderBy(x => x.Id).ToList();
-                for (int i = 0; i < scriptOffsets.Count; i++)
-                {
-                    writer.Write(scriptOffsets[i].Offset - (uint)writer.BaseStream.Position - 0x4);
-                }
+                WriteScriptOffsets(writer, scriptOffsets);
 
-                for (int i = 0; i < callerReferences.Count; i++)
-                {
-                    writer.BaseStream.Position = callerReferences[i].Offset;
-                    ScriptReference result;
-                    if (callerReferences[i].InvokedType == ScriptType.Action)
-                    {
-                        result = actionOffsets.Find(entry => entry.Id == callerReferences[i].InvokedId);
-                        int relativeOffset = (int)(result.Offset - callerReferences[i].Offset - 4);
-                        writer.Write(relativeOffset);
-                    }
-                    else
-                    {
-                        result = functionOffsets.Find(entry => entry.Id == callerReferences[i].InvokedId);
-                        int relativeOffset = (int)(result.Offset - callerReferences[i].Offset - 4);
-                        writer.Write(relativeOffset);
-                    }
-                }
+                // Write Caller References
+                WriteCallerReferences(writer, callerReferences, functionOffsets, actionOffsets);
 
+                // Write to the file
                 string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}\\{scriptFileData.ScriptFileId:D4}";
                 File.WriteAllBytes(directory, stream.ToArray());
-                writer.Dispose();
-                stream.Close();
+
                 return (true, "");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                writer.Dispose();
+                // Log or throw a detailed exception
+                Console.WriteLine($"Error writing script data: {ex.Message}");
                 return (false, ex.Message);
             }
         }
+
+        private static void WriteScripts(ScriptFileData scriptFileData, BinaryWriter writer, ref List<ScriptReference> scriptOffsets, ref List<ScriptData> useScripts, ref List<CallerReference> callerReferences)
+        {
+            foreach (var script in scriptFileData.Scripts)
+            {
+                if (!script.UsedScriptId.HasValue)
+                {
+                    scriptOffsets.Add(new ScriptReference(script.ScriptNumber, (uint)writer.BaseStream.Position));
+                    foreach (var line in script.Lines)
+                    {
+                        writer.Write((ushort)line.ScriptCommandId);
+                        List<byte[]> parameters = line.Parameters;
+                        foreach (byte[] parameter in parameters)
+                        {
+                            writer.Write(parameter);
+                        }
+                        AddReference(ref callerReferences, (ushort)line.ScriptCommandId, parameters, (int)writer.BaseStream.Position, script);
+                    }
+                }
+                else
+                {
+                    useScripts.Add(script);
+                }
+            }
+        }
+
+        private static void HandleUseScripts(ref List<ScriptReference> scriptOffsets, ref List<ScriptData> useScripts)
+        {
+            foreach (var useScript in useScripts)
+            {
+                var matchingScript = scriptOffsets.FirstOrDefault(s => s.Id == useScript.UsedScriptId);
+
+                if (!matchingScript.Equals(default(ScriptReference)))
+                {
+                    scriptOffsets.Add(new ScriptReference(useScript.ScriptNumber, matchingScript.Offset));
+                }
+            }
+        }
+
+        private static (bool Success, string ErrorMessage) WriteFunctions(ScriptFileData scriptFileData, BinaryWriter writer, ref List<ScriptReference> scriptOffsets, ref List<ScriptReference> functionOffsets, ref List<CallerReference> callerReferences)
+        {
+            foreach (var function in scriptFileData.Functions)
+            {
+                if (!function.UsedScriptId.HasValue)
+                {
+                    functionOffsets.Add(new ScriptReference(function.ScriptNumber, (uint)writer.BaseStream.Position));
+
+                    foreach (var line in function.Lines)
+                    {
+                        writer.Write((ushort)line.ScriptCommandId);
+                        List<byte[]> parameters = line.Parameters;
+                        foreach (byte[] parameter in parameters)
+                        {
+                            writer.Write(parameter);
+                        }
+                        AddReference(ref callerReferences, (ushort)line.ScriptCommandId, parameters, (int)writer.BaseStream.Position, function);
+                    }
+                }
+                else
+                {
+                    int useScriptIndex = function.UsedScriptId.Value - 1;
+                    if (useScriptIndex >= scriptOffsets.Count)
+                    {
+                        return (false, $"Function #{function.ScriptNumber} refers to Script {function.UsedScriptId}, which does not exist.\nThis Script File cannot be saved.");
+                    }
+                    else
+                    {
+                        functionOffsets.Add(new ScriptReference(function.ScriptNumber, scriptOffsets[useScriptIndex].Offset));
+                    }
+                }
+            }
+            return (true, "");
+        }
+
+        private static void AlignActions(BinaryWriter writer)
+        {
+            if (writer.BaseStream.Position % 2 == 1)
+            {
+                writer.Write((byte)0x00); // Padding byte for halfword alignment
+            }
+        }
+
+        private static void WriteActions(ScriptFileData scriptFileData, BinaryWriter writer, ref List<ScriptReference> actionOffsets)
+        {
+            foreach (var action in scriptFileData.Actions)
+            {
+                actionOffsets.Add(new ScriptReference(action.ActionNumber, (uint)writer.BaseStream.Position));
+                foreach (var line in action.Lines)
+                {
+                    writer.Write((ushort)line.ActionCommandId);
+                    writer.Write((ushort)line.Repetitions);
+                }
+            }
+        }
+
+        private static void WriteScriptOffsets(BinaryWriter writer, List<ScriptReference> scriptOffsets)
+        {
+            writer.BaseStream.Position = 0x0;
+            scriptOffsets = scriptOffsets.OrderBy(x => x.Id).ToList();
+            foreach (var scriptReference in scriptOffsets)
+            {
+                writer.Write(scriptReference.Offset - (uint)writer.BaseStream.Position - 0x4);
+            }
+        }
+
+        private static void WriteCallerReferences(BinaryWriter writer, List<CallerReference> callerReferences, List<ScriptReference> functionOffsets, List<ScriptReference> actionOffsets)
+        {
+            foreach (var reference in callerReferences)
+            {
+                writer.BaseStream.Position = reference.Offset;
+
+                ScriptReference result = reference.InvokedType == ScriptType.Action
+                    ? actionOffsets.Find(entry => entry.Id == reference.InvokedId)
+                    : functionOffsets.Find(entry => entry.Id == reference.InvokedId);
+
+                if (!result.Equals(default(ScriptReference)))
+                {
+                    int relativeOffset = (int)(result.Offset - reference.Offset - 4);
+                    writer.Write(relativeOffset);
+                }
+            }
+        }
+
 
         #endregion Write
     }

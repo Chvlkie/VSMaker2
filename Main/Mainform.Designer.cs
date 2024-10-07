@@ -2861,12 +2861,11 @@
             // 
             trainer_Properties_toolStrip.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             trainer_Properties_toolStrip.Dock = DockStyle.None;
-            trainer_Properties_toolStrip.Enabled = false;
             trainer_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveProperties_btn, trainer_UndoProperties_btn, toolStripSeparator13, trainer_CopyProperties_btn, trainer_PastePropeties_btn, toolStripSeparator21, trainer_ImportProperties_btn, trainer_ExportProperties_btn });
             trainer_Properties_toolStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
-            trainer_Properties_toolStrip.Location = new Point(569, 5);
+            trainer_Properties_toolStrip.Location = new Point(538, 5);
             trainer_Properties_toolStrip.Name = "trainer_Properties_toolStrip";
-            trainer_Properties_toolStrip.Size = new Size(235, 23);
+            trainer_Properties_toolStrip.Size = new Size(266, 23);
             trainer_Properties_toolStrip.TabIndex = 156;
             trainer_Properties_toolStrip.Text = "toolStrip8";
             // 

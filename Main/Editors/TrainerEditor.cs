@@ -276,6 +276,7 @@ namespace Main
             TrainerPartyChange = hasChanges;
             main_MainTab_TrainerTab.Text = UnsavedTrainerEditorChanges ? "Trainers *" : "Trainers";
             trainer_TrainerData_tab.Text = TrainerPartyChange || TrainerPropertyChange ? "Trainer Data *" : "Trainer Data";
+            trainer_SaveParty_btn.Enabled = hasChanges;
             trainer_UndoParty_btn.Enabled = hasChanges;
             trainer_UndoAll_Btn.Enabled = UnsavedTrainerEditorChanges;
         }
@@ -285,6 +286,7 @@ namespace Main
             TrainerPropertyChange = hasChanges;
             main_MainTab_TrainerTab.Text = UnsavedTrainerEditorChanges ? "Trainers *" : "Trainers";
             trainer_TrainerData_tab.Text = TrainerPropertyChange || TrainerPartyChange ? "Trainer Data *" : "Trainer Data";
+            trainer_SaveProperties_btn.Enabled = hasChanges;
             trainer_UndoProperties_btn.Enabled = hasChanges;
             trainer_UndoAll_Btn.Enabled = UnsavedTrainerEditorChanges;
         }
