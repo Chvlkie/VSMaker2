@@ -465,7 +465,7 @@ namespace Main
                 var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
                 if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > 0)
                 {
-                    OpenMoveSelector(buttonIndex, pokeComboBoxes[buttonIndex].SelectedIndex);
+                    OpenMoveSelector(buttonIndex, GetPokemonIdFromComboBoxText(pokeComboBoxes[buttonIndex].Text));
                 }
                 else
                 {
@@ -1950,16 +1950,13 @@ namespace Main
 
         private int GetPokemonIdFromComboBoxText(string selectedItemText)
         {
-            // Check if the input text is not null or empty
             if (string.IsNullOrWhiteSpace(selectedItemText))
             {
                 return -1; // Return -1 if the input is invalid
             }
 
-            // Find the index of the selected item in the PokemonNames list
             int pokemonId = MainEditorModel.PokemonNames.IndexOf(selectedItemText);
 
-            // Return the found index or -1 if not found
             return pokemonId;
         }
 
