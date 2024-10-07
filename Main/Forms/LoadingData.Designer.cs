@@ -48,6 +48,7 @@
             label1.Size = new Size(207, 15);
             label1.TabIndex = 1;
             label1.Text = "Please wait... This might take a while...";
+            label1.UseWaitCursor = true;
             // 
             // LoadingData
             // 
@@ -62,6 +63,7 @@
             MinimizeBox = false;
             MinimumSize = new Size(440, 102);
             Name = "LoadingData";
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "LoadingData";
             UseWaitCursor = true;

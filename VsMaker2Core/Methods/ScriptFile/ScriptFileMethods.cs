@@ -10,20 +10,33 @@ namespace VsMaker2Core.Methods
         private ScriptData GetScriptData(BinaryReader reader, uint index, int scriptOffset, ref List<int> functionOffsets, ref List<int> actionOffsets)
         {
             reader.BaseStream.Position = scriptOffset;
+
             List<ScriptLine> lines = [];
             bool endScript = false;
 
-            while (!endScript)
+            const int maxIterations = 1000;
+            int iterationCount = 0;
+
+            while (!endScript && iterationCount < maxIterations)
             {
                 var line = ReadScriptLine(reader, ref functionOffsets, ref actionOffsets);
-                if (line.Parameters is not null)
+
+                if (line.Parameters != null)
                 {
                     lines.Add(line);
+
                     if (ScriptDatabase.endCodes.Contains((ushort)line.ScriptCommandId))
                     {
                         endScript = true;
                     }
                 }
+
+                iterationCount++;
+            }
+
+            if (iterationCount >= maxIterations)
+            {
+                Console.WriteLine("Warning: Max iterations reached in GetScriptData. Possible infinite loop.");
             }
 
             return new ScriptData(index + 1, ScriptType.Script, lines: lines);
@@ -33,48 +46,77 @@ namespace VsMaker2Core.Methods
         {
             List<ScriptLine> lines = [];
             bool endScript = false;
+            int iterationCount = 0;
+            const int maxIterations = 1000;
 
-            while (!endScript)
+            while (!endScript && iterationCount < maxIterations)
             {
                 var line = ReadScriptLine(reader, ref functionOffsets, ref actionOffsets);
-                if (line.Parameters is not null)
+
+                if (line.Parameters != null)
                 {
                     lines.Add(line);
+
                     if (ScriptDatabase.endCodes.Contains((ushort)line.ScriptCommandId))
                     {
                         endScript = true;
                     }
                 }
+
+                iterationCount++;
+            }
+
+            if (iterationCount >= maxIterations)
+            {
+                Console.WriteLine("Warning: Max iterations reached in GetFunctionData. Potential infinite loop.");
             }
 
             return new ScriptData(index + 1, ScriptType.Function, lines: lines);
         }
 
-        private void AddParametersToList(ref List<byte[]> parameterList, ushort id, BinaryReader dataReader)
+        private static void AddParametersToList(ref List<byte[]> parameterList, ushort id, BinaryReader dataReader)
         {
             Console.WriteLine("Loaded command id: " + id.ToString("X4"));
+
             try
             {
-                foreach (int bytesToRead in RomFile.ScriptCommandParametersDict[id])
+                if (!RomFile.ScriptCommandParametersDict.TryGetValue(id, out byte[]? value))
+                {
+                    Console.WriteLine($"Warning: Command ID {id:X4} not found in the ScriptCommandParametersDict.");
+                    return;
+                }
+
+                foreach (int bytesToRead in value)
                 {
                     parameterList.Add(dataReader.ReadBytes(bytesToRead));
                 }
             }
-            catch (NullReferenceException)
+            catch (EndOfStreamException ex)
             {
-                parameterList = null;
+                Console.WriteLine($"Error reading parameters for command ID {id:X4}: {ex.Message}");
                 return;
             }
-            catch
+            catch (IOException ex)
             {
-                parameterList = null;
+                Console.WriteLine($"IO error while reading parameters for command ID {id:X4}: {ex.Message}");
+                return;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine($"NullReferenceException occurred for command ID {id:X4}. Check ScriptCommandParametersDict.");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error for command ID {id:X4}: {ex.Message}");
                 return;
             }
         }
 
-        private void ProcessRelativeJump(BinaryReader reader, ref List<byte[]> parameters, ref List<int> offsetsList)
+        private static void ProcessRelativeJump(BinaryReader reader, ref List<byte[]> parameters, ref List<int> offsetsList)
         {
             int relativeOffset = reader.ReadInt32();
+
             int offsetFromScriptFileStart = (int)(relativeOffset + reader.BaseStream.Position);
 
             if (!offsetsList.Contains(offsetFromScriptFileStart))
@@ -83,15 +125,22 @@ namespace VsMaker2Core.Methods
             }
 
             int functionNumber = offsetsList.IndexOf(offsetFromScriptFileStart);
+
             if (functionNumber < 0)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"Offset {offsetFromScriptFileStart} not found in offsetsList.");
+            }
+
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters), "Parameters list cannot be null.");
             }
 
             parameters.Add(BitConverter.GetBytes(functionNumber + 1));
         }
 
-        private ScriptLine ReadScriptLine(BinaryReader reader, ref List<int> functionOffsets, ref List<int> actionOffsets)
+
+        private static ScriptLine ReadScriptLine(BinaryReader reader, ref List<int> functionOffsets, ref List<int> actionOffsets)
         {
             ushort id = reader.ReadUInt16();
 
@@ -117,7 +166,7 @@ namespace VsMaker2Core.Methods
                                    //in the case of JumpIf and CallIf, the first param is a comparisonOperator
                                    //for JumpIfPlayerDir it's a directionID
                                    //for JumpIfObjID, it's an EventID
-                            parameterList.Add(new byte[] { reader.ReadByte() });
+                            parameterList.Add([reader.ReadByte()]);
                             ProcessRelativeJump(reader, ref parameterList, ref functionOffsets);
                             break;
 
@@ -133,7 +182,7 @@ namespace VsMaker2Core.Methods
                         case 0x1D1:
                             {
                                 byte parameter1 = reader.ReadByte();
-                                parameterList.Add(new byte[] { parameter1 });
+                                parameterList.Add([parameter1]);
                                 if (parameter1 == 0x2)
                                 {
                                     parameterList.Add(reader.ReadBytes(2)); //Read additional u16 if first param read is 2
@@ -224,7 +273,7 @@ namespace VsMaker2Core.Methods
                         case 0x2C4:
                             {
                                 byte parameter1 = reader.ReadByte();
-                                parameterList.Add(new byte[] { parameter1 });
+                                parameterList.Add([parameter1]);
                                 if (parameter1 == 0 || parameter1 == 1)
                                 {
                                     parameterList.Add(reader.ReadBytes(2));
@@ -292,7 +341,7 @@ namespace VsMaker2Core.Methods
                         case 0x19: //JumpIfPlayerDir
                         case 0x1C: //JumpIf
                         case 0x1D: //CallIf
-                            parameterList.Add(new byte[] { reader.ReadByte() }); //in the case of JumpIf and CallIf, the first param is a comparisonOperator
+                            parameterList.Add([reader.ReadByte()]); //in the case of JumpIf and CallIf, the first param is a comparisonOperator
                             ProcessRelativeJump(reader, ref parameterList, ref functionOffsets);
                             break;
 
@@ -396,18 +445,29 @@ namespace VsMaker2Core.Methods
         public List<ScriptFileData> GetScriptFiles()
         {
             List<ScriptFileData> scripts = [];
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}";
-            for (int i = 0; i < new DirectoryInfo(directory).GetFiles().Length; i++)
+
+            string directory = Path.Combine(VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory);
+
+            var files = new DirectoryInfo(directory).EnumerateFiles();
+
+            foreach (var file in files)
             {
-                scripts.Add(GetScriptFileData(i));
+                int index = int.Parse(Path.GetFileNameWithoutExtension(file.Name)); // Assuming file names are indices
+                scripts.Add(GetScriptFileData(index));
             }
+
             return scripts;
         }
+
 
         public ScriptFileData GetScriptFileData(int scriptFileId)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory}\\{scriptFileId:D4}";
-            var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
+
+            if (!File.Exists(directory))
+            {
+                throw new FileNotFoundException($"Script file with ID {scriptFileId} not found in directory: {directory}");
+            }
 
             List<int> scriptOffsets = [];
             List<int> functionOffsets = [];
@@ -416,23 +476,27 @@ namespace VsMaker2Core.Methods
             List<ScriptData> scripts = [];
             List<ScriptData> functions = [];
             List<ScriptActionData> actions = [];
+
+            using FileStream fileStream = new(directory, FileMode.Open, FileAccess.Read);
             using BinaryReader reader = new(fileStream);
+
             bool isLevelScript = true;
+
             try
             {
+                // Read and determine if the script is a level script or not
                 while (true)
                 {
                     uint checker = reader.ReadUInt16();
                     reader.BaseStream.Position -= 0x2;
                     uint value = reader.ReadUInt32();
 
-                    // Script is a level script
                     if (value == 0 && scriptOffsets.Count == 0)
                     {
                         isLevelScript = true;
                         break;
                     }
-                    // Script is not a level script
+
                     if (checker == 0xFD13)
                     {
                         reader.BaseStream.Position -= 0x4;
@@ -444,16 +508,17 @@ namespace VsMaker2Core.Methods
                     scriptOffsets.Add(offsetFromStart);
                 }
 
-                // Begin reading Script file
+                // If not a level script, read the script, function, and action data
                 if (!isLevelScript)
                 {
-                    // Script Data
+                    // Read Script Data
                     for (uint i = 0; i < scriptOffsets.Count; i++)
                     {
-                        int index = scriptOffsets.FindIndex(x => x == scriptOffsets[(int)i]); // Check for UseScript
+                        int offset = scriptOffsets[(int)i];
+                        int index = scriptOffsets.FindIndex(x => x == offset);
+
                         if (index == i)
                         {
-                            int offset = scriptOffsets[(int)i];
                             scripts.Add(GetScriptData(reader, i, offset, ref functionOffsets, ref actionOffsets));
                         }
                         else
@@ -462,11 +527,11 @@ namespace VsMaker2Core.Methods
                         }
                     }
 
-                    // Function Data
+                    // Read Function Data
                     for (uint i = 0; i < functionOffsets.Count; i++)
                     {
                         reader.BaseStream.Position = functionOffsets[(int)i];
-                        int index = scriptOffsets.IndexOf(functionOffsets[(int)i]); // Check for UseScript
+                        int index = scriptOffsets.IndexOf(functionOffsets[(int)i]);
 
                         if (index == -1)
                         {
@@ -478,12 +543,13 @@ namespace VsMaker2Core.Methods
                         }
                     }
 
-                    // Action Data
+                    // Read Action Data
                     for (uint i = 0; i < actionOffsets.Count; i++)
                     {
                         reader.BaseStream.Position = actionOffsets[(int)i];
                         List<ScriptActionLine> lines = [];
                         bool endActions = false;
+
                         while (!endActions)
                         {
                             ushort id = reader.ReadUInt16();
@@ -497,6 +563,7 @@ namespace VsMaker2Core.Methods
                                 lines.Add(new ScriptActionLine(id, reader.ReadUInt16()));
                             }
                         }
+
                         actions.Add(new ScriptActionData(i + 1, lines));
                     }
                 }
@@ -505,73 +572,62 @@ namespace VsMaker2Core.Methods
             {
                 if (!isLevelScript)
                 {
-                    Console.WriteLine("Could not read script file");
-                    reader.Close();
-                    fileStream.Close();
+                    Console.WriteLine("End of stream reached while reading script file.");
                     throw;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                reader.Close();
-                fileStream.Close();
+                Console.WriteLine($"Error reading script file with ID {scriptFileId}: {ex.Message}");
                 throw;
             }
+
             return new ScriptFileData(scriptFileId, isLevelScript, scripts, functions, actions);
         }
 
+
         #endregion Get
 
-        private struct ScriptReference
+        private struct ScriptReference(uint id, uint offset)
         {
-            public uint Id;
-            public uint Offset;
-
-            public ScriptReference(uint id, uint offset)
-            {
-                Id = id;
-                Offset = offset;
-            }
+            public uint Id = id;
+            public uint Offset = offset;
         }
 
-        private struct CallerReference
+        private struct CallerReference(Enums.ScriptType scriptType, uint callerId, Enums.ScriptType invokedType, uint invokedId, int position)
         {
-            public ScriptType ScriptType;
-            public uint CallerId;
-            public ScriptType InvokedType;
-            public uint InvokedId;
-            public int Offset;
-
-            public CallerReference(ScriptType scriptType, uint callerId, ScriptType invokedType, uint invokedId, int position)
-            {
-                ScriptType = scriptType;
-                CallerId = callerId;
-                InvokedType = invokedType;
-                InvokedId = invokedId;
-                Offset = position;
-            }
+            public ScriptType ScriptType = scriptType;
+            public uint CallerId = callerId;
+            public ScriptType InvokedType = invokedType;
+            public uint InvokedId = invokedId;
+            public int Offset = position;
         }
 
-        private void AddReference(ref List<CallerReference> callerReferences, ushort commandId, List<byte[]> parameters, int position, ScriptData script)
+        private static void AddReference(ref List<CallerReference> callerReferences, ushort commandId, List<byte[]> parameters, int position, ScriptData script)
         {
             if (ScriptDatabase.commandsWithRelativeJump.TryGetValue(commandId, out int parameterWithRelativeJump))
             {
-                uint invokedId = BitConverter.ToUInt32(parameters[parameterWithRelativeJump], 0); // Jump, Call
-
-                switch (commandId)
+                if (parameterWithRelativeJump < parameters.Count)
                 {
-                    case 0x005E:
-                        callerReferences.Add(new CallerReference(script.ScriptType, script.ScriptNumber, ScriptType.Action, invokedId, position - 4));
-                        break;
+                    uint invokedId = BitConverter.ToUInt32(parameters[parameterWithRelativeJump], 0);
 
-                    default:
-                        callerReferences.Add(new CallerReference(script.ScriptType, script.ScriptNumber, ScriptType.Function, invokedId, position - 4));
-                        break;
+                    switch (commandId)
+                    {
+                        case 0x005E: // Special case for Action Type
+                            callerReferences.Add(new CallerReference(script.ScriptType, script.ScriptNumber, ScriptType.Action, invokedId, position - 4));
+                            break;
+
+                        default: // Default case for Function Type
+                            callerReferences.Add(new CallerReference(script.ScriptType, script.ScriptNumber, ScriptType.Function, invokedId, position - 4));
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Error: Parameter index {parameterWithRelativeJump} is out of bounds for command {commandId:X4}.");
                 }
             }
         }
-
         #region Write
 
         public (bool Success, string ErrorMessage) WriteScriptData(ScriptFileData scriptFileData)

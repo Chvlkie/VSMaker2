@@ -92,7 +92,7 @@ namespace VsMaker2Core.Methods
         /// </summary>
         /// <param name="messageArchive"></param>
         /// <returns></returns>
-        Task<int> GetMessageInitialKeyAsync(int messageArchive);
+       int GetMessageInitialKey(int messageArchive);
 
         /// <summary>
         ///

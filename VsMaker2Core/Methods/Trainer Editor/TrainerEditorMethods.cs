@@ -9,9 +9,10 @@ namespace VsMaker2Core.Methods
     {
         private IRomFileMethods romFileMethods;
 
-        public TrainerEditorMethods()
+        public TrainerEditorMethods(IRomFileMethods romFileMethods)
         {
             romFileMethods = new RomFileMethods();
+            this.romFileMethods = romFileMethods;
         }
 
         public List<Trainer> GetTrainers(List<string> trainerNames)
@@ -22,7 +23,7 @@ namespace VsMaker2Core.Methods
             {
                 var trainerData = RomFile.TrainersData[i];
                 var trainerPartyData = RomFile.TrainersPartyData[i];
-                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl));
+                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.IsNotDiamondPearl));
             }
             return trainers;
         }

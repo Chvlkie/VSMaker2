@@ -15,10 +15,12 @@ namespace VsMaker2Core.Methods
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
 
-        public FileSystemMethods()
+        public FileSystemMethods(IRomFileMethods romFileMethods, IScriptFileMethods scriptFileMethods)
         {
             romFileMethods = new RomFileMethods();
             scriptFileMethods = new ScriptFileMethods();
+            this.romFileMethods = romFileMethods;
+            this.scriptFileMethods = scriptFileMethods;
         }
 
         public void AddNewTrainerClassSprite()
@@ -154,7 +156,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive)
         {
-            if (battleMessages == null || !battleMessages.Any())
+            if (battleMessages == null || battleMessages.Count == 0)
             {
                 return (false, "Battle messages list is null or empty.");
             }
@@ -285,7 +287,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
         {
-            if (descriptions == null || !descriptions.Any())
+            if (descriptions == null || descriptions.Count == 0)
             {
                 return (false, "Descriptions list is null or empty.");
             }
@@ -439,7 +441,7 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                if (messages == null || !messages.Any())
+                if (messages == null || messages.Count == 0)
                 {
                     return (false, "Messages list is null or empty.");
                 }
@@ -727,10 +729,8 @@ namespace VsMaker2Core.Methods
                     var serializer = MessagePackSerializer.Get<VsTrainersFile>();
                     serializer.Pack(stream, export);
 
-                    using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                    {
-                        stream.WriteTo(fileStream);
-                    }
+                    using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+                    stream.WriteTo(fileStream);
                 }
 
                 return (true, string.Empty);
@@ -753,13 +753,11 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                {
-                    var serializer = MessagePackSerializer.Get<VsTrainersFile>();
-                    VsTrainersFile imported = serializer.Unpack(fileStream);
+                using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                var serializer = MessagePackSerializer.Get<VsTrainersFile>();
+                VsTrainersFile imported = serializer.Unpack(fileStream);
 
-                    return (imported, true, string.Empty);
-                }
+                return (imported, true, string.Empty);
             }
             catch (FileNotFoundException ex)
             {
@@ -855,7 +853,7 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                string directory = $"{Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
+                string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{trainerNameTextArchiveId:D4}";
 
                 using var fileStream = new FileStream(directory, FileMode.Open, FileAccess.Read);
                 byte[] fileData = new byte[fileStream.Length];

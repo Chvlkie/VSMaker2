@@ -222,7 +222,7 @@ namespace VsMaker2Core.Methods
                     throw;
                 }
             }
-            return classGenders;
+            return [.. classGenders.OrderBy(x => x.TrainerClassId)];
         }
 
         public async Task<List<string>> GetClassNamesAsync(int classNamesArchive)
@@ -292,7 +292,7 @@ namespace VsMaker2Core.Methods
                 }
             }
 
-            return eyeContactMusic;
+            return [.. eyeContactMusic.OrderBy(x => x.TrainerClassId)];
         }
 
         public async Task<List<string>> GetItemNamesAsync(int itemNameArchive)
@@ -348,7 +348,7 @@ namespace VsMaker2Core.Methods
             return messageArchives;
         }
 
-        public async Task<int> GetMessageInitialKeyAsync(int messageArchive)
+        public int GetMessageInitialKey(int messageArchive)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.textArchives].unpackedDirectory}\\{messageArchive:D4}";
 
@@ -470,7 +470,7 @@ namespace VsMaker2Core.Methods
                 throw;
             }
 
-            return prizeMoneyData;
+            return [.. prizeMoneyData.OrderBy(x => x.TrainerClassId)];
         }
 
         public async Task<List<Species>> GetSpeciesAsync()

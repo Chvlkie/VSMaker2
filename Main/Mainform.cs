@@ -36,7 +36,7 @@ namespace Main
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
-        private INdsImage imageMethods;
+        private INdsImage ndsImage;
 
         #endregion Methods
 
@@ -408,7 +408,7 @@ namespace Main
                 RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
                 RomFile.EyeContactExpanded = RomFile.CheckForEyeContactExpansion();
             }
-            RomFile.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
+            RomFile.ClassGenderData = RomFile.IsNotDiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -746,11 +746,11 @@ namespace Main
             LoadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
             scriptFileMethods = new ScriptFileMethods();
-            battleMessageEditorMethods = new BattleMessageEditorMethods();
-            trainerEditorMethods = new TrainerEditorMethods();
-            classEditorMethods = new ClassEditorMethods();
-            fileSystemMethods = new FileSystemMethods();
-            imageMethods = new NdsImage();
+            battleMessageEditorMethods = new BattleMessageEditorMethods(romFileMethods);
+            trainerEditorMethods = new TrainerEditorMethods(romFileMethods);
+            classEditorMethods = new ClassEditorMethods(romFileMethods);
+            fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
+            ndsImage = new NdsImage();
         }
 
         private void menu_Export_Trainers_Click(object sender, EventArgs e)
@@ -1081,11 +1081,11 @@ namespace Main
 
         private void UpdateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
         {
-            if (RomFile.GameFamily != GameFamily.DiamondPearl)
+            if (RomFile.IsNotDiamondPearl)
             {
-                var palette = imageMethods.GetTrainerClassPaletteBase(trainerClassId);
-                var image = imageMethods.GetTrainerClassImageBase(trainerClassId);
-                var sprite = imageMethods.GetTrainerClassSpriteBase(trainerClassId);
+                var palette = ndsImage.GetTrainerClassPaletteBase(trainerClassId);
+                var image = ndsImage.GetTrainerClassImageBase(trainerClassId);
+                var sprite = ndsImage.GetTrainerClassSpriteBase(trainerClassId);
                 frameNumBox.Enabled = sprite.NumBanks > 1;
                 frameNumBox.Maximum = sprite.NumBanks - 1;
                 if (frameNumBox.Value > frameNumBox.Maximum)
@@ -1093,7 +1093,7 @@ namespace Main
                     frameNumBox.Value = 0;
                 }
                 int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
-                pictureBox.Image = imageMethods.GetTrainerClassSrite(palette, image, sprite, frame);
+                pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
         }
     }

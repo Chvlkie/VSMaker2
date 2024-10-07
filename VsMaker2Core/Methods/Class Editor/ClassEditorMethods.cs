@@ -1,5 +1,4 @@
 ﻿using VsMaker2Core.DataModels;
-using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods
 {
@@ -7,46 +6,66 @@ namespace VsMaker2Core.Methods
     {
         private IRomFileMethods romFileMethods;
 
-        public ClassEditorMethods()
+        public ClassEditorMethods(IRomFileMethods romFileMethods)
         {
             romFileMethods = new RomFileMethods();
+            this.romFileMethods = romFileMethods;
         }
 
-        public TrainerClass GetTrainerClass(List<TrainerClass> classes, int classId)
+        public TrainerClass GetTrainerClass(List<TrainerClass> trainerClasses, int trainerClassId)
         {
-            return classes.SingleOrDefault(x => x.TrainerClassId == classId);
+            var trainerClass = trainerClasses.SingleOrDefault(x => x.TrainerClassId == trainerClassId);
+
+            if (trainerClass == null)
+            {
+                Console.WriteLine($"Trainer class with ID {trainerClassId} not found.");
+            }
+
+            return trainerClass;
         }
 
-        public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions)
+        public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> trainerClassNames, List<string> trainerClassDescriptions)
         {
             List<TrainerClass> trainerClasses = [];
-            // Start from i 2 to skip player classes
-            for (int i = 2; i < classNames.Count; i++)
+
+            // Start from i = 2 to skip player classes
+            for (int i = 2; i < trainerClassNames.Count; i++)
             {
                 var eyeContactData = RomFile.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
+
+                var gender = (RomFile.IsNotDiamondPearl && i < RomFile.ClassGenderData.Count)
+                    ? (byte?)RomFile.ClassGenderData[i].Gender : null;
+
+                var prizeMoneyMultiplier = (i < RomFile.PrizeMoneyData.Count)
+                    ? RomFile.PrizeMoneyData[i].PrizeMoney
+                    : 0;
+
                 var trainerClass = new TrainerClass
                 {
                     TrainerClassId = i,
-                    TrainerClassName = classNames[i],
+                    TrainerClassName = trainerClassNames[i],
                     ClassProperties = new TrainerClassProperty
                     {
-                        Description = classDescriptions[i],
-                        Gender = RomFile.GameFamily != GameFamily.DiamondPearl ? RomFile.ClassGenderData[i].Gender : null,
-                        EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
-                        EyeContactMusicNight = RomFile.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
-                        : null,
-                        PrizeMoneyMultiplier = RomFile.PrizeMoneyData[i].PrizeMoney
+                        Description = trainerClassDescriptions[i],
+                        Gender = gender,
+                        EyeContactMusicDay = eyeContactData?.MusicDayId ?? -1,  // Use -1 if eyeContactData is null
+                        EyeContactMusicNight = RomFile.IsHeartGoldSoulSilver
+                            ? eyeContactData?.MusicNightId ?? -1  // Use -1 if null, based on HeartGoldSoulSilver logic
+                            : (int?)null,
+                        PrizeMoneyMultiplier = prizeMoneyMultiplier
                     },
                     UsedByTrainers = GetUsedByTrainers(i, trainers),
                 };
+
                 trainerClasses.Add(trainerClass);
             }
+
             return trainerClasses;
         }
 
-        public List<Trainer> GetUsedByTrainers(int classId, List<Trainer> trainers)
+        public List<Trainer> GetUsedByTrainers(int trainerClassId, List<Trainer> trainers)
         {
-            return trainers.Where(x => x.TrainerProperties.TrainerClassId == classId).ToList();
+            return trainers == null ? (List<Trainer>)([]) : trainers.Where(x => x.TrainerProperties.TrainerClassId == trainerClassId).ToList();
         }
     }
 }

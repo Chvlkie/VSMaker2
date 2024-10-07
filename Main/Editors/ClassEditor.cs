@@ -174,9 +174,14 @@ namespace Main
             if (!IsLoadingData)
             {
                 IsLoadingData = true;
-                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId) && await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId))
+                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
                 {
-                    MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    bool saveProperties = await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId);
+                    if (saveProperties)
+                    {
+                        MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    }
                 }
                 IsLoadingData = false;
             }

@@ -16,6 +16,7 @@ namespace VsMaker2Core.DataModels
         public static string GameCode { get; set; }
 
         public static bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
+        public static bool IsNotDiamondPearl => GameFamily != GameFamily.DiamondPearl;
 
         public static GameFamily GameFamily => GameVersion switch
         {
