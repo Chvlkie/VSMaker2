@@ -20,6 +20,35 @@ namespace VsMaker2Core.Methods
             scriptFileMethods = new ScriptFileMethods();
         }
 
+        public void AddNewTrainerClassSprite()
+        {
+            var files = Directory.GetFiles(RomFile.TrainerGraphicsPath);
+            int totalFiles = files.Length;
+
+            string[] filesToCopy = { "0000", "0001", "0002", "0003", "0004" };
+
+            for (int i = 0; i < filesToCopy.Length; i++)
+            {
+                string sourceFile = Path.Combine(RomFile.TrainerGraphicsPath, filesToCopy[i]);
+
+                if (File.Exists(sourceFile))
+                {
+                    string newFileName = (totalFiles + i).ToString("D4"); // e.g., "0644" or "0645", etc.
+                    string destinationFile = Path.Combine(RomFile.TrainerGraphicsPath, newFileName);
+
+                    File.Copy(sourceFile, destinationFile);
+
+                    Console.WriteLine($"Copied {sourceFile} to {destinationFile}");
+                }
+                else
+                {
+                    Console.WriteLine($"File {filesToCopy[i]} does not exist in the directory.");
+                }
+            }
+
+            Console.WriteLine("File duplication complete.");
+        }
+
         public VsTrainersFile BuildVsTrainersFile(List<Trainer> trainers, GameFamily gameFamily, int trainerNameTextArchiveId, int classesCount, int battleMessagesCount)
         {
             return new VsTrainersFile
@@ -75,39 +104,35 @@ namespace VsMaker2Core.Methods
             }
         }
 
-        public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
+        public (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive)
         {
-            descriptions[classId] = newDescription;
-            return WriteMessage(descriptions, classDescriptionMessageNumber);
+            battleMessages[messageId] = newMessage;
+            return WriteMessage(battleMessages, battleMessageArchive, false);
         }
 
-        public (bool Success, string ErrorMessage) WriteClassGenderData(ClassGenderData classGenderData)
+        public (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress)
         {
+            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory}\\{0:D4}";
+
             try
             {
-                if (RomFile.ClassGenderExpanded)
+                using (var fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
+                using (var bufferedStream = new BufferedStream(fileStream, 8192))
+                using (var binaryWriter = new BinaryWriter(bufferedStream))
                 {
-                    using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
-                    using BinaryWriter writer = new(overlayStream);
-                    overlayStream.Position = (uint)classGenderData.Offset;
-                    writer.Write(classGenderData.Gender);
+                    for (int i = 0; i < offsets.Count; i++)
+                    {
+                        binaryWriter.Write(offsets[i]);
+                        progress?.Report((i + 1) * 100 / offsets.Count);
+                    }
                 }
-                else
-                {
-                    Arm9.WriteByte(classGenderData.Gender, (uint)classGenderData.Offset);
-                };
+
+                return (true, "");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
                 return (false, ex.Message);
             }
-            return (true, "");
-        }
-
-        public (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive)
-        {
-            return WriteMessage(messages, battleMessageArchive);
         }
 
         public (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress)
@@ -139,31 +164,40 @@ namespace VsMaker2Core.Methods
             }
         }
 
-        public (bool Success, string ErrorMessage) WriteBattleMessageOffsetData(List<ushort> offsets, IProgress<int> progress)
+        public (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive)
         {
-            string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory}\\{0:D4}";
+            return WriteMessage(messages, battleMessageArchive);
+        }
 
+        public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
+        {
+            descriptions[classId] = newDescription;
+            return WriteMessage(descriptions, classDescriptionMessageNumber);
+        }
+
+        public (bool Success, string ErrorMessage) WriteClassGenderData(ClassGenderData classGenderData)
+        {
             try
             {
-                using (var fileStream = new FileStream(directory, FileMode.Create, FileAccess.Write))
-                using (var bufferedStream = new BufferedStream(fileStream, 8192))
-                using (var binaryWriter = new BinaryWriter(bufferedStream))
+                if (RomFile.ClassGenderExpanded)
                 {
-                    for (int i = 0; i < offsets.Count; i++)
-                    {
-                        binaryWriter.Write(offsets[i]);
-                        progress?.Report((i + 1) * 100 / offsets.Count);
-                    }
+                    using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
+                    using BinaryWriter writer = new(overlayStream);
+                    overlayStream.Position = (uint)classGenderData.Offset;
+                    writer.Write(classGenderData.Gender);
                 }
-
-                return (true, "");
+                else
+                {
+                    Arm9.WriteByte(classGenderData.Gender, (uint)classGenderData.Offset);
+                };
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return (false, ex.Message);
             }
+            return (true, "");
         }
-
         public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
         {
             classNames[classId] = newName;
@@ -305,13 +339,6 @@ namespace VsMaker2Core.Methods
             trainerNames[trainerId] = newName;
             return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
-
-        public (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive)
-        {
-            battleMessages[messageId] = newMessage;
-            return WriteMessage(battleMessages, battleMessageArchive, false);
-        }
-
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";

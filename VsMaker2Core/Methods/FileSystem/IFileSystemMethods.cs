@@ -6,6 +6,8 @@ namespace VsMaker2Core.Methods
 {
     public interface IFileSystemMethods
     {
+        void AddNewTrainerClassSprite();
+
         /// <summary>
         /// Build a VsTrainersFile model with given data.
         /// </summary>

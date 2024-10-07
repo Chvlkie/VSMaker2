@@ -331,5 +331,8 @@ namespace VsMaker2Core.DataModels
             }
             return (initialMoneyOverlayNumber, initialMoneyOverlayOffset);
         }
+
+        public static string TrainerGraphicsPath = Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
+
     }
 }

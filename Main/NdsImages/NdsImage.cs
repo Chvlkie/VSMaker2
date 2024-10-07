@@ -1,41 +1,14 @@
 ﻿using Ekona.Images;
 using Images;
+using VsMaker2Core.DataModels;
 using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.Methods.NdsImages
 {
     public class NdsImage : INdsImage
     {
-        private static readonly string TrainerGraphicsPath = Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
 
-        public static void AddNewTrainerClassSprite()
-        {
-            var files = Directory.GetFiles(TrainerGraphicsPath);
-            int totalFiles = files.Length;
-
-            string[] filesToCopy = { "0000", "0001", "0002", "0003", "0004" };
-
-            for (int i = 0; i < filesToCopy.Length; i++)
-            {
-                string sourceFile = Path.Combine(TrainerGraphicsPath, filesToCopy[i]);
-
-                if (File.Exists(sourceFile))
-                {
-                    string newFileName = (totalFiles + i).ToString("D4"); // e.g., "0644" or "0645", etc.
-                    string destinationFile = Path.Combine(TrainerGraphicsPath, newFileName);
-
-                    File.Copy(sourceFile, destinationFile);
-
-                    Console.WriteLine($"Copied {sourceFile} to {destinationFile}");
-                }
-                else
-                {
-                    Console.WriteLine($"File {filesToCopy[i]} does not exist in the directory.");
-                }
-            }
-
-            Console.WriteLine("File duplication complete.");
-        }
+      
 
         public NdsImage()
         { }
@@ -60,7 +33,7 @@ namespace VsMaker2Core.Methods.NdsImages
 
             int nclrId = baseIndex + 1;
             string nclrFileName = nclrId.ToString("D4");
-            string nclrFilePath = Path.Combine(TrainerGraphicsPath, nclrFileName);
+            string nclrFilePath = Path.Combine(RomFile.TrainerGraphicsPath, nclrFileName);
 
             return new NCLR(nclrFilePath, nclrId, nclrFileName);
         }
@@ -70,7 +43,7 @@ namespace VsMaker2Core.Methods.NdsImages
             int baseIndex = trainerClassId * 5;
             int ncgrId = baseIndex;
             string ncgrFileName = ncgrId.ToString("D4");
-            string ncgrFilePath = Path.Combine(TrainerGraphicsPath, ncgrFileName);
+            string ncgrFilePath = Path.Combine(RomFile.TrainerGraphicsPath, ncgrFileName);
             return new NCGR(ncgrFilePath, ncgrId, ncgrFileName);
         }
 
@@ -80,7 +53,7 @@ namespace VsMaker2Core.Methods.NdsImages
 
             int ncerId = baseIndex + 2;
             string ncerFileName = ncerId.ToString("D4");
-            string ncerFilePath = Path.Combine(TrainerGraphicsPath, ncerFileName);
+            string ncerFilePath = Path.Combine(RomFile.TrainerGraphicsPath, ncerFileName);
 
             return new NCER(ncerFilePath, ncerId, ncerFileName);
         }

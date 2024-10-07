@@ -496,5 +496,32 @@ namespace Main
             nextButton.Enabled = false;
             nextButton.Visible = nextButton.Enabled;
         }
+
+        private (bool Valid, int Row) VerifyBattleMessageTable()
+        {
+            foreach (var trainer in MainEditorModel.Trainers)
+            {
+                var checkMessages = new List<string>();
+                for (int i = 0; i < battleMessage_MessageTableDataGrid.Rows.Count; i++)
+                {
+                    var selectedMessageTrigger = battleMessage_MessageTableDataGrid.Rows[i].Cells[2].Value.ToString();
+                    var selectedTrainer = battleMessage_MessageTableDataGrid.Rows[i].Cells[1].Value.ToString();
+                    int trainerId = int.Parse(selectedTrainer.Remove(0, 1).Remove(4));
+                    if (trainerId == trainer.TrainerId)
+                    {
+                        if (checkMessages.Contains(selectedMessageTrigger))
+                        {
+                            return (false, i);
+                        }
+                        else
+                        {
+                            checkMessages.Add(selectedMessageTrigger);
+                        }
+                    }
+                }
+            }
+
+            return (true, -1);
+        }
     }
 }

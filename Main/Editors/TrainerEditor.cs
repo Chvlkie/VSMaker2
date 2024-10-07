@@ -35,7 +35,134 @@ namespace Main
         private bool TrainerPropertyChange;
         private List<string> UnfilteredTrainers = [];
         private bool UnsavedTrainerEditorChanges => TrainerDataChange || TrainerPartyChange || TrainerPropertyChange || TrainerBattleMessagesChange;
+        private void trainer_Copy_Btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainer = new Trainer(MainEditorModel.SelectedTrainer);
+            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
+            MainEditorModel.ClipboardTrainerParty = new TrainerParty(MainEditorModel.SelectedTrainer.TrainerParty);
+            trainer_Paste_Btn.Enabled = true;
+            trainer_PastePropeties_btn.Enabled = true;
+            trainer_PasteParty_btn.Enabled = true;
+        }
 
+        private void trainer_CopyParty_btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainerParty = new TrainerParty(MainEditorModel.SelectedTrainer.TrainerParty)
+            {
+                ChooseItems = MainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems,
+                ChooseMoves = MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves,
+                DoubleBattle = MainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle,
+                TeamSize = MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize,
+            };
+            trainer_PasteParty_btn.Enabled = true;
+        }
+
+        private void trainer_CopyProperties_btn_Click(object sender, EventArgs e)
+        {
+            MainEditorModel.ClipboardTrainerProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties);
+            trainer_PastePropeties_btn.Enabled = true;
+        }
+
+        private void trainer_InsertE_btn_Click(object sender, EventArgs e)
+        {
+            AppendBattleMessage(trainer_MessageTextBox, "é");
+        }
+
+        private void trainer_InsertF_Btn_Click(object sender, EventArgs e)
+        {
+            AppendBattleMessage(trainer_MessageTextBox, "\\f");
+        }
+
+        private void trainer_InsertN_btn_Click(object sender, EventArgs e)
+        {
+            AppendBattleMessage(trainer_MessageTextBox, "\\n");
+        }
+
+        private void trainer_InsertR_btn_Click(object sender, EventArgs e)
+        {
+            AppendBattleMessage(trainer_MessageTextBox, "\\r");
+        }
+
+        private void trainer_Paste_Btn_Click(object sender, EventArgs e)
+        {
+            int selectedTrainerId = MainEditorModel.SelectedTrainer.TrainerId;
+            var pasteTrainer = new Trainer(selectedTrainerId, MainEditorModel.ClipboardTrainer);
+
+            PopulateTrainerData(pasteTrainer);
+            PopulatePartyData(pasteTrainer.TrainerParty, pasteTrainer.TrainerProperties.TeamSize, pasteTrainer.TrainerProperties.ChooseMoves);
+            PopulateTrainerBattleMessageTriggers(pasteTrainer);
+            EnableTrainerEditor();
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+            EditedTrainerData(true);
+        }
+
+        private void trainer_PasteParty_btn_Click(object sender, EventArgs e)
+        {
+            IsLoadingData = true;
+            if (MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize != MainEditorModel.ClipboardTrainerParty.TeamSize
+                                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != MainEditorModel.ClipboardTrainerParty.ChooseItems
+                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != MainEditorModel.ClipboardTrainerParty.ChooseMoves
+                || MainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle != MainEditorModel.ClipboardTrainerParty.DoubleBattle
+                )
+            {
+                var pasteProperties = new TrainerProperty(MainEditorModel.SelectedTrainer.TrainerProperties, MainEditorModel.ClipboardTrainerParty.DoubleBattle,
+                   MainEditorModel.ClipboardTrainerParty.TeamSize,
+                    MainEditorModel.ClipboardTrainerParty.ChooseMoves,
+                   MainEditorModel.ClipboardTrainerParty.ChooseItems);
+                SetTrainerPartyProperties(pasteProperties);
+                EditedTrainerProperty(true);
+            }
+            else
+            {
+            }
+            IsLoadingData = false;
+            PopulatePartyData(MainEditorModel.ClipboardTrainerParty, MainEditorModel.ClipboardTrainerParty.TeamSize, MainEditorModel.ClipboardTrainerParty.ChooseMoves);
+            EditedTrainerParty(true);
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+        }
+
+        private void trainer_PastePropeties_btn_Click(object sender, EventArgs e)
+        {
+            IsLoadingData = true;
+            if (MainEditorModel.SelectedTrainer.TrainerProperties.TeamSize != MainEditorModel.ClipboardTrainerProperties.TeamSize
+                                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != MainEditorModel.ClipboardTrainerProperties.ChooseItems
+                || MainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != MainEditorModel.ClipboardTrainerProperties.ChooseMoves
+                || MainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle != MainEditorModel.ClipboardTrainerProperties.DoubleBattle
+                || MainEditorModel.SelectedTrainer.TrainerProperties.Items != MainEditorModel.ClipboardTrainerProperties.Items
+                || MainEditorModel.SelectedTrainer.TrainerProperties.AIFlags != MainEditorModel.ClipboardTrainerProperties.AIFlags
+                )
+            {
+                var pasteProperties = new TrainerProperty(MainEditorModel.ClipboardTrainerProperties);
+                SetTrainerProperties(pasteProperties);
+                EditedTrainerProperty(true);
+            }
+
+            IsLoadingData = false;
+            PopulatePartyData(MainEditorModel.SelectedTrainer.TrainerParty, MainEditorModel.ClipboardTrainerProperties.TeamSize, MainEditorModel.ClipboardTrainerProperties.ChooseMoves);
+            EditedTrainerParty(true);
+            EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_HeldItemsCheckbox.Checked, trainer_ChooseMovesCheckbox.Checked);
+        }
+
+        private void trainerEditor_SaveMessage_Click(object sender, EventArgs e)
+        {
+            int trainerId = MainEditorModel.SelectedTrainer.TrainerId;
+            int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
+            var message = MainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+            if (SaveTrainerMessage(message.MessageId))
+            {
+                if (battleMessage_MessageTableDataGrid.Rows.Count > 0)
+                {
+                    var row = battleMessage_MessageTableDataGrid.Rows.Cast<DataGridViewRow>()
+                        .SingleOrDefault(x => x.Cells[1].Value.ToString() == MainEditorModel.SelectedTrainer.ListName
+                        && x.Cells[2].Value.ToString() == trainer_MessageTriggerListBox!.SelectedItem.ToString());
+
+                    if (row != default)
+                    {
+                        row.Cells[3].Value = message.MessageText;
+                    }
+                }
+            }
+        }
         private void AddNewTrainer()
         {
             IsLoadingData = true;
@@ -322,6 +449,29 @@ namespace Main
 
         #endregion Initialize
 
+        private void MoveBtn_Click(object sender, EventArgs e)
+        {
+            // Determine which button was clicked
+            var clickedButton = sender as Button;
+            int buttonIndex = pokeMoveButtons.IndexOf(clickedButton);
+
+            if (buttonIndex >= 0 && buttonIndex < pokeComboBoxes.Count)
+            {
+                var selectedItem = pokeComboBoxes[buttonIndex].SelectedItem?.ToString();
+
+                // Check if the selected item is valid
+                var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > 0)
+                {
+                    OpenMoveSelector(buttonIndex, pokeComboBoxes[buttonIndex].SelectedIndex);
+                }
+                else
+                {
+                    MessageBox.Show("Please select a valid Pokémon.", "Cannot Set Moves", MessageBoxButtons.OK);
+                }
+            }
+        }
+
         private void OpenMoveSelector(int partyIndex, int pokemonId)
         {
             // Set new array if null
@@ -404,30 +554,6 @@ namespace Main
                 EditedTrainerParty(true);
             }
         }
-
-        private void MoveBtn_Click(object sender, EventArgs e)
-        {
-            // Determine which button was clicked
-            var clickedButton = sender as Button;
-            int buttonIndex = pokeMoveButtons.IndexOf(clickedButton);
-
-            if (buttonIndex >= 0 && buttonIndex < pokeComboBoxes.Count)
-            {
-                var selectedItem = pokeComboBoxes[buttonIndex].SelectedItem?.ToString();
-
-                // Check if the selected item is valid
-                var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > 0)
-                {
-                    OpenMoveSelector(buttonIndex, pokeComboBoxes[buttonIndex].SelectedIndex);
-                }
-                else
-                {
-                    MessageBox.Show("Please select a valid Pokémon.", "Cannot Set Moves", MessageBoxButtons.OK);
-                }
-            }
-        }
-
         private void poke2AbilityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -1288,15 +1414,6 @@ namespace Main
             }
         }
 
-        private void trainer_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                int trainerClassId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
-                UpdateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, trainerClassId);
-            }
-        }
-
         private void trainer_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -1551,6 +1668,14 @@ namespace Main
             }
         }
 
+        private void trainer_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerClassId = TrainerClass.ListNameToTrainerClassId(trainer_ClassListBox.SelectedItem.ToString());
+                UpdateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, trainerClassId);
+            }
+        }
         private void trainer_TeamSizeNum_ValueChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData)
@@ -1809,6 +1934,13 @@ namespace Main
             pokeComboBox.SelectedIndexChanged += (s, e) => HandlePokeComboBoxSelectionChanged(pokeComboBox, partyIndex);
         }
 
+        private void FilterTimer_Tick(object sender, EventArgs e)
+        {
+            filterTimer.Stop(); // Stop the timer
+            var pokeComboBox = (ComboBox)filterTimer.Tag; // Get the last input
+            PerformFiltering(pokeComboBox); // Call the update method with the last input
+        }
+
         private int GetPokemonIdFromComboBoxText(string selectedItemText)
         {
             // Check if the input text is not null or empty
@@ -1933,14 +2065,6 @@ namespace Main
                 pokeComboBox.SelectedItem = previousSelection;
             }
         }
-
-        private void FilterTimer_Tick(object sender, EventArgs e)
-        {
-            filterTimer.Stop(); // Stop the timer
-            var pokeComboBox = (ComboBox)filterTimer.Tag; // Get the last input
-            PerformFiltering(pokeComboBox); // Call the update method with the last input
-        }
-
         #endregion PokemonComboBoxes
     }
 }

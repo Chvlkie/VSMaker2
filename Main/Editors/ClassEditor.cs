@@ -16,6 +16,42 @@ namespace Main
         private List<string> UnfilteredClasses = [];
         private bool UnsavedClassChanges => ClassNameEdited || ClassPropertyEdited;
 
+        private void AddNewTrainerClass()
+        {
+            IsLoadingData = true;
+            class_FilterTextBox.Text = "";
+            class_ClassListBox.SelectedIndex = -1;
+            int newTrainerClassId = RomFile.TotalNumberOfTrainerClasses;
+            MainEditorModel.ClassNames.Add("-");
+            MainEditorModel.ClassDescriptions.Add("-");
+            MainEditorModel.Classes.Add(new TrainerClass(newTrainerClassId));
+
+            fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, newTrainerClassId, "-", LoadedRom.ClassNamesTextNumber);
+            fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, newTrainerClassId, "-", LoadedRom.ClassDescriptionMessageNumber);
+            fileSystemMethods.AddNewTrainerClassSprite();
+            UnfilteredClasses.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
+            class_ClassListBox.Items.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
+            RomFile.TotalNumberOfTrainerClasses++;
+
+            IsLoadingData = false;
+            class_ClassListBox.SelectedIndex = newTrainerClassId - 2;
+            EditedTrainerClassName(true);
+            EditedTrainerClassProperties(true);
+        }
+
+        private void class_AddClassBtn_Click(object sender, EventArgs e)
+        {
+            if (UnsavedClassChanges && ConfirmUnsavedChanges())
+            {
+                ClearUnsavedTrainerChanges();
+                ValidateAddClass();
+            }
+            else if (!UnsavedClassChanges)
+            {
+                ValidateAddClass();
+            }
+        }
+
         private void class_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && class_ClassListBox.SelectedIndex > -1)
@@ -33,8 +69,8 @@ namespace Main
 
                     if (!InhibitClassChange)
                     {
-                       ClearUnsavedClassChanges();
-                       ClearUnsavedClassPropertiesChanges();
+                        ClearUnsavedClassChanges();
+                        ClearUnsavedClassPropertiesChanges();
                         SelectedClass = classEditorMethods.GetTrainerClass(
                             MainEditorModel.Classes,
                             TrainerClass.ListNameToTrainerClassId(selectedClass)
@@ -155,6 +191,14 @@ namespace Main
             }
         }
 
+        private void class_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+                int trainerClassId = TrainerClass.ListNameToTrainerClassId(class_ClassListBox.SelectedItem.ToString());
+                UpdateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, trainerClassId);
+            }
+        }
         private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             class_ViewTrainerBtn.Enabled = !IsLoadingData && class_TrainersListBox.SelectedIndex > -1;
@@ -534,6 +578,23 @@ namespace Main
             IsLoadingData = false;
         }
 
+        private void ValidateAddClass()
+        {
+            if (class_ClassListBox.Items.Count >= 150)
+            {
+                MessageBox.Show("Unable to add another class. VS Maker 2 is optimized to only allow up to 150 Trainer Classes.", "Trainer Class Limit Reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            else if (RomFile.ClassGenderExpanded && RomFile.PrizeMoneyExpanded && RomFile.EyeContactExpanded)
+            {
+                AddNewTrainerClass();
+            }
+            else
+            {
+                MessageBox.Show("Trainer Class Expansion not applied. Please patch using the ROM Tool Box", "Unable to Add New Class", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+        }
         private bool ValidateClassName()
         {
             string className = class_NameTextBox.Text;
