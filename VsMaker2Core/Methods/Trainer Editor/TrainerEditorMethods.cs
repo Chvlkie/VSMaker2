@@ -115,43 +115,31 @@ namespace VsMaker2Core.Methods
 
         private static List<TrainerUsage> FindTrainerUses(int trainerId)
         {
-            List<TrainerUsage> scripts = [];
-            List<TrainerUsage> events = [];
+            List<TrainerUsage> trainerUsages = [];
 
             var scriptFiles = RomFile.ScriptFileData.Where(x => !x.IsLevelScript);
+
             foreach (var scriptFile in scriptFiles)
             {
-                foreach (var script in scriptFile.Scripts.Where(x => !x.UsedScriptId.HasValue))
+                foreach (var script in scriptFile.Scripts.Concat(scriptFile.Functions).Where(s => !s.UsedScriptId.HasValue))
                 {
                     foreach (var line in script.Lines.Where(x => IsTrainerCommand(x, trainerId)))
                     {
-                        scripts.Add(new TrainerUsage(trainerId, scriptFile.ScriptFileId, (int)script.ScriptNumber, TrainerUsageType.Script));
-                    }
-                }
-
-                foreach (var function in scriptFile.Functions.Where(x => !x.UsedScriptId.HasValue))
-                {
-                    foreach (var line in function.Lines.Where(x => IsTrainerCommand(x, trainerId)))
-                    {
-                        scripts.Add(new TrainerUsage(trainerId, scriptFile.ScriptFileId, (int)function.ScriptNumber, TrainerUsageType.Function));
+                        var usageType = scriptFile.Scripts.Contains(script) ? TrainerUsageType.Script : TrainerUsageType.Function;
+                        trainerUsages.Add(new TrainerUsage(trainerId, scriptFile.ScriptFileId, (int)script.ScriptNumber, usageType));
                     }
                 }
             }
 
-            var eventFiles = RomFile.EventFileData.Where(x => x.Overworlds.Any(x => x.IsTrainer));
-
-            foreach (var eventFile in eventFiles)
+            foreach (var eventFile in RomFile.EventFileData.Where(e => e.Overworlds.Any(ow => ow.IsTrainer)))
             {
-                foreach (var ow in eventFile.Overworlds)
+                foreach (var ow in eventFile.Overworlds.Where(ow => ow.TrainerId == trainerId))
                 {
-                    if (ow.TrainerId == trainerId)
-                    {
-                        events.Add(new TrainerUsage(trainerId, eventFile.EventFileId, ow.OverworldId, TrainerUsageType.Event));
-                    }
+                    trainerUsages.Add(new TrainerUsage(trainerId, eventFile.EventFileId, ow.OverworldId, TrainerUsageType.Event));
                 }
             }
 
-            return [.. scripts, .. events];
+            return trainerUsages;
         }
 
         private static bool IsTrainerCommand(ScriptLine line, int trainerId)

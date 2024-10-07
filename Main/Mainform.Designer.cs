@@ -321,8 +321,6 @@
 
         private ToolStripMenuItem menu_File_Save;
 
-        private ToolStripMenuItem menu_File_SaveAs;
-
         private ToolStripMenuItem menu_Help;
 
         private ToolStripMenuItem menu_Help_About;
@@ -782,7 +780,6 @@
             menu_File_OpenRecent = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             menu_File_Save = new ToolStripMenuItem();
-            menu_File_SaveAs = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             menu_File_Close = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
@@ -1214,7 +1211,7 @@
             // 
             // menu_File
             // 
-            menu_File.DropDownItems.AddRange(new ToolStripItem[] { menu_File_OpenRom, menu_File_OpenFolder, menu_File_OpenRecent, toolStripSeparator3, menu_File_Save, menu_File_SaveAs, toolStripSeparator1, menu_File_Close, toolStripSeparator2, menu_File_Exit });
+            menu_File.DropDownItems.AddRange(new ToolStripItem[] { menu_File_OpenRom, menu_File_OpenFolder, menu_File_OpenRecent, toolStripSeparator3, menu_File_Save, toolStripSeparator1, menu_File_Close, toolStripSeparator2, menu_File_Exit });
             menu_File.Name = "menu_File";
             menu_File.Size = new Size(37, 20);
             menu_File.Text = "File";
@@ -1250,13 +1247,7 @@
             menu_File_Save.Name = "menu_File_Save";
             menu_File_Save.Size = new Size(191, 22);
             menu_File_Save.Text = "Save";
-            // 
-            // menu_File_SaveAs
-            // 
-            menu_File_SaveAs.Enabled = false;
-            menu_File_SaveAs.Name = "menu_File_SaveAs";
-            menu_File_SaveAs.Size = new Size(191, 22);
-            menu_File_SaveAs.Text = "Save As...";
+            menu_File_Save.Click += menu_File_Save_Click;
             // 
             // toolStripSeparator1
             // 
@@ -2863,9 +2854,9 @@
             trainer_Properties_toolStrip.Dock = DockStyle.None;
             trainer_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveProperties_btn, trainer_UndoProperties_btn, toolStripSeparator13, trainer_CopyProperties_btn, trainer_PastePropeties_btn, toolStripSeparator21, trainer_ImportProperties_btn, trainer_ExportProperties_btn });
             trainer_Properties_toolStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
-            trainer_Properties_toolStrip.Location = new Point(538, 5);
+            trainer_Properties_toolStrip.Location = new Point(569, 5);
             trainer_Properties_toolStrip.Name = "trainer_Properties_toolStrip";
-            trainer_Properties_toolStrip.Size = new Size(266, 23);
+            trainer_Properties_toolStrip.Size = new Size(235, 23);
             trainer_Properties_toolStrip.TabIndex = 156;
             trainer_Properties_toolStrip.Text = "toolStrip8";
             // 
@@ -4898,6 +4889,7 @@
             Name = "Mainform";
             Text = "VS Maker 2";
             FormClosing += Mainform_FormClosing;
+            Load += Mainform_Load;
             Shown += Mainform_Shown;
             mainMenu.ResumeLayout(false);
             mainMenu.PerformLayout();

@@ -1,4 +1,5 @@
 using Main.Forms;
+using Main.Misc;
 using Main.Models;
 using Microsoft.VisualBasic.FileIO;
 using System.Reflection;
@@ -563,7 +564,6 @@ namespace Main
             main_SaveRomBtn.Enabled = enable;
 
             menu_File_Save.Enabled = enable;
-            menu_File_SaveAs.Enabled = enable;
             menu_File_Close.Enabled = enable;
             menu_Import.Enabled = enable;
             menu_Export.Enabled = enable;
@@ -979,6 +979,8 @@ namespace Main
             {
                 CloseProject();
                 RomLoaded = ReadRomExtractedFolder(selectFolder.SelectedPath);
+                Config.AddToRecentItems(selectFolder.SelectedPath);
+                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
                 if (RomLoaded)
                 {
                     BeginExtractRomData();
@@ -1001,7 +1003,8 @@ namespace Main
             {
                 CloseProject();
                 string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
-
+                Config.AddToRecentItems(workingDirectory);
+                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
                 if (Directory.Exists(workingDirectory))
                 {
                     var directoryExists = MessageBox.Show("An extracted contents folder for this ROM has been found." +
@@ -1102,6 +1105,58 @@ namespace Main
                 int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
+        }
+
+        private void menu_File_Save_Click(object sender, EventArgs e)
+        {
+            SaveRomChanges();
+        }
+
+        private void Mainform_Load(object sender, EventArgs e)
+        {
+            Config.LoadRecentItems();
+            Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+        }
+
+        private void OpenRecentFile(string filePath)
+        {
+            IsLoadingData = true;
+
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    CloseProject();
+                    RomLoaded = ReadRomExtractedFolder(filePath);
+                    Config.AddToRecentItems(filePath);
+                    Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+                    if (RomLoaded)
+                    {
+                        BeginExtractRomData();
+                        InitializeTrainerEditor();
+                        InitializeClassEditor();
+                        EndOpenRom();
+                    }
+                }
+            }
+            else
+            {
+                CloseProject();
+                RomLoaded = ReadRomExtractedFolder(filePath);
+                Config.AddToRecentItems(filePath);
+                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+                if (RomLoaded)
+                {
+                    BeginExtractRomData();
+                    InitializeTrainerEditor();
+                    InitializeClassEditor();
+                    EndOpenRom();
+                }
+            }
+            IsLoadingData = false;
         }
     }
 }
