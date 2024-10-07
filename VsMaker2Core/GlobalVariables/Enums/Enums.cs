@@ -68,6 +68,7 @@
             battleTowerPokeData,
             battleTowerTrainerData,
             personalPokeData,
+            eventFiles,
             scripts,
             synthOverlay,
             textArchives,

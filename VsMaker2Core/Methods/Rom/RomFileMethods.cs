@@ -741,24 +741,32 @@ namespace VsMaker2Core.Methods
                 {
                     [NarcDirectory.monIcons] = @"data\poketool\icongra\poke_icon.narc",
                     [NarcDirectory.moveData] = @"data\poketool\waza\waza_tbl.narc",
-                    [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl ? @"data\poketool\personal_pearl\personal.narc" : @"data\poketool\personal\personal.narc",
-                    [NarcDirectory.scripts] = @"data\fielddata\script\scr_seq_release.narc",
+                    [NarcDirectory.personalPokeData] = gameVersion == GameVersion.Pearl
+                                           ? @"data\poketool\personal_pearl\personal.narc"
+                                           : @"data\poketool\personal\personal.narc",
+                    [NarcDirectory.eventFiles] = !RomFile.GameLanguage.Equals(GameLanguage.Japanese)
+                                           ? @"data\fielddata\eventdata\zone_event_release.narc"
+                                           : @"data\fielddata\eventdata\zone_event.narc",
+                    [NarcDirectory.scripts] = !RomFile.GameLanguage.Equals(GameLanguage.Japanese)
+                                           ? @"data\fielddata\script\scr_seq_release.narc"
+                                           : @"data\fielddata\script\scr_seq.narc",
                     [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
                     [NarcDirectory.textArchives] = @"data\msgdata\msg.narc",
                     [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
                     [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
                     [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
                     [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
-                    [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
+                    [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc"
                 },
                 GameFamily.Platinum => new Dictionary<NarcDirectory, string>
                 {
                     [NarcDirectory.monIcons] = @"data\poketool\icongra\pl_poke_icon.narc",
                     [NarcDirectory.moveData] = @"data\poketool\waza\pl_waza_tbl.narc",
                     [NarcDirectory.personalPokeData] = @"data\poketool\personal\pl_personal.narc",
+                    [NarcDirectory.eventFiles] = @"data\fielddata\eventdata\zone_event.narc",
                     [NarcDirectory.scripts] = @"data\fielddata\script\scr_seq.narc",
                     [NarcDirectory.synthOverlay] = @"data\data\weather_sys.narc",
-                    [NarcDirectory.textArchives] = @"data\msgdata\" + gameVersion.ToString().Substring(0, 2).ToLower() + '_' + "msg.narc",
+                    [NarcDirectory.textArchives] = @"data\msgdata\" + gameVersion.ToString()[..2].ToLower() + '_' + "msg.narc",
                     [NarcDirectory.trainerGraphics] = @"data\poketool\trgra\trfgra.narc",
                     [NarcDirectory.trainerParty] = @"data\poketool\trainer\trpoke.narc",
                     [NarcDirectory.trainerProperties] = @"data\poketool\trainer\trdata.narc",
@@ -771,6 +779,7 @@ namespace VsMaker2Core.Methods
                     [NarcDirectory.battleTowerPokeData] = @"data\a\2\0\3",
                     [NarcDirectory.battleTowerTrainerData] = @"data\a\2\0\2",
                     [NarcDirectory.monIcons] = @"data\a\0\2\0",
+                    [NarcDirectory.eventFiles] = @"data\a\0\3\2",
                     [NarcDirectory.moveData] = @"data\a\0\1\1",
                     [NarcDirectory.personalPokeData] = @"data\a\0\0\2",
                     [NarcDirectory.scripts] = @"data\a\0\1\2",

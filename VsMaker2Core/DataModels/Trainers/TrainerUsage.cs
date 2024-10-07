@@ -13,7 +13,7 @@ namespace VsMaker2Core.DataModels
         {
             TrainerUsageType.Script => $"Script File: {FileId} |  Script #: {ReferenceId}",
             TrainerUsageType.Function => $"Script File: {FileId} |  Function #: {ReferenceId}",
-            TrainerUsageType.Event => $"Event File: {FileId} |  Script #: {ReferenceId}",
+            TrainerUsageType.Event => $"Event File: {FileId} |  Overworld ID: {ReferenceId}",
             TrainerUsageType.Unknown => throw new NotImplementedException(),
             _ => "",
         };

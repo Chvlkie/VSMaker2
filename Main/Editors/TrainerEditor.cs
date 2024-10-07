@@ -845,6 +845,10 @@ namespace Main
             {
                 trainer_ScriptUsage.Items.Add(item.ListItemName);
             }
+            foreach (var item in trainerUsage.Where(x => x.TrainerUsageType == TrainerUsageType.Event).OrderBy(x => x.FileId))
+            {
+                trainer_EventUsage.Items.Add(item.ListItemName);
+            }
         }
 
         private void PopulateItemComboBox(ComboBox comboBox)

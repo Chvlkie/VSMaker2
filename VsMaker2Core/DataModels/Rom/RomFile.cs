@@ -80,7 +80,7 @@ namespace VsMaker2Core.DataModels
         public static List<BattleMessageOffsetData> BattleMessageOffsetData { get; set; }
 
         public static List<ScriptFileData> ScriptFileData { get; set; }
-        public static List<ScriptFileData> EventFileData { get; set; }
+        public static List<EventFileData> EventFileData { get; set; }
 
         public static int VanillaTotalTrainers => GameFamily switch
         {

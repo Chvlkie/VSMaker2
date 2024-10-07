@@ -22,13 +22,10 @@ namespace VsMaker2Core.DataModels
 
         #region Battle Message Table
 
-        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextTable)}\\0000";
         public static string BattleMessageOffsetPath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextOffset)}\\0000";
+        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextTable)}\\0000";
 
         #endregion Battle Message Table
-
-        public static string TrainerGraphicsPath => Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
-
 
         #region PrizeMoney
 
@@ -233,19 +230,20 @@ namespace VsMaker2Core.DataModels
                 GameLanguage.Japanese => 0x7342E,
                 GameLanguage.Spanish => 0x73426,
                 _ => -1,
-            }
+            },
+            _ => throw new NotImplementedException()
         };
 
         #endregion TrainerNames
 
         #region TrainerEncounter
 
-        public static int TrainerScriptFile => GameFamily switch
+        public static int OriginalTrainerEncounterScript => GameFamily switch
         {
-            GameFamily.DiamondPearl => 1040,
-            GameFamily.Platinum => 1114,
-            GameFamily.HeartGoldSoulSilver => 953,
-            GameFamily.HgEngine => 953,
+            GameFamily.DiamondPearl => 851,
+            GameFamily.Platinum => 929,
+            GameFamily.HeartGoldSoulSilver => 740,
+            GameFamily.HgEngine => 740,
             _ => 0
         };
 
@@ -295,12 +293,12 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public static int OriginalTrainerEncounterScript => GameFamily switch
+        public static int TrainerScriptFile => GameFamily switch
         {
-            GameFamily.DiamondPearl => 851,
-            GameFamily.Platinum => 929,
-            GameFamily.HeartGoldSoulSilver => 740,
-            GameFamily.HgEngine => 740,
+            GameFamily.DiamondPearl => 1040,
+            GameFamily.Platinum => 1114,
+            GameFamily.HeartGoldSoulSilver => 953,
+            GameFamily.HgEngine => 953,
             _ => 0
         };
 
@@ -314,5 +312,7 @@ namespace VsMaker2Core.DataModels
             GameFamily.HgEngine => 36,
             _ => -1
         };
+
+        public static string TrainerGraphicsPath => Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
     }
 }

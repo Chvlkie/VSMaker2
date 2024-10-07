@@ -8,6 +8,7 @@ using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
 using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
+using VsMaker2Core.Methods.EventFile;
 using VsMaker2Core.Methods.NdsImages;
 using static VsMaker2Core.Enums;
 
@@ -35,6 +36,7 @@ namespace Main
         private IFileSystemMethods fileSystemMethods;
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
+        private IEventFileMethods eventFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
         private INdsImage ndsImage;
 
@@ -367,9 +369,13 @@ namespace Main
         {
             IsLoadingData = true;
             int progressCount = 0;
-            int increment = 100 / 11;
+            int increment = 100 / 12;
 
             RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
+            progressCount += increment;
+            progress?.Report(progressCount);
+
+            RomFile.EventFileData = eventFileMethods.GetEventFiles();
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -746,6 +752,7 @@ namespace Main
             LoadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
             scriptFileMethods = new ScriptFileMethods();
+            eventFileMethods = new EventFileMethods();
             battleMessageEditorMethods = new BattleMessageEditorMethods(romFileMethods);
             trainerEditorMethods = new TrainerEditorMethods(romFileMethods);
             classEditorMethods = new ClassEditorMethods(romFileMethods);
