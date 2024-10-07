@@ -2,13 +2,13 @@
 
 namespace VsMaker2Core.DataModels
 {
-    public partial class RomFile
+    public static partial class RomFile
     {
         #region ARM9
 
         public const uint SynthOverlayLoadAddress = 0x023C8000;
         public static string Arm9Path => $"{WorkingDirectory}{Common.Arm9FilePath}";
-        public uint Arm9SpawnOffset { get; set; }
+        public static uint Arm9SpawnOffset { get; set; }
 
         #endregion ARM9
 
@@ -27,15 +27,12 @@ namespace VsMaker2Core.DataModels
 
         #endregion Battle Message Table
 
-        #region Palettes
+        public static string TrainerGraphicsPath => Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerGraphics].unpackedDirectory;
 
-        public uint PokemonIconPalTableAddress { get; set; }
-
-        #endregion Palettes
 
         #region PrizeMoney
 
-        public static uint PrizeMoneyRepointOffset = 0x1100;
+        public const uint PrizeMoneyRepointOffset = 0x1100;
 
         public static uint PrizeMoneyTableOffset => PrizeMoneyExpanded ? PrizeMoneyRepointOffset : GameFamily switch
         {
@@ -68,7 +65,7 @@ namespace VsMaker2Core.DataModels
 
         #region ClassGenders
 
-        public static uint ClassGenderRepointOffset = 0x1400;
+        public const uint ClassGenderRepointOffset = 0x1400;
 
         public static uint ClassGenderOffsetToRamAddress => GameFamily switch
 
@@ -113,7 +110,7 @@ namespace VsMaker2Core.DataModels
 
         #region EyeContactMusic
 
-        public static uint EyeContactRepointOffset = 0x1600;
+        public const uint EyeContactRepointOffset = 0x1600;
 
         public static uint EyeContactMusicTableOffsetToRam => GameFamily switch
         {
@@ -167,20 +164,20 @@ namespace VsMaker2Core.DataModels
 
         #region EffectsTable
 
-        public uint EffectsComboTableOffsetToRamAddress { get; set; }
-        public uint EffectsComboTableOffsetToSizeLimiter { get; set; }
+        public static uint EffectsComboTableOffsetToRamAddress { get; set; }
+        public static uint EffectsComboTableOffsetToSizeLimiter { get; set; }
 
-        public uint VsPokemonEntryTableOffsetToRamAddress { get; set; }
-        public uint VsPokemonEntryTableOffsetToSizeLimiter { get; set; }
+        public static uint VsPokemonEntryTableOffsetToRamAddress { get; set; }
+        public static uint VsPokemonEntryTableOffsetToSizeLimiter { get; set; }
 
-        public uint VsTrainerEntryTableOffsetToRamAddress { get; set; }
-        public uint VsTrainerEntryTableOffsetToSizeLimiter { get; set; }
+        public static uint VsTrainerEntryTableOffsetToRamAddress { get; set; }
+        public static uint VsTrainerEntryTableOffsetToSizeLimiter { get; set; }
 
         #endregion EffectsTable
 
         #region TrainerNames
 
-        public int TrainerNameMaxByteOffset => GameFamily switch
+        public static int TrainerNameMaxByteOffset => GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage switch
             {
@@ -309,30 +306,13 @@ namespace VsMaker2Core.DataModels
 
         #endregion TrainerEncounter
 
-        public static (int overlayNumber, int offset) SetInitialMoneyOverlay()
+        public static int InitialMoneyOverlayNumber => GameFamily switch
         {
-            int initialMoneyOverlayNumber = -1;
-            int initialMoneyOverlayOffset = -1;
-            switch (GameFamily)
-            {
-                case GameFamily.DiamondPearl:
-                    initialMoneyOverlayNumber = 52;
-                    initialMoneyOverlayOffset = 0x1E4;
-                    break;
-
-                case GameFamily.Platinum:
-                    initialMoneyOverlayNumber = 57;
-                    initialMoneyOverlayOffset = 0x1EC;
-                    break;
-
-                case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
-                    initialMoneyOverlayNumber = 36;
-                    initialMoneyOverlayOffset = 0x2FC;
-                    break;
-            }
-            return (initialMoneyOverlayNumber, initialMoneyOverlayOffset);
-        }
-
+            GameFamily.DiamondPearl => 52,
+            GameFamily.Platinum => 57,
+            GameFamily.HeartGoldSoulSilver => 36,
+            GameFamily.HgEngine => 36,
+            _ => -1
+        };
     }
 }

@@ -113,7 +113,7 @@ namespace VsMaker2Core.Methods
         /// </summary>
         /// <param name="loadedRom"></param>
         /// <returns></returns>
-        Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync(RomFile loadedRom);
+        Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync();
 
         /// <summary>
         /// Get all Pokemon Species data from extracted ROM Files.

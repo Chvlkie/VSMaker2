@@ -26,8 +26,8 @@ namespace Main
             MainEditorModel.ClassDescriptions.Add("-");
             MainEditorModel.Classes.Add(new TrainerClass(newTrainerClassId));
 
-            fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, newTrainerClassId, "-", LoadedRom.ClassNamesTextNumber);
-            fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, newTrainerClassId, "-", LoadedRom.ClassDescriptionMessageNumber);
+            fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, newTrainerClassId, "-", RomFile.ClassNamesTextNumber);
+            fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, newTrainerClassId, "-", RomFile.ClassDescriptionMessageNumber);
             fileSystemMethods.AddNewTrainerClassSprite();
             UnfilteredClasses.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
             class_ClassListBox.Items.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
@@ -375,16 +375,16 @@ namespace Main
 
         private bool SaveClassGender(int classId, int classGender)
         {
-            var index = LoadedRom.ClassGenderData.FindIndex(x => x.TrainerClassId == classId);
+            var index = RomFile.ClassGenderData.FindIndex(x => x.TrainerClassId == classId);
             if (index > -1)
             {
-                var classGenderData = new ClassGenderData(LoadedRom.ClassGenderData[index].Offset, (byte)classGender, classId);
+                var classGenderData = new ClassGenderData(RomFile.ClassGenderData[index].Offset, (byte)classGender, classId);
                 var writeClassGenderData = fileSystemMethods.WriteClassGenderData(classGenderData);
                 if (writeClassGenderData.Success)
                 {
                     SelectedClass.ClassProperties.Gender = classGenderData.Gender;
                     MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.Gender = classGenderData.Gender;
-                    LoadedRom.ClassGenderData[index].Gender = classGenderData.Gender;
+                    RomFile.ClassGenderData[index].Gender = classGenderData.Gender;
                     return true;
                 }
                 else
@@ -397,7 +397,7 @@ namespace Main
 
         private bool SaveClassName(int classId)
         {
-            var saveClass = fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, classId, class_NameTextBox.Text, LoadedRom.ClassNamesTextNumber);
+            var saveClass = fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, classId, class_NameTextBox.Text, RomFile.ClassNamesTextNumber);
             if (saveClass.Success)
             {
                 class_NameTextBox.BackColor = Color.White;
@@ -421,19 +421,19 @@ namespace Main
 
         private bool SaveEyeContactData(int classId, int eyeContactDay, int? eyeContactNight = null)
         {
-            var index = LoadedRom.EyeContactMusicData.FindIndex(x => x.TrainerClassId == classId);
+            var index = RomFile.EyeContactMusicData.FindIndex(x => x.TrainerClassId == classId);
             if (index > -1)
             {
-                var eyeContactMusicData = new EyeContactMusicData(LoadedRom.EyeContactMusicData[index].Offset, (ushort)classId, (ushort)eyeContactDay, (ushort?)eyeContactNight);
+                var eyeContactMusicData = new EyeContactMusicData(RomFile.EyeContactMusicData[index].Offset, (ushort)classId, (ushort)eyeContactDay, (ushort?)eyeContactNight);
 
-                var writeEyeContactMusic = fileSystemMethods.WriteEyeContactMusicData(eyeContactMusicData, LoadedRom);
+                var writeEyeContactMusic = fileSystemMethods.WriteEyeContactMusicData(eyeContactMusicData);
                 if (writeEyeContactMusic.Success)
                 {
                     SelectedClass.ClassProperties.EyeContactMusicDay = eyeContactDay;
                     SelectedClass.ClassProperties.EyeContactMusicNight = eyeContactNight;
                     MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicDay = eyeContactDay;
                     MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicNight = eyeContactNight;
-                    LoadedRom.EyeContactMusicData[index] = eyeContactMusicData;
+                    RomFile.EyeContactMusicData[index] = eyeContactMusicData;
                     return true;
                 }
                 else
@@ -447,19 +447,19 @@ namespace Main
 
         private async Task<bool> SavePrizeMoneyDataAsync(int classId, int prizeMoneyMultiplier)
         {
-            var index = LoadedRom.PrizeMoneyData.FindIndex(x => x.TrainerClassId == classId);
+            var index = RomFile.PrizeMoneyData.FindIndex(x => x.TrainerClassId == classId);
 
             if (index > -1)
             {
-                var prizeMoneyData = new PrizeMoneyData(LoadedRom.PrizeMoneyData[index].Offset, (ushort)classId, (ushort)prizeMoneyMultiplier);
+                var prizeMoneyData = new PrizeMoneyData(RomFile.PrizeMoneyData[index].Offset, (ushort)classId, (ushort)prizeMoneyMultiplier);
 
-                var writePrizeMoney = await fileSystemMethods.WritePrizeMoneyDataAsync(prizeMoneyData, LoadedRom);
+                var writePrizeMoney = await fileSystemMethods.WritePrizeMoneyDataAsync(prizeMoneyData);
 
                 if (writePrizeMoney.Success)
                 {
                     SelectedClass.ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
-                    LoadedRom.PrizeMoneyData[index] = prizeMoneyData;
+                    RomFile.PrizeMoneyData[index] = prizeMoneyData;
 
                     return true;
                 }
@@ -475,7 +475,7 @@ namespace Main
 
         private bool SaveTrainerClassDescription(int classId, string newDescription)
         {
-            var saveDescription = fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, classId, newDescription, LoadedRom.ClassDescriptionMessageNumber);
+            var saveDescription = fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, classId, newDescription, RomFile.ClassDescriptionMessageNumber);
             if (saveDescription.Success)
             {
                 MainEditorModel.ClassDescriptions[classId] = newDescription;

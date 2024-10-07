@@ -10,7 +10,7 @@ namespace VsMaker2Core.Methods
         /// </summary>
         /// <param name="loadedRom"></param>
         /// <returns></returns>
-        List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom);
+        List<Trainer> GetTrainers(List<string> trainerNames);
 
         /// <summary>
         /// Get Data from a specific Trainer from given trainerId.
@@ -25,7 +25,7 @@ namespace VsMaker2Core.Methods
 
         TrainerProperty BuildTrainerPropertyFromRomData(TrainerData trainerData);
 
-        Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule, RomFile loadedRom);
+        Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule);
 
         TrainerData NewTrainerData(TrainerProperty trainerProperties);
 

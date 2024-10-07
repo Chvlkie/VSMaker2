@@ -374,7 +374,7 @@ namespace VsMaker2Core.Methods
             return WriteMessage(classNames, classNamesArchive);
         }
 
-        public (bool Success, string ErrorMessage) WriteEyeContactMusicData(EyeContactMusicData eyeContactMusicData, RomFile loadedRom)
+        public (bool Success, string ErrorMessage) WriteEyeContactMusicData(EyeContactMusicData eyeContactMusicData)
         {
             try
             {
@@ -471,7 +471,7 @@ namespace VsMaker2Core.Methods
             return (true, "");
         }
 
-        public async Task<(bool Success, string ErrorMessage)> WritePrizeMoneyDataAsync(PrizeMoneyData prizeMoneyData, RomFile loadedRom)
+        public async Task<(bool Success, string ErrorMessage)> WritePrizeMoneyDataAsync(PrizeMoneyData prizeMoneyData)
         {
             try
             {

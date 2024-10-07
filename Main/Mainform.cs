@@ -42,7 +42,6 @@ namespace Main
 
         private bool InhibitTabChange = false;
         private bool IsLoadingData;
-        private RomFile LoadedRom;
         private bool LoadingError = false;
         private MainEditorModel MainEditorModel;
         private bool RomLoaded;
@@ -263,7 +262,7 @@ namespace Main
 
         public async Task BeginUnpackRomDataAsync()
         {
-            var unpack = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, LoadedRom.FileName);
+            var unpack = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, RomFile.FileName);
             if (!unpack.Success)
             {
                 MessageBox.Show($"{unpack.ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -300,44 +299,44 @@ namespace Main
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(LoadedRom.TrainerNamesTextNumber);
+            MainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(RomFile.TrainerNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(LoadedRom.ClassNamesTextNumber);
+            MainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(RomFile.ClassNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(LoadedRom.ClassDescriptionMessageNumber);
+            MainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(RomFile.ClassDescriptionMessageNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames, LoadedRom);
+            MainEditorModel.Trainers = trainerEditorMethods.GetTrainers(MainEditorModel.TrainerNames);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
+            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(LoadedRom.PokemonNamesTextNumber);
+            MainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(RomFile.PokemonNamesTextNumber);
             MainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(MainEditorModel.PokemonNamesFull);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(LoadedRom.MoveNameTextNumber);
+            MainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(RomFile.MoveNameTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(LoadedRom.AbilityNamesTextNumber);
+            MainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(RomFile.AbilityNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(LoadedRom.ItemNamesTextNumber);
+            MainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(RomFile.ItemNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
+            MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -370,35 +369,35 @@ namespace Main
             int progressCount = 0;
             int increment = 100 / 11;
 
-            LoadedRom.ScriptFileData = scriptFileMethods.GetScriptFiles();
+            RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(LoadedRom.TrainerNamesTextNumber);
+            RomFile.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(RomFile.TrainerNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
+            RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
+            RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainersData = await romFileMethods.GetTrainersDataAsync(LoadedRom.TotalNumberOfTrainers);
+            RomFile.TrainersData = await romFileMethods.GetTrainersDataAsync(RomFile.TotalNumberOfTrainers);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(LoadedRom.TotalNumberOfTrainers, LoadedRom.TrainersData, RomFile.GameFamily);
+            RomFile.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(LoadedRom.TrainerNameMaxByteOffset);
+            RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(RomFile.TrainerNameMaxByteOffset);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(LoadedRom.ClassNamesTextNumber);
+            RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(RomFile.ClassNamesTextNumber);
             progressCount += increment;
             progress?.Report(progressCount);
             RomFile.Arm9Expanded = RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
@@ -409,15 +408,15 @@ namespace Main
                 RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
                 RomFile.EyeContactExpanded = RomFile.CheckForEyeContactExpansion();
             }
-            LoadedRom.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
+            RomFile.ClassGenderData = RomFile.GameFamily != GameFamily.DiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+            RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
             progressCount += increment;
             progress?.Report(progressCount);
 
-            LoadedRom.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync(LoadedRom);
+            RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();
             progressCount += increment;
             progress?.Report(progressCount);
 
@@ -427,7 +426,7 @@ namespace Main
 
         public void RefreshTrainerClasses()
         {
-            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions, LoadedRom);
+            MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions);
         }
 
         private static void CreateDirectory(string workingDirectory)
@@ -471,7 +470,7 @@ namespace Main
         {
             IsLoadingData = true;
             romName_Label.Text = "";
-            LoadedRom = new RomFile();
+            RomFile.Reset();
             RomLoaded = false;
             startupTab.SelectedTab = startupPage;
             MainEditorModel = new();
@@ -639,10 +638,10 @@ namespace Main
                 }
             }
 
-            if (Overlay.CheckOverlayHasCompressionFlag(LoadedRom.InitialMoneyOverlayNumber) &&
-                !await Overlay.CheckOverlayIsCompressedAsync(LoadedRom.InitialMoneyOverlayNumber))
+            if (Overlay.CheckOverlayHasCompressionFlag(RomFile.InitialMoneyOverlayNumber) &&
+                !await Overlay.CheckOverlayIsCompressedAsync(RomFile.InitialMoneyOverlayNumber))
             {
-                await Overlay.CompressOverlayAsync(LoadedRom.InitialMoneyOverlayNumber);
+                await Overlay.CompressOverlayAsync(RomFile.InitialMoneyOverlayNumber);
             }
         }
 
@@ -762,7 +761,7 @@ namespace Main
                 var gameFamily = RomFile.GameFamily;
                 int classesCount = 100;
                 int battleMessagesCount = 200;
-                var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, LoadedRom.TrainerNamesTextNumber, classesCount, battleMessagesCount);
+                var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, RomFile.TrainerNamesTextNumber, classesCount, battleMessagesCount);
             }
         }
 
@@ -899,7 +898,7 @@ namespace Main
 
         private void OpenRomPatchesWindow()
         {
-            RomPatches = new RomPatches(this, LoadedRom, romFileMethods);
+            RomPatches = new RomPatches(this, romFileMethods);
             RomPatches.ShowDialog();
         }
 
@@ -934,7 +933,7 @@ namespace Main
         {
             IsLoadingData = true;
             var loadedRom = LoadInitialRomData(fileName);
-            LoadedRom = new RomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
+            RomFile.SetupRomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
             if (RomFile.GameVersion == GameVersion.Unknown)
             {
                 MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +

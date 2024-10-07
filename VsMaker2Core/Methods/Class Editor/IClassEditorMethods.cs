@@ -6,7 +6,7 @@ namespace VsMaker2Core.Methods
     {
         TrainerClass GetTrainerClass(List<TrainerClass> classes, int classId);
 
-        List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions, RomFile loadedRom);
+        List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions);
 
         List<Trainer> GetUsedByTrainers(int classId, List<Trainer> trainers);
     }

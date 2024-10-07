@@ -408,7 +408,7 @@ namespace VsMaker2Core.Methods
             return messageArchives.Select(item => item.MessageText).ToList();
         }
 
-        public async Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync(RomFile loadedRom)
+        public async Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync()
         {
             var prizeMoneyData = new List<PrizeMoneyData>();
 

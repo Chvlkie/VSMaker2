@@ -15,29 +15,25 @@ namespace Main.Forms
         public static uint ExpandedArmFileId = ToolboxDB.SyntheticOverlayFileNumbersDB[RomFile.GameFamily];
         public static bool LoadOverlay1FromBackup;
         public string BackupSuffix = ".backup";
-        private readonly RomFile LoadedRom;
-        private Mainform Main;
+        private readonly Mainform Main;
         private IRomFileMethods romFileMethods;
 
-        public RomPatches(Mainform main, RomFile loadedRom, IRomFileMethods romFileMethods)
+        public RomPatches(Mainform main, IRomFileMethods romFileMethods)
         {
             InitializeComponent();
             this.romFileMethods = romFileMethods;
             Main = main;
-            LoadedRom = loadedRom;
-            if (loadedRom != null)
+
+            btn_TrainerName.Enabled = !RomFile.TrainerNameExpansion;
+            checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;
+            if (RomFile.GameLanguage == GameLanguage.Spanish || RomFile.GameLanguage == GameLanguage.English && !RomFile.Arm9Expanded)
             {
-                btn_TrainerName.Enabled = !RomFile.TrainerNameExpansion;
-                checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;
-                if (RomFile.GameLanguage == GameLanguage.Spanish || RomFile.GameLanguage == GameLanguage.English && !RomFile.Arm9Expanded)
-                {
-                    RomFile.Arm9Expanded = CheckFilesArm9ExpansionApplied();
-                }
-                patchArm9Btn.Enabled = !RomFile.Arm9Expanded;
-                arm9PatchCheckBox.Checked = RomFile.Arm9Expanded;
-                btn_expandTrainerClass.Enabled = RomFile.Arm9Expanded && !RomFile.PrizeMoneyExpanded && !RomFile.EyeContactExpanded && !RomFile.ClassGenderExpanded;
-                checkBox2.Checked = RomFile.Arm9Expanded && !btn_expandTrainerClass.Enabled;
+                RomFile.Arm9Expanded = CheckFilesArm9ExpansionApplied();
             }
+            patchArm9Btn.Enabled = !RomFile.Arm9Expanded;
+            arm9PatchCheckBox.Checked = RomFile.Arm9Expanded;
+            btn_expandTrainerClass.Enabled = RomFile.Arm9Expanded && !RomFile.PrizeMoneyExpanded && !RomFile.EyeContactExpanded && !RomFile.ClassGenderExpanded;
+            checkBox2.Checked = RomFile.Arm9Expanded && !btn_expandTrainerClass.Enabled;
         }
 
         public static bool CheckFilesArm9ExpansionApplied()
@@ -66,9 +62,9 @@ namespace Main.Forms
             }
         }
 
-        public static bool ExpandTrainerNames(RomFile loadedRom)
+        public static bool ExpandTrainerNames()
         {
-            using Arm9.Arm9Writer writer = new(loadedRom.TrainerNameMaxByteOffset);
+            using Arm9.Arm9Writer writer = new(RomFile.TrainerNameMaxByteOffset);
             try
             {
                 writer.Write((byte)12);
@@ -296,7 +292,7 @@ namespace Main.Forms
 
         public List<ClassGenderData> CreateClassGenderTable()
         {
-            List<ClassGenderData> original = LoadedRom.ClassGenderData;
+            List<ClassGenderData> original = RomFile.ClassGenderData;
             List<ClassGenderData> newData = new(150);
 
             for (int i = 0; i < 150; i++)
@@ -320,7 +316,7 @@ namespace Main.Forms
 
         public List<EyeContactMusicData> CreateEyeContactTable()
         {
-            List<EyeContactMusicData> original = LoadedRom.EyeContactMusicData;
+            List<EyeContactMusicData> original = RomFile.EyeContactMusicData;
             List<EyeContactMusicData> newData = new(150);
 
             for (int i = 0; i < 150; i++)
@@ -346,7 +342,7 @@ namespace Main.Forms
 
         public List<PrizeMoneyData> CreatePrizeMoneyTable()
         {
-            List<PrizeMoneyData> originalPrizeMoney = LoadedRom.PrizeMoneyData;
+            List<PrizeMoneyData> originalPrizeMoney = RomFile.PrizeMoneyData;
             List<PrizeMoneyData> newPrizeMoneyData = new(150);
 
             for (int i = 0; i < 150; i++)
@@ -422,7 +418,7 @@ namespace Main.Forms
                 {
                     var newPrizeMoneyTable = CreatePrizeMoneyTable();
                     await WritePrizeMoneyTableAsync(newPrizeMoneyTable);
-                    LoadedRom.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync(LoadedRom);
+                    RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();
                 }
 
                 if (success)
@@ -439,7 +435,7 @@ namespace Main.Forms
                 {
                     var newClassGenderData = CreateClassGenderTable();
                     await WriteClassGenderTableAsync(newClassGenderData);
-                    LoadedRom.ClassGenderData = await romFileMethods.GetClassGendersAsync(150, RomFile.ClassGenderOffsetToRamAddress);
+                    RomFile.ClassGenderData = await romFileMethods.GetClassGendersAsync(150, RomFile.ClassGenderOffsetToRamAddress);
                 }
 
                 if (success)
@@ -456,7 +452,7 @@ namespace Main.Forms
                 {
                     var newEyeContactData = CreateEyeContactTable();
                     await WriteEyeContactTableAsync(newEyeContactData);
-                    LoadedRom.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                    RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
                 }
 
                 // Handle the result
@@ -486,7 +482,7 @@ namespace Main.Forms
 
         private void btn_TrainerName_Click(object sender, EventArgs e)
         {
-            if (ExpandTrainerNames(LoadedRom))
+            if (ExpandTrainerNames())
             {
                 btn_TrainerName.Enabled = !RomFile.TrainerNameExpansion;
                 checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;

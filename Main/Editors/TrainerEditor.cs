@@ -170,22 +170,22 @@ namespace Main
             IsLoadingData = true;
             trainer_FilterBox.Text = "";
             trainer_TrainersListBox.SelectedIndex = -1;
-            int newTrainerId = LoadedRom.TotalNumberOfTrainers;
+            int newTrainerId = RomFile.TotalNumberOfTrainers;
             // Add new name to trainers
             MainEditorModel.TrainerNames.Add("-");
             // Add new trainer
             MainEditorModel.Trainers.Add(new Trainer(newTrainerId));
 
             // New TrainerProperties
-            fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", LoadedRom.TrainerNamesTextNumber);
+            fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, newTrainerId, "-", RomFile.TrainerNamesTextNumber);
             fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
             fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, RomFile.GameFamily != GameFamily.DiamondPearl);
             UnfilteredTrainers.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
             trainer_TrainersListBox.Items.Add(MainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
-            LoadedRom.TotalNumberOfTrainers++;
+            RomFile.TotalNumberOfTrainers++;
 
             // Create new Trainer Script
-            var updateScripts = fileSystemMethods.UpdateTrainerScripts(LoadedRom.TotalNumberOfTrainers);
+            var updateScripts = fileSystemMethods.UpdateTrainerScripts(RomFile.TotalNumberOfTrainers);
             if (!updateScripts.Success)
             {
                 MessageBox.Show(updateScripts.ErrorMessage, "Couldn't update Trainer Scripts");
@@ -943,7 +943,7 @@ namespace Main
         private bool SaveTrainerMessage(int messageId)
         {
             var battleMessages = MainEditorModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
-            var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, LoadedRom.BattleMessageTextNumber);
+            var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, RomFile.BattleMessageTextNumber);
             if (!saveMessage.Success)
             {
                 MessageBox.Show(saveMessage.ErrorMessage, "Unable to Save Battle Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -963,7 +963,7 @@ namespace Main
 
         private bool SaveTrainerName(int trainerId)
         {
-            var saveTrainerName = fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, LoadedRom.TrainerNamesTextNumber);
+            var saveTrainerName = fileSystemMethods.WriteTrainerName(MainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, RomFile.TrainerNamesTextNumber);
             if (!saveTrainerName.Success)
             {
                 MessageBox.Show(saveTrainerName.ErrorMessage, "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1013,7 +1013,7 @@ namespace Main
 
                 MainEditorModel.SelectedTrainer.TrainerParty = trainerParty;
                 MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerParty = trainerParty;
-                LoadedRom.TrainersPartyData[trainerId - 1] = trainerPartyData;
+                RomFile.TrainersPartyData[trainerId - 1] = trainerPartyData;
                 EditedTrainerParty(false);
                 if (displaySuccess)
                 {
@@ -1056,7 +1056,7 @@ namespace Main
             {
                 MainEditorModel.SelectedTrainer.TrainerProperties = trainerProperties;
                 MainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
-                LoadedRom.TrainersData[trainerId - 1] = newTrainerData;
+                RomFile.TrainersData[trainerId - 1] = newTrainerData;
                 EditedTrainerProperty(false);
                 if (displaySucces)
                 {
@@ -1362,14 +1362,13 @@ namespace Main
             if (poke1GenderComboBox.Items.Count == 0 && RomFile.GameFamily != GameFamily.DiamondPearl)
             {
                 PopulatePokemonGenderComboBoxes();
-                pokeGenderComboBoxes?.ForEach(x => x.Visible = true);
                 pokeGenderComboBoxes?.ForEach(x => x.SelectedIndex = -1);
             }
             else
             {
-                pokeGenderComboBoxes?.ForEach(x => x.Visible = false);
                 pokeGenderComboBoxes?.ForEach(x => x.Enabled = false);
             }
+
             if (poke1HeldItemComboBox.Items.Count == 0)
             {
                 pokeHeldItemComboBoxes?.ForEach(PopulateItemComboBox);
@@ -1555,7 +1554,7 @@ namespace Main
         {
             if (!IsLoadingData)
             {
-                if (MainEditorModel.SelectedTrainer.TrainerId <= LoadedRom.VanillaTotalTrainers - 1)
+                if (MainEditorModel.SelectedTrainer.TrainerId <= RomFile.VanillaTotalTrainers - 1)
                 {
                     MessageBox.Show("This is one of the game's core Trainers.\nYou cannot remove this file as it will cause issues.", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
@@ -1897,7 +1896,7 @@ namespace Main
                 var confirmPatch = MessageBox.Show("Do you wish to apply this patch now?", "Apply Trainer Name Expansion", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (confirmPatch == DialogResult.Yes)
                 {
-                    return RomPatches.ExpandTrainerNames(LoadedRom);
+                    return RomPatches.ExpandTrainerNames();
                 }
                 else
                 {

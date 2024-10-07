@@ -17,13 +17,13 @@ namespace VsMaker2Core.Methods
             return classes.SingleOrDefault(x => x.TrainerClassId == classId);
         }
 
-        public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions, RomFile loadedRom)
+        public List<TrainerClass> GetTrainerClasses(List<Trainer> trainers, List<string> classNames, List<string> classDescriptions)
         {
             List<TrainerClass> trainerClasses = [];
             // Start from i 2 to skip player classes
             for (int i = 2; i < classNames.Count; i++)
             {
-                var eyeContactData = loadedRom.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
+                var eyeContactData = RomFile.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
                 var trainerClass = new TrainerClass
                 {
                     TrainerClassId = i,
@@ -31,11 +31,11 @@ namespace VsMaker2Core.Methods
                     ClassProperties = new TrainerClassProperty
                     {
                         Description = classDescriptions[i],
-                        Gender = RomFile.GameFamily != GameFamily.DiamondPearl ? loadedRom.ClassGenderData[i].Gender : null,
+                        Gender = RomFile.GameFamily != GameFamily.DiamondPearl ? RomFile.ClassGenderData[i].Gender : null,
                         EyeContactMusicDay = eyeContactData != default ? eyeContactData.MusicDayId : -1,
                         EyeContactMusicNight = RomFile.IsHeartGoldSoulSilver ? eyeContactData != default ? eyeContactData.MusicNightId : null
                         : null,
-                        PrizeMoneyMultiplier = loadedRom.PrizeMoneyData[i].PrizeMoney
+                        PrizeMoneyMultiplier = RomFile.PrizeMoneyData[i].PrizeMoney
                     },
                     UsedByTrainers = GetUsedByTrainers(i, trainers),
                 };

@@ -185,9 +185,9 @@ namespace Main
                 else if (dialogResult == DialogResult.Yes)
                 {
                     OpenLoadingDialog(LoadType.SaveTrainerTextTable);
-                    LoadedRom.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
-                    LoadedRom.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
-                    MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
+                    RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
+                    RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
+                    MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
@@ -216,9 +216,9 @@ namespace Main
                 if (dialogResult == DialogResult.OK)
                 {
                     OpenLoadingDialog(LoadType.RepointTextTable);
-                    LoadedRom.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
-                    LoadedRom.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
-                    MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(LoadedRom.BattleMessageTableData, LoadedRom.BattleMessageTextNumber);
+                    RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
+                    RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
+                    MainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
@@ -390,7 +390,7 @@ namespace Main
             }
             else
             {
-                var writeText = fileSystemMethods.WriteBattleMessageTexts(messageTexts, LoadedRom.BattleMessageTextNumber);
+                var writeText = fileSystemMethods.WriteBattleMessageTexts(messageTexts, RomFile.BattleMessageTextNumber);
                 if (!writeText.Success)
                 {
                     MessageBox.Show(writeText.ErrorMessage, "Unable to Save Battle Message Text", MessageBoxButtons.OK, MessageBoxIcon.Error);

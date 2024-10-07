@@ -14,15 +14,15 @@ namespace VsMaker2Core.Methods
             romFileMethods = new RomFileMethods();
         }
 
-        public List<Trainer> GetTrainers(List<string> trainerNames, RomFile loadedRom)
+        public List<Trainer> GetTrainers(List<string> trainerNames)
         {
             List<Trainer> trainers = [];
             // Start from i 1 to skip player trainer file
             for (int i = 1; i < trainerNames.Count; i++)
             {
-                var trainerData = loadedRom.TrainersData[i];
-                var trainerPartyData = loadedRom.TrainersPartyData[i];
-                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl, loadedRom));
+                var trainerData = RomFile.TrainersData[i];
+                var trainerPartyData = RomFile.TrainersPartyData[i];
+                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, RomFile.GameFamily != GameFamily.DiamondPearl));
             }
             return trainers;
         }
@@ -79,19 +79,19 @@ namespace VsMaker2Core.Methods
             return trainerProperty;
         }
 
-        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule, RomFile loadedRom)
+        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
         {
             var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
             var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
-            var usages = FindTrainerUses(trainerId, loadedRom);
+            var usages = FindTrainerUses(trainerId);
             return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty, usages);
         }
 
-        public List<TrainerUsage> FindTrainerUses(int trainerId, RomFile loadedRom)
+        public List<TrainerUsage> FindTrainerUses(int trainerId)
         {
             List<TrainerUsage> scripts = [];
 
-            foreach (var scriptFile in loadedRom.ScriptFileData.Where(x => !x.IsLevelScript))
+            foreach (var scriptFile in RomFile.ScriptFileData.Where(x => !x.IsLevelScript))
             {
                 foreach (var script in scriptFile.Scripts.Where(x => !x.UsedScriptId.HasValue))
                 {

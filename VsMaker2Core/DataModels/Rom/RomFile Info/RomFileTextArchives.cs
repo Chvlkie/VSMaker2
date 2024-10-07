@@ -2,9 +2,9 @@
 
 namespace VsMaker2Core.DataModels
 {
-    public partial class RomFile
+    public static partial class RomFile
     {
-        public int AbilityNamesTextNumber => GameFamily switch
+        public static int AbilityNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 552,
             GameFamily.Platinum => 610,
@@ -13,7 +13,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int BattleMessageTextNumber => GameFamily switch
+        public static int BattleMessageTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? 549 : 558,
             GameFamily.Platinum => 617,
@@ -22,7 +22,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int ClassDescriptionMessageNumber => GameFamily switch
+        public static int ClassDescriptionMessageNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? 552 : 561,
             GameFamily.Platinum => 620,
@@ -31,7 +31,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int ClassNamesTextNumber => GameFamily switch
+        public static int ClassNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? 551 : 560,
             GameFamily.Platinum => 619,
@@ -40,7 +40,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int ItemNamesTextNumber => GameFamily switch
+        public static int ItemNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 344,
             GameFamily.Platinum => 392,
@@ -49,7 +49,7 @@ namespace VsMaker2Core.DataModels
             _ => 0
         };
 
-        public int MoveNameTextNumber => GameFamily switch
+        public static int MoveNameTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 588,
             GameFamily.Platinum => 647,
@@ -58,7 +58,7 @@ namespace VsMaker2Core.DataModels
             _ => 0,
         };
 
-        public int PokemonNamesTextNumber => GameFamily switch
+        public static int PokemonNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 362,
             GameFamily.Platinum => 412,
@@ -67,7 +67,7 @@ namespace VsMaker2Core.DataModels
             _ => 0,
         };
 
-        public int TrainerNamesTextNumber => GameFamily switch
+        public static int TrainerNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? 550 : 559,
             GameFamily.Platinum => 618,
@@ -76,7 +76,7 @@ namespace VsMaker2Core.DataModels
             _ => 0,
         };
 
-        public int TypeNamesTextNumber => GameFamily switch
+        public static int TypeNamesTextNumber => GameFamily switch
         {
             GameFamily.DiamondPearl => 565,
             GameFamily.Platinum => 624,
