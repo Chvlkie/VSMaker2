@@ -6,6 +6,9 @@ namespace Main
     // BATTLE MESSAGES EDITOR
     public partial class Mainform : Form
     {
+        private Stack<string> undoStack = new Stack<string>();
+        private Stack<string> redoStack = new Stack<string>();
+
         private readonly string Seperator = @"\r";
         private bool UnsavedBattleMessageChanges;
         public int BattleMessageCount => battleMessage_MessageTableDataGrid.RowCount;
@@ -70,6 +73,10 @@ namespace Main
                 battleMessages_MessageTextBox.Enabled = true;
                 battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
                 battleMessages_RemoveBtn.Enabled = true;
+               
+                undoStack.Clear();
+                redoStack.Clear();
+                UpdateUndoRedoButtons();
             }
         }
 
@@ -126,15 +133,28 @@ namespace Main
             MessagePreviewNavigate(true, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
         }
 
+        private bool isUndoRedo = false; 
         private void battleMessages_MessageTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!IsLoadingData && !isUndoRedo) // Skip if undo/redo is in progress
             {
+                // Push the current text to the undo stack and clear the redo stack
+                undoStack.Push(battleMessages_MessageTextBox.Text);
+                redoStack.Clear();
+
+                // Update Undo/Redo button states
+                UpdateUndoRedoButtons();
+
+                // Compare the text to the DataGridView value and mark it as edited if different
                 if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
                 {
                     EditedBattleMessage(true);
                 }
+
+                // Update the DataGridView with the new text
                 battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
+
+                // Update text preview
                 UpdateTextPreview(battleMessages_MessageTextBox.Text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
             }
         }
@@ -191,6 +211,10 @@ namespace Main
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
+                   
+                    undoStack.Clear();
+                    redoStack.Clear();
+                    UpdateUndoRedoButtons();
                 }
             }
             IsLoadingData = false;
@@ -238,6 +262,35 @@ namespace Main
 
         private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
         {
+            if (undoStack.Count > 1) // Ensure there's something to undo
+            {
+                // Set flag to indicate undo/redo is in progress
+                isUndoRedo = true;
+
+                // Push the current text to the redo stack
+                redoStack.Push(battleMessages_MessageTextBox.Text);
+
+                // Pop the current state from the undo stack and apply the last saved state
+                undoStack.Pop();
+                battleMessages_MessageTextBox.Text = undoStack.Peek(); // Apply the previous state
+
+                // Update DataGridView and Preview
+                UpdateDataGridViewAndPreview(battleMessages_MessageTextBox.Text);
+
+                // Reset flag after undo is completed
+                isUndoRedo = false;
+
+                // Update buttons after undo
+                UpdateUndoRedoButtons();
+            }
+        }
+
+
+
+        private void UpdateUndoRedoButtons()
+        {
+            battleMessages_UndoMessageBtn.Enabled = undoStack.Count > 1;
+            battleMessages_RedoMessageBtn.Enabled = redoStack.Count > 0;
         }
 
         private void battleMessages_UpdateText_Click(object sender, EventArgs e)

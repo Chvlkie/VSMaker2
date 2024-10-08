@@ -22,8 +22,8 @@ namespace VsMaker2Core.DataModels
 
         #region Battle Message Table
 
-        public static string BattleMessageOffsetPath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextOffset)}\\0000";
-        public static string BattleMessageTablePath => $"{WorkingDirectory}\\unpacked\\{nameof(NarcDirectory.trainerTextTable)}\\0000";
+        public static string BattleMessageOffsetPath => Path.Combine(Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset].unpackedDirectory, "0000");
+        public static string BattleMessageTablePath => Path.Combine(Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable].unpackedDirectory, "0000");
 
         #endregion Battle Message Table
 

@@ -182,9 +182,9 @@ namespace VsMaker2Core.Methods
 
             try
             {
-                if (!Directory.Exists(directoryPath))
+                if (!File.Exists(directoryPath))
                 {
-                    return (false, $"Directory {directoryPath} does not exist.");
+                    return (false, $"File {directoryPath} does not exist.");
                 }
 
                 using (var fileStream = new FileStream(directoryPath, FileMode.Create, FileAccess.Write))
@@ -222,13 +222,13 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteBattleMessageTableData(List<BattleMessage> messageData, IProgress<int> progress)
         {
-            string directoryPath = Path.Combine(VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable].unpackedDirectory, "0000");
+            string filePath = RomFile.BattleMessageTablePath;
 
             try
             {
-                if (!Directory.Exists(directoryPath))
+                if (!File.Exists(filePath))
                 {
-                    return (false, $"Directory {directoryPath} does not exist.");
+                    return (false, $"File {filePath} does not exist.");
                 }
 
                 if (messageData == null || messageData.Count == 0)
@@ -236,7 +236,7 @@ namespace VsMaker2Core.Methods
                     return (false, "Message data is null or empty.");
                 }
 
-                using (var fileStream = new FileStream(directoryPath, FileMode.Create, FileAccess.Write))
+                using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 using (var bufferedStream = new BufferedStream(fileStream, 8192))
                 using (var binaryWriter = new BinaryWriter(bufferedStream))
                 {

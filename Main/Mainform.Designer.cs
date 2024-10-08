@@ -1345,19 +1345,19 @@
             // 
             menu_Tools_RomPatcher.Enabled = false;
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
-            menu_Tools_RomPatcher.Size = new Size(180, 22);
+            menu_Tools_RomPatcher.Size = new Size(144, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
             menu_Tools_RomPatcher.Click += menu_Tools_RomPatcher_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(177, 6);
+            toolStripSeparator5.Size = new Size(141, 6);
             // 
             // menu_Tools_Settings
             // 
             menu_Tools_Settings.Name = "menu_Tools_Settings";
-            menu_Tools_Settings.Size = new Size(180, 22);
+            menu_Tools_Settings.Size = new Size(144, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
             // 
@@ -4552,6 +4552,7 @@
             battleMessages_RedoMessageBtn.Name = "battleMessages_RedoMessageBtn";
             battleMessages_RedoMessageBtn.Size = new Size(23, 22);
             battleMessages_RedoMessageBtn.Text = "Redo";
+            battleMessages_RedoMessageBtn.Click += battleMessages_RedoMessageBtn_Click;
             // 
             // toolStripSeparator27
             // 

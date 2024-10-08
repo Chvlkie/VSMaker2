@@ -34,7 +34,10 @@
         // Save the ROM folder path
         public static void SaveRomFolderPath(string path)
         {
-            romFolderPath = path;
+            // Remove trailing backslash if it exists
+            romFolderPath = path.TrimEnd('\\');
+
+            // Save the updated config
             SaveConfig();
         }
 
@@ -47,15 +50,12 @@
         // Load the configuration settings from files
         public static void LoadConfig()
         {
-            EnsureConfigFolderExists(); // Ensure the config folder exists
-
-            // Load recent items if the recent files exist
             if (File.Exists(RecentFilesPath))
             {
-                recentItems = File.ReadAllLines(RecentFilesPath).ToList();
+                // Trim trailing backslashes from recent items
+                recentItems = File.ReadAllLines(RecentFilesPath).Select(p => p.TrimEnd('\\')).ToList();
             }
 
-            // Load general configuration from the config file
             if (File.Exists(ConfigFilePath))
             {
                 foreach (var line in File.ReadAllLines(ConfigFilePath))
@@ -66,11 +66,12 @@
                     }
                     if (line.StartsWith("RomFolderPath="))
                     {
-                        romFolderPath = line.Split('=')[1];
+                        romFolderPath = line.Split('=')[1].TrimEnd('\\'); // Trim trailing backslash
                     }
                 }
             }
         }
+
 
         // Save the configuration settings to the file
         public static void SaveConfig()
@@ -111,18 +112,25 @@
         // Add a path to recent items, moving it to the top if it already exists
         public static void AddToRecentItems(string path)
         {
-            // Remove if it already exists and insert at the top
+            // Remove trailing backslash if it exists
+            path = path.TrimEnd('\\');
+
+            // Remove any existing instances of the path
             recentItems.Remove(path);
+
+            // Insert the path at the top of the list
             recentItems.Insert(0, path);
 
-            // Trim to maximum recent items
+            // Ensure the list doesn't exceed the maximum number of recent items
             if (recentItems.Count > MaxRecentItems)
             {
                 recentItems = recentItems.Take(MaxRecentItems).ToList();
             }
 
-            SaveConfig(); // Save the updated recent list
+            // Save the updated config
+            SaveConfig();
         }
+
 
         // Update the "Open Recent" menu
         public static void UpdateRecentItemsMenu(ToolStripMenuItem openRecentMenu, Action<string> openRecentFileAction)

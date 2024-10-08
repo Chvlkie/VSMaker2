@@ -1190,5 +1190,39 @@ namespace Main
             }
             IsLoadingData = false;
         }
+
+        private void battleMessages_RedoMessageBtn_Click(object sender, EventArgs e)
+        {
+            if (redoStack.Count > 0) // Ensure there's something to redo
+            {
+                // Set flag to indicate undo/redo is in progress
+                isUndoRedo = true;
+
+                // Push the current text to the undo stack
+                undoStack.Push(battleMessages_MessageTextBox.Text);
+
+                // Pop and apply the last undone text from the redo stack
+                battleMessages_MessageTextBox.Text = redoStack.Pop();
+
+                // Update DataGridView and Preview
+                UpdateDataGridViewAndPreview(battleMessages_MessageTextBox.Text);
+
+                // Reset flag after redo is completed
+                isUndoRedo = false;
+
+                // Update buttons after redo
+                UpdateUndoRedoButtons();
+            }
+        }
+
+        private void UpdateDataGridViewAndPreview(string text)
+        {
+            // Update the DataGridView with the new text
+            battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
+
+            // Update text preview
+            UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
+        }
+
     }
 }
