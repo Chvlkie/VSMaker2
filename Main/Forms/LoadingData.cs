@@ -148,51 +148,51 @@ namespace Main.Forms
             switch (loadType)
             {
                 case LoadType.UnpackRom:
-                    Text = "Unpacking ROM Data";
+                    Text = "Unpacking ROM Data...";
                     await UnpackRom();
                     break;
 
                 case LoadType.LoadRomData:
-                    Text = "Loading ROM Data";
+                    Text = "Loading ROM Data...";
                     await LoadRomData();
                     break;
 
                 case LoadType.SetupEditor:
-                    Text = "Setting up VS Maker";
+                    Text = "Setting up VS Maker 2...";
                     await SetupEditor();
                     break;
 
                 case LoadType.UnpackNarcs:
-                    Text = "Unpacking Essential NARCs";
+                    Text = "Unpacking Essential NARCs...";
                     await UnpackNarcs();
                     break;
 
                 case LoadType.SaveRom:
-                    Text = "Saving ROM";
+                    Text = "Saving ROM...";
                     await SaveRom();
                     break;
 
                 case LoadType.SaveTrainerTextTable:
-                    Text = "Saving Battle Message Table";
+                    Text = "Saving Battle Message Table...";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
                     await SaveTrainerTextTable();
                     break;
 
                 case LoadType.ExportTextTable:
-                    Text = "Exporting Battle Messages";
+                    Text = "Exporting Battle Messages...";
                     progressBar.Maximum = mainForm.BattleMessageCount + 50;
                     await ExportTrainerTextTable();
                     break;
 
                 case LoadType.ImportTextTable:
-                    Text = "Importing Battle Messages";
+                    Text = "Importing Battle Messages...";
                     progressBar.Style = ProgressBarStyle.Marquee;
                     progressBar.Value = 100;
                     await ImportTrainerTextTable();
                     break;
 
                 case LoadType.RepointTextTable:
-                    Text = "Sorting & Repointing Battle Message Table";
+                    Text = "Sorting & Repointing Battle Message Table...";
                     progressBar.Maximum = mainForm.BattleMessageCount + 25;
                     await RepointTrainerTable();
                     break;

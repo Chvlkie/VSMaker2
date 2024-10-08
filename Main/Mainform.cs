@@ -19,6 +19,7 @@ namespace Main
     {
         private const int debounceDelay = 300;
         private System.Windows.Forms.Timer filterTimer;
+        private string defaultFolderPath = "";
         // Delay in milliseconds
 
         #region Forms
@@ -26,7 +27,6 @@ namespace Main
         private LoadingData LoadingData;
         private MoveSelector MoveSelector;
         private RomPatches RomPatches;
-        private Settings Settings;
 
         #endregion Forms
 
@@ -571,6 +571,12 @@ namespace Main
             main_OpenPatchesBtn.Enabled = enable;
         }
 
+        private void SettingsForm_ClearRecentItemsRequested(object sender, EventArgs e)
+        {
+            Config.ClearRecentItems(menu_File_OpenRecent);
+            MessageBox.Show("Recent items have been cleared.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void EndOpenRom()
         {
             EnableDisableMenu(RomLoaded);
@@ -597,6 +603,8 @@ namespace Main
                 Title = "Save CSV File" +
                 "",
             };
+
+
             if (exportFile.ShowDialog(this) != DialogResult.OK)
             {
                 return;
@@ -748,7 +756,6 @@ namespace Main
 
         private void Mainform_Shown(object sender, EventArgs e)
         {
-            Settings = new Settings();
             LoadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
             scriptFileMethods = new ScriptFileMethods();
@@ -758,6 +765,15 @@ namespace Main
             classEditorMethods = new ClassEditorMethods(romFileMethods);
             fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
             ndsImage = new NdsImage();
+
+            if (Config.LoadLastOpened)
+            {
+                string lastOpenedRomFolder = Config.GetFirstRecentItem();
+                if (!string.IsNullOrEmpty(lastOpenedRomFolder))
+                {
+                    OpenRecentFile(lastOpenedRomFolder);
+                }
+            }
         }
 
         private void menu_Export_Trainers_Click(object sender, EventArgs e)
@@ -911,7 +927,12 @@ namespace Main
 
         private void OpenSettingsWindow()
         {
-            Settings.ShowDialog();
+            var settingsForm = new Settings();
+
+            // Subscribe to the ClearRecentItemsRequested event
+            settingsForm.ClearRecentItemsRequested += SettingsForm_ClearRecentItemsRequested;
+
+            settingsForm.ShowDialog();
         }
 
         private bool ReadRomExtractedFolder(string selectedFolder)
@@ -959,6 +980,11 @@ namespace Main
             {
                 Filter = Common.NdsRomFilter
             };
+
+            if (!string.IsNullOrEmpty(defaultFolderPath) && Directory.Exists(defaultFolderPath))
+            {
+                save.InitialDirectory = defaultFolderPath;
+            }
             if (save.ShowDialog(this) != DialogResult.OK)
             {
                 return;
@@ -974,6 +1000,11 @@ namespace Main
                 Description = "Choose Extracted ROM Contents Folder",
                 UseDescriptionForTitle = true
             };
+
+            if (!string.IsNullOrEmpty(defaultFolderPath) && Directory.Exists(defaultFolderPath))
+            {
+                selectFolder.InitialDirectory = defaultFolderPath;
+            }
 
             if (selectFolder.ShowDialog() == DialogResult.OK)
             {
@@ -1114,8 +1145,9 @@ namespace Main
 
         private void Mainform_Load(object sender, EventArgs e)
         {
-            Config.LoadRecentItems();
+            Config.LoadConfig();
             Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+            defaultFolderPath = Config.GetRomFolderPath();
         }
 
         private void OpenRecentFile(string filePath)

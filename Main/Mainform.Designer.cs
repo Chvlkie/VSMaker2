@@ -1345,20 +1345,19 @@
             // 
             menu_Tools_RomPatcher.Enabled = false;
             menu_Tools_RomPatcher.Name = "menu_Tools_RomPatcher";
-            menu_Tools_RomPatcher.Size = new Size(144, 22);
+            menu_Tools_RomPatcher.Size = new Size(180, 22);
             menu_Tools_RomPatcher.Text = "ROM Patcher";
             menu_Tools_RomPatcher.Click += menu_Tools_RomPatcher_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(141, 6);
+            toolStripSeparator5.Size = new Size(177, 6);
             // 
             // menu_Tools_Settings
             // 
-            menu_Tools_Settings.Enabled = false;
             menu_Tools_Settings.Name = "menu_Tools_Settings";
-            menu_Tools_Settings.Size = new Size(144, 22);
+            menu_Tools_Settings.Size = new Size(180, 22);
             menu_Tools_Settings.Text = "Settings";
             menu_Tools_Settings.Click += menu_Tools_Settings_Click;
             // 
@@ -4850,7 +4849,6 @@
             // main_SettingsBtn
             // 
             main_SettingsBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            main_SettingsBtn.Enabled = false;
             main_SettingsBtn.Image = Properties.Resources.settings_ico;
             main_SettingsBtn.ImageTransparentColor = Color.Magenta;
             main_SettingsBtn.Name = "main_SettingsBtn";
