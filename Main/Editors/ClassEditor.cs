@@ -18,22 +18,22 @@ namespace Main
 
         private void AddNewTrainerClass()
         {
-            IsLoadingData = true;
+            isLoadingData = true;
             class_FilterTextBox.Text = "";
             class_ClassListBox.SelectedIndex = -1;
             int newTrainerClassId = RomFile.TotalNumberOfTrainerClasses;
-            MainEditorModel.ClassNames.Add("-");
-            MainEditorModel.ClassDescriptions.Add("-");
-            MainEditorModel.Classes.Add(new TrainerClass(newTrainerClassId));
+            mainEditorModel.ClassNames.Add("-");
+            mainEditorModel.ClassDescriptions.Add("-");
+            mainEditorModel.Classes.Add(new TrainerClass(newTrainerClassId));
 
-            fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, newTrainerClassId, "-", RomFile.ClassNamesTextNumber);
-            fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, newTrainerClassId, "-", RomFile.ClassDescriptionMessageNumber);
+            fileSystemMethods.WriteClassName(mainEditorModel.ClassNames, newTrainerClassId, "-", RomFile.ClassNamesTextNumber);
+            fileSystemMethods.WriteClassDescription(mainEditorModel.ClassDescriptions, newTrainerClassId, "-", RomFile.ClassDescriptionMessageNumber);
             fileSystemMethods.AddNewTrainerClassSprite();
-            UnfilteredClasses.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
-            class_ClassListBox.Items.Add(MainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
+            UnfilteredClasses.Add(mainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
+            class_ClassListBox.Items.Add(mainEditorModel.Classes.Single(x => x.TrainerClassId == newTrainerClassId).ListName);
             RomFile.TotalNumberOfTrainerClasses++;
 
-            IsLoadingData = false;
+            isLoadingData = false;
             class_ClassListBox.SelectedIndex = newTrainerClassId - 2;
             EditedTrainerClassName(true);
             EditedTrainerClassProperties(true);
@@ -54,7 +54,7 @@ namespace Main
 
         private void class_ClassListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData && class_ClassListBox.SelectedIndex > -1)
+            if (!isLoadingData && class_ClassListBox.SelectedIndex > -1)
             {
                 string selectedClass = class_ClassListBox.SelectedItem.ToString();
 
@@ -72,7 +72,7 @@ namespace Main
                         ClearUnsavedClassChanges();
                         ClearUnsavedClassPropertiesChanges();
                         SelectedClass = classEditorMethods.GetTrainerClass(
-                            MainEditorModel.Classes,
+                            mainEditorModel.Classes,
                             TrainerClass.ListNameToTrainerClassId(selectedClass)
                         );
                         class_ViewTrainerBtn.Enabled = false;
@@ -93,7 +93,7 @@ namespace Main
 
         private void class_DescriptionTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 EditedTrainerClassProperties(true);
             }
@@ -101,7 +101,7 @@ namespace Main
 
         private void class_EyeContactDayComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 EditedTrainerClassProperties(true);
             }
@@ -109,7 +109,7 @@ namespace Main
 
         private void class_EyeContactNightComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 EditedTrainerClassProperties(true);
             }
@@ -117,11 +117,11 @@ namespace Main
 
         private void class_FilterTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 if (string.IsNullOrEmpty(class_FilterTextBox.Text))
                 {
-                    PopulateClassList(MainEditorModel.Classes);
+                    PopulateClassList(mainEditorModel.Classes);
                     class_ClearFilterBtn.Enabled = false;
                 }
                 else
@@ -134,7 +134,7 @@ namespace Main
 
         private void class_GenderComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 EditedTrainerClassProperties(true);
             }
@@ -142,7 +142,7 @@ namespace Main
 
         private void class_NameTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 class_NameTextBox.BackColor = Color.White;
                 EditedTrainerClassName(true);
@@ -163,7 +163,7 @@ namespace Main
 
         private void class_PrizeMoneyNum_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 EditedTrainerClassProperties(true);
             }
@@ -171,9 +171,9 @@ namespace Main
 
         private async void class_SaveClassBtn_Click(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
-                IsLoadingData = true;
+                isLoadingData = true;
                 if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
                 {
                     bool saveProperties = await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId);
@@ -183,7 +183,7 @@ namespace Main
 
                     }
                 }
-                IsLoadingData = false;
+                isLoadingData = false;
             }
         }
 
@@ -198,7 +198,7 @@ namespace Main
 
         private void class_SpriteFrameNum_ValueChanged(object sender, EventArgs e)
         {
-            if (!IsLoadingData)
+            if (!isLoadingData)
             {
                 int trainerClassId = TrainerClass.ListNameToTrainerClassId(class_ClassListBox.SelectedItem.ToString());
                 UpdateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, trainerClassId);
@@ -207,7 +207,7 @@ namespace Main
 
         private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            class_ViewTrainerBtn.Enabled = !IsLoadingData && class_TrainersListBox.SelectedIndex > -1;
+            class_ViewTrainerBtn.Enabled = !isLoadingData && class_TrainersListBox.SelectedIndex > -1;
         }
 
         private void class_UndoAllBtn_Click(object sender, EventArgs e)
@@ -224,7 +224,7 @@ namespace Main
 
         private void class_ViewTrainerBtn_Click(object sender, EventArgs e)
         {
-            if (!IsLoadingData && class_TrainersListBox.SelectedIndex > -1)
+            if (!isLoadingData && class_TrainersListBox.SelectedIndex > -1)
             {
                 if (UnsavedTrainerEditorChanges && ConfirmUnsavedChanges())
                 {
@@ -361,10 +361,10 @@ namespace Main
 
         private void PopulateTrainerClassData()
         {
-            IsLoadingData = true;
+            isLoadingData = true;
             SetClassName();
             SetClassProperties();
-            IsLoadingData = false;
+            isLoadingData = false;
         }
 
         private void PopulateUsedByTrainers(List<Trainer> usedByTrainers)
@@ -388,7 +388,7 @@ namespace Main
                 if (writeClassGenderData.Success)
                 {
                     SelectedClass.ClassProperties.Gender = classGenderData.Gender;
-                    MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.Gender = classGenderData.Gender;
+                    mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.Gender = classGenderData.Gender;
                     RomFile.ClassGenderData[index].Gender = classGenderData.Gender;
                     return true;
                 }
@@ -402,19 +402,19 @@ namespace Main
 
         private bool SaveClassName(int classId)
         {
-            var saveClass = fileSystemMethods.WriteClassName(MainEditorModel.ClassNames, classId, class_NameTextBox.Text, RomFile.ClassNamesTextNumber);
+            var saveClass = fileSystemMethods.WriteClassName(mainEditorModel.ClassNames, classId, class_NameTextBox.Text, RomFile.ClassNamesTextNumber);
             if (saveClass.Success)
             {
                 class_NameTextBox.BackColor = Color.White;
-                MainEditorModel.ClassNames[classId] = class_NameTextBox.Text;
-                MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).TrainerClassName = class_NameTextBox.Text;
+                mainEditorModel.ClassNames[classId] = class_NameTextBox.Text;
+                mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).TrainerClassName = class_NameTextBox.Text;
                 var index = class_ClassListBox.FindString(UnfilteredClasses[classId - 2]);
                 if (index > -1)
                 {
-                    class_ClassListBox.Items[index] = MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
+                    class_ClassListBox.Items[index] = mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
                     class_ClassListBox.SelectedIndex = index;
                 }
-                UnfilteredClasses[classId - 2] = MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
+                UnfilteredClasses[classId - 2] = mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
                 EditedTrainerClassName(false);
             }
             else
@@ -436,8 +436,8 @@ namespace Main
                 {
                     SelectedClass.ClassProperties.EyeContactMusicDay = eyeContactDay;
                     SelectedClass.ClassProperties.EyeContactMusicNight = eyeContactNight;
-                    MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicDay = eyeContactDay;
-                    MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicNight = eyeContactNight;
+                    mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicDay = eyeContactDay;
+                    mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicNight = eyeContactNight;
                     RomFile.EyeContactMusicData[index] = eyeContactMusicData;
                     return true;
                 }
@@ -463,7 +463,7 @@ namespace Main
                 if (writePrizeMoney.Success)
                 {
                     SelectedClass.ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
-                    MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
+                    mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     RomFile.PrizeMoneyData[index] = prizeMoneyData;
 
                     return true;
@@ -480,10 +480,10 @@ namespace Main
 
         private bool SaveTrainerClassDescription(int classId, string newDescription)
         {
-            var saveDescription = fileSystemMethods.WriteClassDescription(MainEditorModel.ClassDescriptions, classId, newDescription, RomFile.ClassDescriptionMessageNumber);
+            var saveDescription = fileSystemMethods.WriteClassDescription(mainEditorModel.ClassDescriptions, classId, newDescription, RomFile.ClassDescriptionMessageNumber);
             if (saveDescription.Success)
             {
-                MainEditorModel.ClassDescriptions[classId] = newDescription;
+                mainEditorModel.ClassDescriptions[classId] = newDescription;
                 return true;
             }
             else { return false; }
@@ -504,7 +504,7 @@ namespace Main
 
             if (prizeMoneySaved && eyeContactSaved && genderSaved && descriptionSaved)
             {
-                MainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties = new TrainerClassProperty(gender, prizeMoneyMultiplier, newDescription, eyeContactMusicDay, eyeContactMusicNight);
+                mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties = new TrainerClassProperty(gender, prizeMoneyMultiplier, newDescription, eyeContactMusicDay, eyeContactMusicNight);
                 EditedTrainerClassProperties(false);
                 return true;
             }
@@ -541,10 +541,10 @@ namespace Main
 
         private void SetupClassEditor()
         {
-            IsLoadingData = true;
+            isLoadingData = true;
             if (class_ClassListBox.Items.Count == 0)
             {
-                PopulateClassList(MainEditorModel.Classes);
+                PopulateClassList(mainEditorModel.Classes);
             }
             if (class_GenderComboBox.Items.Count == 0)
             {
@@ -560,7 +560,7 @@ namespace Main
             }
             class_ClassListBox.Enabled = true;
             class_FilterTextBox.Enabled = true;
-            IsLoadingData = false;
+            isLoadingData = false;
         }
 
         private void UndoAllClassChanges()
@@ -571,17 +571,17 @@ namespace Main
 
         private void UndoClassNameChange()
         {
-            IsLoadingData = true;
+            isLoadingData = true;
             SetClassName();
-            IsLoadingData = false;
+            isLoadingData = false;
         }
 
         private void UndoClassPropertiesChanges()
         {
-            IsLoadingData = true;
+            isLoadingData = true;
             SetClassProperties();
             EditedTrainerClassProperties(false);
-            IsLoadingData = false;
+            isLoadingData = false;
         }
 
         private void ValidateAddClass()
