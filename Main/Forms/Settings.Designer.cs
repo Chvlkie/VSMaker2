@@ -46,6 +46,11 @@
             label2 = new Label();
             tab_Display = new TabPage();
             tab_Advanced = new TabPage();
+            groupBox3 = new GroupBox();
+            label4 = new Label();
+            btn_ExportLogs = new Button();
+            label5 = new Label();
+            checkBox_ShowConsole = new CheckBox();
             toolTip_AutoLoad = new ToolTip(components);
             toolTip_DefaultRomFolder = new ToolTip(components);
             panel1.SuspendLayout();
@@ -54,6 +59,8 @@
             tab_General.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox1.SuspendLayout();
+            tab_Advanced.SuspendLayout();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -228,6 +235,7 @@
             // 
             // tab_Advanced
             // 
+            tab_Advanced.Controls.Add(groupBox3);
             tab_Advanced.Location = new Point(4, 24);
             tab_Advanced.Name = "tab_Advanced";
             tab_Advanced.Padding = new Padding(3);
@@ -235,6 +243,61 @@
             tab_Advanced.TabIndex = 2;
             tab_Advanced.Text = "Advanced";
             tab_Advanced.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(label4);
+            groupBox3.Controls.Add(btn_ExportLogs);
+            groupBox3.Controls.Add(label5);
+            groupBox3.Controls.Add(checkBox_ShowConsole);
+            groupBox3.Dock = DockStyle.Top;
+            groupBox3.Location = new Point(3, 3);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(306, 82);
+            groupBox3.TabIndex = 9;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Logs";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(9, 27);
+            label4.Name = "label4";
+            label4.Size = new Size(129, 15);
+            label4.TabIndex = 5;
+            label4.Text = "Show Console Window";
+            // 
+            // btn_ExportLogs
+            // 
+            btn_ExportLogs.Location = new Point(226, 53);
+            btn_ExportLogs.Name = "btn_ExportLogs";
+            btn_ExportLogs.Size = new Size(75, 23);
+            btn_ExportLogs.TabIndex = 3;
+            btn_ExportLogs.Text = "Export";
+            btn_ExportLogs.UseVisualStyleBackColor = true;
+            btn_ExportLogs.Click += btn_ExportLogs_Click;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(9, 57);
+            label5.Name = "label5";
+            label5.Size = new Size(69, 15);
+            label5.TabIndex = 2;
+            label5.Text = "Export Logs";
+            // 
+            // checkBox_ShowConsole
+            // 
+            checkBox_ShowConsole.Appearance = Appearance.Button;
+            checkBox_ShowConsole.CheckAlign = ContentAlignment.MiddleCenter;
+            checkBox_ShowConsole.Location = new Point(226, 22);
+            checkBox_ShowConsole.Name = "checkBox_ShowConsole";
+            checkBox_ShowConsole.Size = new Size(75, 25);
+            checkBox_ShowConsole.TabIndex = 4;
+            checkBox_ShowConsole.Text = "Hide";
+            checkBox_ShowConsole.TextAlign = ContentAlignment.MiddleCenter;
+            checkBox_ShowConsole.UseVisualStyleBackColor = true;
+            checkBox_ShowConsole.CheckedChanged += checkBox_ShowConsole_CheckedChanged;
             // 
             // Settings
             // 
@@ -259,6 +322,9 @@
             groupBox2.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            tab_Advanced.ResumeLayout(false);
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -282,5 +348,11 @@
         private ToolTip toolTip_AutoLoad;
         private Label lbl_DefaultRomFolder;
         private ToolTip toolTip_DefaultRomFolder;
+        private GroupBox groupBox3;
+        private Label label3;
+        private Label label4;
+        private Button btn_ExportLogs;
+        private Label label5;
+        private CheckBox checkBox_ShowConsole;
     }
 }

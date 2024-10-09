@@ -2,57 +2,73 @@
 {
     public static class Config
     {
-        // Define file paths
+        private const int MaxRecentItems = 5;
         private static readonly string ConfigFilePath = Path.Combine("Config", "config.txt");
         private static readonly string RecentFilesPath = Path.Combine("Config", "recent_files.txt");
-        private const int MaxRecentItems = 5; // Maximum number of recent items to store
-
-        // Configuration fields
-        private static string romFolderPath = "";
         private static bool loadLastOpened;
-
-        // List of recent items
-        private static List<string> recentItems = new List<string>();
-
-        // Property for the 'LoadLastOpened' setting
+        private static List<string> recentItems = [];
+        private static string romFolderPath = "";
+        private static bool showConsoleWindow;
         public static bool LoadLastOpened
         {
             get => loadLastOpened;
             set
             {
                 loadLastOpened = value;
-                SaveConfig(); // Save when the setting changes
+                SaveConfig();
             }
         }
 
-        // Get the first recent item (used as the last opened file/folder)
-        public static string GetFirstRecentItem()
+        public static bool ShowConsoleWindow
         {
-            return recentItems.FirstOrDefault();
+            get => showConsoleWindow;
+            set
+            {
+                showConsoleWindow = value;
+                SaveConfig(); 
+            }
         }
 
-        // Save the ROM folder path
-        public static void SaveRomFolderPath(string path)
+        public static void AddToRecentItems(string path)
         {
-            // Remove trailing backslash if it exists
-            romFolderPath = path.TrimEnd('\\');
+            path = path.TrimEnd('\\');
 
-            // Save the updated config
+            recentItems.Remove(path);
+
+            recentItems.Insert(0, path);
+
+            if (recentItems.Count > MaxRecentItems)
+            {
+                recentItems = recentItems.Take(MaxRecentItems).ToList();
+            }
+
             SaveConfig();
         }
 
-        // Get the ROM folder path
+        public static void ClearRecentItems(ToolStripMenuItem openRecentMenu)
+        {
+            recentItems.Clear();
+
+            if (File.Exists(RecentFilesPath))
+            {
+                File.Delete(RecentFilesPath);
+            }
+
+            openRecentMenu.DropDownItems.Clear();
+            openRecentMenu.Enabled = false;
+        }
+
+        public static string GetFirstRecentItem() => recentItems.FirstOrDefault();
+
         public static string GetRomFolderPath()
         {
             return romFolderPath;
         }
 
-        // Load the configuration settings from files
         public static void LoadConfig()
         {
             if (File.Exists(RecentFilesPath))
             {
-                // Trim trailing backslashes from recent items
                 recentItems = File.ReadAllLines(RecentFilesPath).Select(p => p.TrimEnd('\\')).ToList();
             }
 
@@ -66,20 +82,23 @@
                     }
                     if (line.StartsWith("RomFolderPath="))
                     {
-                        romFolderPath = line.Split('=')[1].TrimEnd('\\'); // Trim trailing backslash
+                        romFolderPath = line.Split('=')[1].TrimEnd('\\');
+                    }
+                    if (line.StartsWith("ShowConsoleWindow="))
+                    {
+                        showConsoleWindow = bool.Parse(line.Split('=')[1]);
                     }
                 }
             }
         }
 
-
-        // Save the configuration settings to the file
         public static void SaveConfig()
         {
-            EnsureConfigFolderExists(); // Ensure the config folder exists
+            EnsureConfigFolderExists();
 
             var configLines = new List<string>
             {
+               $"ShowConsoleWindow={showConsoleWindow}",
                 $"LoadLastOpened={loadLastOpened}",
                 $"RomFolderPath={romFolderPath}"
             };
@@ -95,44 +114,12 @@
             }
         }
 
-        // Clear the recent items and update the recent menu
-        public static void ClearRecentItems(ToolStripMenuItem openRecentMenu)
+        public static void SaveRomFolderPath(string path)
         {
-            recentItems.Clear();
+            romFolderPath = path.TrimEnd('\\');
 
-            if (File.Exists(RecentFilesPath))
-            {
-                File.Delete(RecentFilesPath);
-            }
-
-            openRecentMenu.DropDownItems.Clear();
-            openRecentMenu.Enabled = false;
-        }
-
-        // Add a path to recent items, moving it to the top if it already exists
-        public static void AddToRecentItems(string path)
-        {
-            // Remove trailing backslash if it exists
-            path = path.TrimEnd('\\');
-
-            // Remove any existing instances of the path
-            recentItems.Remove(path);
-
-            // Insert the path at the top of the list
-            recentItems.Insert(0, path);
-
-            // Ensure the list doesn't exceed the maximum number of recent items
-            if (recentItems.Count > MaxRecentItems)
-            {
-                recentItems = recentItems.Take(MaxRecentItems).ToList();
-            }
-
-            // Save the updated config
             SaveConfig();
         }
-
-
-        // Update the "Open Recent" menu
         public static void UpdateRecentItemsMenu(ToolStripMenuItem openRecentMenu, Action<string> openRecentFileAction)
         {
             openRecentMenu.DropDownItems.Clear();
@@ -147,7 +134,6 @@
             openRecentMenu.Enabled = recentItems.Count > 0;
         }
 
-        // Ensure the Config folder exists before reading/writing files
         private static void EnsureConfigFolderExists()
         {
             string configDirectory = Path.GetDirectoryName(ConfigFilePath);

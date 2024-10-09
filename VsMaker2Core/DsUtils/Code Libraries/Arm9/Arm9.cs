@@ -71,6 +71,7 @@ namespace VsMaker2Core.DSUtils
 
         public static async Task<bool> Arm9CompressAsync(string path)
         {
+            Console.WriteLine("Compressing Arm9...");
             try
             {
                 using Process compress = new()
@@ -100,6 +101,7 @@ namespace VsMaker2Core.DSUtils
                     Console.WriteLine("ARM9 file not found after compression.");
                     return false;
                 }
+                Console.WriteLine("Compressing Arm9 | Success");
 
                 return fileInfo.Length <= 0xBC000;
             }
@@ -112,6 +114,8 @@ namespace VsMaker2Core.DSUtils
 
         public static async Task<bool> Arm9DecompressAsync(string path)
         {
+            Console.WriteLine("Decompressing Arm9...");
+
             try
             {
                 using Process decompress = new()
@@ -142,6 +146,7 @@ namespace VsMaker2Core.DSUtils
                     return false;
                 }
 
+                Console.WriteLine("Decompressing Arm9 | Success");
                 return fileInfo.Length > 0xBC000;
             }
             catch (Exception ex)
@@ -153,6 +158,8 @@ namespace VsMaker2Core.DSUtils
 
         public static void Arm9EditSize(int increment)
         {
+            Console.WriteLine("Edit Arm9 size...");
+
             try
             {
                 if (increment == 0)
@@ -165,6 +172,7 @@ namespace VsMaker2Core.DSUtils
                 writer.EditSize(increment);
 
                 Console.WriteLine($"Successfully edited ARM9 size by {increment} bytes.");
+                Console.WriteLine("Edit Arm9 size | Success");
             }
             catch (Exception ex)
             {

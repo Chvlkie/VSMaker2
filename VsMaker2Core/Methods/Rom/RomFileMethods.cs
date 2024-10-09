@@ -735,6 +735,8 @@ namespace VsMaker2Core.Methods
 
         public void SetNarcDirectories(string workingDirectory, GameVersion gameVersion, GameFamily gameFamily, GameLanguage gameLanguage)
         {
+            Console.WriteLine("Setting up NARC directories");
+
             Dictionary<NarcDirectory, string> packedDirectories = gameFamily switch
             {
                 GameFamily.DiamondPearl => new Dictionary<NarcDirectory, string>
@@ -804,6 +806,8 @@ namespace VsMaker2Core.Methods
             }
 
             VsMakerDatabase.RomData.GameDirectories = directories;
+            Console.WriteLine("Setting up NARC directories | Success");
+
         }
 
         public int SetTrainerNameMax(int trainerNameOffset)

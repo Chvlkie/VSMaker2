@@ -3,6 +3,7 @@ using Main.Misc;
 using Main.Models;
 using Microsoft.VisualBasic.FileIO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
@@ -440,13 +441,15 @@ namespace Main
         {
             if (!Directory.Exists(workingDirectory))
             {
+                Console.WriteLine("Creating directory " + workingDirectory);
                 Directory.CreateDirectory(workingDirectory);
+                Console.WriteLine("Created directory " + workingDirectory + " | Success");
             }
             else
             {
                 MessageBox.Show("Unable to extract contents.\n\n" +
                     "Contents folder may already exist", "Unable to Extract ROM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                Console.WriteLine("Unable to create directory " + workingDirectory);
             }
         }
 
@@ -475,6 +478,7 @@ namespace Main
 
         private void CloseProject()
         {
+            Console.WriteLine("Closing any open projects...");
             IsLoadingData = true;
             romName_Label.Text = "";
             RomFile.Reset();
@@ -487,6 +491,7 @@ namespace Main
             EnableDisableMenu(false);
             ClearUnsavedChanges();
             IsLoadingData = false;
+            Console.WriteLine("Projects closed.");
         }
 
         private void ConfirmImportTrainers(List<Trainer> newTrainers, List<Trainer> oldTrainers)
@@ -603,7 +608,6 @@ namespace Main
                 Title = "Save CSV File" +
                 "",
             };
-
 
             if (exportFile.ShowDialog(this) != DialogResult.OK)
             {
@@ -937,11 +941,13 @@ namespace Main
 
         private bool ReadRomExtractedFolder(string selectedFolder)
         {
+            Console.WriteLine("Reading ROM Contents from " + selectedFolder);
             if (string.IsNullOrEmpty(selectedFolder))
             {
                 MessageBox.Show("Cannot load ROM header.bin." +
                     "\n\nPlease ensure you select an extracted ROM contents folder" +
                     "\nand that data is not corrupted.", "Unable to Open Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Cannot load ROM header.bin");
                 return false;
             }
 
@@ -951,6 +957,7 @@ namespace Main
                 MessageBox.Show("Cannot load ROM header.bin." +
                     "\n\nPlease ensure you select an extracted ROM contents folder" +
                     "\nand that data is not corrupted.", "Unable to Open Folder", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Cannot load ROM header.bin");
                 return false;
             }
 
@@ -959,8 +966,12 @@ namespace Main
 
         private bool ReadRomFile(string workingDirectory, string fileName)
         {
+            Console.WriteLine("Reading ROM File...");
+
             IsLoadingData = true;
+            Console.WriteLine("Load initial ROM Data");
             var loadedRom = LoadInitialRomData(fileName);
+            Console.WriteLine("Load initial ROM Data | Success");
             RomFile.SetupRomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
             if (RomFile.GameVersion == GameVersion.Unknown)
             {
@@ -968,9 +979,13 @@ namespace Main
                     "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Soul Silver version."
                     , "Unsupported ROM",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Unable to read ROM File");
+
                 return false;
             }
+
             romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
+            Console.WriteLine("Reading ROM File | Success");
             return true;
         }
 
@@ -1033,6 +1048,7 @@ namespace Main
             if (selectFolder.ShowDialog() == DialogResult.OK)
             {
                 CloseProject();
+                Console.WriteLine("Opening ROM file " + fileName);
                 string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
                 Config.AddToRecentItems(workingDirectory);
                 Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
@@ -1044,6 +1060,7 @@ namespace Main
                     if (directoryExists == DialogResult.Yes)
                     {
                         CloseProject();
+                        Console.WriteLine("Opening existing contents folder " + workingDirectory);
                         RomLoaded = ReadRomExtractedFolder(workingDirectory);
                     }
                     else
@@ -1053,7 +1070,9 @@ namespace Main
 
                         if (extractContentsAgain == DialogResult.Yes)
                         {
+                            Console.WriteLine("Deleting existing ROM contents folder " + workingDirectory);
                             Directory.Delete(workingDirectory, true);
+                            Console.WriteLine("Deleted folder " + workingDirectory);
                             CreateDirectory(workingDirectory);
                         }
                         else
@@ -1085,6 +1104,7 @@ namespace Main
                                 if (!await Arm9.Arm9DecompressAsync(RomFile.Arm9Path))
                                 {
                                     MessageBox.Show("Unable to decompress Arm9");
+                                    Console.WriteLine("Unable to decompress Arm9");
                                     return;
                                 }
                             }
@@ -1138,6 +1158,17 @@ namespace Main
             }
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool AllocConsole();
+
+        private const int SW_SHOW = 5;
+
         private void menu_File_Save_Click(object sender, EventArgs e)
         {
             SaveRomChanges();
@@ -1148,6 +1179,19 @@ namespace Main
             Config.LoadConfig();
             Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
             defaultFolderPath = Config.GetRomFolderPath();
+            if (Config.ShowConsoleWindow)
+            {
+                ShowConsoleWindow();
+            }
+        }
+
+        private void ShowConsoleWindow()
+        {
+            AllocConsole();
+
+            IntPtr consoleWindow = GetConsoleWindow();
+
+            ShowWindow(consoleWindow, SW_SHOW);
         }
 
         private void OpenRecentFile(string filePath)
@@ -1223,6 +1267,5 @@ namespace Main
             // Update text preview
             UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
         }
-
     }
 }

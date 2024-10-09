@@ -140,6 +140,7 @@ namespace VsMaker2Core.DataModels
 
         public static void SetupRomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
         {
+            Console.WriteLine("Setup Rom File");
             ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
             WorkingDirectory = workingDirectory;
 
@@ -156,6 +157,8 @@ namespace VsMaker2Core.DataModels
             GameCode = romId;
             FileName = romName;
             EuropeByte = europeByte;
+            Console.WriteLine("Setup Rom File | Success");
+
         }
 
         public static bool CheckForClassGenderExpansion()
