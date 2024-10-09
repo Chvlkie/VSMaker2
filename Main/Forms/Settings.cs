@@ -1,5 +1,4 @@
 ﻿using Main.Misc;
-using System.Runtime.InteropServices;
 
 namespace Main.Forms
 {
@@ -15,21 +14,7 @@ namespace Main.Forms
 
         public event EventHandler ClearRecentItemsRequested;
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetConsoleWindow();
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool AllocConsole();
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool FreeConsole();
-
-        private const int SW_HIDE = 0;
-        private const int SW_SHOW = 5;
-        private StringWriter consoleOutput = new StringWriter(); // Captures the console output
+        private StringWriter consoleOutput = new();
 
         private void btn_Apply_Click(object sender, EventArgs e)
         {
@@ -63,18 +48,14 @@ namespace Main.Forms
 
         private void btn_ExportLogs_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveDialog = new SaveFileDialog())
+            using SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            saveDialog.Title = "Export Console Logs";
+            saveDialog.FileName = "ConsoleLog.txt";
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
             {
-                saveDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-                saveDialog.Title = "Export Console Logs";
-                saveDialog.FileName = "ConsoleLog.txt";
-
-                if (saveDialog.ShowDialog() == DialogResult.OK)
-                {
-                    File.WriteAllText(saveDialog.FileName, consoleOutput.ToString());
-
-                    MessageBox.Show("Logs exported successfully.", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                Config.ExportConsoleLogs(saveDialog.FileName);
             }
         }
 
@@ -86,19 +67,8 @@ namespace Main.Forms
 
         private void checkBox_ShowConsole_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox_ShowConsole.Checked)
-            {
-                AllocConsole(); // Attach the console window
-                IntPtr consoleWindow = GetConsoleWindow();
-                ShowWindow(consoleWindow, SW_SHOW); // Show the console
-                checkBox_ShowConsole.Text = "Shown";
-            }
-            else
-            {
-                FreeConsole(); // Hide the console window
-                checkBox_ShowConsole.Text = "Hidden";
-            }
-
+            Config.ShowConsole(checkBox_ShowConsole.Checked);
+            checkBox_ShowConsole.Text = checkBox_ShowConsole.Checked ? "Shown" : "Hidden";
             Config.ShowConsoleWindow = checkBox_ShowConsole.Checked;
         }
 
@@ -109,6 +79,11 @@ namespace Main.Forms
             tb_RomFolder.Text = Config.GetRomFolderPath();
             toolTip_AutoLoad.SetToolTip(lbl_AutoLoadHelp, "When enabled, VS Maker 2 will automatically\nload the most recently opened project.");
             toolTip_DefaultRomFolder.SetToolTip(lbl_DefaultRomFolder, "The default browser location when\nselecting a rom/project folder.");
+        }
+
+        private void btn_Close_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

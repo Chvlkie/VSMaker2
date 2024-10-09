@@ -10,6 +10,7 @@ namespace VsMaker2Core.DSUtils
 
         public static byte ReadByte(uint startOffset)
         {
+            Console.WriteLine("Reading byte from offset: " + startOffset.ToString());
             using EasyReader reader = new(RomFile.Arm9Path, startOffset);
             return reader.ReadByte();
         }
@@ -21,6 +22,8 @@ namespace VsMaker2Core.DSUtils
 
         public static byte[] ReadFromFile(string filePath, long startOffset = 0, long numberOfBytes = 0)
         {
+            Console.WriteLine("Reading from file " + filePath);
+
             byte[] buffer;
 
             using (EasyReader reader = new(filePath, startOffset))
@@ -31,6 +34,7 @@ namespace VsMaker2Core.DSUtils
 
                     buffer = new byte[bytesToRead];
                     reader.Read(buffer, 0, (int)bytesToRead);
+                    Console.WriteLine("Reading from file " + filePath + " | Success");
                 }
                 catch (EndOfStreamException ex)
                 {
@@ -49,9 +53,11 @@ namespace VsMaker2Core.DSUtils
 
         public static void WriteToFile(string filePath, byte[] toOutput, uint writeAt = 0, int indexFirstByteToWrite = 0, int? indexLastByteToWrite = null, FileMode fileMode = FileMode.OpenOrCreate)
         {
+            Console.WriteLine("Writing to file " + filePath);
             int lastByteIndex = indexLastByteToWrite ?? toOutput.Length;
             if (indexFirstByteToWrite < 0 || indexFirstByteToWrite >= toOutput.Length || lastByteIndex > toOutput.Length)
             {
+                Console.WriteLine("Invalid byte range specified for writing.");
                 throw new ArgumentOutOfRangeException("Invalid byte range specified for writing.");
             }
 
@@ -61,6 +67,7 @@ namespace VsMaker2Core.DSUtils
 
                 int count = lastByteIndex - indexFirstByteToWrite;
                 writer.Write(toOutput, indexFirstByteToWrite, count);
+                Console.WriteLine("Writing to file " + filePath + " | Success");
             }
             catch (IOException ex)
             {
@@ -183,6 +190,7 @@ namespace VsMaker2Core.DSUtils
 
         public static bool CheckCompressionMark(GameFamily gameFamily)
         {
+            Console.WriteLine("Checking Arm9 compression mark...");
             const uint DiamondPearlOffset = 0xB7C;
             const uint OtherGamesOffset = 0xBB4;
 
@@ -197,8 +205,12 @@ namespace VsMaker2Core.DSUtils
                     Console.WriteLine($"Failed to read 4 bytes from offset {offset:X}");
                     return false;
                 }
+                bool isCompressed = BitConverter.ToInt32(bytes, 0) != 0;
+                string compressedResult = isCompressed ? "Compressed" : "Uncompressed";
+                Console.WriteLine($"Arm 9 is {compressedResult}");
+                Console.WriteLine("Checking Arm9 compression mark | Success");
 
-                return BitConverter.ToInt32(bytes, 0) != 0;
+                return isCompressed;
             }
             catch (Exception ex)
             {
@@ -209,24 +221,26 @@ namespace VsMaker2Core.DSUtils
 
         public static void WriteByte(byte value, uint destinationOffset)
         {
+            Console.WriteLine($"Writing byte {value} to Arm9 at offset {destinationOffset}");
             try
             {
                 using FileStream arm9Stream = new FileStream(RomFile.Arm9Path, FileMode.Open, FileAccess.Write, FileShare.None);
                 arm9Stream.Position = destinationOffset;
 
                 arm9Stream.WriteByte(value);
-
+                Console.WriteLine($"Writing byte {value} to Arm9 at offset {destinationOffset} | Success");
                 arm9Stream.Flush();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error writing to ARM9: {ex.Message}");
-                throw;  // Re-throw the exception if needed
+                throw;
             }
         }
 
         public static void WriteBytes(byte[] bytesToWrite, uint destinationOffset, int indexFirstByte = 0, int? indexLastByte = null)
         {
+            Console.WriteLine($"Writing bytes to Arm9 at offset {destinationOffset}");
             int lastByteIndex = indexLastByte ?? bytesToWrite.Length;
 
             if (indexFirstByte < 0 || indexFirstByte >= bytesToWrite.Length || lastByteIndex > bytesToWrite.Length)
@@ -235,6 +249,7 @@ namespace VsMaker2Core.DSUtils
             }
 
             WriteToFile(RomFile.Arm9Path, bytesToWrite, destinationOffset, indexFirstByte, lastByteIndex);
+            Console.WriteLine($"Writing bytes to Arm9 at offset {destinationOffset} | Success");
         }
 
         public class Arm9Reader : EasyReader

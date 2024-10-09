@@ -341,6 +341,7 @@ namespace Main
 
         private void EnableTrainerEditor()
         {
+            Console.WriteLine("Enable Trainer Editor UI");
             trainer_RemoveBtn.Enabled = true;
             trainer_Copy_Btn.Enabled = true;
             trainer_Paste_Btn.Enabled = MainEditorModel.ClipboardTrainer != null;
@@ -351,18 +352,39 @@ namespace Main
             trainer_NameTextBox.Enabled = true;
             trainer_PropertiesTabControl.Enabled = true;
             trainer_SaveBtn.Enabled = true;
+            Console.WriteLine("Enable Trainer Editor UI | Success");
         }
 
         #region Get
 
         private string GetAbilityNameByAbilityId(int abilityId)
         {
-            return MainEditorModel.AbilityNames[abilityId];
+            Console.WriteLine($"Getting Ability Name for abilityId {abilityId}");
+            string abiiltyName = MainEditorModel.AbilityNames[abilityId];
+            if (!string.IsNullOrEmpty(abiiltyName))
+            {
+                Console.WriteLine($"Ability name found: " + abiiltyName);
+            }
+            else
+            {
+                Console.WriteLine($"Unable to match Ability name to abilityId {abilityId}");
+            }
+            return abiiltyName;
         }
 
         private Species GetSpeciesBySpeciesId(int speciesId)
         {
-            return MainEditorModel.PokemonSpecies.Find(x => x.SpeciesId == speciesId);
+            Console.WriteLine($"Getting Species Data for speciesId {speciesId}");
+            var species = MainEditorModel.PokemonSpecies.Find(x => x.SpeciesId == speciesId);
+            if (species != null)
+            {
+                Console.WriteLine($"Species Data found");
+            }
+            else
+            {
+                Console.WriteLine($"Unable to match Species Data to speciesId {speciesId}");
+            }
+            return species;
         }
 
         private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId)
@@ -372,7 +394,7 @@ namespace Main
 
         #endregion Get
 
-        private int GetIndex(ushort? index)
+        private static int GetIndex(ushort? index)
         {
             if (!index.HasValue)
             {
@@ -430,6 +452,7 @@ namespace Main
 
         private void InitializeTrainerEditor()
         {
+            Console.WriteLine("Initialize Trainer Editor");
             trainer_UndoAll_Btn.Enabled = false;
             trainer_SaveBtn.Enabled = false;
             trainer_AddTrainerBtn.Enabled = false;
@@ -447,6 +470,7 @@ namespace Main
             trainer_ViewClassBtn.Enabled = false;
             trainer_NameTextBox.Enabled = false;
             trainer_PropertiesTabControl.Enabled = false;
+            Console.WriteLine("Initialize Trainer Editor | Success");
         }
 
         #endregion Initialize

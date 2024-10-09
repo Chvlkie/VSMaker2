@@ -13,6 +13,30 @@ namespace Main
         private bool UnsavedBattleMessageChanges;
         public int BattleMessageCount => battleMessage_MessageTableDataGrid.RowCount;
 
+        private void UpdateDataGridViewAndPreview(string text)
+        {
+            battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
+            UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
+        }
+
+        private void battleMessages_RedoMessageBtn_Click(object sender, EventArgs e)
+        {
+            if (redoStack.Count > 0)
+            {
+                isUndoRedo = true;
+
+                undoStack.Push(battleMessages_MessageTextBox.Text);
+
+                battleMessages_MessageTextBox.Text = redoStack.Pop();
+
+                UpdateDataGridViewAndPreview(battleMessages_MessageTextBox.Text);
+
+                isUndoRedo = false;
+
+                UpdateUndoRedoButtons();
+            }
+        }
+
         private static string? ReadLine(string text, int lineNumber)
         {
             var reader = new StringReader(text);
@@ -73,7 +97,7 @@ namespace Main
                 battleMessages_MessageTextBox.Enabled = true;
                 battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
                 battleMessages_RemoveBtn.Enabled = true;
-               
+
                 undoStack.Clear();
                 redoStack.Clear();
                 UpdateUndoRedoButtons();
@@ -133,7 +157,8 @@ namespace Main
             MessagePreviewNavigate(true, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
         }
 
-        private bool isUndoRedo = false; 
+        private bool isUndoRedo = false;
+
         private void battleMessages_MessageTextBox_TextChanged(object sender, EventArgs e)
         {
             if (!IsLoadingData && !isUndoRedo) // Skip if undo/redo is in progress
@@ -211,7 +236,7 @@ namespace Main
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
-                   
+
                     undoStack.Clear();
                     redoStack.Clear();
                     UpdateUndoRedoButtons();
@@ -284,8 +309,6 @@ namespace Main
                 UpdateUndoRedoButtons();
             }
         }
-
-
 
         private void UpdateUndoRedoButtons()
         {

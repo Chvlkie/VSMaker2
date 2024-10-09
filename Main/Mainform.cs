@@ -19,9 +19,9 @@ namespace Main
     public partial class Mainform : Form
     {
         private const int debounceDelay = 300;
-        private System.Windows.Forms.Timer filterTimer;
+        private readonly System.Windows.Forms.Timer filterTimer;
+        private string? AppVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(4);
         private string defaultFolderPath = "";
-        // Delay in milliseconds
 
         #region Forms
 
@@ -35,12 +35,12 @@ namespace Main
 
         private IBattleMessageEditorMethods battleMessageEditorMethods;
         private IClassEditorMethods classEditorMethods;
+        private IEventFileMethods eventFileMethods;
         private IFileSystemMethods fileSystemMethods;
+        private INdsImage ndsImage;
         private IRomFileMethods romFileMethods;
         private IScriptFileMethods scriptFileMethods;
-        private IEventFileMethods eventFileMethods;
         private ITrainerEditorMethods trainerEditorMethods;
-        private INdsImage ndsImage;
 
         #endregion Methods
 
@@ -61,9 +61,8 @@ namespace Main
             RomLoaded = false;
             romName_Label.Text = "";
             MainEditorModel = new();
-            var version = Assembly.GetExecutingAssembly().GetName().Version?.ToString(3);
 
-            Text = $"VS Maker 2 v {version}";
+            Text = $"VS Maker 2 - v{AppVersion}";
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
@@ -437,6 +436,9 @@ namespace Main
             MainEditorModel.Classes = classEditorMethods.GetTrainerClasses(MainEditorModel.Trainers, MainEditorModel.ClassNames, MainEditorModel.ClassDescriptions);
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool AllocConsole();
+
         private static void CreateDirectory(string workingDirectory)
         {
             if (!Directory.Exists(workingDirectory))
@@ -453,6 +455,9 @@ namespace Main
             }
         }
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern IntPtr GetConsoleWindow();
+
         private static (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
         {
             using (EasyReader reader = new(filePath, 0xC))
@@ -463,6 +468,9 @@ namespace Main
                 return (europeByte, gameCode);
             }
         }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         private void BeginExtractRomData()
         {
@@ -576,12 +584,6 @@ namespace Main
             main_OpenPatchesBtn.Enabled = enable;
         }
 
-        private void SettingsForm_ClearRecentItemsRequested(object sender, EventArgs e)
-        {
-            Config.ClearRecentItems(menu_File_OpenRecent);
-            MessageBox.Show("Recent items have been cleared.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
         private void EndOpenRom()
         {
             EnableDisableMenu(RomLoaded);
@@ -663,221 +665,20 @@ namespace Main
             }
         }
 
-        #region Event Handlers
-
-        private void HandleTabChange(TabPage selectedTab)
-        {
-            if (selectedTab == main_MainTab_TrainerTab)
-            {
-                SetupTrainerEditor();
-            }
-            else if (selectedTab == main_MainTab_ClassTab)
-            {
-                SetupClassEditor();
-            }
-            else if (selectedTab == main_MainTable_BattleMessageTab)
-            {
-                SetupBattleMessageEditor();
-            }
-        }
-
-        private void main_MainTab_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (InhibitTabChange)
-            {
-                InhibitTabChange = false;
-                return;
-            }
-
-            if (UnsavedBattleMessageChanges && !ConfirmUnsavedChanges())
-            {
-                InhibitTabChange = true;
-                main_MainTab.SelectedTab = main_MainTable_BattleMessageTab;
-            }
-            else
-            {
-                HandleTabChange(main_MainTab.SelectedTab);
-            }
-        }
-
-        private void main_OpenFolderBtn_Click(object sender, EventArgs e)
-        {
-            IsLoadingData = true;
-
-            if (UnsavedChanges)
-            {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
-                {
-                    SelectExtractedRomFolder();
-                }
-            }
-            else
-            {
-                SelectExtractedRomFolder();
-            }
-            IsLoadingData = false;
-        }
-
-        private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
-        {
-            OpenRomPatchesWindow();
-        }
-
-        private async void main_OpenRomBtn_Click(object sender, EventArgs e)
-        {
-            if (UnsavedChanges)
-            {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
-                {
-                    await OpenRomAsync();
-                }
-            }
-            else
-            {
-                await OpenRomAsync();
-            }
-        }
-
-        private void main_SettingsBtn_Click(object sender, EventArgs e)
-        {
-            OpenSettingsWindow();
-        }
-
-        private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            string closeMessage = RomLoaded ? "Do you wish to close VS-Maker?\n\nAny unsaved changes will be lost." : "Do you wish to close VS-Maker?";
-            if (MessageBox.Show(closeMessage, "Close VS-Maker", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
-            {
-                e.Cancel = true;
-            }
-        }
-
-        private void Mainform_Shown(object sender, EventArgs e)
-        {
-            LoadingData = new LoadingData();
-            romFileMethods = new RomFileMethods();
-            scriptFileMethods = new ScriptFileMethods();
-            eventFileMethods = new EventFileMethods();
-            battleMessageEditorMethods = new BattleMessageEditorMethods(romFileMethods);
-            trainerEditorMethods = new TrainerEditorMethods(romFileMethods);
-            classEditorMethods = new ClassEditorMethods(romFileMethods);
-            fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
-            ndsImage = new NdsImage();
-
-            if (Config.LoadLastOpened)
-            {
-                string lastOpenedRomFolder = Config.GetFirstRecentItem();
-                if (!string.IsNullOrEmpty(lastOpenedRomFolder))
-                {
-                    OpenRecentFile(lastOpenedRomFolder);
-                }
-            }
-        }
-
-        private void menu_Export_Trainers_Click(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-                var trainers = MainEditorModel.Trainers;
-                var gameFamily = RomFile.GameFamily;
-                int classesCount = 100;
-                int battleMessagesCount = 200;
-                var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, RomFile.TrainerNamesTextNumber, classesCount, battleMessagesCount);
-            }
-        }
-
-        private void menu_File_Close_Click(object sender, EventArgs e)
-        {
-            var confirmClose = MessageBox.Show("Are you sure you want to close this project?", "Close Project", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirmClose == DialogResult.Yes)
-            {
-                if (UnsavedChanges)
-                {
-                    var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                    if (saveChanges == DialogResult.Yes)
-                    {
-                        CloseProject();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-                CloseProject();
-            }
-        }
-
-        private void menu_File_Exit_Click(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
-
-        private void menu_File_OpenFolder_Click(object sender, EventArgs e)
-        {
-            if (UnsavedChanges)
-            {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
-                {
-                    SelectExtractedRomFolder();
-                }
-            }
-            else
-            {
-                SelectExtractedRomFolder();
-            }
-        }
-
-        private async void menu_File_OpenRom_Click(object sender, EventArgs e)
-        {
-            if (UnsavedChanges)
-            {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
-                {
-                    OpenRomAsync();
-                }
-            }
-            else
-            {
-                OpenRomAsync();
-            }
-        }
-
-        private void menu_Import_Trainers_Click(object sender, EventArgs e)
-        {
-            if (!IsLoadingData)
-            {
-            }
-        }
-
-        private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
-        {
-            OpenRomPatchesWindow();
-        }
-
-        private void menu_Tools_Settings_Click(object sender, EventArgs e)
-        {
-            OpenSettingsWindow();
-        }
-
-        #endregion Event Handlers
-
         private void main_SaveRomBtn_Click(object sender, EventArgs e)
         {
             SaveRomChanges();
+        }
+
+        private void Mainform_Load(object sender, EventArgs e)
+        {
+            AllocConsole();
+            Config.ResetConsoleOutput();
+            Console.WriteLine($"VS Maker 2 - v{AppVersion}");
+            Config.LoadConfig();
+            Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+            defaultFolderPath = Config.GetRomFolderPath();
+            Config.ShowConsole(Config.ShowConsoleWindow);
         }
 
         private void menu_Export_BattleMessages_Click(object sender, EventArgs e)
@@ -887,6 +688,11 @@ namespace Main
                 LoadBattleMessages();
             }
             ExportBattleMessagesAsCsv();
+        }
+
+        private void menu_File_Save_Click(object sender, EventArgs e)
+        {
+            SaveRomChanges();
         }
 
         private void menu_Import_BattleMessages_Click(object sender, EventArgs e)
@@ -908,6 +714,47 @@ namespace Main
             LoadingData = new(this, loadType, filePath);
             LoadingData.ShowDialog();
             UseWaitCursor = false;
+        }
+
+        private void OpenRecentFile(string filePath)
+        {
+            IsLoadingData = true;
+
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    CloseProject();
+                    RomLoaded = ReadRomExtractedFolder(filePath);
+                    Config.AddToRecentItems(filePath);
+                    Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+                    if (RomLoaded)
+                    {
+                        BeginExtractRomData();
+                        InitializeTrainerEditor();
+                        InitializeClassEditor();
+                        EndOpenRom();
+                    }
+                }
+            }
+            else
+            {
+                CloseProject();
+                RomLoaded = ReadRomExtractedFolder(filePath);
+                Config.AddToRecentItems(filePath);
+                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+                if (RomLoaded)
+                {
+                    BeginExtractRomData();
+                    InitializeTrainerEditor();
+                    InitializeClassEditor();
+                    EndOpenRom();
+                }
+            }
+            IsLoadingData = false;
         }
 
         private async Task OpenRomAsync()
@@ -933,10 +780,14 @@ namespace Main
         {
             var settingsForm = new Settings();
 
-            // Subscribe to the ClearRecentItemsRequested event
             settingsForm.ClearRecentItemsRequested += SettingsForm_ClearRecentItemsRequested;
 
             settingsForm.ShowDialog();
+        }
+
+        private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
+        {
+            UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);
         }
 
         private bool ReadRomExtractedFolder(string selectedFolder)
@@ -1135,10 +986,224 @@ namespace Main
             }
         }
 
-        private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
+        private void SettingsForm_ClearRecentItemsRequested(object sender, EventArgs e)
         {
-            UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);
+            Config.ClearRecentItems(menu_File_OpenRecent);
+            MessageBox.Show("Recent items have been cleared.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        #region Event Handlers
+
+        private void HandleTabChange(TabPage selectedTab)
+        {
+            if (selectedTab == main_MainTab_TrainerTab)
+            {
+                SetupTrainerEditor();
+            }
+            else if (selectedTab == main_MainTab_ClassTab)
+            {
+                SetupClassEditor();
+            }
+            else if (selectedTab == main_MainTable_BattleMessageTab)
+            {
+                SetupBattleMessageEditor();
+            }
+        }
+
+        private void main_MainTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (InhibitTabChange)
+            {
+                InhibitTabChange = false;
+                return;
+            }
+
+            if (UnsavedBattleMessageChanges && !ConfirmUnsavedChanges())
+            {
+                InhibitTabChange = true;
+                main_MainTab.SelectedTab = main_MainTable_BattleMessageTab;
+            }
+            else
+            {
+                HandleTabChange(main_MainTab.SelectedTab);
+            }
+        }
+
+        private void main_OpenFolderBtn_Click(object sender, EventArgs e)
+        {
+            IsLoadingData = true;
+
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    SelectExtractedRomFolder();
+                }
+            }
+            else
+            {
+                SelectExtractedRomFolder();
+            }
+            IsLoadingData = false;
+        }
+
+        private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
+        {
+            OpenRomPatchesWindow();
+        }
+
+        private async void main_OpenRomBtn_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    await OpenRomAsync();
+                }
+            }
+            else
+            {
+                await OpenRomAsync();
+            }
+        }
+
+        private void main_SettingsBtn_Click(object sender, EventArgs e)
+        {
+            OpenSettingsWindow();
+        }
+
+        private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            string closeMessage = RomLoaded ? "Do you wish to close VS-Maker?\n\nAny unsaved changes will be lost." : "Do you wish to close VS-Maker?";
+            if (MessageBox.Show(closeMessage, "Close VS-Maker", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Mainform_Shown(object sender, EventArgs e)
+        {
+            LoadingData = new LoadingData();
+            romFileMethods = new RomFileMethods();
+            scriptFileMethods = new ScriptFileMethods();
+            eventFileMethods = new EventFileMethods();
+            battleMessageEditorMethods = new BattleMessageEditorMethods(romFileMethods);
+            trainerEditorMethods = new TrainerEditorMethods(romFileMethods);
+            classEditorMethods = new ClassEditorMethods(romFileMethods);
+            fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
+            ndsImage = new NdsImage();
+
+            if (Config.LoadLastOpened)
+            {
+                Console.WriteLine("Loading last opened project...");
+                string lastOpenedRomFolder = Config.GetFirstRecentItem();
+                if (!string.IsNullOrEmpty(lastOpenedRomFolder))
+                {
+                    OpenRecentFile(lastOpenedRomFolder);
+                }
+            }
+        }
+
+        private void menu_Export_Trainers_Click(object sender, EventArgs e)
+        {
+            //if (!IsLoadingData)
+            //{
+            //    var trainers = MainEditorModel.Trainers;
+            //    var gameFamily = RomFile.GameFamily;
+            //    const int classesCount = 100;
+            //    const int battleMessagesCount = 200;
+            //    var vsTrainersFile = fileSystemMethods.BuildVsTrainersFile(trainers, gameFamily, RomFile.TrainerNamesTextNumber, classesCount, battleMessagesCount);
+            //}
+        }
+
+        private void menu_File_Close_Click(object sender, EventArgs e)
+        {
+            var confirmClose = MessageBox.Show("Are you sure you want to close this project?", "Close Project", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmClose == DialogResult.Yes)
+            {
+                if (UnsavedChanges)
+                {
+                    var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (saveChanges == DialogResult.Yes)
+                    {
+                        CloseProject();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                CloseProject();
+            }
+        }
+
+        private void menu_File_Exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void menu_File_OpenFolder_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    SelectExtractedRomFolder();
+                }
+            }
+            else
+            {
+                SelectExtractedRomFolder();
+            }
+        }
+
+        private async void menu_File_OpenRom_Click(object sender, EventArgs e)
+        {
+            if (UnsavedChanges)
+            {
+                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
+                        "You will lose these changes if you close the project.\n" +
+                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (saveChanges == DialogResult.Yes)
+                {
+                    OpenRomAsync();
+                }
+            }
+            else
+            {
+                OpenRomAsync();
+            }
+        }
+
+        private void menu_Import_Trainers_Click(object sender, EventArgs e)
+        {
+            if (!IsLoadingData)
+            {
+            }
+        }
+
+        private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
+        {
+            OpenRomPatchesWindow();
+        }
+
+        private void menu_Tools_Settings_Click(object sender, EventArgs e)
+        {
+            OpenSettingsWindow();
+        }
+
+        #endregion Event Handlers
 
         private void UpdateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
         {
@@ -1156,116 +1221,6 @@ namespace Main
                 int frame = (int)(frameNumBox.Enabled ? frameNumBox.Value : 0);
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
-        }
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetConsoleWindow();
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool AllocConsole();
-
-        private const int SW_SHOW = 5;
-
-        private void menu_File_Save_Click(object sender, EventArgs e)
-        {
-            SaveRomChanges();
-        }
-
-        private void Mainform_Load(object sender, EventArgs e)
-        {
-            Config.LoadConfig();
-            Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-            defaultFolderPath = Config.GetRomFolderPath();
-            if (Config.ShowConsoleWindow)
-            {
-                ShowConsoleWindow();
-            }
-        }
-
-        private void ShowConsoleWindow()
-        {
-            AllocConsole();
-
-            IntPtr consoleWindow = GetConsoleWindow();
-
-            ShowWindow(consoleWindow, SW_SHOW);
-        }
-
-        private void OpenRecentFile(string filePath)
-        {
-            IsLoadingData = true;
-
-            if (UnsavedChanges)
-            {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
-                {
-                    CloseProject();
-                    RomLoaded = ReadRomExtractedFolder(filePath);
-                    Config.AddToRecentItems(filePath);
-                    Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                    if (RomLoaded)
-                    {
-                        BeginExtractRomData();
-                        InitializeTrainerEditor();
-                        InitializeClassEditor();
-                        EndOpenRom();
-                    }
-                }
-            }
-            else
-            {
-                CloseProject();
-                RomLoaded = ReadRomExtractedFolder(filePath);
-                Config.AddToRecentItems(filePath);
-                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                if (RomLoaded)
-                {
-                    BeginExtractRomData();
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                    EndOpenRom();
-                }
-            }
-            IsLoadingData = false;
-        }
-
-        private void battleMessages_RedoMessageBtn_Click(object sender, EventArgs e)
-        {
-            if (redoStack.Count > 0) // Ensure there's something to redo
-            {
-                // Set flag to indicate undo/redo is in progress
-                isUndoRedo = true;
-
-                // Push the current text to the undo stack
-                undoStack.Push(battleMessages_MessageTextBox.Text);
-
-                // Pop and apply the last undone text from the redo stack
-                battleMessages_MessageTextBox.Text = redoStack.Pop();
-
-                // Update DataGridView and Preview
-                UpdateDataGridViewAndPreview(battleMessages_MessageTextBox.Text);
-
-                // Reset flag after redo is completed
-                isUndoRedo = false;
-
-                // Update buttons after redo
-                UpdateUndoRedoButtons();
-            }
-        }
-
-        private void UpdateDataGridViewAndPreview(string text)
-        {
-            // Update the DataGridView with the new text
-            battleMessage_MessageTableDataGrid.Rows[MainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
-
-            // Update text preview
-            UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
         }
     }
 }

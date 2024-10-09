@@ -53,6 +53,7 @@
             checkBox_ShowConsole = new CheckBox();
             toolTip_AutoLoad = new ToolTip(components);
             toolTip_DefaultRomFolder = new ToolTip(components);
+            btn_Close = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             tabMenu_Settings.SuspendLayout();
@@ -107,6 +108,7 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(btn_Close);
             panel2.Controls.Add(btn_Apply);
             panel2.Dock = DockStyle.Bottom;
             panel2.Location = new Point(0, 184);
@@ -116,7 +118,7 @@
             // 
             // btn_Apply
             // 
-            btn_Apply.Location = new Point(232, 3);
+            btn_Apply.Location = new Point(151, 3);
             btn_Apply.Name = "btn_Apply";
             btn_Apply.Size = new Size(75, 23);
             btn_Apply.TabIndex = 0;
@@ -299,6 +301,16 @@
             checkBox_ShowConsole.UseVisualStyleBackColor = true;
             checkBox_ShowConsole.CheckedChanged += checkBox_ShowConsole_CheckedChanged;
             // 
+            // btn_Close
+            // 
+            btn_Close.Location = new Point(233, 3);
+            btn_Close.Name = "btn_Close";
+            btn_Close.Size = new Size(75, 23);
+            btn_Close.TabIndex = 1;
+            btn_Close.Text = "Close";
+            btn_Close.UseVisualStyleBackColor = true;
+            btn_Close.Click += btn_Close_Click;
+            // 
             // Settings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -354,5 +366,6 @@
         private Button btn_ExportLogs;
         private Label label5;
         private CheckBox checkBox_ShowConsole;
+        private Button btn_Close;
     }
 }
