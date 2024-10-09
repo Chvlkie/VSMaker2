@@ -90,10 +90,7 @@ namespace Ekona.Images
             return Actions.Get_Image(palette[index]);
         }
 
-        public void FillColors(int maxColors, int pal_index)
-        {
-            FillColors(maxColors, pal_index, Color.Black);
-        }
+        public void FillColors(int maxColors, int pal_index) => FillColors(maxColors, pal_index, Color.Black);
 
         public void FillColors(int maxColors, int pal_index, Color color)
         {
@@ -213,15 +210,9 @@ namespace Ekona.Images
             startByte = 0;
         }
 
-        public void Set_Palette(Color[] palette, ColorFormat depth, bool editable)
-        {
-            Set_Palette(new Color[][] { palette }, depth, editable);
-        }
+        public void Set_Palette(Color[] palette, ColorFormat depth, bool editable) => Set_Palette(new Color[][] { palette }, depth, editable);
 
-        public void Set_Palette(Color[] palette, int index)
-        {
-            this.palette[index] = palette;
-        }
+        public void Set_Palette(Color[] palette, int index) => this.palette[index] = palette;
 
         public void Set_Palette(PaletteBase new_pal)
         {

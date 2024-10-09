@@ -12,21 +12,12 @@
             MessageText = messageText;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as MessageArchive);
-        }
+        public override bool Equals(object? obj) => Equals(obj as MessageArchive);
 
-        public bool Equals(MessageArchive? other)
-        {
-            return other is not null &&
+        public bool Equals(MessageArchive? other) => other is not null &&
                    MessageId == other.MessageId &&
                    MessageText == other.MessageText;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(MessageId, MessageText);
-        }
+        public override int GetHashCode() => HashCode.Combine(MessageId, MessageText);
     }
 }

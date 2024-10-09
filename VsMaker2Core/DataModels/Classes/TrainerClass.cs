@@ -13,25 +13,16 @@
 
         public static int ListNameToTrainerClassId(string listName) => int.Parse(listName.Substring(1, 4));
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as TrainerClass);
-        }
+        public override bool Equals(object? obj) => Equals(obj as TrainerClass);
 
-        public bool Equals(TrainerClass? other)
-        {
-            return other is not null &&
+        public bool Equals(TrainerClass? other) => other is not null &&
                    TrainerClassId == other.TrainerClassId &&
                    TrainerClassName == other.TrainerClassName &&
                    EqualityComparer<List<Trainer>>.Default.Equals(UsedByTrainers, other.UsedByTrainers) &&
                    ListName == other.ListName &&
                    EqualityComparer<TrainerClassProperty>.Default.Equals(ClassProperties, other.ClassProperties);
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(TrainerClassId, TrainerClassName, UsedByTrainers, ListName, ClassProperties);
-        }
+        public override int GetHashCode() => HashCode.Combine(TrainerClassId, TrainerClassName, UsedByTrainers, ListName, ClassProperties);
 
         public TrainerClass()
         {

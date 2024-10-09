@@ -123,17 +123,14 @@ namespace Images
             Ekona.Helper.Translation.TranslateControls(this.groupBox2.Controls, "AnimationControl");
         }
 
-        private void ShowInfo()
-        {
+        private void ShowInfo() =>
             //listProp.Items[1].SubItems.Add(ani.Struct.abnk.nBanks.ToString());
             //listProp.Items[2].SubItems.Add(ani.Struct.abnk.tFrames.ToString());
             //listProp.Items[3].SubItems.Add("0x" + String.Format("{0:X}", ani.Struct.abnk.constant));
             //listProp.Items[4].SubItems.Add("0x" + String.Format("{0:X}", ani.Struct.abnk.padding));
             ShowInfo(0);
-        }
 
-        private void ShowInfo(int bnk)
-        {
+        private void ShowInfo(int bnk) =>
             //listProp.Items[6].SubItems[1].Text = bnk.ToString();
             //listProp.Items[7].SubItems[1].Text = ani.Struct.abnk.anis[bnk].nFrames.ToString();
             //listProp.Items[8].SubItems[1].Text = ani.Struct.abnk.anis[bnk].dataType.ToString();
@@ -141,7 +138,6 @@ namespace Images
             //listProp.Items[10].SubItems[1].Text = "0x" + String.Format("{0:X}", ani.Struct.abnk.anis[bnk].unknown2);
             //listProp.Items[11].SubItems[1].Text = "0x" + String.Format("{0:X}", ani.Struct.abnk.anis[bnk].unknown3);
             ShowInfo(0, 0);
-        }
 
         private void ShowInfo(int bnk, int frame)
         {

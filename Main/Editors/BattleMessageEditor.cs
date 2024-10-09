@@ -130,25 +130,6 @@ namespace Main
             }
         }
 
-        public void BeginSortRepointTrainerText(IProgress<int> progress, int max)
-        {
-            var messageTriggers = MessageTrigger.MessageTriggers.ToDictionary(mt => mt.ListName, mt => mt.MessageTriggerId);
-            List<BattleMessage> messageData = new List<BattleMessage>(battleMessage_MessageTableDataGrid.Rows.Count);
-
-            foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
-            {
-                int trainerId = int.Parse(row.Cells[1].Value.ToString().Substring(1, 4));
-                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()];
-                int messageId = int.Parse(row.Cells[0].Value.ToString());
-                string messageText = row.Cells[3].Value.ToString();
-
-                messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
-            }
-            messageData = messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId).ToList();
-            SaveBattleMessages(messageData, progress);
-            RepointBattleMessageOffsets(messageData, progress);
-            progress?.Report(max);
-        }
         public void BeginSaveBattleMessages(IProgress<int> progress)
         {
             var messageTriggers = MessageTrigger.MessageTriggers.ToDictionary(mt => mt.ListName, mt => mt.MessageTriggerId);
@@ -168,6 +149,25 @@ namespace Main
             SaveBattleMessages(messageData, progress);
         }
 
+        public void BeginSortRepointTrainerText(IProgress<int> progress, int max)
+        {
+            var messageTriggers = MessageTrigger.MessageTriggers.ToDictionary(mt => mt.ListName, mt => mt.MessageTriggerId);
+            List<BattleMessage> messageData = new List<BattleMessage>(battleMessage_MessageTableDataGrid.Rows.Count);
+
+            foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
+            {
+                int trainerId = int.Parse(row.Cells[1].Value.ToString().Substring(1, 4));
+                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()];
+                int messageId = int.Parse(row.Cells[0].Value.ToString());
+                string messageText = row.Cells[3].Value.ToString();
+
+                messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
+            }
+            messageData = messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId).ToList();
+            SaveBattleMessages(messageData, progress);
+            RepointBattleMessageOffsets(messageData, progress);
+            progress?.Report(max);
+        }
         private static string? ReadLine(string text, int lineNumber)
         {
             var reader = new StringReader(text);
@@ -192,25 +192,13 @@ namespace Main
             messageText.SelectionStart = selectionIndex + appendText.Length;
         }
 
-        private void battleMessage_InsertE_Btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "é");
-        }
+        private void battleMessage_InsertE_Btn_Click(object sender, EventArgs e) => AppendBattleMessage(battleMessages_MessageTextBox, "é");
 
-        private void battleMessage_InsertF_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
-        }
+        private void battleMessage_InsertF_btn_Click(object sender, EventArgs e) => AppendBattleMessage(battleMessages_MessageTextBox, "\\f");
 
-        private void battleMessage_InsertN_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
-        }
+        private void battleMessage_InsertN_btn_Click(object sender, EventArgs e) => AppendBattleMessage(battleMessages_MessageTextBox, "\\n");
 
-        private void battleMessage_InsertR_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
-        }
+        private void battleMessage_InsertR_btn_Click(object sender, EventArgs e) => AppendBattleMessage(battleMessages_MessageTextBox, "\\r");
 
         private void battleMessage_MessageTableDataGrid_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
@@ -273,20 +261,11 @@ namespace Main
             EditedBattleMessage(true);
         }
 
-        private void battleMessages_ExportBtn_Click(object sender, EventArgs e)
-        {
-            ExportBattleMessagesAsCsv();
-        }
+        private void battleMessages_ExportBtn_Click(object sender, EventArgs e) => ExportBattleMessagesAsCsv();
 
-        private void battleMessages_ImportBtn_Click(object sender, EventArgs e)
-        {
-            ImportBattleMessageCsv();
-        }
+        private void battleMessages_ImportBtn_Click(object sender, EventArgs e) => ImportBattleMessageCsv();
 
-        private void battleMessages_MessageDownBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewNavigate(true, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
-        }
+        private void battleMessages_MessageDownBtn_Click(object sender, EventArgs e) => MessagePreviewNavigate(true, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
 
         private void battleMessages_MessageTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -313,10 +292,7 @@ namespace Main
             }
         }
 
-        private void battleMessages_MessageUpBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewNavigate(false, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
-        }
+        private void battleMessages_MessageUpBtn_Click(object sender, EventArgs e) => MessagePreviewNavigate(false, battleMessages_MessageDownBtn, battleMessages_MessageUpBtn, battleMessage_PreviewText);
 
         private void battleMessages_RedoMessageBtn_Click(object sender, EventArgs e)
         {
@@ -502,10 +478,7 @@ namespace Main
             battleMessages_UndoMessageBtn.Enabled = false;
         }
 
-        private async void LoadBattleMessages()
-        {
-            await BeginPopulateBattleMessages();
-        }
+        private async void LoadBattleMessages() => await BeginPopulateBattleMessages();
 
         private void MessagePreviewNavigate(bool isNext, Button nextButton, Button backButton, Label previewText)
         {
@@ -681,6 +654,7 @@ namespace Main
             battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
             UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
         }
+
         private void UpdateTextPreview(string battleMessage, Label previewText, Button nextButton, Button backButton)
         {
             mainEditorModel.BattleMessageDisplayIndex = 0;
@@ -724,6 +698,7 @@ namespace Main
             battleMessages_UndoMessageBtn.Enabled = undoStack.Count > 1;
             battleMessages_RedoMessageBtn.Enabled = redoStack.Count > 0;
         }
+
         private (bool Valid, int Row) VerifyBattleMessageTable()
         {
             foreach (var trainer in mainEditorModel.Trainers)

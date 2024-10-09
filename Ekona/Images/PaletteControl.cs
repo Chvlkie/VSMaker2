@@ -278,15 +278,9 @@ namespace Ekona.Images
             }
         }
 
-        private void checkHex_CheckedChanged(object sender, EventArgs e)
-        {
-            numericStartByte.Hexadecimal = checkHex.Checked;
-        }
+        private void checkHex_CheckedChanged(object sender, EventArgs e) => numericStartByte.Hexadecimal = checkHex.Checked;
 
-        private void btnUseThis_Click(object sender, EventArgs e)
-        {
-            pluginHost.Set_Palette(palette);
-        }
+        private void btnUseThis_Click(object sender, EventArgs e) => pluginHost.Set_Palette(palette);
 
         private void btnFillColors_Click(object sender, EventArgs e)
         {

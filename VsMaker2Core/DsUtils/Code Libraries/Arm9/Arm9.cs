@@ -15,10 +15,7 @@ namespace VsMaker2Core.DSUtils
             return reader.ReadByte();
         }
 
-        public static byte[] ReadBytes(uint startOffset, long numberOfBytes = 0)
-        {
-            return ReadFromFile(RomFile.Arm9Path, startOffset, numberOfBytes);
-        }
+        public static byte[] ReadBytes(uint startOffset, long numberOfBytes = 0) => ReadFromFile(RomFile.Arm9Path, startOffset, numberOfBytes);
 
         public static byte[] ReadFromFile(string filePath, long startOffset = 0, long numberOfBytes = 0)
         {

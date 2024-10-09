@@ -41,14 +41,9 @@ namespace VsMaker2Core.DataModels
             BallCapsuleId = ballCapsuleId;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as Pokemon);
-        }
+        public override bool Equals(object? obj) => Equals(obj as Pokemon);
 
-        public bool Equals(Pokemon? other)
-        {
-            return other is not null &&
+        public bool Equals(Pokemon? other) => other is not null &&
                    DifficultyValue == other.DifficultyValue &&
                    GenderOverride == other.GenderOverride &&
                    AbilityOverride == other.AbilityOverride &&
@@ -61,7 +56,6 @@ namespace VsMaker2Core.DataModels
                    HeldItemId == other.HeldItemId &&
                    EqualityComparer<ushort[]?>.Default.Equals(Moves, other.Moves) &&
                    BallCapsuleId == other.BallCapsuleId;
-        }
 
         public override int GetHashCode()
         {

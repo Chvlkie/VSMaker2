@@ -256,10 +256,7 @@ namespace Ekona.Images.Dialogs
             stop = false;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void btnSave_Click(object sender, EventArgs e) => this.Close();
 
         public Bank Bank
         {
@@ -332,10 +329,7 @@ namespace Ekona.Images.Dialogs
             Update_Image();
         }
 
-        private void Change_Preview(object sender, EventArgs e)
-        {
-            Update_Image();
-        }
+        private void Change_Preview(object sender, EventArgs e) => Update_Image();
 
         private void numNumOAM_ValueChanged(object sender, EventArgs e)
         {

@@ -45,10 +45,7 @@ namespace Ekona.Images
 
         #region Error
 
-        private static double ColorLengthSquared(Vector3 v)
-        {
-            return Math.Truncate(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
-        }
+        private static double ColorLengthSquared(Vector3 v) => Math.Truncate(v.X * v.X + v.Y * v.Y + v.Z * v.Z);
 
         private static double Error(Vector3[] inputPoints, int[] mask, Vector3 a, Vector3 b, bool hasAlpha)
         {
@@ -104,26 +101,17 @@ namespace Ekona.Images
             return (uint)(r * r + g * g + b * b);
         }
 
-        private static Color VectorToColor(Vector3 v)
-        {
-            return Color.FromArgb(255,
+        private static Color VectorToColor(Vector3 v) => Color.FromArgb(255,
                         (byte)Clamp(v.X /* 255 / 31*/),
                         (byte)Clamp(v.Y /* 255 / 63*/),
                         (byte)Clamp(v.Z /* 255 / 31*/));
-        }
 
-        private static Vector3 ColorToVector(Color c)
-        {
-            return new Vector3(c.R, c.G, c.B);
-        }
+        private static Vector3 ColorToVector(Color c) => new Vector3(c.R, c.G, c.B);
 
-        private static Color SumColors(Color a, Color b, int wa, int wb)
-        {
-            return Color.FromArgb(
+        private static Color SumColors(Color a, Color b, int wa, int wb) => Color.FromArgb(
                 (a.R * wa + b.R * wb) / (wa + wb),
                 (a.G * wa + b.G * wb) / (wa + wb),
                 (a.B * wa + b.B * wb) / (wa + wb));
-        }
 
         #endregion Colors manipulations
 
@@ -480,10 +468,7 @@ namespace Ekona.Images
             return indices;
         }
 
-        private static double ColorDistance(Vector3 c0, Vector3 c1)
-        {
-            return (c0 - c1).LengthSquared();
-        }
+        private static double ColorDistance(Vector3 c0, Vector3 c1) => (c0 - c1).LengthSquared();
 
         // Takes a normalized color in [0, 255] range and returns
         private static ushort RoundAndExpand(ref Vector3 v)

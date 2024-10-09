@@ -154,10 +154,7 @@ namespace Ekona.Mathematics
         /// <param name="v">First summand Vector3</param>
         /// <param name="w">Second summand Vector3</param>
         /// <returns>The result sum vector = v + w</returns>
-        public static Vector3 Add(Vector3 v, Vector3 w)
-        {
-            return new Vector3(v.X + w.X, v.Y + w.Y, v.Z + w.Z);
-        }
+        public static Vector3 Add(Vector3 v, Vector3 w) => new Vector3(v.X + w.X, v.Y + w.Y, v.Z + w.Z);
 
         /// <summary>
         /// Addition vector and scalar
@@ -165,10 +162,7 @@ namespace Ekona.Mathematics
         /// <param name="v">First summand Vector3</param>
         /// <param name="s">Second scalar summand double</param>
         /// <returns>The result sum vector = v + s</returns>
-        public static Vector3 Add(Vector3 v, double s)
-        {
-            return new Vector3(v.X + s, v.Y + s, v.Z + s);
-        }
+        public static Vector3 Add(Vector3 v, double s) => new Vector3(v.X + s, v.Y + s, v.Z + s);
 
         /// <summary>
         /// The subtract of two vectors
@@ -179,10 +173,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         ///	result[i] = v[i] - w[i].
         /// </remarks>
-        public static Vector3 Subtract(Vector3 v, Vector3 w)
-        {
-            return new Vector3(v.X - w.X, v.Y - w.Y, v.Z - w.Z);
-        }
+        public static Vector3 Subtract(Vector3 v, Vector3 w) => new Vector3(v.X - w.X, v.Y - w.Y, v.Z - w.Z);
 
         /// <summary>
         /// Subtraction scalar from a vector
@@ -193,10 +184,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         /// result[i] = v[i] - s
         /// </remarks>
-        public static Vector3 Subtract(Vector3 v, double s)
-        {
-            return new Vector3(v.X - s, v.Y - s, v.Z - s);
-        }
+        public static Vector3 Subtract(Vector3 v, double s) => new Vector3(v.X - s, v.Y - s, v.Z - s);
 
         /// <summary>
         /// Subtraction vector from a scalar
@@ -207,10 +195,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         /// result[i] = s - v[i]
         /// </remarks>
-        public static Vector3 Subtract(double s, Vector3 v)
-        {
-            return new Vector3(s - v.X, s - v.Y, s - v.Z);
-        }
+        public static Vector3 Subtract(double s, Vector3 v) => new Vector3(s - v.X, s - v.Y, s - v.Z);
 
         /// <summary>
         /// Dividing a vector to another vector
@@ -221,10 +206,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         ///	result[i] = u[i] / v[i].
         /// </remarks>
-        public static Vector3 Divide(Vector3 u, Vector3 v)
-        {
-            return new Vector3(u.X / v.X, u.Y / v.Y, u.Z / v.Z);
-        }
+        public static Vector3 Divide(Vector3 u, Vector3 v) => new Vector3(u.X / v.X, u.Y / v.Y, u.Z / v.Z);
 
         /// <summary>
         /// The division of a vector by a scalar
@@ -235,10 +217,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         /// result[i] = v[i] / s;
         /// </remarks>
-        public static Vector3 Divide(Vector3 v, double s)
-        {
-            return new Vector3(v.X / s, v.Y / s, v.Z / s);
-        }
+        public static Vector3 Divide(Vector3 v, double s) => new Vector3(v.X / s, v.Y / s, v.Z / s);
 
         /// <summary>
         /// Dividing a scalar to a vector
@@ -249,10 +228,7 @@ namespace Ekona.Mathematics
         /// <remarks>
         /// result[i] = s / v[i]
         /// </remarks>
-        public static Vector3 Divide(double s, Vector3 v)
-        {
-            return new Vector3(s / v.X, s / v.Y, s / v.Z);
-        }
+        public static Vector3 Divide(double s, Vector3 v) => new Vector3(s / v.X, s / v.Y, s / v.Z);
 
         /// <summary>
         /// Multiplication of a vector by a scalar
@@ -260,10 +236,7 @@ namespace Ekona.Mathematics
         /// <param name="u">Vector</param>
         /// <param name="s">Scalar</param>
         /// <returns>The vector containing the product</returns>
-        public static Vector3 Multiply(Vector3 u, double s)
-        {
-            return new Vector3(u.X * s, u.Y * s, u.Z * s);
-        }
+        public static Vector3 Multiply(Vector3 u, double s) => new Vector3(u.X * s, u.Y * s, u.Z * s);
 
         /// <summary>
         /// Calculating the scalar product
@@ -271,10 +244,7 @@ namespace Ekona.Mathematics
         /// <param name="u">Vector</param>
         /// <param name="v">Vector</param>
         /// <returns>Scalar containing the result of the scalar product</returns>
-        public static double DotProduct(Vector3 u, Vector3 v)
-        {
-            return u.DotProduct(v);
-        }
+        public static double DotProduct(Vector3 u, Vector3 v) => u.DotProduct(v);
 
         /// <summary>
         /// Calculating the cross product of two vectors
@@ -282,23 +252,17 @@ namespace Ekona.Mathematics
         /// <param name="u">Vector</param>
         /// <param name="v">Vector</param>
         /// <returns>The vector containing the result of the cross product</returns>
-        public static Vector3 CrossProduct(Vector3 u, Vector3 v)
-        {
-            return new Vector3(
+        public static Vector3 CrossProduct(Vector3 u, Vector3 v) => new Vector3(
                 u.Y * v.Z - u.Z * v.Y,
                 u.Z * v.X - u.X * v.Z,
                 u.X * v.Y - u.Y * v.X);
-        }
 
         /// <summary>
         /// The negate of the vector - an appeal of its component signs
         /// </summary>
         /// <param name="v">Source vector</param>
         /// <returns>Inverted vector</returns>
-        public static Vector3 Negate(Vector3 v)
-        {
-            return new Vector3(-v.X, -v.Y, -v.Z);
-        }
+        public static Vector3 Negate(Vector3 v) => new Vector3(-v.X, -v.Y, -v.Z);
 
         /// <summary>
         /// Testing for equivalence using the default tolerance
@@ -306,10 +270,7 @@ namespace Ekona.Mathematics
         /// <param name="v">Vector</param>
         /// <param name="u">Vector</param>
         /// <returns>True if the vector equivalent, otherwise false</returns>
-        public static bool ApproxEqual(Vector3 v, Vector3 u)
-        {
-            return ApproxEqual(v, u, Double.Epsilon);
-        }
+        public static bool ApproxEqual(Vector3 v, Vector3 u) => ApproxEqual(v, u, Double.Epsilon);
 
         /// <summary>
         /// Testing for equivalence
@@ -318,15 +279,11 @@ namespace Ekona.Mathematics
         /// <param name="u">Vector</param>
         /// <param name="tolerance">Tolerance (possible deviation)</param>
         /// <returns>True if the vector equivalent, otherwise false</returns>
-        public static bool ApproxEqual(Vector3 v, Vector3 u, double tolerance)
-        {
-            return
-                (
+        public static bool ApproxEqual(Vector3 v, Vector3 u, double tolerance) => (
                 (Math.Abs(v.X - u.X) <= tolerance) &&
                 (Math.Abs(v.Y - u.Y) <= tolerance) &&
                 (Math.Abs(v.Z - u.Z) <= tolerance)
                 );
-        }
 
         /// <summary>
         /// Normalizing the vector
@@ -345,10 +302,7 @@ namespace Ekona.Mathematics
         /// <param name="vector1">Vector</param>
         /// <param name="vector2">Vector</param>
         /// <returns>Angle in radians</returns>
-        public static double Angle(Vector3 vector1, Vector3 vector2)
-        {
-            return vector1.Angle(vector2);
-        }
+        public static double Angle(Vector3 vector1, Vector3 vector2) => vector1.Angle(vector2);
 
         /// <summary>
         /// Angle counterclockwise from the first vector to the second
@@ -425,10 +379,7 @@ namespace Ekona.Mathematics
         /// </summary>
         /// <param name="vector">The vector whose coordinates change</param>
         /// <returns>The vector with modified coordinates</returns>
-        public static Vector3 SwapYZ(Vector3 vector)
-        {
-            return new Vector3(vector.X, vector.Z, vector.Y);
-        }
+        public static Vector3 SwapYZ(Vector3 vector) => new Vector3(vector.X, vector.Z, vector.Y);
 
         #endregion Static methods
 
@@ -485,10 +436,7 @@ namespace Ekona.Mathematics
         /// <returns>
         /// Turned point
         /// </returns>
-        public Vector3 Rotate(Vector3 origin, double angle, Vector3 normal)
-        {
-            return origin + (this - origin).Rotate(angle, normal);
-        }
+        public Vector3 Rotate(Vector3 origin, double angle, Vector3 normal) => origin + (this - origin).Rotate(angle, normal);
 
         /// <summary>
         /// Normalizing the vector (bringing it to the unit)
@@ -555,10 +503,7 @@ namespace Ekona.Mathematics
         /// Get the length squared of the vector
         /// </summary>
         /// <returns>The length squared (X*X + Y*Y + Z*Z)</returns>
-        public double LengthSquared()
-        {
-            return (x * x + y * y + z * z);
-        }
+        public double LengthSquared() => (x * x + y * y + z * z);
 
         /// <summary>
         /// Clamp the values of the vector at the origin using the given tolerance
@@ -577,33 +522,24 @@ namespace Ekona.Mathematics
         /// <remarks>
         /// Tolerant value is Double.Epsilon.
         /// </remarks>
-        public void ClampZero()
-        {
-            ClampZero(Double.Epsilon);
-        }
+        public void ClampZero() => ClampZero(Double.Epsilon);
 
         /// <summary>
         /// Calculating the scalar product of vectors
         /// </summary>
         /// <param name="vector">Second vector</param>
         /// <returns>The scalar product</returns>
-        public double DotProduct(Vector3 vector)
-        {
-            return this.x * vector.X + this.y * vector.Y + this.z * vector.Z;
-        }
+        public double DotProduct(Vector3 vector) => this.x * vector.X + this.y * vector.Y + this.z * vector.Z;
 
         /// <summary>
         /// Calculating the cross product of two vectors
         /// </summary>
         /// <param name="vector">Second vector</param>
         /// <returns>The vector containing the result of the cross product</returns>
-        public Vector3 CrossProduct(Vector3 vector)
-        {
-            return new Vector3(
+        public Vector3 CrossProduct(Vector3 vector) => new Vector3(
                 this.Y * vector.Z - this.Z * vector.Y,
                 this.Z * vector.X - this.X * vector.Z,
                 this.X * vector.Y - this.Y * vector.X);
-        }
 
         /// <summary>
         /// Computation of the angle between the vectors
@@ -625,10 +561,7 @@ namespace Ekona.Mathematics
         /// Returns HASP key for this property
         /// </summary>
         /// <returns>HASP 32-bit key</returns>
-        public override int GetHashCode()
-        {
-            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
-        }
+        public override int GetHashCode() => x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
 
         /// <summary>
         /// Equivalence Checking with another object
@@ -651,19 +584,13 @@ namespace Ekona.Mathematics
         /// <param name="vector">The vector for comparison</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>True if an equivalent object, false otherwise</returns>
-        public bool Equals(Vector3 vector, double tolerance)
-        {
-            return ((Math.Abs(x - vector.X) < tolerance) && (Math.Abs(y - vector.Y) < tolerance) && (Math.Abs(z - vector.Z) < tolerance));
-        }
+        public bool Equals(Vector3 vector, double tolerance) => ((Math.Abs(x - vector.X) < tolerance) && (Math.Abs(y - vector.Y) < tolerance) && (Math.Abs(z - vector.Z) < tolerance));
 
         /// <summary>
         /// The string representation of a object
         /// </summary>
         /// <returns>String - representation of the object</returns>
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.InvariantCulture, "({0}; {1}; {2})", x, y, z);
-        }
+        public override string ToString() => string.Format(CultureInfo.InvariantCulture, "({0}; {1}; {2})", x, y, z);
 
         #endregion Overrided methods
 
@@ -848,35 +775,17 @@ namespace Ekona.Mathematics
 
         #region NvVector3
 
-        public static Vector3 Max(Vector3 a, Vector3 b)
-        {
-            return new Vector3(Math.Max(a.x, b.x), Math.Max(a.y, b.y), Math.Max(a.z, b.z));
-        }
+        public static Vector3 Max(Vector3 a, Vector3 b) => new Vector3(Math.Max(a.x, b.x), Math.Max(a.y, b.y), Math.Max(a.z, b.z));
 
-        public static Vector3 Min(Vector3 a, Vector3 b)
-        {
-            return new Vector3(Math.Min(a.x, b.x), Math.Min(a.y, b.y), Math.Min(a.z, b.z));
-        }
+        public static Vector3 Min(Vector3 a, Vector3 b) => new Vector3(Math.Min(a.x, b.x), Math.Min(a.y, b.y), Math.Min(a.z, b.z));
 
-        public static Vector3 Clamp(Vector3 v, float min, float max)
-        {
-            return new Vector3(NvMath.Clamp(v.x, min, max), NvMath.Clamp(v.y, min, max), NvMath.Clamp(v.z, min, max));
-        }
+        public static Vector3 Clamp(Vector3 v, float min, float max) => new Vector3(NvMath.Clamp(v.x, min, max), NvMath.Clamp(v.y, min, max), NvMath.Clamp(v.z, min, max));
 
-        public static Vector3 Saturate(Vector3 v)
-        {
-            return new Vector3(NvMath.Saturate((float)v.x), NvMath.Saturate((float)v.y), NvMath.Saturate((float)v.z));
-        }
+        public static Vector3 Saturate(Vector3 v) => new Vector3(NvMath.Saturate((float)v.x), NvMath.Saturate((float)v.y), NvMath.Saturate((float)v.z));
 
-        public static Vector3 Floor(Vector3 v)
-        {
-            return new Vector3(Math.Floor(v.x), Math.Floor(v.y), Math.Floor(v.z));
-        }
+        public static Vector3 Floor(Vector3 v) => new Vector3(Math.Floor(v.x), Math.Floor(v.y), Math.Floor(v.z));
 
-        public static Vector3 Ceil(Vector3 v)
-        {
-            return new Vector3(Math.Ceiling(v.x), Math.Ceiling(v.y), Math.Ceiling(v.z));
-        }
+        public static Vector3 Ceil(Vector3 v) => new Vector3(Math.Ceiling(v.x), Math.Ceiling(v.y), Math.Ceiling(v.z));
 
         public static Vector3 Lerp(Vector3 v1, Vector3 v2, float t)
         {

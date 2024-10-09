@@ -381,10 +381,7 @@ namespace Ekona.Images
                 Update_Image();
         }
 
-        private void checkHex_CheckedChanged(object sender, EventArgs e)
-        {
-            numericStart.Hexadecimal = checkHex.Checked;
-        }
+        private void checkHex_CheckedChanged(object sender, EventArgs e) => numericStart.Hexadecimal = checkHex.Checked;
 
         private void btnSetTrans_Click(object sender, EventArgs e)
         {

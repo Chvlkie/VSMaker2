@@ -64,10 +64,7 @@ namespace Images
                 TileForm.Horizontal, false);
         }
 
-        public override void Write(string fileOut, PaletteBase palette)
-        {
-            Console.WriteLine("Write Tiles - NCCG");
-        }
+        public override void Write(string fileOut, PaletteBase palette) => Console.WriteLine("Write Tiles - NCCG");
 
         public struct sNCCG
         {

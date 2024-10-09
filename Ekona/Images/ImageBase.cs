@@ -336,14 +336,8 @@ namespace Ekona.Images
         {
         }
 
-        public override void Read(string fileIn)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Read(string fileIn) => throw new NotImplementedException();
 
-        public override void Write(string fileOut, PaletteBase palette)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Write(string fileOut, PaletteBase palette) => throw new NotImplementedException();
     }
 }

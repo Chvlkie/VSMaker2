@@ -111,10 +111,10 @@ namespace Main
 
         public async Task BeginUnpackRomDataAsync()
         {
-            var unpack = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, RomFile.FileName);
-            if (!unpack.Success)
+            var (Success, ExceptionMessage) = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, RomFile.FileName);
+            if (!Success)
             {
-                MessageBox.Show($"{unpack.ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 loadingError = true;
                 CloseProject();
             }
@@ -126,7 +126,7 @@ namespace Main
             return;
         }
 
-        public void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
+        public static void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
         {
             listBox.BeginUpdate();
             var filteredList = unfiltered
@@ -134,11 +134,11 @@ namespace Main
                 .ToList();
 
             listBox.Items.Clear();
-            listBox.Items.AddRange(filteredList.ToArray());
+            listBox.Items.AddRange([.. filteredList]);
             listBox.EndUpdate();
         }
 
-        public async void GetInitialData(IProgress<int> progress = null)
+        public async void GetInitialData(IProgress<int>? progress = null)
         {
             isLoadingData = true;
             int progressCount = 0;
@@ -216,7 +216,7 @@ namespace Main
         {
             isLoadingData = true;
             int progressCount = 0;
-            int increment = 100 / 12;
+            const int increment = 100 / 12;
 
             RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
             progressCount += increment;
@@ -277,10 +277,7 @@ namespace Main
             progress?.Report(100);
         }
 
-        public void RefreshTrainerClasses()
-        {
-            mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
-        }
+        public void RefreshTrainerClasses() => mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool AllocConsole();
@@ -301,27 +298,16 @@ namespace Main
             }
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetConsoleWindow();
-
         private static (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
         {
-            using (EasyReader reader = new(filePath, 0xC))
-            {
-                string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
-                reader.BaseStream.Position = 0x1E;
-                byte europeByte = reader.ReadByte();
-                return (europeByte, gameCode);
-            }
+            using EasyReader reader = new(filePath, 0xC);
+            string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
+            reader.BaseStream.Position = 0x1E;
+            byte europeByte = reader.ReadByte();
+            return (europeByte, gameCode);
         }
 
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        private void BeginExtractRomData()
-        {
-            OpenLoadingDialog(LoadType.UnpackNarcs);
-        }
+        private void BeginExtractRomData() => OpenLoadingDialog(LoadType.UnpackNarcs);
 
         private void ClearUnsavedChanges()
         {
@@ -348,7 +334,7 @@ namespace Main
             Console.WriteLine("Projects closed.");
         }
 
-        private void ConfirmImportTrainers(List<Trainer> newTrainers, List<Trainer> oldTrainers)
+        private static void ConfirmImportTrainers(List<Trainer> newTrainers, List<Trainer> oldTrainers)
         {
             int newTrainerCount = newTrainers.Count;
             int oldTrainerCount = oldTrainers.Count;
@@ -359,11 +345,7 @@ namespace Main
                 if (confirm != DialogResult.Yes)
                 {
                     confirm = MessageBox.Show("Do you wish to cancel importing Trainer Data?", "Cancel Import", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (confirm == DialogResult.Yes)
-                    {
-                        return;
-                    }
-                    else
+                    if (confirm != DialogResult.Yes)
                     {
                         ConfirmImportTrainers(newTrainers, oldTrainers);
                     }
@@ -398,11 +380,7 @@ namespace Main
                 if (confirm != DialogResult.Yes)
                 {
                     confirm = MessageBox.Show("Do you wish to cancel importing Trainer Data?", "Cancel Import", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (confirm == DialogResult.Yes)
-                    {
-                        return;
-                    }
-                    else
+                    if (confirm != DialogResult.Yes)
                     {
                         ConfirmImportTrainers(newTrainers, oldTrainers);
                     }
@@ -410,7 +388,7 @@ namespace Main
             }
         }
 
-        private bool ConfirmUnsavedChanges()
+        private static bool ConfirmUnsavedChanges()
         {
             var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
                     "Any unsaved changes will be lost.\n" +
@@ -465,10 +443,7 @@ namespace Main
             OpenLoadingDialog(LoadType.ExportTextTable, exportFile.FileName);
         }
 
-        private string GetPokemonNameById(int pokemonId)
-        {
-            return mainEditorModel.PokemonNamesFull[pokemonId];
-        }
+        private string GetPokemonNameById(int pokemonId) => mainEditorModel.PokemonNamesFull[pokemonId];
 
         private static void HandleArm9Compression(IProgress<int> progress)
         {
@@ -481,22 +456,24 @@ namespace Main
                 progress?.Report(0);
                 if (d == DialogResult.Yes)
                 {
-                    Arm9.WriteBytes(new byte[] { 0, 0, 0, 0 }, (uint)(RomFile.GameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4));
+                    Arm9.WriteBytes([0, 0, 0, 0], (uint)(RomFile.GameFamily == GameFamily.DiamondPearl ? 0xB7C : 0xBB4));
                     progress?.Report(10);
                 }
             }
         }
 
-        private async Task HandleOverlayCompressionAsync(IProgress<int> progress)
+        private static async Task HandleOverlayCompressionAsync(IProgress<int> progress)
         {
+            ArgumentNullException.ThrowIfNull(progress);
+
             if (Overlay.CheckOverlayHasCompressionFlag(1))
             {
                 if (RomPatches.LoadOverlay1FromBackup)
                 {
-                    var restore = await Overlay.RestoreOverlayFromCompressedBackupAsync(1, false);
-                    if (!restore.Success)
+                    var (Success, Error) = await Overlay.RestoreOverlayFromCompressedBackupAsync(1, false);
+                    if (!Success)
                     {
-                        MessageBox.Show(restore.Error, "Unable to Restore Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Error, "Unable to Restore Backup", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else if (!await Overlay.CheckOverlayIsCompressedAsync(1))
@@ -512,10 +489,7 @@ namespace Main
             }
         }
 
-        private void main_SaveRomBtn_Click(object sender, EventArgs e)
-        {
-            SaveRomChanges();
-        }
+        private void main_SaveRomBtn_Click(object sender, EventArgs e) => SaveRomChanges();
 
         private void Mainform_Load(object sender, EventArgs e)
         {
@@ -537,15 +511,9 @@ namespace Main
             ExportBattleMessagesAsCsv();
         }
 
-        private void menu_File_Save_Click(object sender, EventArgs e)
-        {
-            SaveRomChanges();
-        }
+        private void menu_File_Save_Click(object sender, EventArgs e) => SaveRomChanges();
 
-        private void menu_Import_BattleMessages_Click(object sender, EventArgs e)
-        {
-            ImportBattleMessageCsv();
-        }
+        private void menu_Import_BattleMessages_Click(object sender, EventArgs e) => ImportBattleMessageCsv();
 
         private void OpenLoadingDialog(LoadType loadType)
         {
@@ -632,10 +600,7 @@ namespace Main
             settingsForm.ShowDialog();
         }
 
-        private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId)
-        {
-            UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);
-        }
+        private void PopulateTrainerClassSprite(PictureBox pictureBox, NumericUpDown frameNumBox, int trainerClassId) => UpdateTrainerClassSprite(pictureBox, frameNumBox, trainerClassId);
 
         private bool ReadRomExtractedFolder(string selectedFolder)
         {
@@ -649,7 +614,7 @@ namespace Main
                 return false;
             }
 
-            string fileName = Directory.GetFiles(selectedFolder).SingleOrDefault(x => x.Contains(Common.HeaderFilePath));
+            string? fileName = Directory.GetFiles(selectedFolder).SingleOrDefault(x => x.Contains(Common.HeaderFilePath));
             if (string.IsNullOrEmpty(fileName))
             {
                 MessageBox.Show("Cannot load ROM header.bin." +
@@ -668,9 +633,9 @@ namespace Main
 
             isLoadingData = true;
             Console.WriteLine("Load initial ROM Data");
-            var loadedRom = LoadInitialRomData(fileName);
+            var (EuropeByte, GameCode) = LoadInitialRomData(fileName);
             Console.WriteLine("Load initial ROM Data | Success");
-            RomFile.SetupRomFile(loadedRom.GameCode, fileName, workingDirectory, loadedRom.EuropeByte);
+            RomFile.SetupRomFile(GameCode, fileName, workingDirectory, EuropeByte);
             if (RomFile.GameVersion == GameVersion.Unknown)
             {
                 MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
@@ -897,10 +862,7 @@ namespace Main
             isLoadingData = false;
         }
 
-        private void main_OpenPatchesBtn_Click(object sender, EventArgs e)
-        {
-            OpenRomPatchesWindow();
-        }
+        private void main_OpenPatchesBtn_Click(object sender, EventArgs e) => OpenRomPatchesWindow();
 
         private async void main_OpenRomBtn_Click(object sender, EventArgs e)
         {
@@ -920,10 +882,7 @@ namespace Main
             }
         }
 
-        private void main_SettingsBtn_Click(object sender, EventArgs e)
-        {
-            OpenSettingsWindow();
-        }
+        private void main_SettingsBtn_Click(object sender, EventArgs e) => OpenSettingsWindow();
 
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -992,10 +951,7 @@ namespace Main
             }
         }
 
-        private void menu_File_Exit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
+        private void menu_File_Exit_Click(object sender, EventArgs e) => Application.Exit();
 
         private void menu_File_OpenFolder_Click(object sender, EventArgs e)
         {
@@ -1024,12 +980,12 @@ namespace Main
                         "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                 if (saveChanges == DialogResult.Yes)
                 {
-                    OpenRomAsync();
+                    await OpenRomAsync();
                 }
             }
             else
             {
-                OpenRomAsync();
+                await OpenRomAsync();
             }
         }
 
@@ -1040,15 +996,9 @@ namespace Main
             }
         }
 
-        private void menu_Tools_RomPatcher_Click(object sender, EventArgs e)
-        {
-            OpenRomPatchesWindow();
-        }
+        private void menu_Tools_RomPatcher_Click(object sender, EventArgs e) => OpenRomPatchesWindow();
 
-        private void menu_Tools_Settings_Click(object sender, EventArgs e)
-        {
-            OpenSettingsWindow();
-        }
+        private void menu_Tools_Settings_Click(object sender, EventArgs e) => OpenSettingsWindow();
 
         #endregion Event Handlers
 

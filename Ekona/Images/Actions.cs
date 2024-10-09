@@ -1342,10 +1342,7 @@ namespace Ekona.Images
             return oam;
         }
 
-        public static OAM OAMInfo(ushort v1, ushort v2, ushort v3)
-        {
-            return OAMInfo(new ushort[] { v1, v2, v3 });
-        }
+        public static OAM OAMInfo(ushort v1, ushort v2, ushort v3) => OAMInfo(new ushort[] { v1, v2, v3 });
 
         #endregion OAM
     }

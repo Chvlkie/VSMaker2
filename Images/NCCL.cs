@@ -53,10 +53,7 @@ namespace Images
             this.fileName = Path.GetFileName(file);
         }
 
-        public override void Write(string fileOut)
-        {
-            System.Windows.Forms.MessageBox.Show("Not supported");
-        }
+        public override void Write(string fileOut) => System.Windows.Forms.MessageBox.Show("Not supported");
 
         public struct sNCCL
         {

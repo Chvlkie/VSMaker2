@@ -26,24 +26,15 @@
             DoubleBattle = toCopy.DoubleBattle;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as TrainerParty);
-        }
+        public override bool Equals(object? obj) => Equals(obj as TrainerParty);
 
-        public bool Equals(TrainerParty? other)
-        {
-            return other is not null &&
+        public bool Equals(TrainerParty? other) => other is not null &&
                    EqualityComparer<List<Pokemon>>.Default.Equals(Pokemons, other.Pokemons) &&
                    ChooseItems == other.ChooseItems &&
                    ChooseMoves == other.ChooseMoves &&
                    DoubleBattle == other.DoubleBattle &&
                    TeamSize == other.TeamSize;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Pokemons, ChooseItems, ChooseMoves, DoubleBattle, TeamSize);
-        }
+        public override int GetHashCode() => HashCode.Combine(Pokemons, ChooseItems, ChooseMoves, DoubleBattle, TeamSize);
     }
 }

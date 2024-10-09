@@ -135,10 +135,7 @@ namespace Ekona.Images.Formats
             Set_Tiles(tiles, (int)width, (int)height, format, Images.TileForm.Lineal, false);
         }
 
-        public override void Write(string fileOut, PaletteBase palette)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Write(string fileOut, PaletteBase palette) => throw new NotImplementedException();
 
         public PaletteBase Palette
         {

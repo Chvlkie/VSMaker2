@@ -25,23 +25,14 @@
             MessageTriggerId = messageTriggerId;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as BattleMessage);
-        }
+        public override bool Equals(object? obj) => Equals(obj as BattleMessage);
 
-        public bool Equals(BattleMessage? other)
-        {
-            return other is not null &&
+        public bool Equals(BattleMessage? other) => other is not null &&
                    TrainerId == other.TrainerId &&
                    MessageId == other.MessageId &&
                    MessageTriggerId == other.MessageTriggerId &&
                    MessageText == other.MessageText;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(TrainerId, MessageId, MessageTriggerId, MessageText);
-        }
+        public override int GetHashCode() => HashCode.Combine(TrainerId, MessageId, MessageTriggerId, MessageText);
     }
 }

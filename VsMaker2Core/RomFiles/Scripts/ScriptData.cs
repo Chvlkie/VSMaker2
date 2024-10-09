@@ -28,24 +28,15 @@ namespace VsMaker2Core.RomFiles
             Lines = lines;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as ScriptData);
-        }
+        public override bool Equals(object? obj) => Equals(obj as ScriptData);
 
-        public bool Equals(ScriptData? other)
-        {
-            return other is not null &&
+        public bool Equals(ScriptData? other) => other is not null &&
                    EqualityComparer<List<ScriptLine>>.Default.Equals(Lines, other.Lines) &&
                    ScriptNumber == other.ScriptNumber &&
                    UsedScriptId == other.UsedScriptId &&
                    ScriptType == other.ScriptType;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Lines, ScriptNumber, UsedScriptId, ScriptType);
-        }
+        public override int GetHashCode() => HashCode.Combine(Lines, ScriptNumber, UsedScriptId, ScriptType);
 
         public static bool operator ==(ScriptData? left, ScriptData? right)
         {

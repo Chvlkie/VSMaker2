@@ -32,10 +32,7 @@ namespace Images
         private IPluginHost pluginHost;
         private NANR nanr;  // TEMP
 
-        public void Initialize(IPluginHost pluginHost)
-        {
-            this.pluginHost = pluginHost;
-        }
+        public void Initialize(IPluginHost pluginHost) => this.pluginHost = pluginHost;
 
         public Format Get_Format(sFile file, byte[] magic)
         {
@@ -116,10 +113,7 @@ namespace Images
             return new Control();
         }
 
-        public void Read(sFile file)
-        {
-            Read2(file);
-        }
+        public void Read(sFile file) => Read2(file);
 
         public Format Read2(sFile file)
         {
@@ -252,10 +246,8 @@ namespace Images
             return Format.Unknown;
         }
 
-        public String Pack(ref sFolder unpacked, sFile file)
-        { return null; }
+        public String Pack(ref sFolder unpacked, sFile file) => null;
 
-        public sFolder Unpack(sFile file)
-        { return new sFolder(); }
+        public sFolder Unpack(sFile file) => new sFolder();
     }
 }

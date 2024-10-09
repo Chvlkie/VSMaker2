@@ -144,18 +144,12 @@
             return (true, "");
         }
 
-        public void Free()
-        { // Libera todos los recursos de memoria asociados (cierra los streams)
-            Parallel.For(0, Elements.Length, i =>
-            {
-                Elements[i].Close();
-            });
-        }
+        public void Free() => Parallel.For(0, Elements.Length, i =>
+                                       {
+                                           Elements[i].Close();
+                                       });
 
-        public int GetElementsLength()
-        {
-            return Elements.Length;
-        }
+        public int GetElementsLength() => Elements.Length;
 
         public void Save(String filePath)
         {

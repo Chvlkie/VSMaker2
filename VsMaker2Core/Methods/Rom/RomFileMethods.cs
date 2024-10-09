@@ -531,15 +531,9 @@ namespace VsMaker2Core.Methods
             return messageArchives?.Count ?? 0;
         }
 
-        public async Task<int> GetTotalNumberOfTrainerClassesAsync(int trainerClassNameArchive)
-        {
-            return await GetTotalNumberOfItemsInArchiveAsync(trainerClassNameArchive);
-        }
+        public async Task<int> GetTotalNumberOfTrainerClassesAsync(int trainerClassNameArchive) => await GetTotalNumberOfItemsInArchiveAsync(trainerClassNameArchive);
 
-        public async Task<int> GetTotalNumberOfTrainersAsync(int trainerNameArchive)
-        {
-            return await GetTotalNumberOfItemsInArchiveAsync(trainerNameArchive);
-        }
+        public async Task<int> GetTotalNumberOfTrainersAsync(int trainerNameArchive) => await GetTotalNumberOfItemsInArchiveAsync(trainerNameArchive);
 
         public async Task<List<string>> GetTrainerNamesAsync(int trainerNameMessageArchive)
         {

@@ -20,24 +20,15 @@
             EyeContactMusicNight = eyeContactMusicNight;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as TrainerClassProperty);
-        }
+        public override bool Equals(object? obj) => Equals(obj as TrainerClassProperty);
 
-        public bool Equals(TrainerClassProperty? other)
-        {
-            return other is not null &&
+        public bool Equals(TrainerClassProperty? other) => other is not null &&
                    EyeContactMusicDay == other.EyeContactMusicDay &&
                    EyeContactMusicNight == other.EyeContactMusicNight &&
                    PrizeMoneyMultiplier == other.PrizeMoneyMultiplier &&
                    Gender == other.Gender &&
                    Description == other.Description;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(EyeContactMusicDay, EyeContactMusicNight, PrizeMoneyMultiplier, Gender, Description);
-        }
+        public override int GetHashCode() => HashCode.Combine(EyeContactMusicDay, EyeContactMusicNight, PrizeMoneyMultiplier, Gender, Description);
     }
 }

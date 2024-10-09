@@ -103,15 +103,9 @@ namespace Ekona.Helper
             return bytes.ToArray();
         }
 
-        public static Byte Bit4ToByte(Byte[] data)
-        {
-            return (byte)(data[0] + (data[1] << 4));
-        }
+        public static Byte Bit4ToByte(Byte[] data) => (byte)(data[0] + (data[1] << 4));
 
-        public static Byte Bit4ToByte(Byte b1, Byte b2)
-        {
-            return (byte)(b1 + (b2 << 4));
-        }
+        public static Byte Bit4ToByte(Byte b1, Byte b2) => (byte)(b1 + (b2 << 4));
 
         public static Byte[] Bits4ToByte(Byte[] data)
         {

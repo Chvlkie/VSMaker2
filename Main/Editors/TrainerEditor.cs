@@ -64,25 +64,13 @@ namespace Main
             trainer_PastePropeties_btn.Enabled = true;
         }
 
-        private void trainer_InsertE_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(trainer_MessageTextBox, "é");
-        }
+        private void trainer_InsertE_btn_Click(object sender, EventArgs e) => AppendBattleMessage(trainer_MessageTextBox, "é");
 
-        private void trainer_InsertF_Btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(trainer_MessageTextBox, "\\f");
-        }
+        private void trainer_InsertF_Btn_Click(object sender, EventArgs e) => AppendBattleMessage(trainer_MessageTextBox, "\\f");
 
-        private void trainer_InsertN_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(trainer_MessageTextBox, "\\n");
-        }
+        private void trainer_InsertN_btn_Click(object sender, EventArgs e) => AppendBattleMessage(trainer_MessageTextBox, "\\n");
 
-        private void trainer_InsertR_btn_Click(object sender, EventArgs e)
-        {
-            AppendBattleMessage(trainer_MessageTextBox, "\\r");
-        }
+        private void trainer_InsertR_btn_Click(object sender, EventArgs e) => AppendBattleMessage(trainer_MessageTextBox, "\\r");
 
         private void trainer_Paste_Btn_Click(object sender, EventArgs e)
         {
@@ -387,10 +375,7 @@ namespace Main
             return species;
         }
 
-        private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId)
-        {
-            return mainEditorModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
-        }
+        private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId) => mainEditorModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
 
         #endregion Get
 
@@ -1205,10 +1190,7 @@ namespace Main
             }
         }
 
-        private void SetTrainerName(Trainer trainer)
-        {
-            trainer_NameTextBox.Text = trainer.TrainerName;
-        }
+        private void SetTrainerName(Trainer trainer) => trainer_NameTextBox.Text = trainer.TrainerName;
 
         private void SetTrainerParty(TrainerParty trainerParty, int teamSize, bool chooseMoves)
         {
@@ -1456,10 +1438,7 @@ namespace Main
             trainer_ViewClassBtn.Enabled = trainer_ClassListBox.SelectedIndex > -1;
         }
 
-        private void trainer_ClearFilterBtn_Click(object sender, EventArgs e)
-        {
-            trainer_FilterBox.Text = "";
-        }
+        private void trainer_ClearFilterBtn_Click(object sender, EventArgs e) => trainer_FilterBox.Text = "";
 
         private void trainer_DblBattleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -1530,10 +1509,7 @@ namespace Main
             }
         }
 
-        private void trainer_MessageDownBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewNavigate(true, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
-        }
+        private void trainer_MessageDownBtn_Click(object sender, EventArgs e) => MessagePreviewNavigate(true, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
 
         private void trainer_MessageTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -1563,10 +1539,7 @@ namespace Main
             }
         }
 
-        private void trainer_MessageUpBtn_Click(object sender, EventArgs e)
-        {
-            MessagePreviewNavigate(false, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
-        }
+        private void trainer_MessageUpBtn_Click(object sender, EventArgs e) => MessagePreviewNavigate(false, trainer_MessageDownBtn, trainer_MessageUpBtn, trainer_MessagePreviewText);
 
         private void trainer_NameTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -1765,20 +1738,11 @@ namespace Main
             }
         }
 
-        private void trainer_UndoAll_Btn_Click(object sender, EventArgs e)
-        {
-            UndoTrainerChanges();
-        }
+        private void trainer_UndoAll_Btn_Click(object sender, EventArgs e) => UndoTrainerChanges();
 
-        private void trainer_UndoParty_btn_Click(object sender, EventArgs e)
-        {
-            UndoTrainerPartyChanges();
-        }
+        private void trainer_UndoParty_btn_Click(object sender, EventArgs e) => UndoTrainerPartyChanges();
 
-        private void trainer_UndoProperties_Click(object sender, EventArgs e)
-        {
-            UndoTrainerPropertyChanges();
-        }
+        private void trainer_UndoProperties_Click(object sender, EventArgs e) => UndoTrainerPropertyChanges();
 
         private void trainer_ViewClassBtn_Click(object sender, EventArgs e)
         {
@@ -1830,10 +1794,7 @@ namespace Main
             isLoadingData = false;
         }
 
-        private void UpdateAbilty(int index)
-        {
-            EditedTrainerParty(true);
-        }
+        private void UpdateAbilty(int index) => EditedTrainerParty(true);
 
         private bool ValidatePokemon()
         {

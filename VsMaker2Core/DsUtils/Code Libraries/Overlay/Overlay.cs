@@ -128,10 +128,7 @@ namespace VsMaker2Core.DsUtils
             }
         }
 
-        public static string OverlayFilePath(int overlayNumber)
-        {
-            return $"{RomFile.WorkingDirectory}overlay\\overlay_{overlayNumber:D4}.bin";
-        }
+        public static string OverlayFilePath(int overlayNumber) => $"{RomFile.WorkingDirectory}overlay\\overlay_{overlayNumber:D4}.bin";
 
         public static async Task<(bool Success, string Error)> RestoreOverlayFromCompressedBackupAsync(int overlayNumber, bool eventEditorIsReady)
         {

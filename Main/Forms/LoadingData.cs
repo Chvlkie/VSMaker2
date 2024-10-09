@@ -204,10 +204,7 @@ namespace Main.Forms
             }
         }
 
-        private void LoadingData_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-        }
+        private void LoadingData_FormClosing(object sender, FormClosingEventArgs e) => e.Cancel = true;
 
         public void UpdateProgressBarStyle(ProgressBarStyle style)
         {

@@ -74,10 +74,7 @@ namespace Ekona.Images
             Read(file, editable, offset, size);
         }
 
-        public override void Read(string fileIn)
-        {
-            Read(fileIn, true, 0, -1);
-        }
+        public override void Read(string fileIn) => Read(fileIn, true, 0, -1);
 
         public void Read(string fileIn, bool editable, ColorFormat depth, int offset, int fileSize)
         {
@@ -184,10 +181,7 @@ namespace Ekona.Images
             Set_Tiles(tiles, width, height, format, form, editable);
         }
 
-        public override void Read(string fileIn)
-        {
-            Read(fileIn, TileForm.Horizontal, Images.ColorFormat.colors16, true, 0, -1);
-        }
+        public override void Read(string fileIn) => Read(fileIn, TileForm.Horizontal, Images.ColorFormat.colors16, true, 0, -1);
 
         public void Read(string fileIn, TileForm form, ColorFormat format, bool editable,
             int offset, int fileSize)
@@ -264,10 +258,7 @@ namespace Ekona.Images
         {
         }
 
-        public override void Read(string fileIn)
-        {
-            Read(fileIn, 0, -1, true);
-        }
+        public override void Read(string fileIn) => Read(fileIn, 0, -1, true);
 
         public void Read(string fileIn, int offset, int size, bool editable)
         {
@@ -322,14 +313,8 @@ namespace Ekona.Images
             Set_Banks(new Bank[] { bank }, blocksize, editable);
         }
 
-        public override void Read(string fileIn)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Read(string fileIn) => throw new NotImplementedException();
 
-        public override void Write(string fileOut, ImageBase image, PaletteBase palette)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Write(string fileOut, ImageBase image, PaletteBase palette) => throw new NotImplementedException();
     }
 }

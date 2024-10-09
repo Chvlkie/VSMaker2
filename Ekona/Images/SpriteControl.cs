@@ -192,10 +192,7 @@ namespace Ekona.Images
             Update_Image();
         }
 
-        private void check_CheckedChanged(object sender, EventArgs e)
-        {
-            Update_Image();
-        }
+        private void check_CheckedChanged(object sender, EventArgs e) => Update_Image();
 
         private void btnShowAll_Click(object sender, EventArgs e)
         {
@@ -261,10 +258,7 @@ namespace Ekona.Images
             }
         }
 
-        private void btnSetTrans_Click(object sender, EventArgs e)
-        {
-            selectColor = true;
-        }
+        private void btnSetTrans_Click(object sender, EventArgs e) => selectColor = true;
 
         private void SetTransFromImage(Color color)
         {
@@ -383,10 +377,7 @@ namespace Ekona.Images
             o = null;
         }
 
-        private void checkBatch_CheckedChanged(object sender, EventArgs e)
-        {
-            txtBatch.Enabled = checkBatch.Checked;
-        }
+        private void checkBatch_CheckedChanged(object sender, EventArgs e) => txtBatch.Enabled = checkBatch.Checked;
 
         private void btnImport_Click(object sender, EventArgs e)
         {

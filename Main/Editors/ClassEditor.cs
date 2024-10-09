@@ -86,10 +86,7 @@ namespace Main
             }
         }
 
-        private void class_ClearFilterBtn_Click(object sender, EventArgs e)
-        {
-            class_FilterTextBox.Text = "";
-        }
+        private void class_ClearFilterBtn_Click(object sender, EventArgs e) => class_FilterTextBox.Text = "";
 
         private void class_DescriptionTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -149,9 +146,7 @@ namespace Main
             }
         }
 
-        private void class_NewClassInfoBtn_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Trainer Classes rely on data from specific tables:\n" +
+        private void class_NewClassInfoBtn_Click(object sender, EventArgs e) => MessageBox.Show("Trainer Classes rely on data from specific tables:\n" +
                 "Class Gender Table and Prize Money table.\n\n" +
                 "In order to create a new Trainer Class, these required tables must first be expanded. " +
                 "It is possible to apply patches to expand these tables from the ROM Patcher Menu.\n" +
@@ -159,7 +154,6 @@ namespace Main
                 "IMPORTANT: Applying patches is an advanced feature and has the potential of corrupting your ROM. " +
                 "Before applying any ROM patch, make a back up of your project to avoid any potential loss of work.",
                 "Creating a New Class");
-        }
 
         private void class_PrizeMoneyNum_ValueChanged(object sender, EventArgs e)
         {
@@ -205,10 +199,7 @@ namespace Main
             }
         }
 
-        private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            class_ViewTrainerBtn.Enabled = !isLoadingData && class_TrainersListBox.SelectedIndex > -1;
-        }
+        private void class_TrainersListBox_SelectedIndexChanged(object sender, EventArgs e) => class_ViewTrainerBtn.Enabled = !isLoadingData && class_TrainersListBox.SelectedIndex > -1;
 
         private void class_UndoAllBtn_Click(object sender, EventArgs e)
         {
@@ -246,10 +237,7 @@ namespace Main
             EditedTrainerClassProperties(false);
         }
 
-        private void ClearUnsavedClassPropertiesChanges()
-        {
-            EditedTrainerClassProperties(false);
-        }
+        private void ClearUnsavedClassPropertiesChanges() => EditedTrainerClassProperties(false);
 
         private void EditedTrainerClassName(bool hasChanges)
         {
@@ -514,10 +502,7 @@ namespace Main
             }
         }
 
-        private void SetClassName()
-        {
-            class_NameTextBox.Text = SelectedClass.TrainerClassName;
-        }
+        private void SetClassName() => class_NameTextBox.Text = SelectedClass.TrainerClassName;
 
         private void SetClassProperties()
         {

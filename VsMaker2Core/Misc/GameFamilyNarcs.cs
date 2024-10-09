@@ -70,16 +70,13 @@ namespace VsMaker2Core
                         NarcDirectory.trainerTextOffset
                       ];
 
-        public static List<NarcDirectory> GetGameFamilyNarcs(GameFamily gameFamily)
+        public static List<NarcDirectory> GetGameFamilyNarcs(GameFamily gameFamily) => gameFamily switch
         {
-            return gameFamily switch
-            {
-                GameFamily.DiamondPearl => DiamondPearl,
-                GameFamily.Platinum => Platinum,
-                GameFamily.HeartGoldSoulSilver => HeartGoldSoulSilver,
-                GameFamily.HgEngine => HgEngine,
-                _ => [],
-            };
-        }
+            GameFamily.DiamondPearl => DiamondPearl,
+            GameFamily.Platinum => Platinum,
+            GameFamily.HeartGoldSoulSilver => HeartGoldSoulSilver,
+            GameFamily.HgEngine => HgEngine,
+            _ => [],
+        };
     }
 }

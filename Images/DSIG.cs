@@ -72,10 +72,7 @@ namespace Images
             br.Close();
         }
 
-        public override void Write(string fileOut, PaletteBase palette)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Write(string fileOut, PaletteBase palette) => throw new NotImplementedException();
 
         public PaletteBase Palette
         {

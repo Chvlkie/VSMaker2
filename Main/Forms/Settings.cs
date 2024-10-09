@@ -41,10 +41,7 @@ namespace Main.Forms
             }
         }
 
-        private void btn_ClearRecent_Click(object sender, EventArgs e)
-        {
-            ClearRecentItemsRequested?.Invoke(this, EventArgs.Empty);
-        }
+        private void btn_ClearRecent_Click(object sender, EventArgs e) => ClearRecentItemsRequested?.Invoke(this, EventArgs.Empty);
 
         private void btn_ExportLogs_Click(object sender, EventArgs e)
         {
@@ -81,9 +78,6 @@ namespace Main.Forms
             toolTip_DefaultRomFolder.SetToolTip(lbl_DefaultRomFolder, "The default browser location when\nselecting a rom/project folder.");
         }
 
-        private void btn_Close_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void btn_Close_Click(object sender, EventArgs e) => this.Close();
     }
 }

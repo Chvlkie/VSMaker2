@@ -9,23 +9,14 @@
 
         public static int ListNameToMessageTriggerId(string listName) => int.Parse(listName.Substring(1, 2));
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as MessageTrigger);
-        }
+        public override bool Equals(object? obj) => Equals(obj as MessageTrigger);
 
-        public bool Equals(MessageTrigger? other)
-        {
-            return other is not null &&
+        public bool Equals(MessageTrigger? other) => other is not null &&
                    MessageTriggerId == other.MessageTriggerId &&
                    MessageTriggerName == other.MessageTriggerName &&
                    ListName == other.ListName;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(MessageTriggerId, MessageTriggerName, ListName);
-        }
+        public override int GetHashCode() => HashCode.Combine(MessageTriggerId, MessageTriggerName, ListName);
 
         public MessageTrigger()
         { }

@@ -95,10 +95,7 @@ namespace Images
             Set_Banks(ncob.cell.banks, 0, false);
         }
 
-        public override void Write(string fileOut, ImageBase image, PaletteBase palette)
-        {
-            throw new NotImplementedException();
-        }
+        public override void Write(string fileOut, ImageBase image, PaletteBase palette) => throw new NotImplementedException();
 
         public ImageBase Image
         {

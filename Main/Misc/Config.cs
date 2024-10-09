@@ -52,10 +52,7 @@ namespace Main.Misc
             SaveConfig();
         }
 
-        public static void ClearConsoleLogs()
-        {
-            consoleLogWriter.GetStringBuilder().Clear();
-        }
+        public static void ClearConsoleLogs() => consoleLogWriter.GetStringBuilder().Clear();
 
         public static void ClearRecentItems(ToolStripMenuItem openRecentMenu)
         {
@@ -87,10 +84,7 @@ namespace Main.Misc
 
         public static string GetFirstRecentItem() => recentItems.FirstOrDefault();
 
-        public static string GetRomFolderPath()
-        {
-            return romFolderPath;
-        }
+        public static string GetRomFolderPath() => romFolderPath;
 
         public static void LoadConfig()
         {

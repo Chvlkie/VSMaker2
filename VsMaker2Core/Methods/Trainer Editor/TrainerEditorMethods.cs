@@ -142,28 +142,22 @@ namespace VsMaker2Core.Methods
             return trainerUsages;
         }
 
-        private static bool IsTrainerCommand(ScriptLine line, int trainerId)
-        {
-            return (line.ScriptCommandId == 0x00E5 || line.ScriptCommandId == 0x00D5)
+        private static bool IsTrainerCommand(ScriptLine line, int trainerId) => (line.ScriptCommandId == 0x00E5 || line.ScriptCommandId == 0x00D5)
                 && line.Parameters[0].Length >= 2
                 && BitConverter.ToUInt16(line.Parameters[0], 0) == trainerId;
-        }
 
         public Trainer GetTrainer(List<Trainer> trainers, int trainerId) => trainers.SingleOrDefault(x => x.TrainerId == trainerId);
 
-        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags)
+        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags) => new TrainerProperty
         {
-            return new TrainerProperty
-            {
-                DoubleBattle = isDouble,
-                ChooseItems = chooseItems,
-                ChooseMoves = chooseMoves,
-                TeamSize = teamSize,
-                Items = [item1, item2, item3, item4],
-                TrainerClassId = trainerClassId,
-                AIFlags = aiFlags
-            };
-        }
+            DoubleBattle = isDouble,
+            ChooseItems = chooseItems,
+            ChooseMoves = chooseMoves,
+            TeamSize = teamSize,
+            Items = [item1, item2, item3, item4],
+            TrainerClassId = trainerClassId,
+            AIFlags = aiFlags
+        };
 
         public TrainerData NewTrainerData(TrainerProperty trainerProperties)
         {

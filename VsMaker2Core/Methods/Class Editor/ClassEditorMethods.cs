@@ -63,9 +63,6 @@ namespace VsMaker2Core.Methods
             return trainerClasses;
         }
 
-        public List<Trainer> GetUsedByTrainers(int trainerClassId, List<Trainer> trainers)
-        {
-            return trainers == null ? (List<Trainer>)([]) : trainers.Where(x => x.TrainerProperties.TrainerClassId == trainerClassId).ToList();
-        }
+        public List<Trainer> GetUsedByTrainers(int trainerClassId, List<Trainer> trainers) => trainers == null ? (List<Trainer>)([]) : trainers.Where(x => x.TrainerProperties.TrainerClassId == trainerClassId).ToList();
     }
 }

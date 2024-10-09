@@ -34,9 +34,6 @@ namespace Ekona.Helper
         public BinaryReaderBE(string file) : base(File.OpenRead(file))
         { }
 
-        public override ushort ReadUInt16()
-        {
-            return BitConverter.ToUInt16(ReadBytes(2).Reverse().ToArray(), 0);
-        }
+        public override ushort ReadUInt16() => BitConverter.ToUInt16(ReadBytes(2).Reverse().ToArray(), 0);
     }
 }

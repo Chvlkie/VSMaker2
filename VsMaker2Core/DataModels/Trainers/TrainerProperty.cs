@@ -55,14 +55,9 @@
             DoubleBattle = toCopy.DoubleBattle;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as TrainerProperty);
-        }
+        public override bool Equals(object? obj) => Equals(obj as TrainerProperty);
 
-        public bool Equals(TrainerProperty? other)
-        {
-            return other is not null &&
+        public bool Equals(TrainerProperty? other) => other is not null &&
                    EqualityComparer<List<bool>>.Default.Equals(AIFlags, other.AIFlags) &&
                    ChooseMoves == other.ChooseMoves &&
                    ChooseItems == other.ChooseItems &&
@@ -70,11 +65,7 @@
                    EqualityComparer<ushort[]>.Default.Equals(Items, other.Items) &&
                    DoubleBattle == other.DoubleBattle &&
                    TeamSize == other.TeamSize;
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(AIFlags, ChooseMoves, ChooseItems, TrainerClassId, Items, DoubleBattle, TeamSize);
-        }
+        public override int GetHashCode() => HashCode.Combine(AIFlags, ChooseMoves, ChooseItems, TrainerClassId, Items, DoubleBattle, TeamSize);
     }
 }

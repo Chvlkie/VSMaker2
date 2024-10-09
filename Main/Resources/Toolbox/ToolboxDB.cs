@@ -149,31 +149,25 @@ namespace Main.Resources.Toolbox
             internal string specialCaseData2 = "C0 46";
             internal string specialCaseData3 = "00 00 00 00";
 
-            public static uint GetDynamicHeadersInitOffset(string romID)
+            public static uint GetDynamicHeadersInitOffset(string romID) => romID switch
             {
-                return romID switch
-                {
-                    "CPUE" => 0x3A024,
-                    "CPUS" or "CPUI" or "CPUF" or "CPUD" => 0x3A0C8,
-                    "CPUJ" => 0x39BE0,
-                    "IPKS" => 0x3B260,
-                    "IPKJ" or "IPGJ" => 0x3AE20,
-                    _ => 0x3B268,
-                };
-            }
+                "CPUE" => 0x3A024,
+                "CPUS" or "CPUI" or "CPUF" or "CPUD" => 0x3A0C8,
+                "CPUJ" => 0x39BE0,
+                "IPKS" => 0x3B260,
+                "IPKJ" or "IPGJ" => 0x3AE20,
+                _ => 0x3B268,
+            };
 
-            public static string GetDynamicHeadersInitString(string romID)
+            public static string GetDynamicHeadersInitString(string romID) => romID switch
             {
-                return romID switch
-                {
-                    "CPUE" => "00 B5 01 1C 94 20 00 22 CC F7 48 FD 03 1C DE F7 C7 F8 00 BD",
-                    "CPUS" or "CPUI" or "CPUF" or "CPUD" => "00 B5 01 1C 94 20 00 22 CC F7 00 FD 03 1C CC F7 74 FC 00 BD",
-                    "CPUJ" => "00 B5 01 1C 94 20 00 22 CC F7 0A FF 03 1C DE F7 3D F9 00 BD",
-                    "IPKS" => "00 B5 01 1C 32 20 00 22 CC F7 5C F9 03 1C DF F7 4D FC 00 BD",
-                    "IPKJ" or "IPGJ" => "00 B5 01 1C 32 20 00 22 CC F7 08 FB 03 1C DF F7 C7 FC 00 BD",
-                    _ => "00 B5 01 1C 32 20 00 22 CC F7 58 F9 03 1C DF F7 49 FC 00 BD",
-                };
-            }
+                "CPUE" => "00 B5 01 1C 94 20 00 22 CC F7 48 FD 03 1C DE F7 C7 F8 00 BD",
+                "CPUS" or "CPUI" or "CPUF" or "CPUD" => "00 B5 01 1C 94 20 00 22 CC F7 00 FD 03 1C CC F7 74 FC 00 BD",
+                "CPUJ" => "00 B5 01 1C 94 20 00 22 CC F7 0A FF 03 1C DE F7 3D F9 00 BD",
+                "IPKS" => "00 B5 01 1C 32 20 00 22 CC F7 5C F9 03 1C DF F7 4D FC 00 BD",
+                "IPKJ" or "IPGJ" => "00 B5 01 1C 32 20 00 22 CC F7 08 FB 03 1C DF F7 C7 FC 00 BD",
+                _ => "00 B5 01 1C 32 20 00 22 CC F7 58 F9 03 1C DF F7 49 FC 00 BD",
+            };
 
             public static Dictionary<GameFamily, Tuple<uint, uint>[]> dynamicHeadersPointersDB = new()
             {

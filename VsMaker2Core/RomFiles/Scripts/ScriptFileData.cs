@@ -29,25 +29,16 @@
             Actions = original.Actions;
         }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as ScriptFileData);
-        }
+        public override bool Equals(object? obj) => Equals(obj as ScriptFileData);
 
-        public bool Equals(ScriptFileData? other)
-        {
-            return other is not null &&
+        public bool Equals(ScriptFileData? other) => other is not null &&
                    ScriptFileId == other.ScriptFileId &&
                    IsLevelScript == other.IsLevelScript &&
                    EqualityComparer<List<ScriptData>>.Default.Equals(Scripts, other.Scripts) &&
                    EqualityComparer<List<ScriptData>>.Default.Equals(Functions, other.Functions) &&
                    EqualityComparer<List<ScriptActionData>>.Default.Equals(Actions, other.Actions);
-        }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(ScriptFileId, IsLevelScript, Scripts, Functions, Actions);
-        }
+        public override int GetHashCode() => HashCode.Combine(ScriptFileId, IsLevelScript, Scripts, Functions, Actions);
 
         public static bool operator ==(ScriptFileData? left, ScriptFileData? right)
         {
