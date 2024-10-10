@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using VsMaker2Core.Database;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
@@ -12,6 +13,29 @@ namespace VsMaker2Core.Methods
     public class RomFileMethods : IRomFileMethods
     {
         #region Extract
+
+        public (bool Success, string ErrorMessage) LoadInitialRomData(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+            {
+                return (false, "Invalid ROM file path provided.");
+            }
+
+            try
+            {
+                using EasyReader reader = new(filePath, 0xC);
+
+                RomFile.GameCode = Encoding.ASCII.GetString(reader.ReadBytes(4));
+
+                reader.BaseStream.Position = 0x1E;
+                RomFile.EuropeByte = reader.ReadByte();
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                return (false,$"Error loading ROM data: {ex.Message}");
+            }
+        }
 
         public async Task<(bool Success, string ExceptionMessage)> ExtractRomContentsAsync(string workingDirectory, string fileName)
         {
@@ -801,7 +825,6 @@ namespace VsMaker2Core.Methods
 
             VsMakerDatabase.RomData.GameDirectories = directories;
             Console.WriteLine("Setting up NARC directories | Success");
-
         }
 
         public int SetTrainerNameMax(int trainerNameOffset)

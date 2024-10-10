@@ -158,6 +158,13 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         Task<List<TrainerPartyData>> GetTrainersPartyDataAsync(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily);
 
+     /// <summary>
+     /// 
+     /// </summary>
+     /// <param name="filePath"></param>
+     /// <returns></returns>
+        (bool Success, string ErrorMessage) LoadInitialRomData(string filePath);
+
         /// <summary>
         ///
         /// </summary>

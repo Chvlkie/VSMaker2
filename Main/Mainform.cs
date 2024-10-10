@@ -11,6 +11,7 @@ using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
 using VsMaker2Core.Methods.EventFile;
 using VsMaker2Core.Methods.NdsImages;
+using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -43,9 +44,9 @@ namespace Main
 
         #endregion Methods
 
-        private bool inhibitTabChange = false;
+        private bool inhibitTabChange;
         private bool isLoadingData;
-        private bool loadingError = false;
+        private bool loadingError;
         private MainEditorModel mainEditorModel;
         private bool romLoaded;
 
@@ -56,7 +57,7 @@ namespace Main
             {
                 Interval = debounceDelay
             };
-            filterTimer.Tick += FilterTimer_Tick;
+            filterTimer.Tick += FilterTimer_Tick!;
 
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
             romLoaded = false;
@@ -66,245 +67,275 @@ namespace Main
             Text = $"VS Maker 2 - v{appVersion}";
         }
 
-        private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || UnsavedBattleMessageChanges;
+        private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || unsavedBattleMessageChanges;
 
-        public async void BeginSaveRomChanges(IProgress<int> progress, string filePath)
+        public async Task BeginSaveRomChangesAsync(IProgress<int> progress, string filePath)
         {
-            int count = 0;
-            int increment = 100 / VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories.Count;
-
-            foreach (var kvp in VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories)
+            try
             {
-                DirectoryInfo di = new(kvp.Value.unpackedDirectory);
-                if (di.Exists)
-                {
-                    Narc.FromFolder(kvp.Value.unpackedDirectory).Save(kvp.Value.packedDirectory);
-                }
-                progress?.Report(count += increment);
-            }
+                int count = 0;
+                int totalDirectories = VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories.Count;
+                int increment = totalDirectories > 0 ? 100 / totalDirectories : 0;
 
-            HandleArm9Compression(progress!);
-            await HandleOverlayCompressionAsync(progress!);
-            await romFileMethods.RepackRomAsync(filePath);
-            progress?.Report(100);
-            MessageBox.Show("ROM File saved to " + filePath, "Success!");
+                foreach (var kvp in VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories)
+                {
+                    DirectoryInfo di = new(kvp.Value.unpackedDirectory);
+                    if (di.Exists)
+                    {
+                        Narc.FromFolder(kvp.Value.unpackedDirectory).Save(kvp.Value.packedDirectory);
+                    }
+
+                    count += increment;
+                    progress?.Report(count);
+                }
+
+                HandleArm9Compression(progress!);
+                await HandleOverlayCompressionAsync(progress!);
+
+                await romFileMethods.RepackRomAsync(filePath);
+
+                progress?.Report(100);
+
+                MessageBox.Show("ROM File saved to " + filePath, "Success!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving ROM file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public async Task BeginUnpackNarcsAsync(IProgress<int> progress)
         {
-            var narcs = GameFamilyNarcs.GetGameFamilyNarcs(RomFile.GameFamily);
-
-            var (success, exception) = await romFileMethods.UnpackNarcsAsync(narcs, progress);
-            if (!success)
+            try
             {
-                MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var narcs = GameFamilyNarcs.GetGameFamilyNarcs(RomFile.GameFamily);
+
+                var (success, exception) = await romFileMethods.UnpackNarcsAsync(narcs, progress);
+
+                if (!success)
+                {
+                    MessageBox.Show(exception, "Unable to Unpack NARCs", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    loadingError = true;
+                    CloseProject();
+                }
+                else
+                {
+                    loadingError = false;
+                    progress?.Report(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unexpected error during NARC unpacking: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 loadingError = true;
                 CloseProject();
             }
-            else
-            {
-                loadingError = false;
-            }
-            progress?.Report(100);
-            return;
         }
 
         public async Task BeginUnpackRomDataAsync()
         {
-            var (Success, ExceptionMessage) = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, RomFile.FileName);
-            if (!Success)
+            try
             {
-                MessageBox.Show($"{ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var (Success, ExceptionMessage) = await romFileMethods.ExtractRomContentsAsync(RomFile.WorkingDirectory, RomFile.FileName);
+
+                if (!Success)
+                {
+                    MessageBox.Show($"{ExceptionMessage}", "Unable to Extract ROM Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    loadingError = true;
+                    CloseProject();
+                }
+                else
+                {
+                    loadingError = false;
+                    romLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Unexpected error during ROM extraction: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 loadingError = true;
                 CloseProject();
             }
-            else
-            {
-                loadingError = false;
-            }
-            romLoaded = true;
-            return;
         }
 
         public static void FilterListBox(ListBox listBox, string filter, List<string> unfiltered)
         {
             listBox.BeginUpdate();
-            var filteredList = unfiltered
-                .Where(item => item.Contains(filter, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+
+            var filteredList = string.IsNullOrEmpty(filter)
+                ? unfiltered
+                : unfiltered.Where(item => item.Contains(filter, StringComparison.OrdinalIgnoreCase));
 
             listBox.Items.Clear();
-            listBox.Items.AddRange([.. filteredList]);
+            listBox.Items.AddRange(filteredList.ToArray());
+
             listBox.EndUpdate();
         }
 
-        public async void GetInitialData(IProgress<int>? progress = null)
+        public async Task GetInitialDataAsync(IProgress<int>? progress = null)
         {
-            isLoadingData = true;
-            int progressCount = 0;
-            const int increment = 100 / 11;
-
-            mainEditorModel.PokemonSpecies = await romFileMethods.GetSpeciesAsync();
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(RomFile.TrainerNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(RomFile.ClassNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(RomFile.ClassDescriptionMessageNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.Trainers = trainerEditorMethods.GetTrainers(mainEditorModel.TrainerNames);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(RomFile.PokemonNamesTextNumber);
-            mainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(mainEditorModel.PokemonNamesFull);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(RomFile.MoveNameTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(RomFile.AbilityNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(RomFile.ItemNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            mainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            isLoadingData = false;
-            progress?.Report(100);
-        }
-
-        public void ImportBattleMessageCsv()
-        {
-            var confirmImport = MessageBox.Show("Importing a CSV will overwrite existing data.\n\nAre you sure?", "Import CSV", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirmImport == DialogResult.Yes)
+            try
             {
-                var importFile = new OpenFileDialog
-                {
-                    Filter = "CSV files (*.csv)|*.csv",
-                    Title = "Open CSV File"
-                };
+                isLoadingData = true;
 
-                if (importFile.ShowDialog(this) != DialogResult.OK)
+                const int totalSteps = 11;
+                int progressCount = 0;
+                const int increment = 100 / totalSteps;
+
+                void ReportProgress()
                 {
-                    return;
+                    progressCount += increment;
+                    progress?.Report(progressCount);
                 }
-                OpenLoadingDialog(LoadType.ImportTextTable, importFile.FileName);
+
+                mainEditorModel.PokemonSpecies = await romFileMethods.GetSpeciesAsync();
+                ReportProgress();
+
+                mainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(RomFile.TrainerNamesTextNumber);
+                ReportProgress();
+
+                mainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(RomFile.ClassNamesTextNumber);
+                ReportProgress();
+
+                mainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(RomFile.ClassDescriptionMessageNumber);
+                ReportProgress();
+
+                mainEditorModel.Trainers = trainerEditorMethods.GetTrainers(mainEditorModel.TrainerNames);
+                ReportProgress();
+
+                mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
+                ReportProgress();
+
+                mainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(RomFile.PokemonNamesTextNumber);
+                mainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(mainEditorModel.PokemonNamesFull);
+                ReportProgress();
+
+                mainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(RomFile.MoveNameTextNumber);
+                ReportProgress();
+
+                mainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(RomFile.AbilityNamesTextNumber);
+                ReportProgress();
+
+                mainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(RomFile.ItemNamesTextNumber);
+                ReportProgress();
+
+                mainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                ReportProgress();
+
+                progress?.Report(100);
             }
-        }
-
-        public async void LoadRomData(IProgress<int> progress)
-        {
-            isLoadingData = true;
-            int progressCount = 0;
-            const int increment = 100 / 12;
-
-            RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.EventFileData = eventFileMethods.GetEventFiles();
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(RomFile.TrainerNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.TrainersData = await romFileMethods.GetTrainersDataAsync(RomFile.TotalNumberOfTrainers);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(RomFile.TrainerNameMaxByteOffset);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(RomFile.ClassNamesTextNumber);
-            progressCount += increment;
-            progress?.Report(progressCount);
-            RomFile.Arm9Expanded = RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
-            if (RomFile.Arm9Expanded)
+            catch (Exception ex)
             {
-                bool prizeMoneyExpanded = await RomFile.CheckForPrizeMoneyExpansionAsync();
-                RomFile.PrizeMoneyExpanded = prizeMoneyExpanded;
-                RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
-                RomFile.EyeContactExpanded = RomFile.CheckForEyeContactExpansion();
+                MessageBox.Show($"Error loading initial data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                progress?.Report(0);
             }
-            RomFile.ClassGenderData = RomFile.IsNotDiamondPearl ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress) : [];
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();
-            progressCount += increment;
-            progress?.Report(progressCount);
-
-            isLoadingData = false;
-            progress?.Report(100);
+            finally
+            {
+                isLoadingData = false;
+            }
         }
 
-        public void RefreshTrainerClasses() => mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
+        public async Task LoadRomDataAsync(IProgress<int> progress)
+        {
+            try
+            {
+                isLoadingData = true;
+                int progressCount = 0;
+                const int totalSteps = 12;
+                const int increment = 100 / totalSteps;
+
+                void ReportProgress()
+                {
+                    progressCount += increment;
+                    progress?.Report(progressCount);
+                }
+
+                RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
+                ReportProgress();
+
+                RomFile.EventFileData = eventFileMethods.GetEventFiles();
+                ReportProgress();
+
+                RomFile.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(RomFile.TrainerNamesTextNumber);
+                ReportProgress();
+
+                RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
+                ReportProgress();
+
+                RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
+                ReportProgress();
+
+                RomFile.TrainersData = await romFileMethods.GetTrainersDataAsync(RomFile.TotalNumberOfTrainers);
+                ReportProgress();
+
+                RomFile.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
+                ReportProgress();
+
+                RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(RomFile.TrainerNameMaxByteOffset);
+                ReportProgress();
+
+                RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(RomFile.ClassNamesTextNumber);
+                ReportProgress();
+
+                RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
+                if (RomFile.Arm9Expanded)
+                {
+                    RomFile.PrizeMoneyExpanded = await RomFile.CheckForPrizeMoneyExpansionAsync();
+                    RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
+                    RomFile.EyeContactExpanded = RomFile.CheckForEyeContactExpansion();
+                }
+
+                RomFile.ClassGenderData = RomFile.IsNotDiamondPearl
+                    ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress)
+                    : [];
+                ReportProgress();
+
+                RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                ReportProgress();
+
+                RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();
+                ReportProgress();
+
+                isLoadingData = false;
+                progress?.Report(100);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading ROM data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                isLoadingData = false;
+                progress?.Report(0);
+            }
+        }
 
         [DllImport("kernel32.dll", SetLastError = true)]
         private static extern bool AllocConsole();
 
-        private static void CreateDirectory(string workingDirectory)
+        private static bool CreateDirectory(string workingDirectory)
         {
-            if (!Directory.Exists(workingDirectory))
+            try
             {
-                Console.WriteLine("Creating directory " + workingDirectory);
-                Directory.CreateDirectory(workingDirectory);
-                Console.WriteLine("Created directory " + workingDirectory + " | Success");
+                if (!Directory.Exists(workingDirectory))
+                {
+                    Console.WriteLine($"Creating directory {workingDirectory}");
+                    Directory.CreateDirectory(workingDirectory);
+                    Console.WriteLine($"Created directory {workingDirectory} | Success");
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("Directory already exists.\n\nPlease select a different location or delete the existing directory.",
+                        "Directory Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Console.WriteLine($"Directory {workingDirectory} already exists.");
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Unable to extract contents.\n\n" +
-                    "Contents folder may already exist", "Unable to Extract ROM", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Console.WriteLine("Unable to create directory " + workingDirectory);
+                MessageBox.Show($"Unable to create directory {workingDirectory}.\n\nError: {ex.Message}",
+                    "Error Creating Directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"Error creating directory {workingDirectory}: {ex.Message}");
+                return false;
             }
-        }
-
-        private static (byte EuropeByte, string GameCode) LoadInitialRomData(string filePath)
-        {
-            using EasyReader reader = new(filePath, 0xC);
-            string gameCode = Encoding.UTF8.GetString(reader.ReadBytes(4));
-            reader.BaseStream.Position = 0x1E;
-            byte europeByte = reader.ReadByte();
-            return (europeByte, gameCode);
         }
 
         private void BeginExtractRomData() => OpenLoadingDialog(LoadType.UnpackNarcs);
@@ -537,39 +568,42 @@ namespace Main
 
             if (UnsavedChanges)
             {
-                var saveChanges = MessageBox.Show("You have unsaved changes.\n\n" +
-                        "You will lose these changes if you close the project.\n" +
-                        "Do you still want to close?", "Unsaved Changes", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
-                if (saveChanges == DialogResult.Yes)
+                var saveChanges = MessageBox.Show(
+                    "You have unsaved changes.\n\n" +
+                    "You will lose these changes if you close the project.\n" +
+                    "Do you still want to close?",
+                    "Unsaved Changes",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Warning);
+
+                if (saveChanges == DialogResult.Cancel)
                 {
-                    CloseProject();
-                    romLoaded = ReadRomExtractedFolder(filePath);
-                    Config.AddToRecentItems(filePath);
-                    Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                    if (romLoaded)
-                    {
-                        BeginExtractRomData();
-                        InitializeTrainerEditor();
-                        InitializeClassEditor();
-                        EndOpenRom();
-                    }
+                    // User cancelled the action, stop further processing
+                    isLoadingData = false;
+                    return;
                 }
             }
-            else
-            {
-                CloseProject();
-                romLoaded = ReadRomExtractedFolder(filePath);
-                Config.AddToRecentItems(filePath);
-                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                if (romLoaded)
-                {
-                    BeginExtractRomData();
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                    EndOpenRom();
-                }
-            }
+
+            CloseProjectAndLoadRom(filePath);
+
             isLoadingData = false;
+        }
+
+        private void CloseProjectAndLoadRom(string filePath)
+        {
+            CloseProject();
+            romLoaded = ReadRomExtractedFolder(filePath);
+
+            Config.AddToRecentItems(filePath);
+            Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+
+            if (romLoaded)
+            {
+                BeginExtractRomData();
+                InitializeTrainerEditor();
+                InitializeClassEditor();
+                EndOpenRom();
+            }
         }
 
         private async Task OpenRomAsync()
@@ -595,7 +629,7 @@ namespace Main
         {
             var settingsForm = new Settings();
 
-            settingsForm.ClearRecentItemsRequested += SettingsForm_ClearRecentItemsRequested;
+            settingsForm.ClearRecentItemsRequested += SettingsForm_ClearRecentItemsRequested!;
 
             settingsForm.ShowDialog();
         }
@@ -629,27 +663,50 @@ namespace Main
 
         private bool ReadRomFile(string workingDirectory, string fileName)
         {
-            Console.WriteLine("Reading ROM File...");
-
-            isLoadingData = true;
-            Console.WriteLine("Load initial ROM Data");
-            var (EuropeByte, GameCode) = LoadInitialRomData(fileName);
-            Console.WriteLine("Load initial ROM Data | Success");
-            RomFile.SetupRomFile(GameCode, fileName, workingDirectory, EuropeByte);
-            if (RomFile.GameVersion == GameVersion.Unknown)
+            try
             {
-                MessageBox.Show("The ROM file you have selected is not supported by VSMaker 2." +
-                    "\n\nVSMaker 2 currently only support Pokémon Diamond, Pearl, Platinum, HeartGold or Soul Silver version."
-                    , "Unsupported ROM",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.WriteLine("Unable to read ROM File");
+                Console.WriteLine("Reading ROM File...");
 
+                isLoadingData = true;
+                Console.WriteLine("Load initial ROM Data");
+
+                var (Success, ErrorMessage) = romFileMethods.LoadInitialRomData(fileName);
+                if (!Success)
+                {
+                    MessageBox.Show(ErrorMessage, "Error Reading ROM File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.WriteLine($"Error: {ErrorMessage}");
+                    return false;
+                }
+
+                Console.WriteLine("Load initial ROM Data | Success");
+
+                RomFile.SetupRomFile(fileName, workingDirectory);
+
+                if (RomFile.GameVersion == GameVersion.Unknown)
+                {
+                    const string errorMessage = "The ROM file you have selected is not supported by VSMaker 2." +
+                                          "\n\nVSMaker 2 currently only supports Pokémon Diamond, Pearl, Platinum, " +
+                                          "HeartGold or SoulSilver versions.";
+                    MessageBox.Show(errorMessage, "Unsupported ROM", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.WriteLine("ROM version is unsupported.");
+                    return false;
+                }
+
+                romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
+
+                Console.WriteLine("Reading ROM File | Success");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine($"Error: {ex.Message}");
                 return false;
             }
-
-            romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
-            Console.WriteLine("Reading ROM File | Success");
-            return true;
+            finally
+            {
+                isLoadingData = false;
+            }
         }
 
         private void SaveRomChanges()
@@ -686,17 +743,7 @@ namespace Main
 
             if (selectFolder.ShowDialog() == DialogResult.OK)
             {
-                CloseProject();
-                romLoaded = ReadRomExtractedFolder(selectFolder.SelectedPath);
-                Config.AddToRecentItems(selectFolder.SelectedPath);
-                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                if (romLoaded)
-                {
-                    BeginExtractRomData();
-                    InitializeTrainerEditor();
-                    InitializeClassEditor();
-                    EndOpenRom();
-                }
+                CloseProjectAndLoadRom(selectFolder.SelectedPath);
             }
         }
 
@@ -708,93 +755,102 @@ namespace Main
                 UseDescriptionForTitle = true,
             };
 
-            if (selectFolder.ShowDialog() == DialogResult.OK)
+            if (selectFolder.ShowDialog() != DialogResult.OK) return;
+
+            CloseProject();
+            string workingDirectory = GetWorkingDirectory(selectFolder.SelectedPath, fileName);
+            Config.AddToRecentItems(workingDirectory);
+            Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
+
+            if (HandleExistingDirectory(workingDirectory, fileName))
+            {
+                await HandleRomFileProcessingAsync(workingDirectory, fileName);
+            }
+        }
+
+        private static string GetWorkingDirectory(string selectedPath, string fileName)
+        {
+            return $"{selectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
+        }
+
+        private bool HandleExistingDirectory(string workingDirectory, string fileName)
+        {
+            if (!Directory.Exists(workingDirectory))
+            {
+                CreateDirectory(workingDirectory);
+                return true;
+            }
+
+            var directoryExists = MessageBox.Show(
+                "An extracted contents folder for this ROM has been found.\n\nDo you wish to open this folder?",
+                "Extracted ROM Data exists",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (directoryExists == DialogResult.Yes)
             {
                 CloseProject();
-                Console.WriteLine("Opening ROM file " + fileName);
-                string workingDirectory = $"{selectFolder.SelectedPath}\\{Path.GetFileNameWithoutExtension(fileName)}{Common.VsMakerContentsFolder}\\";
-                Config.AddToRecentItems(workingDirectory);
-                Config.UpdateRecentItemsMenu(menu_File_OpenRecent, OpenRecentFile);
-                if (Directory.Exists(workingDirectory))
-                {
-                    var directoryExists = MessageBox.Show("An extracted contents folder for this ROM has been found." +
-                        "\n\nDo you wish to open this folder?", "Extracted ROM Data exists", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                Console.WriteLine("Opening existing contents folder " + workingDirectory);
+                romLoaded = ReadRomExtractedFolder(workingDirectory);
+                return false;
+            }
 
-                    if (directoryExists == DialogResult.Yes)
-                    {
-                        CloseProject();
-                        Console.WriteLine("Opening existing contents folder " + workingDirectory);
-                        romLoaded = ReadRomExtractedFolder(workingDirectory);
-                    }
-                    else
-                    {
-                        var extractContentsAgain = MessageBox.Show("ROM Data will be re-extracted.\nThis will delete all existing data in the old folder." +
-                            "\n\nDo you wish to proceed?", "Re-Extract ROM Data", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var extractContentsAgain = MessageBox.Show(
+                "ROM Data will be re-extracted.\nThis will delete all existing data in the old folder.\n\nDo you wish to proceed?",
+                "Re-Extract ROM Data",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                        if (extractContentsAgain == DialogResult.Yes)
-                        {
-                            Console.WriteLine("Deleting existing ROM contents folder " + workingDirectory);
-                            Directory.Delete(workingDirectory, true);
-                            Console.WriteLine("Deleted folder " + workingDirectory);
-                            CreateDirectory(workingDirectory);
-                        }
-                        else
-                        {
-                            await SelectWorkingFolderDirectoryAsync(fileName);
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    CreateDirectory(workingDirectory);
-                }
+            if (extractContentsAgain == DialogResult.Yes)
+            {
+                Console.WriteLine("Deleting existing ROM contents folder " + workingDirectory);
+                Directory.Delete(workingDirectory, true);
+                Console.WriteLine("Deleted folder " + workingDirectory);
+                CreateDirectory(workingDirectory);
+            }
+            else
+            {
+                _ = SelectWorkingFolderDirectoryAsync(fileName);
+                return false;
+            }
 
-                if (Directory.Exists(workingDirectory))
-                {
-                    if (ReadRomFile(workingDirectory, fileName))
-                    {
-                        OpenLoadingDialog(LoadType.UnpackRom);
+            return true;
+        }
 
-                        if (romLoaded && !loadingError)
-                        {
-                            Arm9.Arm9EditSize(-12);
+        private async Task HandleRomFileProcessingAsync(string workingDirectory, string fileName)
+        {
+            if (!ReadRomFile(workingDirectory, fileName))
+            {
+                CloseProject();
+                return;
+            }
 
-                            // Check for compression mark and await the asynchronous decompression
-                            if (Arm9.CheckCompressionMark(RomFile.GameFamily))
-                            {
-                                // Await the Arm9DecompressAsync method
-                                if (!await Arm9.Arm9DecompressAsync(RomFile.Arm9Path))
-                                {
-                                    MessageBox.Show("Unable to decompress Arm9");
-                                    Console.WriteLine("Unable to decompress Arm9");
-                                    return;
-                                }
-                            }
+            OpenLoadingDialog(LoadType.UnpackRom);
 
-                            BeginExtractRomData();
-                        }
+            if (!romLoaded || loadingError)
+            {
+                CloseProject();
+                return;
+            }
 
-                        if (!loadingError)
-                        {
-                            InitializeTrainerEditor();
-                            InitializeClassEditor();
-                            EndOpenRom();
-                        }
-                        else
-                        {
-                            CloseProject();
-                        }
-                    }
-                    else
-                    {
-                        CloseProject();
-                    }
-                }
-                else
-                {
-                    CloseProject();
-                }
+            Arm9.Arm9EditSize(-12);
+
+            if (Arm9.CheckCompressionMark(RomFile.GameFamily) && !await Arm9.Arm9DecompressAsync(RomFile.Arm9Path))
+            {
+                MessageBox.Show("Unable to decompress Arm9");
+                Console.WriteLine("Unable to decompress Arm9");
+                return;
+            }
+
+            BeginExtractRomData();
+
+            if (!loadingError)
+            {
+                InitializeTrainerEditor();
+                InitializeClassEditor();
+                EndOpenRom();
+            }
+            else
+            {
+                CloseProject();
             }
         }
 
@@ -830,14 +886,14 @@ namespace Main
                 return;
             }
 
-            if (UnsavedBattleMessageChanges && !ConfirmUnsavedChanges())
+            if (unsavedBattleMessageChanges && !ConfirmUnsavedChanges())
             {
                 inhibitTabChange = true;
                 main_MainTab.SelectedTab = main_MainTable_BattleMessageTab;
             }
             else
             {
-                HandleTabChange(main_MainTab.SelectedTab);
+                HandleTabChange(main_MainTab.SelectedTab!);
             }
         }
 

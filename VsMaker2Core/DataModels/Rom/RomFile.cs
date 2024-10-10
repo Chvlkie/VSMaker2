@@ -138,7 +138,7 @@ namespace VsMaker2Core.DataModels
             }
         }
 
-        public static void SetupRomFile(string romId, string romName, string workingDirectory, byte europeByte, bool suffix = true)
+        public static void SetupRomFile(string romName, string workingDirectory, bool suffix = true)
         {
             Console.WriteLine("Setup Rom File");
             ExtractedFolderSuffix = suffix ? Common.VsMakerContentsFolder : "";
@@ -146,7 +146,7 @@ namespace VsMaker2Core.DataModels
 
             try
             {
-                GameVersion = VsMakerDatabase.RomData.GameVersions[romId];
+                GameVersion = VsMakerDatabase.RomData.GameVersions[GameCode];
             }
             catch (KeyNotFoundException)
             {
@@ -154,9 +154,7 @@ namespace VsMaker2Core.DataModels
                 Console.WriteLine("Rom not supported");
             }
 
-            GameCode = romId;
             FileName = romName;
-            EuropeByte = europeByte;
             Console.WriteLine("Setup Rom File | Success");
 
         }

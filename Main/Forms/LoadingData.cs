@@ -34,7 +34,7 @@ namespace Main.Forms
         {
             await Task.Delay(500);
             var progress = new Progress<int>(value => progressBar.Value = value);
-            await Task.Run(() => mainForm.LoadRomData(progress));
+           await mainForm.LoadRomDataAsync(progress);
             await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
@@ -44,7 +44,7 @@ namespace Main.Forms
         {
             await Task.Delay(500);
             var progress = new Progress<int>(value => progressBar.Value = value);
-            await Task.Run(() => mainForm.GetInitialData(progress));
+            await mainForm.GetInitialDataAsync(progress);
             await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();
@@ -90,8 +90,8 @@ namespace Main.Forms
         public async Task SaveRom()
         {
             await Task.Delay(500);
-            var progress = new Progress<int>(value => { progressBar.Value = value; });
-            await Task.Run(() => mainForm.BeginSaveRomChanges(progress, FilePath));
+            var progress = new Progress<int>(value => progressBar.Value = value);
+            await mainForm.BeginSaveRomChangesAsync(progress, FilePath);
             await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();

@@ -8,22 +8,23 @@ namespace Main
     // BATTLE MESSAGES EDITOR
     public partial class Mainform : Form
     {
-        private readonly string Seperator = @"\r";
+        private readonly string seperator = @"\r";
         private bool isUndoRedo = false;
-        private Stack<string> redoStack = new Stack<string>();
-        private Stack<string> undoStack = new Stack<string>();
-        private bool UnsavedBattleMessageChanges;
+        private readonly Stack<string> redoStack = new();
+        private readonly Stack<string> undoStack = new();
+        private bool unsavedBattleMessageChanges;
         public int BattleMessageCount => battleMessage_MessageTableDataGrid.RowCount;
 
         public async Task BeginExportBattleMessagesAsync(IProgress<int> progress, string filePath)
         {
+            Console.WriteLine("Exporting battle messages...");
             try
             {
                 await using StreamWriter outputFile = new(filePath, false, new UTF8Encoding(true));
                 var export = new StringBuilder();
                 var headers = battleMessage_MessageTableDataGrid.Columns.Cast<DataGridViewColumn>();
 
-                export.AppendLine(string.Join(",", headers.Select(column => $"\"{column.HeaderText}\"")));
+                export.AppendJoin(",", headers.Select(column => $"\"{column.HeaderText}\"")).AppendLine();
                 await outputFile.WriteLineAsync(export.ToString());
 
                 export.Clear();
@@ -32,16 +33,15 @@ namespace Main
                 {
                     DataGridViewRow row = battleMessage_MessageTableDataGrid.Rows[i];
                     string messageId = row.Index.ToString();
-                    string trainerId = Trainer.ListNameToTrainerId(row.Cells[1].Value.ToString()).ToString();
-                    string messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(row.Cells[2].Value.ToString()).ToString();
-                    string messageText = row.Cells[3].Value.ToString();
+                    string trainerId = Trainer.ListNameToTrainerId(row.Cells[1].Value.ToString()!).ToString();
+                    string messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(row.Cells[2].Value.ToString()!).ToString();
+                    string messageText = row.Cells[3].Value.ToString()!;
 
                     export.AppendLine($@"""{messageId}"",""{trainerId}"",""{messageTriggerId}"",""{messageText}""");
 
                     await outputFile.WriteLineAsync(export.ToString());
                     export.Clear();
 
-                    // Report progress
                     progress?.Report(i + 1);
 
                     await Task.Yield();
@@ -52,6 +52,8 @@ namespace Main
                 await Task.Delay(250);
 
                 MessageBox.Show("Battle Message exported successfully.", "Success!");
+                Console.WriteLine($"Exported {BattleMessageCount} battle messages.");
+                Console.WriteLine("Exporting battle messages | Success");
             }
             catch (Exception ex)
             {
@@ -61,6 +63,7 @@ namespace Main
 
         public async Task BeginImportBattleMessagesAsync(string filePath)
         {
+            Console.WriteLine("Importing battle messages...");
             try
             {
                 var newMessages = new List<BattleMessage>();
@@ -77,10 +80,11 @@ namespace Main
 
                     while (!parser.EndOfData)
                     {
-                        string[] fields = parser.ReadFields();
+                        string[]? fields = parser.ReadFields();
 
-                        if (fields.Length != 4)
+                        if (fields!.Length != 4)
                         {
+                            Console.WriteLine("Unable to import | Incorrect number of columns");
                             throw new Exception("Unexpected number of columns");
                         }
 
@@ -113,15 +117,14 @@ namespace Main
                         MessageBox.Show("Battle messages imported successfully!", "Success");
                     }
                 });
+                Console.WriteLine($"Imported battle messages {newMessages.Count} battle messages.");
+                Console.WriteLine("Import battle messages | Success");
             }
             catch (Exception ex)
             {
                 if (InvokeRequired)
                 {
-                    Invoke(new Action(() =>
-                    {
-                        MessageBox.Show("An error occurred while reading the file:\n" + ex.Message, "Unable to Import CSV", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }));
+                    Invoke(new Action(() => MessageBox.Show("An error occurred while reading the file:\n" + ex.Message, "Unable to Import CSV", MessageBoxButtons.OK, MessageBoxIcon.Error)));
                 }
                 else
                 {
@@ -133,46 +136,47 @@ namespace Main
         public void BeginSaveBattleMessages(IProgress<int> progress)
         {
             var messageTriggers = MessageTrigger.MessageTriggers.ToDictionary(mt => mt.ListName, mt => mt.MessageTriggerId);
-            List<BattleMessage> messageData = new List<BattleMessage>(battleMessage_MessageTableDataGrid.Rows.Count);
+            List<BattleMessage> messageData = new(battleMessage_MessageTableDataGrid.Rows.Count);
 
             foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
             {
-                int trainerId = int.Parse(row.Cells[1].Value.ToString().Substring(1, 4));
-                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()];
-                int messageId = int.Parse(row.Cells[0].Value.ToString());
-                string messageText = row.Cells[3].Value.ToString();
+                int trainerId = int.Parse(row.Cells[1].Value.ToString()!.Substring(1, 4));
+                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()!];
+                int messageId = int.Parse(row.Cells[0].Value.ToString()!);
+                string messageText = row.Cells[3].Value.ToString()!;
 
                 messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
             }
 
-            messageData = messageData.OrderBy(x => x.MessageId).ToList();
+            messageData = [.. messageData.OrderBy(x => x.MessageId)];
             SaveBattleMessages(messageData, progress);
         }
 
         public void BeginSortRepointTrainerText(IProgress<int> progress, int max)
         {
             var messageTriggers = MessageTrigger.MessageTriggers.ToDictionary(mt => mt.ListName, mt => mt.MessageTriggerId);
-            List<BattleMessage> messageData = new List<BattleMessage>(battleMessage_MessageTableDataGrid.Rows.Count);
+            List<BattleMessage> messageData = new(battleMessage_MessageTableDataGrid.Rows.Count);
 
             foreach (DataGridViewRow row in battleMessage_MessageTableDataGrid.Rows)
             {
-                int trainerId = int.Parse(row.Cells[1].Value.ToString().Substring(1, 4));
-                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()];
-                int messageId = int.Parse(row.Cells[0].Value.ToString());
-                string messageText = row.Cells[3].Value.ToString();
+                int trainerId = int.Parse(row.Cells[1].Value.ToString()!.Substring(1, 4));
+                int messageTriggerId = messageTriggers[row.Cells[2].Value.ToString()!];
+                int messageId = int.Parse(row.Cells[0].Value.ToString()!);
+                string messageText = row.Cells[3].Value.ToString()!;
 
                 messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
             }
-            messageData = messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId).ToList();
+            messageData = [.. messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId)];
             SaveBattleMessages(messageData, progress);
             RepointBattleMessageOffsets(messageData, progress);
             progress?.Report(max);
         }
+
         private static string? ReadLine(string text, int lineNumber)
         {
             var reader = new StringReader(text);
 
-            string line;
+            string? line;
             int currentLineNumber = 0;
 
             do
@@ -185,7 +189,7 @@ namespace Main
             return (currentLineNumber == lineNumber) ? line : string.Empty;
         }
 
-        private void AppendBattleMessage(RichTextBox messageText, string appendText)
+        private static void AppendBattleMessage(RichTextBox messageText, string appendText)
         {
             int selectionIndex = messageText.SelectionStart;
             messageText.Text = messageText.Text.Insert(selectionIndex, appendText);
@@ -269,25 +273,20 @@ namespace Main
 
         private void battleMessages_MessageTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!isLoadingData && !isUndoRedo) // Skip if undo/redo is in progress
+            if (!isLoadingData && !isUndoRedo)
             {
-                // Push the current text to the undo stack and clear the redo stack
                 undoStack.Push(battleMessages_MessageTextBox.Text);
                 redoStack.Clear();
 
-                // Update Undo/Redo button states
                 UpdateUndoRedoButtons();
 
-                // Compare the text to the DataGridView value and mark it as edited if different
                 if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
                 {
                     EditedBattleMessage(true);
                 }
 
-                // Update the DataGridView with the new text
                 battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
 
-                // Update text preview
                 UpdateTextPreview(battleMessages_MessageTextBox.Text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
             }
         }
@@ -335,22 +334,19 @@ namespace Main
         {
             isLoadingData = true;
             battleMessage_MessageTableDataGrid.EndEdit();
-            var verify = VerifyBattleMessageTable();
-            if (!verify.Valid)
+            var (Valid, Row) = VerifyBattleMessageTable();
+            if (!Valid)
             {
-                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + verify.Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = verify.Row;
+                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = Row;
                 battleMessage_MessageTableDataGrid.ClearSelection();
-                battleMessage_MessageTableDataGrid.Rows[verify.Row].Selected = true;
+                battleMessage_MessageTableDataGrid.Rows[Row].Selected = true;
             }
             else
             {
                 var dialogResult = MessageBox.Show("Save all changes to Battle Messsage Table?\nThis might take some time...", "Save Changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                if (dialogResult == DialogResult.No)
-                {
-                }
-                else if (dialogResult == DialogResult.Yes)
+                if (dialogResult != DialogResult.No && dialogResult == DialogResult.Yes)
                 {
                     OpenLoadingDialog(LoadType.SaveTrainerTextTable);
                     RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
@@ -373,17 +369,19 @@ namespace Main
             isLoadingData = true;
 
             battleMessage_MessageTableDataGrid.EndEdit();
-            var verify = VerifyBattleMessageTable();
-            if (!verify.Valid)
+            var (Valid, Row) = VerifyBattleMessageTable();
+            if (!Valid)
             {
-                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + verify.Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = verify.Row;
+                MessageBox.Show("You must only use each Message Trigger once per Trainer.\n\nPlease review entry " + Row, "Unable to Save Changes", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                battleMessage_MessageTableDataGrid.FirstDisplayedScrollingRowIndex = Row;
                 battleMessage_MessageTableDataGrid.ClearSelection();
-                battleMessage_MessageTableDataGrid.Rows[verify.Row].Selected = true;
+                battleMessage_MessageTableDataGrid.Rows[Row].Selected = true;
             }
             else
             {
-                var dialogResult = MessageBox.Show("This will sort the Battle Message table to group Trainers.\n\nThe Battle Messagex lookup table will also be sorted.\nThis allows for more efficient loading in-game.\n\nAll changes will be saved.", "Sort and Repoint", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                var dialogResult = MessageBox.Show("This will sort the Battle Message table to group Trainers." +
+                    "\n\nThe Battle Messagex lookup table will also be sorted.\nThis allows for more efficient loading in-game." +
+                    "\n\nAll changes will be saved.", "Sort and Repoint", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
                 if (dialogResult == DialogResult.OK)
                 {
@@ -408,27 +406,52 @@ namespace Main
             }
         }
 
+        public void ImportBattleMessageCsv()
+        {
+            var confirmImport = MessageBox.Show(
+                "Importing a CSV will overwrite existing data.\n\nAre you sure?",
+                "Import CSV",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirmImport != DialogResult.Yes) return;
+
+            using OpenFileDialog importFile = new()
+            {
+                Filter = "CSV files (*.csv)|*.csv",
+                Title = "Open CSV File"
+            };
+
+            if (importFile.ShowDialog(this) == DialogResult.OK)
+            {
+                try
+                {
+                    OpenLoadingDialog(LoadType.ImportTextTable, importFile.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error importing CSV file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+
         private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
         {
-            if (undoStack.Count > 1) // Ensure there's something to undo
+            if (undoStack.Count > 1)
             {
-                // Set flag to indicate undo/redo is in progress
                 isUndoRedo = true;
 
-                // Push the current text to the redo stack
                 redoStack.Push(battleMessages_MessageTextBox.Text);
 
-                // Pop the current state from the undo stack and apply the last saved state
                 undoStack.Pop();
-                battleMessages_MessageTextBox.Text = undoStack.Peek(); // Apply the previous state
+                battleMessages_MessageTextBox.Text = undoStack.Peek();
 
-                // Update DataGridView and Preview
                 UpdateDataGridViewAndPreview(battleMessages_MessageTextBox.Text);
 
-                // Reset flag after undo is completed
                 isUndoRedo = false;
 
-                // Update buttons after undo
                 UpdateUndoRedoButtons();
             }
         }
@@ -442,12 +465,12 @@ namespace Main
             battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
         }
 
-        private async Task BeginPopulateBattleMessages()
+        private void BeginPopulateBattleMessages()
         {
             battleMessage_MessageTableDataGrid.AllowUserToAddRows = true;
             battleMessage_MessageTableDataGrid.Enabled = false;
 
-            await PopulateBattleMessages();
+            PopulateBattleMessages();
 
             battleMessage_MessageTableDataGrid.AllowUserToAddRows = false;
             battleMessage_MessageTableDataGrid.Enabled = true;
@@ -455,9 +478,9 @@ namespace Main
 
         private void EditedBattleMessage(bool hasChanges)
         {
-            UnsavedBattleMessageChanges = hasChanges;
-            main_MainTable_BattleMessageTab.Text = UnsavedBattleMessageChanges ? "Battle Messages *" : "Battle Messages";
-            battleMessages_UndoAllBtn.Enabled = UnsavedBattleMessageChanges;
+            unsavedBattleMessageChanges = hasChanges;
+            main_MainTable_BattleMessageTab.Text = unsavedBattleMessageChanges ? "Battle Messages *" : "Battle Messages";
+            battleMessages_UndoAllBtn.Enabled = unsavedBattleMessageChanges;
         }
 
         private void InitializeBattleMessageEditor()
@@ -478,7 +501,7 @@ namespace Main
             battleMessages_UndoMessageBtn.Enabled = false;
         }
 
-        private async void LoadBattleMessages() => await BeginPopulateBattleMessages();
+        private void LoadBattleMessages() => BeginPopulateBattleMessages();
 
         private void MessagePreviewNavigate(bool isNext, Button nextButton, Button backButton, Label previewText)
         {
@@ -504,41 +527,33 @@ namespace Main
             }
             else
             {
-                // If index is out of range, revert the index change
                 mainEditorModel.BattleMessageDisplayIndex = isNext ? mainEditorModel.BattleMessageDisplayIndex - 1 : mainEditorModel.BattleMessageDisplayIndex + 1;
             }
         }
 
-        private async Task PopulateBattleMessages()
+        private void PopulateBattleMessages()
         {
             string[] currentTrainers = mainEditorModel.Trainers.Select(x => x.ListName).ToArray();
             string[] messageTriggers = MessageTrigger.MessageTriggers.Select(x => x.ListName).ToArray();
 
-            // Suspend layout logic to prevent flickering
             battleMessage_MessageTableDataGrid.SuspendLayout();
 
-            // Clear existing rows if necessary
             battleMessage_MessageTableDataGrid.Rows.Clear();
 
-            // Use a loop to add the battle messages
             for (int i = 0; i < mainEditorModel.BattleMessages.Count; i++)
             {
-                // Access the current message data
                 int trainerId = mainEditorModel.BattleMessages[i].TrainerId - 1;
                 int messageTriggerIndex = mainEditorModel.BattleMessages[i].MessageTriggerId;
 
-                // Clone the row and set its values
                 DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
                 row.Cells[0].Value = i;
                 row.Cells[1] = new DataGridViewComboBoxCell { DataSource = currentTrainers, Value = currentTrainers[trainerId] };
                 row.Cells[2] = new DataGridViewComboBoxCell { DataSource = messageTriggers, Value = messageTriggers[messageTriggerIndex] };
                 row.Cells[3].Value = mainEditorModel.BattleMessages[i].MessageText;
 
-                // Use your ThreadSafeDataTable method to add the row
                 ThreadSafeDataTable(row);
             }
 
-            // Resume layout logic after all updates
             battleMessage_MessageTableDataGrid.ResumeLayout();
         }
 
@@ -562,10 +577,10 @@ namespace Main
 
                 offsets.Add((ushort)index);
             }
-            var writeOffsets = fileSystemMethods.WriteBattleMessageOffsetData(offsets, progress);
-            if (!writeOffsets.Success)
+            var (Success, ErrorMessage) = fileSystemMethods.WriteBattleMessageOffsetData(offsets, progress!);
+            if (!Success)
             {
-                MessageBox.Show(writeOffsets.ErrorMessage, "Unable to Save Battle Offset Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ErrorMessage, "Unable to Save Battle Offset Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             progress?.Report(100);
         }
@@ -573,10 +588,10 @@ namespace Main
         private void SaveBattleMessages(List<BattleMessage> messageData, IProgress<int> progress)
         {
             List<string> messageTexts = messageData.ConvertAll(x => x.MessageText);
-            var writeData = fileSystemMethods.WriteBattleMessageTableData(messageData, progress);
-            if (!writeData.Success)
+            var (Success, ErrorMessage) = fileSystemMethods.WriteBattleMessageTableData(messageData, progress);
+            if (!Success)
             {
-                MessageBox.Show(writeData.ErrorMessage, "Unable to Save Battle Message Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ErrorMessage, "Unable to Save Battle Message Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
@@ -663,7 +678,7 @@ namespace Main
             battleMessage = battleMessage.Replace("\\n", Environment.NewLine);
             battleMessage = battleMessage.Replace("\\f", Environment.NewLine);
 
-            foreach (var item in battleMessage.Split(new string[] { Seperator }, StringSplitOptions.None))
+            foreach (var item in battleMessage.Split(new string[] { seperator }, StringSplitOptions.None))
             {
                 int numLines = item.Split('\n').Length;
                 if (numLines >= 3 && !string.IsNullOrEmpty(ReadLine(item, 3)))
@@ -681,9 +696,9 @@ namespace Main
             }
 
             // Remove last item if blank line - is the case as trainer text formatted as ending with \n.
-            if (mainEditorModel.DisplayBattleMessageText.Count > 1 && string.IsNullOrEmpty(mainEditorModel.DisplayBattleMessageText.Last()))
+            if (mainEditorModel.DisplayBattleMessageText.Count > 1 && string.IsNullOrEmpty(mainEditorModel.DisplayBattleMessageText[^1]))
             {
-                mainEditorModel.DisplayBattleMessageText.Remove(mainEditorModel.DisplayBattleMessageText.Last());
+                mainEditorModel.DisplayBattleMessageText.Remove(mainEditorModel.DisplayBattleMessageText[^1]);
             }
             //  trainer_Message.Font = new Font(vsMakerFont.VsMakerFontCollection.Families[0], trainer_Message.Font.Size);
             previewText.Text = mainEditorModel.DisplayBattleMessageText[0];
@@ -708,16 +723,16 @@ namespace Main
                 {
                     var selectedMessageTrigger = battleMessage_MessageTableDataGrid.Rows[i].Cells[2].Value.ToString();
                     var selectedTrainer = battleMessage_MessageTableDataGrid.Rows[i].Cells[1].Value.ToString();
-                    int trainerId = int.Parse(selectedTrainer.Remove(0, 1).Remove(4));
+                    int trainerId = int.Parse(selectedTrainer!.Remove(0, 1).Remove(4));
                     if (trainerId == trainer.TrainerId)
                     {
-                        if (checkMessages.Contains(selectedMessageTrigger))
+                        if (checkMessages.Contains(selectedMessageTrigger!))
                         {
                             return (false, i);
                         }
                         else
                         {
-                            checkMessages.Add(selectedMessageTrigger);
+                            checkMessages.Add(selectedMessageTrigger!);
                         }
                     }
                 }

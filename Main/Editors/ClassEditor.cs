@@ -86,6 +86,19 @@ namespace Main
             }
         }
 
+        public void RefreshTrainerClasses()
+        {
+            try
+            {
+                mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
+
+                Console.WriteLine("Trainer classes refreshed successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error refreshing trainer classes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void class_ClearFilterBtn_Click(object sender, EventArgs e) => class_FilterTextBox.Text = "";
 
         private void class_DescriptionTextBox_TextChanged(object sender, EventArgs e)
