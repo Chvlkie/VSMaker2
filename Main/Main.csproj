@@ -9,12 +9,13 @@
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<Title>VS Maker 2</Title>
 		<AssemblyName>VsMaker2</AssemblyName>
-		<Version>0.2.0</Version>
-		<AssemblyVersion>0.0.2.0</AssemblyVersion>
-		<FileVersion>0.0.2.0</FileVersion>
-		<VersionPrefix>0.2.0</VersionPrefix>
+		<Version>0.9.0</Version>
+		<AssemblyVersion>0.9.0.0</AssemblyVersion>
+		<FileVersion>0.9.0.0</FileVersion>
+		<VersionPrefix>0.9.0</VersionPrefix>
 		<VersionSuffix>beta</VersionSuffix>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<ApplicationIcon>Resources\Icons\vs-maker-2.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,11 +36,17 @@
 		<None Remove="Resources\Icons\sort_ico.png" />
 		<None Remove="Resources\Icons\undo_ico.png" />
 		<None Remove="Resources\Icons\unpack_ico.png" />
+		<None Remove="Resources\Icons\vs-maker-2.ico" />
 		<None Remove="Tools\blz.exe" />
 		<None Remove="Tools\ndstool.exe" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Include="Resources\Icons\vs-maker-2.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Icons\vs-maker-2.ico" />
 	  <EmbeddedResource Include="Tools\blz.exe">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </EmbeddedResource>

@@ -1019,6 +1019,10 @@
             class_PrizeMoneyNum = new NumericUpDown();
             class_GenderComboBox = new ComboBox();
             label58 = new Label();
+            class_Properties_toolStrip = new ToolStrip();
+            class_SavePropertyBtn = new ToolStripButton();
+            class_UndoPropertiesBtn = new ToolStripButton();
+            toolStripSeparator16 = new ToolStripSeparator();
             panel3 = new Panel();
             label52 = new Label();
             class_NameTextBox = new TextBox();
@@ -1101,10 +1105,6 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
-            class_SavePropertyBtn = new ToolStripButton();
-            class_UndoPropertiesBtn = new ToolStripButton();
-            toolStripSeparator16 = new ToolStripSeparator();
-            class_Properties_toolStrip = new ToolStrip();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -1153,6 +1153,7 @@
             panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).BeginInit();
+            class_Properties_toolStrip.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)class_SpriteFrameNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)class_SpritePicBox).BeginInit();
@@ -1174,7 +1175,6 @@
             toolstripContainer.SuspendLayout();
             mainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).BeginInit();
-            class_Properties_toolStrip.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenu
@@ -3961,6 +3961,39 @@
             label58.TabIndex = 9;
             label58.Text = "Gender";
             // 
+            // class_Properties_toolStrip
+            // 
+            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator16 });
+            class_Properties_toolStrip.Location = new Point(0, 0);
+            class_Properties_toolStrip.Name = "class_Properties_toolStrip";
+            class_Properties_toolStrip.Size = new Size(821, 25);
+            class_Properties_toolStrip.TabIndex = 0;
+            class_Properties_toolStrip.Text = "toolStrip2";
+            // 
+            // class_SavePropertyBtn
+            // 
+            class_SavePropertyBtn.Image = Properties.Resources.save_ico;
+            class_SavePropertyBtn.ImageTransparentColor = Color.Magenta;
+            class_SavePropertyBtn.Name = "class_SavePropertyBtn";
+            class_SavePropertyBtn.Size = new Size(107, 22);
+            class_SavePropertyBtn.Text = "Save Properties";
+            class_SavePropertyBtn.Click += class_SavePropertyBtn_Click;
+            // 
+            // class_UndoPropertiesBtn
+            // 
+            class_UndoPropertiesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            class_UndoPropertiesBtn.Image = Properties.Resources.undo_ico;
+            class_UndoPropertiesBtn.ImageTransparentColor = Color.Magenta;
+            class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
+            class_UndoPropertiesBtn.Size = new Size(23, 22);
+            class_UndoPropertiesBtn.Text = "Undo Changes";
+            class_UndoPropertiesBtn.Click += class_UndoPropertiesBtn_Click;
+            // 
+            // toolStripSeparator16
+            // 
+            toolStripSeparator16.Name = "toolStripSeparator16";
+            toolStripSeparator16.Size = new Size(6, 25);
+            // 
             // panel3
             // 
             panel3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
@@ -4775,39 +4808,6 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
-            // class_SavePropertyBtn
-            // 
-            class_SavePropertyBtn.Image = Properties.Resources.save_ico;
-            class_SavePropertyBtn.ImageTransparentColor = Color.Magenta;
-            class_SavePropertyBtn.Name = "class_SavePropertyBtn";
-            class_SavePropertyBtn.Size = new Size(107, 22);
-            class_SavePropertyBtn.Text = "Save Properties";
-            class_SavePropertyBtn.Click += class_SavePropertyBtn_Click;
-            // 
-            // class_UndoPropertiesBtn
-            // 
-            class_UndoPropertiesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_UndoPropertiesBtn.Image = Properties.Resources.undo_ico;
-            class_UndoPropertiesBtn.ImageTransparentColor = Color.Magenta;
-            class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
-            class_UndoPropertiesBtn.Size = new Size(23, 22);
-            class_UndoPropertiesBtn.Text = "Undo Changes";
-            class_UndoPropertiesBtn.Click += class_UndoPropertiesBtn_Click;
-            // 
-            // toolStripSeparator16
-            // 
-            toolStripSeparator16.Name = "toolStripSeparator16";
-            toolStripSeparator16.Size = new Size(6, 25);
-            // 
-            // class_Properties_toolStrip
-            // 
-            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator16 });
-            class_Properties_toolStrip.Location = new Point(0, 0);
-            class_Properties_toolStrip.Name = "class_Properties_toolStrip";
-            class_Properties_toolStrip.Size = new Size(821, 25);
-            class_Properties_toolStrip.TabIndex = 0;
-            class_Properties_toolStrip.Text = "toolStrip2";
-            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -4817,6 +4817,7 @@
             Controls.Add(mainStatusStrip);
             Controls.Add(startupTab);
             Controls.Add(mainMenu);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mainMenu;
             MinimumSize = new Size(1280, 720);
             Name = "Mainform";
@@ -4888,6 +4889,8 @@
             panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).EndInit();
+            class_Properties_toolStrip.ResumeLayout(false);
+            class_Properties_toolStrip.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)class_SpriteFrameNum).EndInit();
@@ -4919,8 +4922,6 @@
             mainToolStrip.ResumeLayout(false);
             mainToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).EndInit();
-            class_Properties_toolStrip.ResumeLayout(false);
-            class_Properties_toolStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
