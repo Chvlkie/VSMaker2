@@ -5,7 +5,7 @@ namespace VsMaker2Core.Methods
 {
     public class BattleMessageEditorMethods : IBattleMessageEditorMethods
     {
-        private IRomFileMethods romFileMethods;
+        private readonly IRomFileMethods romFileMethods;
 
         public BattleMessageEditorMethods(IRomFileMethods romFileMethods)
         {
@@ -13,11 +13,11 @@ namespace VsMaker2Core.Methods
             this.romFileMethods = romFileMethods;
         }
 
-        public async Task<List<BattleMessage>> GetBattleMessagesAsync(List<BattleMessageTableData> tableDatas, int battleMessageArchive)
+        public List<BattleMessage> GetBattleMessages(List<BattleMessageTableData> tableDatas, int battleMessageArchive)
         {
             List<BattleMessage> battleMessages = [];
 
-            var messages = await romFileMethods.GetBattleMessagesAsync(battleMessageArchive);
+            var messages = romFileMethods.GetBattleMessages(battleMessageArchive);
             int messageCount = messages.Count;
 
             for (int i = 0; i < tableDatas.Count && i < messageCount; i++)

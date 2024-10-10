@@ -435,7 +435,7 @@ namespace Main.Forms
                 {
                     var newClassGenderData = CreateClassGenderTable();
                     await WriteClassGenderTableAsync(newClassGenderData);
-                    RomFile.ClassGenderData = await romFileMethods.GetClassGendersAsync(150, RomFile.ClassGenderOffsetToRamAddress);
+                    RomFile.ClassGenderData = romFileMethods.GetClassGenders(150, RomFile.ClassGenderOffsetToRamAddress);
                 }
 
                 if (success)
@@ -452,7 +452,7 @@ namespace Main.Forms
                 {
                     var newEyeContactData = CreateEyeContactTable();
                     await WriteEyeContactTableAsync(newEyeContactData);
-                    RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                    RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
                 }
 
                 // Handle the result

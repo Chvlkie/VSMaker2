@@ -89,19 +89,19 @@ namespace VsMaker2Core.Methods
 
         #region Get
 
-        public async Task<List<string>> GetAbilityNamesAsync(int abilityNameArchive)
+        public List<string> GetAbilityNames(int abilityNameArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(abilityNameArchive, false);
+            var messageArchives = GetMessageArchiveContents(abilityNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<BattleMessageOffsetData>> GetBattleMessageOffsetDataAsync(string battleMessageOffsetPath)
+        public List<BattleMessageOffsetData> GetBattleMessageOffsetData(string battleMessageOffsetPath)
         {
             var battleMessageOffsetData = new List<BattleMessageOffsetData>();
 
@@ -139,19 +139,19 @@ namespace VsMaker2Core.Methods
             return battleMessageOffsetData;
         }
 
-        public async Task<List<string>> GetBattleMessagesAsync(int battleMessageArchive)
+        public List<string> GetBattleMessages(int battleMessageArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(battleMessageArchive, false);
+            var messageArchives = GetMessageArchiveContents(battleMessageArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<BattleMessageTableData>> GetBattleMessageTableDataAsync(string trainerTextTablePath)
+        public List<BattleMessageTableData> GetBattleMessageTableData(string trainerTextTablePath)
         {
             var trainerTextTableDatas = new List<BattleMessageTableData>();
 
@@ -191,19 +191,19 @@ namespace VsMaker2Core.Methods
             return trainerTextTableDatas;
         }
 
-        public async Task<List<string>> GetClassDescriptionsAsync(int classDescriptionsArchive)
+        public List<string> GetClassDescriptions(int classDescriptionsArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(classDescriptionsArchive, false);
+            var messageArchives = GetMessageArchiveContents(classDescriptionsArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<ClassGenderData>> GetClassGendersAsync(int numberOfClasses, uint classGenderOffsetToRam)
+        public List<ClassGenderData> GetClassGenders(int numberOfClasses, uint classGenderOffsetToRam)
         {
             if (numberOfClasses <= 0)
             {
@@ -249,19 +249,19 @@ namespace VsMaker2Core.Methods
             return [.. classGenders.OrderBy(x => x.TrainerClassId)];
         }
 
-        public async Task<List<string>> GetClassNamesAsync(int classNamesArchive)
+        public List<string> GetClassNames(int classNamesArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(classNamesArchive, false);
+            var messageArchives = GetMessageArchiveContents(classNamesArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<EyeContactMusicData>> GetEyeContactMusicDataAsync(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
+        public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
         {
             var eyeContactMusic = new List<EyeContactMusicData>();
             if (RomFile.EyeContactExpanded)
@@ -319,19 +319,19 @@ namespace VsMaker2Core.Methods
             return [.. eyeContactMusic.OrderBy(x => x.TrainerClassId)];
         }
 
-        public async Task<List<string>> GetItemNamesAsync(int itemNameArchive)
+        public List<string> GetItemNames(int itemNameArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(itemNameArchive, false);
+            var messageArchives = GetMessageArchiveContents(itemNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<MessageArchive>> GetMessageArchiveContentsAsync(int messageArchiveId, bool discardLines = false)
+        public List<MessageArchive> GetMessageArchiveContents(int messageArchiveId, bool discardLines = false)
         {
             var messageArchives = new List<MessageArchive>();
 
@@ -408,28 +408,28 @@ namespace VsMaker2Core.Methods
             }
         }
 
-        public async Task<List<string>> GetMoveNamesAsync(int moveTextArchive)
+        public List<string> GetMoveNames(int moveTextArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(moveTextArchive, false);
+            var messageArchives = GetMessageArchiveContents(moveTextArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public async Task<List<string>> GetPokemonNamesAsync(int pokemonNameArchive)
+        public List<string> GetPokemonNames(int pokemonNameArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(pokemonNameArchive, false);
+            var messageArchives = GetMessageArchiveContents(pokemonNameArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
                 return [];
             }
 
-            return messageArchives.Select(item => item.MessageText).ToList();
+            return messageArchives.ConvertAll(item => item.MessageText);
         }
 
         public async Task<List<PrizeMoneyData>> GetPrizeMoneyDataAsync()
@@ -456,7 +456,7 @@ namespace VsMaker2Core.Methods
                     return prizeMoneyData;
                 }
 
-                using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 using var reader = new BinaryReader(fileStream);
                 reader.BaseStream.Position = RomFile.PrizeMoneyTableOffset;
                 long streamEndPosition = reader.BaseStream.Position + RomFile.PrizeMoneyTableSize;
@@ -497,7 +497,7 @@ namespace VsMaker2Core.Methods
             return [.. prizeMoneyData.OrderBy(x => x.TrainerClassId)];
         }
 
-        public async Task<List<Species>> GetSpeciesAsync()
+        public List<Species> GetSpecies()
         {
             var allSpecies = new List<Species>();
 
@@ -548,20 +548,20 @@ namespace VsMaker2Core.Methods
             return allSpecies;
         }
 
-        public async Task<int> GetTotalNumberOfItemsInArchiveAsync(int archiveId)
+        public int GetTotalNumberOfItemsInArchive(int archiveId)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(archiveId, false);
+            var messageArchives = GetMessageArchiveContents(archiveId, false);
 
             return messageArchives?.Count ?? 0;
         }
 
-        public async Task<int> GetTotalNumberOfTrainerClassesAsync(int trainerClassNameArchive) => await GetTotalNumberOfItemsInArchiveAsync(trainerClassNameArchive);
+        public int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive) => GetTotalNumberOfItemsInArchive(trainerClassNameArchive);
 
-        public async Task<int> GetTotalNumberOfTrainersAsync(int trainerNameArchive) => await GetTotalNumberOfItemsInArchiveAsync(trainerNameArchive);
+        public int GetTotalNumberOfTrainers(int trainerNameArchive) => GetTotalNumberOfItemsInArchive(trainerNameArchive);
 
-        public async Task<List<string>> GetTrainerNamesAsync(int trainerNameMessageArchive)
+        public List<string> GetTrainerNames(int trainerNameMessageArchive)
         {
-            var messageArchives = await GetMessageArchiveContentsAsync(trainerNameMessageArchive, false);
+            var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -574,7 +574,7 @@ namespace VsMaker2Core.Methods
                    .ToList();
         }
 
-        public async Task<List<TrainerData>> GetTrainersDataAsync(int numberOfTrainers)
+        public List<TrainerData> GetTrainersData(int numberOfTrainers)
         {
             var trainersData = new List<TrainerData>(numberOfTrainers);
 
@@ -582,7 +582,7 @@ namespace VsMaker2Core.Methods
             {
                 try
                 {
-                    var trainerData = await ReadTrainerDataAsync(i);
+                    var trainerData = ReadTrainerData(i);
                     trainersData.Add(trainerData);
                 }
                 catch (Exception ex)
@@ -594,7 +594,7 @@ namespace VsMaker2Core.Methods
             return trainersData;
         }
 
-        public async Task<List<TrainerPartyData>> GetTrainersPartyDataAsync(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
+        public List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
         {
             var trainersPartyData = new List<TrainerPartyData>(numberOfTrainers);
 
@@ -611,7 +611,7 @@ namespace VsMaker2Core.Methods
 
                 try
                 {
-                    var partyData = await ReadTrainerPartyDataAsync(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
+                    var partyData = ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
                     trainersPartyData.Add(partyData);
                 }
                 catch (Exception ex)
@@ -627,7 +627,7 @@ namespace VsMaker2Core.Methods
 
         #region Read
 
-        public async Task<TrainerData> ReadTrainerDataAsync(int trainerId)
+        public TrainerData ReadTrainerData(int trainerId)
         {
             var trainerData = new TrainerData();
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}\\{trainerId:D4}";
@@ -675,7 +675,7 @@ namespace VsMaker2Core.Methods
             return trainerData;
         }
 
-        public async Task<TrainerPartyData> ReadTrainerPartyDataAsync(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule)
+        public TrainerPartyData ReadTrainerPartyData(int trainerId, byte teamSize, byte trainerType, bool hasBallCapsule)
         {
             var trainerPartyData = new TrainerPartyData
             {

@@ -186,16 +186,16 @@ namespace Main
                     progress?.Report(progressCount);
                 }
 
-                mainEditorModel.PokemonSpecies = await romFileMethods.GetSpeciesAsync();
+                mainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
                 ReportProgress();
 
-                mainEditorModel.TrainerNames = await romFileMethods.GetTrainerNamesAsync(RomFile.TrainerNamesTextNumber);
+                mainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(RomFile.TrainerNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.ClassNames = await romFileMethods.GetClassNamesAsync(RomFile.ClassNamesTextNumber);
+                mainEditorModel.ClassNames = romFileMethods.GetClassNames(RomFile.ClassNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.ClassDescriptions = await romFileMethods.GetClassDescriptionsAsync(RomFile.ClassDescriptionMessageNumber);
+                mainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(RomFile.ClassDescriptionMessageNumber);
                 ReportProgress();
 
                 mainEditorModel.Trainers = trainerEditorMethods.GetTrainers(mainEditorModel.TrainerNames);
@@ -204,20 +204,20 @@ namespace Main
                 mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
                 ReportProgress();
 
-                mainEditorModel.PokemonNamesFull = await romFileMethods.GetPokemonNamesAsync(RomFile.PokemonNamesTextNumber);
+                mainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(RomFile.PokemonNamesTextNumber);
                 mainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(mainEditorModel.PokemonNamesFull);
                 ReportProgress();
 
-                mainEditorModel.MoveNames = await romFileMethods.GetMoveNamesAsync(RomFile.MoveNameTextNumber);
+                mainEditorModel.MoveNames = romFileMethods.GetMoveNames(RomFile.MoveNameTextNumber);
                 ReportProgress();
 
-                mainEditorModel.AbilityNames = await romFileMethods.GetAbilityNamesAsync(RomFile.AbilityNamesTextNumber);
+                mainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(RomFile.AbilityNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.ItemNames = await romFileMethods.GetItemNamesAsync(RomFile.ItemNamesTextNumber);
+                mainEditorModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.BattleMessages = await battleMessageEditorMethods.GetBattleMessagesAsync(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                mainEditorModel.BattleMessages =  battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                 ReportProgress();
 
                 progress?.Report(100);
@@ -254,25 +254,25 @@ namespace Main
                 RomFile.EventFileData = eventFileMethods.GetEventFiles();
                 ReportProgress();
 
-                RomFile.TotalNumberOfTrainers = await romFileMethods.GetTotalNumberOfTrainersAsync(RomFile.TrainerNamesTextNumber);
+                RomFile.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(RomFile.TrainerNamesTextNumber);
                 ReportProgress();
 
-                RomFile.BattleMessageTableData = await romFileMethods.GetBattleMessageTableDataAsync(RomFile.BattleMessageTablePath);
+                RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                 ReportProgress();
 
-                RomFile.BattleMessageOffsetData = await romFileMethods.GetBattleMessageOffsetDataAsync(RomFile.BattleMessageOffsetPath);
+                RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
                 ReportProgress();
 
-                RomFile.TrainersData = await romFileMethods.GetTrainersDataAsync(RomFile.TotalNumberOfTrainers);
+                RomFile.TrainersData = romFileMethods.GetTrainersData(RomFile.TotalNumberOfTrainers);
                 ReportProgress();
 
-                RomFile.TrainersPartyData = await romFileMethods.GetTrainersPartyDataAsync(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
+                RomFile.TrainersPartyData = romFileMethods.GetTrainersPartyData(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
                 ReportProgress();
 
                 RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(RomFile.TrainerNameMaxByteOffset);
                 ReportProgress();
 
-                RomFile.TotalNumberOfTrainerClasses = await romFileMethods.GetTotalNumberOfTrainerClassesAsync(RomFile.ClassNamesTextNumber);
+                RomFile.TotalNumberOfTrainerClasses = romFileMethods.GetTotalNumberOfTrainerClasses(RomFile.ClassNamesTextNumber);
                 ReportProgress();
 
                 RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
@@ -284,11 +284,11 @@ namespace Main
                 }
 
                 RomFile.ClassGenderData = RomFile.IsNotDiamondPearl
-                    ? await romFileMethods.GetClassGendersAsync(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress)
+                    ? romFileMethods.GetClassGenders(RomFile.TotalNumberOfTrainerClasses, RomFile.ClassGenderOffsetToRamAddress)
                     : [];
                 ReportProgress();
 
-                RomFile.EyeContactMusicData = await romFileMethods.GetEyeContactMusicDataAsync(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
                 ReportProgress();
 
                 RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();
