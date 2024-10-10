@@ -90,21 +90,9 @@
 
         private NumericUpDown class_PrizeMoneyNum;
 
-        private ToolStrip class_Properties_toolStrip;
-
-        private ToolStripButton class_PropertyCopyBtn;
-
-        private ToolStripButton class_PropertyExportBtn;
-
-        private ToolStripButton class_PropertyImportBtn;
-
-        private ToolStripButton class_PropertyPasteBtn;
-
         private Button class_RemoveBtn;
 
         private ToolStripButton class_SaveClassBtn;
-
-        private ToolStripButton class_SavePropertyBtn;
 
         private Button class_SpriteExportBtn;
 
@@ -117,8 +105,6 @@
         private ListBox class_TrainersListBox;
 
         private ToolStripButton class_UndoAllBtn;
-
-        private ToolStripButton class_UndoPropertiesBtn;
 
         private Button class_ViewTrainerBtn;
 
@@ -537,8 +523,6 @@
 
         private ToolStripSeparator toolStripSeparator15;
 
-        private ToolStripSeparator toolStripSeparator16;
-
         private ToolStripSeparator toolStripSeparator17;
 
         private ToolStripSeparator toolStripSeparator18;
@@ -550,8 +534,6 @@
         private ToolStripSeparator toolStripSeparator20;
 
         private ToolStripSeparator toolStripSeparator21;
-
-        private ToolStripSeparator toolStripSeparator22;
 
         private ToolStripSeparator toolStripSeparator23;
 
@@ -1037,15 +1019,6 @@
             class_PrizeMoneyNum = new NumericUpDown();
             class_GenderComboBox = new ComboBox();
             label58 = new Label();
-            class_Properties_toolStrip = new ToolStrip();
-            class_SavePropertyBtn = new ToolStripButton();
-            class_UndoPropertiesBtn = new ToolStripButton();
-            toolStripSeparator22 = new ToolStripSeparator();
-            class_PropertyCopyBtn = new ToolStripButton();
-            class_PropertyPasteBtn = new ToolStripButton();
-            toolStripSeparator16 = new ToolStripSeparator();
-            class_PropertyImportBtn = new ToolStripButton();
-            class_PropertyExportBtn = new ToolStripButton();
             panel3 = new Panel();
             label52 = new Label();
             class_NameTextBox = new TextBox();
@@ -1128,6 +1101,10 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
+            class_SavePropertyBtn = new ToolStripButton();
+            class_UndoPropertiesBtn = new ToolStripButton();
+            toolStripSeparator16 = new ToolStripSeparator();
+            class_Properties_toolStrip = new ToolStrip();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -1176,7 +1153,6 @@
             panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).BeginInit();
-            class_Properties_toolStrip.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)class_SpriteFrameNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)class_SpritePicBox).BeginInit();
@@ -1198,6 +1174,7 @@
             toolstripContainer.SuspendLayout();
             mainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).BeginInit();
+            class_Properties_toolStrip.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenu
@@ -3984,84 +3961,6 @@
             label58.TabIndex = 9;
             label58.Text = "Gender";
             // 
-            // class_Properties_toolStrip
-            // 
-            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator22, class_PropertyCopyBtn, class_PropertyPasteBtn, toolStripSeparator16, class_PropertyImportBtn, class_PropertyExportBtn });
-            class_Properties_toolStrip.Location = new Point(0, 0);
-            class_Properties_toolStrip.Name = "class_Properties_toolStrip";
-            class_Properties_toolStrip.Size = new Size(821, 25);
-            class_Properties_toolStrip.TabIndex = 0;
-            class_Properties_toolStrip.Text = "toolStrip2";
-            // 
-            // class_SavePropertyBtn
-            // 
-            class_SavePropertyBtn.Image = Properties.Resources.save_ico;
-            class_SavePropertyBtn.ImageTransparentColor = Color.Magenta;
-            class_SavePropertyBtn.Name = "class_SavePropertyBtn";
-            class_SavePropertyBtn.Size = new Size(107, 22);
-            class_SavePropertyBtn.Text = "Save Properties";
-            class_SavePropertyBtn.Click += class_SavePropertyBtn_Click;
-            // 
-            // class_UndoPropertiesBtn
-            // 
-            class_UndoPropertiesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_UndoPropertiesBtn.Image = Properties.Resources.undo_ico;
-            class_UndoPropertiesBtn.ImageTransparentColor = Color.Magenta;
-            class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
-            class_UndoPropertiesBtn.Size = new Size(23, 22);
-            class_UndoPropertiesBtn.Text = "Undo Changes";
-            class_UndoPropertiesBtn.Click += class_UndoPropertiesBtn_Click;
-            // 
-            // toolStripSeparator22
-            // 
-            toolStripSeparator22.Name = "toolStripSeparator22";
-            toolStripSeparator22.Size = new Size(6, 25);
-            // 
-            // class_PropertyCopyBtn
-            // 
-            class_PropertyCopyBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_PropertyCopyBtn.Enabled = false;
-            class_PropertyCopyBtn.Image = Properties.Resources.copy_ico;
-            class_PropertyCopyBtn.ImageTransparentColor = Color.Magenta;
-            class_PropertyCopyBtn.Name = "class_PropertyCopyBtn";
-            class_PropertyCopyBtn.Size = new Size(23, 22);
-            class_PropertyCopyBtn.Text = "Copy Class Properties";
-            // 
-            // class_PropertyPasteBtn
-            // 
-            class_PropertyPasteBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_PropertyPasteBtn.Enabled = false;
-            class_PropertyPasteBtn.Image = Properties.Resources.paste_ico;
-            class_PropertyPasteBtn.ImageTransparentColor = Color.Magenta;
-            class_PropertyPasteBtn.Name = "class_PropertyPasteBtn";
-            class_PropertyPasteBtn.Size = new Size(23, 22);
-            class_PropertyPasteBtn.Text = "Paste  Class Properties";
-            // 
-            // toolStripSeparator16
-            // 
-            toolStripSeparator16.Name = "toolStripSeparator16";
-            toolStripSeparator16.Size = new Size(6, 25);
-            // 
-            // class_PropertyImportBtn
-            // 
-            class_PropertyImportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_PropertyImportBtn.Enabled = false;
-            class_PropertyImportBtn.Image = Properties.Resources.import_ico;
-            class_PropertyImportBtn.ImageTransparentColor = Color.Magenta;
-            class_PropertyImportBtn.Name = "class_PropertyImportBtn";
-            class_PropertyImportBtn.Size = new Size(23, 22);
-            class_PropertyImportBtn.Text = "Import  Class Properties";
-            // 
-            // class_PropertyExportBtn
-            // 
-            class_PropertyExportBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            class_PropertyExportBtn.Enabled = false;
-            class_PropertyExportBtn.Image = Properties.Resources.export_ico;
-            class_PropertyExportBtn.ImageTransparentColor = Color.Magenta;
-            class_PropertyExportBtn.Name = "class_PropertyExportBtn";
-            class_PropertyExportBtn.Size = new Size(23, 22);
-            class_PropertyExportBtn.Text = "Export Class Properties";
-            // 
             // panel3
             // 
             panel3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
@@ -4358,6 +4257,7 @@
             class_CopyBtn.Name = "class_CopyBtn";
             class_CopyBtn.Size = new Size(55, 22);
             class_CopyBtn.Text = "Copy";
+            class_CopyBtn.Click += class_CopyBtn_Click;
             // 
             // class_PasteBtn
             // 
@@ -4367,6 +4267,7 @@
             class_PasteBtn.Name = "class_PasteBtn";
             class_PasteBtn.Size = new Size(55, 22);
             class_PasteBtn.Text = "Paste";
+            class_PasteBtn.Click += class_PasteBtn_Click;
             // 
             // toolStripSeparator15
             // 
@@ -4874,6 +4775,39 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
+            // class_SavePropertyBtn
+            // 
+            class_SavePropertyBtn.Image = Properties.Resources.save_ico;
+            class_SavePropertyBtn.ImageTransparentColor = Color.Magenta;
+            class_SavePropertyBtn.Name = "class_SavePropertyBtn";
+            class_SavePropertyBtn.Size = new Size(107, 22);
+            class_SavePropertyBtn.Text = "Save Properties";
+            class_SavePropertyBtn.Click += class_SavePropertyBtn_Click;
+            // 
+            // class_UndoPropertiesBtn
+            // 
+            class_UndoPropertiesBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            class_UndoPropertiesBtn.Image = Properties.Resources.undo_ico;
+            class_UndoPropertiesBtn.ImageTransparentColor = Color.Magenta;
+            class_UndoPropertiesBtn.Name = "class_UndoPropertiesBtn";
+            class_UndoPropertiesBtn.Size = new Size(23, 22);
+            class_UndoPropertiesBtn.Text = "Undo Changes";
+            class_UndoPropertiesBtn.Click += class_UndoPropertiesBtn_Click;
+            // 
+            // toolStripSeparator16
+            // 
+            toolStripSeparator16.Name = "toolStripSeparator16";
+            toolStripSeparator16.Size = new Size(6, 25);
+            // 
+            // class_Properties_toolStrip
+            // 
+            class_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { class_SavePropertyBtn, class_UndoPropertiesBtn, toolStripSeparator16 });
+            class_Properties_toolStrip.Location = new Point(0, 0);
+            class_Properties_toolStrip.Name = "class_Properties_toolStrip";
+            class_Properties_toolStrip.Size = new Size(821, 25);
+            class_Properties_toolStrip.TabIndex = 0;
+            class_Properties_toolStrip.Text = "toolStrip2";
+            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -4954,8 +4888,6 @@
             panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)class_VsEffectsPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)class_PrizeMoneyNum).EndInit();
-            class_Properties_toolStrip.ResumeLayout(false);
-            class_Properties_toolStrip.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)class_SpriteFrameNum).EndInit();
@@ -4987,10 +4919,17 @@
             mainToolStrip.ResumeLayout(false);
             mainToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).EndInit();
+            class_Properties_toolStrip.ResumeLayout(false);
+            class_Properties_toolStrip.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
+        private ToolStrip class_Properties_toolStrip;
+        private ToolStripButton class_SavePropertyBtn;
+        private ToolStripButton class_UndoPropertiesBtn;
+        private ToolStripSeparator toolStripSeparator16;
     }
 }

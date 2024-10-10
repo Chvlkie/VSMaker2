@@ -50,11 +50,11 @@
             [0x005E] = 1,   //Movement
         };
 
-        public static HashSet<ushort?> endCodes = new HashSet<ushort?>() {
+        public static HashSet<ushort?> endCodes = [
             0x2,
             0x16,
             0x1B
-        };
+        ];
 
         public static Dictionary<ushort, string> movementsDictIDName = new Dictionary<ushort, string>()
         {
@@ -161,9 +161,9 @@
             [0x00FE] = "End"
         };
 
-        public static HashSet<ushort?> movementEndCodes = new HashSet<ushort?>() {
+        public static HashSet<ushort?> movementEndCodes = [
             0x00FE,
-        };
+        ];
 
         public static Dictionary<ushort, string> DPPtScrCmdNames = new Dictionary<ushort, string>()
         {

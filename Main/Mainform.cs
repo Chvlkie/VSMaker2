@@ -3,7 +3,6 @@ using Main.Misc;
 using Main.Models;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.DsUtils;
@@ -11,7 +10,6 @@ using VsMaker2Core.DSUtils;
 using VsMaker2Core.Methods;
 using VsMaker2Core.Methods.EventFile;
 using VsMaker2Core.Methods.NdsImages;
-using VsMaker2Core.RomFiles;
 using static VsMaker2Core.Enums;
 
 namespace Main
@@ -359,6 +357,7 @@ namespace Main
             ClearTrainerEditorData();
             class_ClassListBox.SelectedIndex = -1;
             class_ClassListBox.Items.Clear();
+            mainEditorModel.SelectedTrainerClass = new();
             EnableDisableMenu(false);
             ClearUnsavedChanges();
             isLoadingData = false;
@@ -1075,5 +1074,7 @@ namespace Main
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
         }
+
+       
     }
 }

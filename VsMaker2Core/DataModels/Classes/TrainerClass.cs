@@ -53,5 +53,21 @@
             ClassProperties = trainerClassProperty;
             UsedByTrainers = usedByTrainers;
         }
+
+        public TrainerClass(TrainerClass trainerClass)
+        {
+            TrainerClassId = trainerClass.TrainerClassId;
+            TrainerClassName = trainerClass.TrainerClassName;
+            UsedByTrainers = [];
+            ClassProperties = trainerClass.ClassProperties;
+        }
+
+        public TrainerClass(int originalId, TrainerClass clipBoard)
+        {
+            TrainerClassId = originalId;
+            TrainerClassName = clipBoard.TrainerClassName;
+            UsedByTrainers = clipBoard.UsedByTrainers;
+            ClassProperties = clipBoard.ClassProperties;
+        }
     }
 }

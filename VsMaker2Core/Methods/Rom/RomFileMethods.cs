@@ -95,7 +95,7 @@ namespace VsMaker2Core.Methods
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return new List<string>();
+                return [];
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();
@@ -145,7 +145,7 @@ namespace VsMaker2Core.Methods
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
-                return new List<string>();
+                return [];
             }
 
             return messageArchives.Select(item => item.MessageText).ToList();

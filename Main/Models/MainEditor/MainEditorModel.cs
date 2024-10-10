@@ -4,20 +4,19 @@ namespace Main.Models
 {
     public class MainEditorModel
     {
-        public List<string> TrainerNames { get; set; }
-        public List<string> ClassNames { get; set; }
-        public List<string> ClassDescriptions { get; set; }
-        public List<string> PokemonNamesFull { get; set; }
-        public List<string> MoveNames { get; set; }
-        public List<string> AbilityNames { get; set; }
-        public List<string> ItemNames { get; set; }
-        public List<Species> PokemonSpecies { get; set; }
-        public List<Trainer> Trainers { get; set; }
-        public List<TrainerClass> Classes { get; set; }
-        public List<BattleMessage> BattleMessages { get; set; }
-        public List<string> PokemonNames { get; set; }
+        public List<string> TrainerNames { get; set; } = [];
+        public List<string> ClassNames { get; set; } = [];
+        public List<string> ClassDescriptions { get; set; } = [];
+        public List<string> PokemonNamesFull { get; set; } = [];
+        public List<string> MoveNames { get; set; } = [];
+        public List<string> AbilityNames { get; set; } = [];
+        public List<string> ItemNames { get; set; } = [];
+        public List<Species> PokemonSpecies { get; set; } = [];
+        public List<Trainer> Trainers { get; set; } = [];
+        public List<TrainerClass> Classes { get; set; } = [];
+        public List<BattleMessage> BattleMessages { get; set; } = [];
+        public List<string> PokemonNames { get; set; } = [];
 
-        // Method to get formatted Pokémon names with improved loop
         public static List<string> SetPokemonNames(List<string> pokemonNamesFull)
         {
             var names = new List<string>(pokemonNamesFull.Count + 1) { "----------" };
@@ -30,25 +29,25 @@ namespace Main.Models
 
         #region TrainerEditor
 
-        public Trainer SelectedTrainer { get; set; }
-        public Trainer? ClipboardTrainer { get; set; }
-        public TrainerProperty? ClipboardTrainerProperties { get; set; }
-        public TrainerParty? ClipboardTrainerParty { get; set; }
+        public Trainer SelectedTrainer { get; set; } = new();
+        public Trainer? ClipboardTrainer { get; set; } = new();
+        public TrainerProperty? ClipboardTrainerProperties { get; set; } = new();
+        public TrainerParty? ClipboardTrainerParty { get; set; } = new();
 
         #endregion TrainerEditor
 
         #region ClassEditor
 
-        public TrainerClass SelectedClass { get; set; }
-        public TrainerClass? ClipboardTrainerClass { get; set; }
-        public TrainerClassProperty? ClipboardClassTrainerProperties { get; set; }
+        public TrainerClass SelectedTrainerClass { get; set; } = new();
+        public TrainerClass? ClipboardTrainerClass { get; set; } = new();
+        public TrainerClassProperty? ClipboardClassTrainerProperties { get; set; } = new();
 
         #endregion ClassEditor
 
         #region BattleEditor
 
-        public int BattleMessageDisplayIndex { get; set; }
-        public List<string> DisplayBattleMessageText { get; set; } = new List<string>();
+        public int BattleMessageDisplayIndex { get; set; } = new();
+        public List<string> DisplayBattleMessageText { get; set; } = [];
 
         public int SelectedBattleMessageRowIndex { get; set; } = -1;
 
@@ -57,17 +56,17 @@ namespace Main.Models
         // Constructor
         public MainEditorModel()
         {
-            TrainerNames = new List<string>();
-            ClassNames = new List<string>();
-            ClassDescriptions = new List<string>();
-            PokemonNamesFull = new List<string>();
-            MoveNames = new List<string>();
-            AbilityNames = new List<string>();
-            ItemNames = new List<string>();
-            PokemonSpecies = new List<Species>();
-            Trainers = new List<Trainer>();
-            Classes = new List<TrainerClass>();
-            BattleMessages = new List<BattleMessage>();
+            TrainerNames = [];
+            ClassNames = [];
+            ClassDescriptions = [];
+            PokemonNamesFull = [];
+            MoveNames = [];
+            AbilityNames = [];
+            ItemNames = [];
+            PokemonSpecies = [];
+            Trainers = [];
+            Classes = [];
+            BattleMessages = [];
         }
     }
 }

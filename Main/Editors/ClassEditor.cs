@@ -12,9 +12,37 @@ namespace Main
         private bool ClassNameEdited;
         private bool ClassPropertyEdited;
         private bool InhibitClassChange = false;
-        private TrainerClass SelectedClass = new();
         private List<string> UnfilteredClasses = [];
         private bool UnsavedClassChanges => ClassNameEdited || ClassPropertyEdited;
+
+        public void RefreshTrainerClasses()
+        {
+            try
+            {
+                mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
+
+                Console.WriteLine("Trainer classes refreshed successfully.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error refreshing trainer classes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void PopulateEyeContactMusic(ComboBox comboBox, GameFamily gameFamily)
+        {
+            comboBox.BeginUpdate();
+            comboBox.Items.Clear();
+            IEnumerable<string> musicList = gameFamily switch
+            {
+                GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.Select(x => x.ListName),
+                GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName),
+                GameFamily.Platinum => EyeContactMusics.Platinum.Select(x => x.ListName),
+                _ => []
+            };
+            comboBox.Items.AddRange(musicList.ToArray());
+            comboBox.EndUpdate();
+        }
 
         private void AddNewTrainerClass()
         {
@@ -56,14 +84,14 @@ namespace Main
         {
             if (!isLoadingData && class_ClassListBox.SelectedIndex > -1)
             {
-                string selectedClass = class_ClassListBox.SelectedItem.ToString();
+                string selectedClass = class_ClassListBox.SelectedItem!.ToString()!;
 
-                if (selectedClass != SelectedClass.ListName)
+                if (selectedClass != mainEditorModel.SelectedTrainerClass.ListName)
                 {
                     if (UnsavedClassChanges && !InhibitClassChange && !ConfirmUnsavedChanges())
                     {
                         InhibitClassChange = true;
-                        class_ClassListBox.SelectedIndex = class_ClassListBox.Items.IndexOf(SelectedClass.ListName);
+                        class_ClassListBox.SelectedIndex = class_ClassListBox.Items.IndexOf(mainEditorModel.SelectedTrainerClass.ListName);
                         return;
                     }
 
@@ -71,14 +99,14 @@ namespace Main
                     {
                         ClearUnsavedClassChanges();
                         ClearUnsavedClassPropertiesChanges();
-                        SelectedClass = classEditorMethods.GetTrainerClass(
+                        mainEditorModel.SelectedTrainerClass = classEditorMethods.GetTrainerClass(
                             mainEditorModel.Classes,
-                            TrainerClass.ListNameToTrainerClassId(selectedClass)
+                            TrainerClass.ListNameToTrainerClassId(selectedClass!)
                         );
                         class_ViewTrainerBtn.Enabled = false;
-                        PopulateTrainerClassData();
-                        PopulateUsedByTrainers(SelectedClass.UsedByTrainers);
-                        PopulateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, SelectedClass.TrainerClassId);
+                        PopulateTrainerClassData(mainEditorModel.SelectedTrainerClass);
+                        PopulateUsedByTrainers(mainEditorModel.SelectedTrainerClass.UsedByTrainers);
+                        PopulateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, mainEditorModel.SelectedTrainerClass.TrainerClassId);
                         EnableClassEditor();
                     }
                     InhibitClassChange = false;
@@ -86,20 +114,13 @@ namespace Main
             }
         }
 
-        public void RefreshTrainerClasses()
-        {
-            try
-            {
-                mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
-
-                Console.WriteLine("Trainer classes refreshed successfully.");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error refreshing trainer classes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         private void class_ClearFilterBtn_Click(object sender, EventArgs e) => class_FilterTextBox.Text = "";
+
+        private void class_CopyBtn_Click(object sender, EventArgs e)
+        {
+            mainEditorModel.ClipboardTrainerClass = new TrainerClass(mainEditorModel.SelectedTrainerClass);
+            class_PasteBtn.Enabled = true;
+        }
 
         private void class_DescriptionTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -168,6 +189,19 @@ namespace Main
                 "Before applying any ROM patch, make a back up of your project to avoid any potential loss of work.",
                 "Creating a New Class");
 
+        private void class_PasteBtn_Click(object sender, EventArgs e)
+        {
+            int selectedTrainerClassId = mainEditorModel.SelectedTrainerClass.TrainerClassId;
+            var pasteTrainerClass = new TrainerClass(selectedTrainerClassId, mainEditorModel.ClipboardTrainerClass!);
+
+            class_ViewTrainerBtn.Enabled = false;
+            PopulateTrainerClassData(pasteTrainerClass);
+            PopulateUsedByTrainers(mainEditorModel.SelectedTrainerClass.UsedByTrainers);
+            PopulateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, pasteTrainerClass.TrainerClassId);
+            EnableClassEditor();
+            EditedTrainerClassName(true);
+            EditedTrainerClassProperties(true);
+        }
         private void class_PrizeMoneyNum_ValueChanged(object sender, EventArgs e)
         {
             if (!isLoadingData)
@@ -181,13 +215,12 @@ namespace Main
             if (!isLoadingData)
             {
                 isLoadingData = true;
-                if (ValidateClassName() && SaveClassName(SelectedClass.TrainerClassId))
+                if (ValidateClassName() && SaveClassName(mainEditorModel.SelectedTrainerClass.TrainerClassId))
                 {
-                    bool saveProperties = await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId);
+                    bool saveProperties = await SaveTrainerClassPropertiesAsync(mainEditorModel.SelectedTrainerClass.TrainerClassId);
                     if (saveProperties)
                     {
                         MessageBox.Show("Class data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     }
                 }
                 isLoadingData = false;
@@ -196,7 +229,7 @@ namespace Main
 
         private async void class_SavePropertyBtn_Click(object sender, EventArgs e)
         {
-            if (await SaveTrainerClassPropertiesAsync(SelectedClass.TrainerClassId))
+            if (await SaveTrainerClassPropertiesAsync(mainEditorModel.SelectedTrainerClass.TrainerClassId))
             {
                 EditedTrainerClassProperties(false);
                 MessageBox.Show("Class Properties updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -277,6 +310,7 @@ namespace Main
             class_EyeContactDayComboBox.Enabled = true;
             class_SaveClassBtn.Enabled = true;
             class_DescriptionTextBox.Enabled = true;
+            class_CopyBtn.Enabled = true;
             class_SavePropertyBtn.Enabled = true;
             class_GenderComboBox.Enabled = true;
             class_AddClassBtn.Enabled = RomFile.PrizeMoneyExpanded && RomFile.ClassGenderExpanded && RomFile.EyeContactExpanded;
@@ -320,10 +354,6 @@ namespace Main
             class_NameTextBox.Enabled = false;
             class_SavePropertyBtn.Enabled = false;
             class_UndoPropertiesBtn.Enabled = false;
-            class_PropertyCopyBtn.Enabled = false;
-            class_PropertyExportBtn.Enabled = false;
-            class_PropertyImportBtn.Enabled = false;
-            class_PropertyPasteBtn.Enabled = false;
             class_EyeContactDaySoundBtn.Enabled = false;
             class_EyeContactNightPlayBtn.Enabled = false;
             class_VSEffectsListBox.Enabled = false;
@@ -344,27 +374,11 @@ namespace Main
             class_ClassListBox.Items.AddRange(UnfilteredClasses.ToArray());
             class_ClassListBox.EndUpdate();
         }
-
-        private void PopulateEyeContactMusic(ComboBox comboBox, GameFamily gameFamily)
-        {
-            comboBox.BeginUpdate();
-            comboBox.Items.Clear();
-            IEnumerable<string> musicList = gameFamily switch
-            {
-                GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.Select(x => x.ListName),
-                GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.Select(x => x.ListName),
-                GameFamily.Platinum => EyeContactMusics.Platinum.Select(x => x.ListName),
-                _ => []
-            };
-            comboBox.Items.AddRange(musicList.ToArray());
-            comboBox.EndUpdate();
-        }
-
-        private void PopulateTrainerClassData()
+        private void PopulateTrainerClassData(TrainerClass trainerClass)
         {
             isLoadingData = true;
-            SetClassName();
-            SetClassProperties();
+            SetClassName(trainerClass);
+            SetClassProperties(trainerClass);
             isLoadingData = false;
         }
 
@@ -388,7 +402,7 @@ namespace Main
                 var writeClassGenderData = fileSystemMethods.WriteClassGenderData(classGenderData);
                 if (writeClassGenderData.Success)
                 {
-                    SelectedClass.ClassProperties.Gender = classGenderData.Gender;
+                    mainEditorModel.SelectedTrainerClass.ClassProperties.Gender = classGenderData.Gender;
                     mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.Gender = classGenderData.Gender;
                     RomFile.ClassGenderData[index].Gender = classGenderData.Gender;
                     return true;
@@ -432,11 +446,11 @@ namespace Main
             {
                 var eyeContactMusicData = new EyeContactMusicData(RomFile.EyeContactMusicData[index].Offset, (ushort)classId, (ushort)eyeContactDay, (ushort?)eyeContactNight);
 
-                var writeEyeContactMusic = fileSystemMethods.WriteEyeContactMusicData(eyeContactMusicData);
-                if (writeEyeContactMusic.Success)
+                var (Success, ErrorMessage) = fileSystemMethods.WriteEyeContactMusicData(eyeContactMusicData);
+                if (Success)
                 {
-                    SelectedClass.ClassProperties.EyeContactMusicDay = eyeContactDay;
-                    SelectedClass.ClassProperties.EyeContactMusicNight = eyeContactNight;
+                    mainEditorModel.SelectedTrainerClass.ClassProperties.EyeContactMusicDay = eyeContactDay;
+                    mainEditorModel.SelectedTrainerClass.ClassProperties.EyeContactMusicNight = eyeContactNight;
                     mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicDay = eyeContactDay;
                     mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.EyeContactMusicNight = eyeContactNight;
                     RomFile.EyeContactMusicData[index] = eyeContactMusicData;
@@ -444,7 +458,7 @@ namespace Main
                 }
                 else
                 {
-                    MessageBox.Show(writeEyeContactMusic.ErrorMessage, "Unable to Save Eye Contact Music Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ErrorMessage, "Unable to Save Eye Contact Music Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
@@ -459,11 +473,11 @@ namespace Main
             {
                 var prizeMoneyData = new PrizeMoneyData(RomFile.PrizeMoneyData[index].Offset, (ushort)classId, (ushort)prizeMoneyMultiplier);
 
-                var writePrizeMoney = await fileSystemMethods.WritePrizeMoneyDataAsync(prizeMoneyData);
+                var (Success, ErrorMessage) = await fileSystemMethods.WritePrizeMoneyDataAsync(prizeMoneyData);
 
-                if (writePrizeMoney.Success)
+                if (Success)
                 {
-                    SelectedClass.ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
+                    mainEditorModel.SelectedTrainerClass.ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ClassProperties.PrizeMoneyMultiplier = prizeMoneyMultiplier;
                     RomFile.PrizeMoneyData[index] = prizeMoneyData;
 
@@ -471,7 +485,7 @@ namespace Main
                 }
                 else
                 {
-                    MessageBox.Show(writePrizeMoney.ErrorMessage, "Unable to Save Prize Money Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ErrorMessage, "Unable to Save Prize Money Data", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
@@ -481,8 +495,8 @@ namespace Main
 
         private bool SaveTrainerClassDescription(int classId, string newDescription)
         {
-            var saveDescription = fileSystemMethods.WriteClassDescription(mainEditorModel.ClassDescriptions, classId, newDescription, RomFile.ClassDescriptionMessageNumber);
-            if (saveDescription.Success)
+            var (Success, ErrorMessage) = fileSystemMethods.WriteClassDescription(mainEditorModel.ClassDescriptions, classId, newDescription, RomFile.ClassDescriptionMessageNumber);
+            if (Success)
             {
                 mainEditorModel.ClassDescriptions[classId] = newDescription;
                 return true;
@@ -515,25 +529,25 @@ namespace Main
             }
         }
 
-        private void SetClassName() => class_NameTextBox.Text = SelectedClass.TrainerClassName;
+        private void SetClassName(TrainerClass trainerClass) => class_NameTextBox.Text = trainerClass.TrainerClassName;
 
-        private void SetClassProperties()
+        private void SetClassProperties(TrainerClass trainerClass)
         {
-            class_GenderComboBox.SelectedIndex = SelectedClass.ClassProperties.Gender ?? -1;
-            class_DescriptionTextBox.Text = SelectedClass.ClassProperties.Description;
-            class_PrizeMoneyNum.Value = SelectedClass.ClassProperties.PrizeMoneyMultiplier;
-            class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(RomFile.GameFamily);
+            class_GenderComboBox.SelectedIndex = trainerClass.ClassProperties.Gender ?? -1;
+            class_DescriptionTextBox.Text = trainerClass.ClassProperties.Description;
+            class_PrizeMoneyNum.Value = trainerClass.ClassProperties.PrizeMoneyMultiplier;
+            class_EyeContactDayComboBox.SelectedIndex = SetEyeContactMusicDay(RomFile.GameFamily, trainerClass);
             class_EyeContactNightComboBox.SelectedIndex = RomFile.IsHeartGoldSoulSilver ?
-                EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicNight)
+                EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicNight)
                 : -1;
         }
 
-        private int SetEyeContactMusicDay(GameFamily gameFamily) => gameFamily switch
+        private int SetEyeContactMusicDay(GameFamily gameFamily, TrainerClass trainerClass) => gameFamily switch
         {
-            GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
-            GameFamily.Platinum => EyeContactMusics.Platinum.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
-            GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
-            GameFamily.HgEngine => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == SelectedClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.Platinum => EyeContactMusics.Platinum.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
+            GameFamily.HgEngine => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
             _ => -1
         };
 
@@ -570,14 +584,14 @@ namespace Main
         private void UndoClassNameChange()
         {
             isLoadingData = true;
-            SetClassName();
+            SetClassName(mainEditorModel.SelectedTrainerClass);
             isLoadingData = false;
         }
 
         private void UndoClassPropertiesChanges()
         {
             isLoadingData = true;
-            SetClassProperties();
+            SetClassProperties(mainEditorModel.SelectedTrainerClass);
             EditedTrainerClassProperties(false);
             isLoadingData = false;
         }
@@ -587,7 +601,6 @@ namespace Main
             if (class_ClassListBox.Items.Count >= 150)
             {
                 MessageBox.Show("Unable to add another class. VS Maker 2 is optimized to only allow up to 150 Trainer Classes.", "Trainer Class Limit Reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
             }
             else if (RomFile.ClassGenderExpanded && RomFile.PrizeMoneyExpanded && RomFile.EyeContactExpanded)
             {
@@ -596,7 +609,6 @@ namespace Main
             else
             {
                 MessageBox.Show("Trainer Class Expansion not applied. Please patch using the ROM Tool Box", "Unable to Add New Class", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
             }
         }
 
