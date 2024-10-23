@@ -400,6 +400,7 @@ namespace Main
             class_FilterTextBox.Text = "";
             main_MainTab.SelectedTab = main_MainTab_ClassTab;
             class_ClassListBox.SelectedIndex = classId;
+            UpdateTrainerClassSprite(class_SpritePicBox, class_SpriteFrameNum, classId);
         }
 
         #region Initialize
