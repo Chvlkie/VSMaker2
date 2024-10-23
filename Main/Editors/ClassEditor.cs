@@ -71,7 +71,8 @@ namespace Main
         {
             if (UnsavedClassChanges && ConfirmUnsavedChanges())
             {
-                ClearUnsavedTrainerChanges();
+                ClearUnsavedClassChanges();
+                ClearUnsavedClassPropertiesChanges();
                 ValidateAddClass();
             }
             else if (!UnsavedClassChanges)
