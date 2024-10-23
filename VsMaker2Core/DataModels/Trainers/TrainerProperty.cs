@@ -20,6 +20,7 @@
             AIFlags = [true, false, false, false, false, false, false, false, false, false, false];
             Items = [0, 0, 0, 0];
             TrainerClassId = 2;
+            TeamSize = 0;
         }
 
         public TrainerProperty(TrainerProperty original, bool doubleBattle, byte teamSize, bool chooseMoves, bool chooseItems)

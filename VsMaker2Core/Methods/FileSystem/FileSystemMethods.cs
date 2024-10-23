@@ -70,7 +70,7 @@ namespace VsMaker2Core.Methods
 
         public VsTrainersFile BuildVsTrainersFile(List<Trainer> trainers, GameFamily gameFamily, int trainerNameTextArchiveId, int classesCount, int battleMessagesCount)
         {
-            if (trainers == null || trainers.Count == 0)
+            if (trainers == null)
             {
                 throw new ArgumentException("Trainers list cannot be null or empty.");
             }
@@ -97,7 +97,7 @@ namespace VsMaker2Core.Methods
             {
                 var originalScriptData = scriptFileMethods.GetScriptFileData(RomFile.TrainerScriptFile);
 
-                if (originalScriptData?.Scripts == null || originalScriptData.Scripts.Count == 0)
+                if (originalScriptData?.Scripts == null)
                 {
                     return (false, "Original script data is null or empty.");
                 }
@@ -156,7 +156,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteBattleMessage(List<string> battleMessages, int messageId, string newMessage, int battleMessageArchive)
         {
-            if (battleMessages == null || battleMessages.Count == 0)
+            if (battleMessages == null)
             {
                 return (false, "Battle messages list is null or empty.");
             }
@@ -231,9 +231,9 @@ namespace VsMaker2Core.Methods
                     return (false, $"File {filePath} does not exist.");
                 }
 
-                if (messageData == null || messageData.Count == 0)
+                if (messageData == null)
                 {
-                    return (false, "Message data is null or empty.");
+                    return (false, "Message data is null.");
                 }
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
@@ -272,7 +272,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteBattleMessageTexts(List<string> messages, int battleMessageArchive)
         {
-            if (messages == null || messages.Count == 0)
+            if (messages == null)
             {
                 return (false, "Messages list is null or empty.");
             }
@@ -287,7 +287,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteClassDescription(List<string> descriptions, int classId, string newDescription, int classDescriptionMessageNumber)
         {
-            if (descriptions == null || descriptions.Count == 0)
+            if (descriptions == null)
             {
                 return (false, "Descriptions list is null or empty.");
             }
@@ -356,7 +356,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteClassName(List<string> classNames, int classId, string newName, int classNamesArchive)
         {
-            if (classNames == null || classNames.Count == 0)
+            if (classNames == null)
             {
                 return (false, "Class names list is null or empty.");
             }
@@ -441,7 +441,7 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                if (messages == null || messages.Count == 0)
+                if (messages == null)
                 {
                     return (false, "Messages list is null or empty.");
                 }
@@ -577,7 +577,7 @@ namespace VsMaker2Core.Methods
 
         public (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive)
         {
-            if (trainerNames == null || trainerNames.Count == 0)
+            if (trainerNames == null)
             {
                 return (false, "Trainer names list is null or empty.");
             }
@@ -596,8 +596,6 @@ namespace VsMaker2Core.Methods
 
             return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
-
-
 
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {

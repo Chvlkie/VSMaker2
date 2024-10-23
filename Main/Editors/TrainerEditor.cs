@@ -1008,7 +1008,7 @@ namespace Main
 
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
-            List<Pokemon> newPokemons = [];
+            List<Pokemon> newPokemons = new(6);
             TrainerPartyPokemonData[] newPokemonDatas = new TrainerPartyPokemonData[(int)trainer_TeamSizeNum.Value];
             for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
             {
@@ -1026,14 +1026,16 @@ namespace Main
             if (writeFile.Success)
             {
                 // Add dummy pokemon data
-                for (int i = 0; i < 6 - newPokemons.Count; i++)
+                for (int i = 0; i < 6 - trainer_TeamSizeNum.Value; i++)
                 {
                     newPokemons.Add(new Pokemon());
                 }
                 var trainerParty = new TrainerParty { Pokemons = newPokemons };
 
                 mainEditorModel.SelectedTrainer.TrainerParty = trainerParty;
-                mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerParty = trainerParty;
+                mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize = (byte)trainer_TeamSizeNum.Value;
+                mainEditorModel.Trainers[trainerId].TrainerParty = trainerParty;
+                mainEditorModel.Trainers[trainerId].TrainerProperties.TeamSize = (byte)trainer_TeamSizeNum.Value;
                 RomFile.TrainersPartyData[trainerId] = trainerPartyData;
                 EditedTrainerParty(false);
                 if (displaySuccess)
