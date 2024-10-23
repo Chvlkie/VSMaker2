@@ -399,7 +399,7 @@ namespace Main
         {
             class_FilterTextBox.Text = "";
             main_MainTab.SelectedTab = main_MainTab_ClassTab;
-            class_ClassListBox.SelectedIndex = classId - 2;
+            class_ClassListBox.SelectedIndex = classId;
         }
 
         #region Initialize
@@ -989,13 +989,13 @@ namespace Main
                 trainer_NameTextBox.BackColor = Color.White;
                 mainEditorModel.TrainerNames[trainerId] = trainer_NameTextBox.Text;
                 mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerName = trainer_NameTextBox.Text;
-                var index = trainer_TrainersListBox.FindString(UnfilteredTrainers[trainerId - 1]);
+                var index = trainer_TrainersListBox.FindString(UnfilteredTrainers[trainerId]);
                 if (index > -1)
                 {
                     trainer_TrainersListBox.Items[index] = mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
                     trainer_TrainersListBox.SelectedIndex = index;
                 }
-                UnfilteredTrainers[trainerId - 1] = mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
+                UnfilteredTrainers[trainerId] = mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
             }
             return saveTrainerName.Success;
         }
@@ -1028,7 +1028,7 @@ namespace Main
 
                 mainEditorModel.SelectedTrainer.TrainerParty = trainerParty;
                 mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerParty = trainerParty;
-                RomFile.TrainersPartyData[trainerId - 1] = trainerPartyData;
+                RomFile.TrainersPartyData[trainerId] = trainerPartyData;
                 EditedTrainerParty(false);
                 if (displaySuccess)
                 {
@@ -1071,7 +1071,7 @@ namespace Main
             {
                 mainEditorModel.SelectedTrainer.TrainerProperties = trainerProperties;
                 mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
-                RomFile.TrainersData[trainerId - 1] = newTrainerData;
+                RomFile.TrainersData[trainerId] = newTrainerData;
                 EditedTrainerProperty(false);
                 if (displaySucces)
                 {
@@ -1719,7 +1719,7 @@ namespace Main
                         selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
                         mainEditorModel.SelectedTrainer = new Trainer(trainerEditorMethods.GetTrainer(mainEditorModel.Trainers, Trainer.ListNameToTrainerId(selectedTrainer)));
 
-                        if (mainEditorModel.SelectedTrainer.TrainerId > 0)
+                        if (mainEditorModel.SelectedTrainer.TrainerId >= 0)
                         {
                             PopulateTrainerData(mainEditorModel.SelectedTrainer);
                             PopulatePartyData(mainEditorModel.SelectedTrainer.TrainerParty, mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);

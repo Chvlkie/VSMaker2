@@ -170,7 +170,7 @@ namespace Main
             listBox.EndUpdate();
         }
 
-        public async Task GetInitialDataAsync(IProgress<int>? progress = null)
+        public void GetInitialData(IProgress<int>? progress = null)
         {
             try
             {
@@ -217,7 +217,7 @@ namespace Main
                 mainEditorModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.BattleMessages =  battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                mainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                 ReportProgress();
 
                 progress?.Report(100);

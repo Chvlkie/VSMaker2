@@ -118,7 +118,7 @@ namespace VsMaker2Core.Methods
                 }
 
                 // Add the encounter script (last one)
-                newScripts.Add(new ScriptData(originalScriptData.Scripts.Last(), (uint)trainerScriptCount));
+                newScripts.Add(new ScriptData(originalScriptData.Scripts[^1], (uint)trainerScriptCount));
 
                 // Create new script data and write it
                 var newScriptData = new ScriptFileData(originalScriptData, newScripts);

@@ -542,7 +542,7 @@ namespace Main
 
             for (int i = 0; i < mainEditorModel.BattleMessages.Count; i++)
             {
-                int trainerId = mainEditorModel.BattleMessages[i].TrainerId - 1;
+                int trainerId = mainEditorModel.BattleMessages[i].TrainerId;
                 int messageTriggerIndex = mainEditorModel.BattleMessages[i].MessageTriggerId;
 
                 DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
@@ -561,12 +561,11 @@ namespace Main
         {
             progress?.Report(0);
             List<ushort> offsets = [];
-            // Increase count by 1 to account for player trainer data.
             offsets.Add(0);
-            for (int i = 1; i < mainEditorModel.Trainers.Count + 1; i++)
+            for (int i = 0; i < mainEditorModel.Trainers.Count; i++)
             {
                 int index = 0;
-                var trainer = mainEditorModel.Trainers[i - 1];
+                var trainer = mainEditorModel.Trainers[i];
                 List<BattleMessage> trainerMessages = messageData.Where(x => x.TrainerId == trainer.TrainerId).ToList();
                 if (trainerMessages.Count > 0)
                 {

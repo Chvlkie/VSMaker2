@@ -44,7 +44,7 @@ namespace Main.Forms
         {
             await Task.Delay(500);
             var progress = new Progress<int>(value => progressBar.Value = value);
-            await mainForm.GetInitialDataAsync(progress);
+            mainForm.GetInitialData(progress);
             await Task.Delay(500);
             FormClosing -= LoadingData_FormClosing;
             Close();

@@ -62,7 +62,7 @@ namespace Main
             RomFile.TotalNumberOfTrainerClasses++;
 
             isLoadingData = false;
-            class_ClassListBox.SelectedIndex = newTrainerClassId - 2;
+            class_ClassListBox.SelectedIndex = newTrainerClassId;
             EditedTrainerClassName(true);
             EditedTrainerClassProperties(true);
         }
@@ -328,7 +328,7 @@ namespace Main
         {
             trainer_FilterBox.Text = "";
             main_MainTab.SelectedTab = main_MainTab_TrainerTab;
-            trainer_TrainersListBox.SelectedIndex = trainerId - 1;
+            trainer_TrainersListBox.SelectedIndex = trainerId;
         }
 
         private void InitializeClassEditor()
@@ -423,13 +423,13 @@ namespace Main
                 class_NameTextBox.BackColor = Color.White;
                 mainEditorModel.ClassNames[classId] = class_NameTextBox.Text;
                 mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).TrainerClassName = class_NameTextBox.Text;
-                var index = class_ClassListBox.FindString(UnfilteredClasses[classId - 2]);
+                var index = class_ClassListBox.FindString(UnfilteredClasses[classId]);
                 if (index > -1)
                 {
                     class_ClassListBox.Items[index] = mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
                     class_ClassListBox.SelectedIndex = index;
                 }
-                UnfilteredClasses[classId - 2] = mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
+                UnfilteredClasses[classId] = mainEditorModel.Classes.Single(x => x.TrainerClassId == classId).ListName;
                 EditedTrainerClassName(false);
             }
             else

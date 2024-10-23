@@ -28,8 +28,7 @@ namespace VsMaker2Core.Methods
         {
             List<TrainerClass> trainerClasses = [];
 
-            // Start from i = 2 to skip player classes
-            for (int i = 2; i < trainerClassNames.Count; i++)
+            for (int i = 0; i < trainerClassNames.Count; i++)
             {
                 var eyeContactData = RomFile.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
 
@@ -48,10 +47,9 @@ namespace VsMaker2Core.Methods
                     {
                         Description = trainerClassDescriptions[i],
                         Gender = gender,
-                        EyeContactMusicDay = eyeContactData?.MusicDayId ?? -1,  // Use -1 if eyeContactData is null
+                        EyeContactMusicDay = eyeContactData?.MusicDayId ?? -1,
                         EyeContactMusicNight = RomFile.IsHeartGoldSoulSilver
-                            ? eyeContactData?.MusicNightId ?? -1  // Use -1 if null, based on HeartGoldSoulSilver logic
-                            : (int?)null,
+                            ? eyeContactData?.MusicNightId ?? -1 : null,
                         PrizeMoneyMultiplier = prizeMoneyMultiplier
                     },
                     UsedByTrainers = GetUsedByTrainers(i, trainers),

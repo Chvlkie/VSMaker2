@@ -24,14 +24,13 @@ namespace VsMaker2Core.Methods
 
         public List<Trainer> GetTrainers(List<string> trainerNames)
         {
-            List<Trainer> trainers = new(trainerNames.Count - 1);
+            List<Trainer> trainers = new(trainerNames.Count);
 
             var trainersData = RomFile.TrainersData;
             var trainersPartyData = RomFile.TrainersPartyData;
             bool isNotDiamondPearl = RomFile.IsNotDiamondPearl;
 
-            // Skip the first trainer file (i = 1) as intended
-            for (int i = 1; i < trainerNames.Count; i++)
+            for (int i = 0; i < trainerNames.Count; i++)
             {
                 var trainerData = trainersData[i];
                 var trainerPartyData = trainersPartyData[i];
