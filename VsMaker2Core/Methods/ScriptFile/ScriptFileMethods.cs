@@ -9,8 +9,6 @@ namespace VsMaker2Core.Methods
     {
         private static void AddParametersToList(ref List<byte[]> parameterList, ushort id, BinaryReader dataReader)
         {
-            Console.WriteLine("Loaded command id: " + id.ToString("X4"));
-
             try
             {
                 if (!RomFile.ScriptCommandParametersDict.TryGetValue(id, out byte[]? value))

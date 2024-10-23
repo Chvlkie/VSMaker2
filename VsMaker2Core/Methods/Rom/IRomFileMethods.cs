@@ -128,34 +128,22 @@ namespace VsMaker2Core.Methods
         int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive);
 
         /// <summary>
-        ///
-        /// </summary>
-        /// <param name="trainerNameArchive"></param>
-        /// <returns></returns>
-        int GetTotalNumberOfTrainers(int trainerNameArchive);
-
-        /// <summary>
         /// Get the TrainerNames from the trainerNameMessageArchive.
         /// </summary>
-        /// <param name="trainerNameMessageArchive"></param>
         /// <returns></returns>
-        List<string> GetTrainerNames(int trainerNameMessageArchive);
+        List<string> GetTrainerNames();
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="numberOfTrainers"></param>
         /// <returns></returns>
-        List<TrainerData> GetTrainersData(int numberOfTrainers);
+        List<TrainerData> GetTrainersData();
 
         /// <summary>
         ///
         /// </summary>
-        /// <param name="numberOfTrainers"></param>
-        /// <param name="trainerData"></param>
-        /// <param name="gameFamily"></param>
         /// <returns></returns>
-        List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily);
+        List<TrainerPartyData> GetTrainersPartyData();
 
         /// <summary>
         ///

@@ -33,7 +33,7 @@ namespace VsMaker2Core.Methods
             }
             catch (Exception ex)
             {
-                return (false,$"Error loading ROM data: {ex.Message}");
+                return (false, $"Error loading ROM data: {ex.Message}");
             }
         }
 
@@ -556,12 +556,10 @@ namespace VsMaker2Core.Methods
         }
 
         public int GetTotalNumberOfTrainerClasses(int trainerClassNameArchive) => GetTotalNumberOfItemsInArchive(trainerClassNameArchive);
-
-        public int GetTotalNumberOfTrainers(int trainerNameArchive) => GetTotalNumberOfItemsInArchive(trainerNameArchive);
-
-        public List<string> GetTrainerNames(int trainerNameMessageArchive)
+    
+        public List<string> GetTrainerNames()
         {
-            var messageArchives = GetMessageArchiveContents(trainerNameMessageArchive, false);
+            var messageArchives = GetMessageArchiveContents(RomFile.TrainerNamesTextNumber, false);
 
             if (messageArchives == null || messageArchives.Count == 0)
             {
@@ -574,11 +572,11 @@ namespace VsMaker2Core.Methods
                    .ToList();
         }
 
-        public List<TrainerData> GetTrainersData(int numberOfTrainers)
+        public List<TrainerData> GetTrainersData()
         {
-            var trainersData = new List<TrainerData>(numberOfTrainers);
+            List<TrainerData> trainersData = [];
 
-            for (int i = 0; i < numberOfTrainers; i++)
+            for (int i = 0; i < RomFile.TotalNumberOfTrainers; i++)
             {
                 try
                 {
@@ -594,20 +592,20 @@ namespace VsMaker2Core.Methods
             return trainersData;
         }
 
-        public List<TrainerPartyData> GetTrainersPartyData(int numberOfTrainers, List<TrainerData> trainerData, GameFamily gameFamily)
+        public List<TrainerPartyData> GetTrainersPartyData()
         {
-            var trainersPartyData = new List<TrainerPartyData>(numberOfTrainers);
+            List<TrainerPartyData> trainersPartyData = [];
 
-            for (int i = 0; i < numberOfTrainers; i++)
+            for (int i = 0; i < RomFile.TotalNumberOfTrainers; i++)
             {
-                if (i >= trainerData.Count)
+                if (i >= RomFile.TrainersData.Count)
                 {
                     Console.WriteLine($"Warning: Trainer data index {i} exceeds available entries in trainerData list.");
                     break;
                 }
 
-                var trainer = trainerData[i];
-                bool isNotDiamondPearl = gameFamily != GameFamily.DiamondPearl;
+                var trainer = RomFile.TrainersData[i];
+                bool isNotDiamondPearl = RomFile.GameFamily != GameFamily.DiamondPearl;
 
                 try
                 {

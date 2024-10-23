@@ -7,38 +7,22 @@ namespace VsMaker2Core.Methods
 {
     public class TrainerEditorMethods : ITrainerEditorMethods
     {
+        private readonly IFileSystemMethods fileSystemMethods;
         private readonly IRomFileMethods romFileMethods;
 
-        public TrainerEditorMethods(IRomFileMethods romFileMethods)
+        public TrainerEditorMethods(IRomFileMethods romFileMethods, IFileSystemMethods fileSystemMethods)
         {
-            if (romFileMethods is not null)
-            {
-                romFileMethods = new RomFileMethods();
-                this.romFileMethods = romFileMethods;
-            }
-            else
-            {
-                throw new ArgumentNullException(nameof(romFileMethods));
-            }
+            this.romFileMethods = romFileMethods;
+            this.fileSystemMethods = fileSystemMethods;
         }
 
-        public List<Trainer> GetTrainers(List<string> trainerNames)
+        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
         {
-            List<Trainer> trainers = new(trainerNames.Count);
+            var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
+            var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
+            var usages = FindTrainerUses(trainerId);
 
-            var trainersData = RomFile.TrainersData;
-            var trainersPartyData = RomFile.TrainersPartyData;
-            bool isNotDiamondPearl = RomFile.IsNotDiamondPearl;
-
-            for (int i = 0; i < trainerNames.Count; i++)
-            {
-                var trainerData = trainersData[i];
-                var trainerPartyData = trainersPartyData[i];
-
-                trainers.Add(BuildTrainerData(i, trainerNames[i], trainerData, trainerPartyData, isNotDiamondPearl));
-            }
-
-            return trainers;
+            return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty, usages);
         }
 
         public TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasItems, bool chooseMoves, bool hasBallCapsule)
@@ -103,13 +87,101 @@ namespace VsMaker2Core.Methods
             return trainerProperty;
         }
 
-        public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
-        {
-            var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
-            var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
-            var usages = FindTrainerUses(trainerId);
+        public Trainer GetTrainer(List<Trainer> trainers, int trainerId) => trainers.SingleOrDefault(x => x.TrainerId == trainerId);
 
-            return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty, usages);
+        public List<Trainer> GetTrainers()
+        {
+            List<Trainer> trainers = [];
+
+            var trainersData = RomFile.TrainersData;
+            var trainersPartyData = RomFile.TrainersPartyData;
+            bool isNotDiamondPearl = RomFile.IsNotDiamondPearl;
+
+            for (int i = 0; i < RomFile.TrainerNames.Count; i++)
+            {
+                var trainerData = trainersData[i];
+                var trainerPartyData = trainersPartyData[i];
+
+                trainers.Add(BuildTrainerData(i, RomFile.TrainerNames[i], trainerData, trainerPartyData, isNotDiamondPearl));
+            }
+
+            return trainers;
+        }
+
+        public TrainerData NewTrainerData(TrainerProperty trainerProperties)
+        {
+            byte trainerType = (byte)((trainerProperties.ChooseMoves ? 1 : 0) | (trainerProperties.ChooseItems ? 2 : 0));
+
+            uint aiFlags = 0;
+            for (int i = 0; i < trainerProperties.AIFlags.Count; i++)
+            {
+                if (trainerProperties.AIFlags[i])
+                {
+                    aiFlags |= (uint)1 << i;
+                }
+            }
+
+            return new TrainerData(
+                trainerType,
+                trainerProperties.TrainerClassId,
+                0,
+                trainerProperties.TeamSize,
+                trainerProperties.Items,
+                aiFlags,
+                (uint)(trainerProperties.DoubleBattle ? 2 : 0)
+            );
+        }
+
+        public TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule)
+        {
+            return new TrainerPartyPokemonData
+            {
+                Difficulty = pokemon.DifficultyValue,
+                GenderAbilityOverride = pokemon.GenderAbilityOverride,
+                Species = (ushort)(pokemon.PokemonId + (pokemon.FormId << Pokemon.Constants.PokemonNumberBitSize)),
+                Level = pokemon.Level,
+                ItemId = chooseItems && pokemon.HeldItemId.HasValue ? pokemon.HeldItemId.Value : null,
+                MoveIds = chooseMoves ? pokemon.Moves : null,
+                BallCapsule = hasBallCapsule && pokemon.BallCapsuleId.HasValue ? pokemon.BallCapsuleId.Value : null
+            };
+        }
+
+        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags) => new TrainerProperty
+        {
+            DoubleBattle = isDouble,
+            ChooseItems = chooseItems,
+            ChooseMoves = chooseMoves,
+            TeamSize = teamSize,
+            Items = [item1, item2, item3, item4],
+            TrainerClassId = trainerClassId,
+            AIFlags = aiFlags
+        };
+
+        public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
+        {
+            var removeTrainer = fileSystemMethods.RemoveTrainerData(trainerId);
+            if (!removeTrainer.Success)
+            {
+                return (false, removeTrainer.ErrorMessage);
+            }
+
+            RomFile.TrainerNames.RemoveAt(trainerId);
+            var updateTrainerNames = fileSystemMethods.WriteMessage(RomFile.TrainerNames, RomFile.TrainerNamesTextNumber, true);
+            if (!updateTrainerNames.Success)
+            {
+                return (false, updateTrainerNames.ErrorMessage);
+            }
+
+            var reorderFiles = fileSystemMethods.ReorderTrainerData();
+            if (!reorderFiles.Success)
+            {
+                return (false, reorderFiles.ErrorMessage);
+            }
+
+            RomFile.TrainersData = romFileMethods.GetTrainersData();
+            RomFile.TrainersPartyData = romFileMethods.GetTrainersPartyData();
+            RomFile.TrainerNames = romFileMethods.GetTrainerNames();
+            return (true, "");
         }
 
         private static List<TrainerUsage> FindTrainerUses(int trainerId)
@@ -144,58 +216,5 @@ namespace VsMaker2Core.Methods
         private static bool IsTrainerCommand(ScriptLine line, int trainerId) => (line.ScriptCommandId == 0x00E5 || line.ScriptCommandId == 0x00D5)
                 && line.Parameters[0].Length >= 2
                 && BitConverter.ToUInt16(line.Parameters[0], 0) == trainerId;
-
-        public Trainer GetTrainer(List<Trainer> trainers, int trainerId) => trainers.SingleOrDefault(x => x.TrainerId == trainerId);
-
-        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags) => new TrainerProperty
-        {
-            DoubleBattle = isDouble,
-            ChooseItems = chooseItems,
-            ChooseMoves = chooseMoves,
-            TeamSize = teamSize,
-            Items = [item1, item2, item3, item4],
-            TrainerClassId = trainerClassId,
-            AIFlags = aiFlags
-        };
-
-        public TrainerData NewTrainerData(TrainerProperty trainerProperties)
-        {
-            byte trainerType = (byte)((trainerProperties.ChooseMoves ? 1 : 0) | (trainerProperties.ChooseItems ? 2 : 0));
-
-            uint aiFlags = 0;
-            for (int i = 0; i < trainerProperties.AIFlags.Count; i++)
-            {
-                if (trainerProperties.AIFlags[i])
-                {
-                    aiFlags |= (uint)1 << i;
-                }
-            }
-
-            return new TrainerData(
-                trainerType,
-                trainerProperties.TrainerClassId,
-                0,
-                trainerProperties.TeamSize,
-                trainerProperties.Items,
-                aiFlags,
-                (uint)(trainerProperties.DoubleBattle ? 2 : 0)
-            );
-        }
-
-        public TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule)
-        {
-            var newPokemonData = new TrainerPartyPokemonData
-            {
-                Difficulty = pokemon.DifficultyValue,
-                GenderAbilityOverride = pokemon.GenderAbilityOverride,
-                Species = (ushort)(pokemon.PokemonId + (pokemon.FormId << Pokemon.Constants.PokemonNumberBitSize)),
-                Level = pokemon.Level,
-                ItemId = chooseItems && pokemon.HeldItemId.HasValue ? pokemon.HeldItemId.Value : null,
-                MoveIds = chooseMoves ? pokemon.Moves : null,
-                BallCapsule = hasBallCapsule && pokemon.BallCapsuleId.HasValue ? pokemon.BallCapsuleId.Value : null
-            };
-
-            return newPokemonData;
-        }
     }
 }

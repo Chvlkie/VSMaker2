@@ -597,9 +597,11 @@ namespace VsMaker2Core.Methods
             return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
 
+
+
         public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
         {
-            if (partyData.PokemonData == null || partyData.PokemonData.Length == 0)
+            if (partyData.PokemonData == null)
             {
                 return (false, "Pokemon data is null or empty.");
             }
@@ -673,7 +675,52 @@ namespace VsMaker2Core.Methods
 
         #region Delete
 
-        public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
+        public (bool Success, string ErrorMessage) ReorderTrainerData()
+        {
+            try
+            {
+                string trainerPropertiesDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerProperties].unpackedDirectory}";
+                string trainerPartyDirectory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}";
+
+                RenameFilesSequentially(trainerPropertiesDirectory);
+                RenameFilesSequentially(trainerPartyDirectory);
+
+                return (true, "");
+            }
+            catch (FileNotFoundException ex)
+            {
+                return (false, $"Directory not found: {ex.Message}");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return (false, $"Access denied: {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                return (false, $"IO error occurred: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        private void RenameFilesSequentially(string directory)
+        {
+            var files = Directory.GetFiles(directory);
+
+            Array.Sort(files);
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                string newFileName = Path.Combine(directory, i.ToString("D4"));
+
+                string currentFilePath = files[i];
+                File.Move(currentFilePath, newFileName);
+            }
+        }
+
+        public (bool Success, string ErrorMessage) RemoveTrainerData(int trainerId)
         {
             try
             {

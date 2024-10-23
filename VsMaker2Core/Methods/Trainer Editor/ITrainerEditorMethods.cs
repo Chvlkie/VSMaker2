@@ -8,9 +8,8 @@ namespace VsMaker2Core.Methods
         /// <summary>
         /// Get a list of Trainer Data from Extracted ROM files.
         /// </summary>
-        /// <param name="loadedRom"></param>
         /// <returns></returns>
-        List<Trainer> GetTrainers(List<string> trainerNames);
+        List<Trainer> GetTrainers();
 
         /// <summary>
         /// Get Data from a specific Trainer from given trainerId.
@@ -32,5 +31,6 @@ namespace VsMaker2Core.Methods
         TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags);
 
         TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule);
+        (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
     }
 }

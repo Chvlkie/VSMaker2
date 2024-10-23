@@ -69,9 +69,10 @@ namespace VsMaker2Core.DataModels
         public static Dictionary<ushort, byte[]> ScriptCommandParametersDict => BuildCommandParametersDatabase(GameFamily);
         public static GameVersion GameVersion { get; set; }
         public static int TotalNumberOfTrainerClasses { get; set; }
-        public static int TotalNumberOfTrainers { get; set; }
-       
-    public static List<TrainerData> TrainersData { get; set; }
+        public static int TotalNumberOfTrainers => RomFile.TrainerNames.Count;
+
+        public static List<string> TrainerNames { get; set; }
+        public static List<TrainerData> TrainersData { get; set; }
         public static List<TrainerPartyData> TrainersPartyData { get; set; }
         public static List<ClassGenderData> ClassGenderData { get; set; }
         public static List<PrizeMoneyData> PrizeMoneyData { get; set; }
@@ -117,7 +118,6 @@ namespace VsMaker2Core.DataModels
             EuropeByte = 0;
             ExtractedFolderSuffix = string.Empty;
             FileName = string.Empty;
-            TotalNumberOfTrainers = 0;
             TrainersData = [];
             TrainersPartyData = [];
             ClassGenderData = [];
@@ -156,7 +156,6 @@ namespace VsMaker2Core.DataModels
 
             FileName = romName;
             Console.WriteLine("Setup Rom File | Success");
-
         }
 
         public static bool CheckForClassGenderExpansion()

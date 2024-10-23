@@ -1,5 +1,4 @@
 ﻿using Main.Forms;
-using Main.Models;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -159,18 +158,14 @@ namespace Main
             trainer_FilterBox.Text = "";
             trainer_TrainersListBox.SelectedIndex = -1;
             int newTrainerId = RomFile.TotalNumberOfTrainers;
-            // Add new name to trainers
             mainEditorModel.TrainerNames.Add("-");
-            // Add new trainer
             mainEditorModel.Trainers.Add(new Trainer(newTrainerId));
+            UnfilteredTrainers.Add(mainEditorModel.Trainers[newTrainerId].ListName);
 
             // New TrainerProperties
             fileSystemMethods.WriteTrainerName(mainEditorModel.TrainerNames, newTrainerId, "-", RomFile.TrainerNamesTextNumber);
             fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
             fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, false, false, RomFile.IsNotDiamondPearl);
-            UnfilteredTrainers.Add(mainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
-            trainer_TrainersListBox.Items.Add(mainEditorModel.Trainers.Single(x => x.TrainerId == newTrainerId).ListName);
-            RomFile.TotalNumberOfTrainers++;
 
             // Create new Trainer Script
             var updateScripts = fileSystemMethods.UpdateTrainerScripts(RomFile.TotalNumberOfTrainers);
@@ -178,11 +173,21 @@ namespace Main
             {
                 MessageBox.Show(updateScripts.ErrorMessage, "Couldn't update Trainer Scripts");
             }
+
+            RefreshTrainerData();
+            trainer_TrainersListBox.Items.Add(mainEditorModel.Trainers[newTrainerId].ListName);
             isLoadingData = false;
-            trainer_TrainersListBox.SelectedIndex = newTrainerId - 1;
+            trainer_TrainersListBox.SelectedIndex = newTrainerId;
             EditedTrainerData(true);
             EditedTrainerParty(true);
             EditedTrainerProperty(true);
+        }
+
+        private void RefreshTrainerData()
+        {
+            RomFile.TrainerNames = romFileMethods.GetTrainerNames();
+            RomFile.TrainersData = romFileMethods.GetTrainersData();
+            RomFile.TrainersPartyData = romFileMethods.GetTrainersPartyData();
         }
 
         private void ClearTrainerEditorData()
@@ -1554,27 +1559,68 @@ namespace Main
             }
         }
 
+        private void ReloadTrainersList()
+        {
+            mainEditorModel.TrainerNames.Clear();
+            mainEditorModel.Trainers.Clear();
+            UnfilteredTrainers.Clear();
+
+            trainer_TrainersListBox.Items.Clear();
+            mainEditorModel.TrainerNames = new List<string>(RomFile.TrainerNames);
+            mainEditorModel.Trainers = trainerEditorMethods.GetTrainers();
+            PopulateTrainerList(mainEditorModel.Trainers);
+        }
+
         private void trainer_RemoveBtn_Click(object sender, EventArgs e)
         {
-            if (!isLoadingData)
+            if (isLoadingData) return;
+
+            int trainerId = mainEditorModel.SelectedTrainer.TrainerId;
+
+            if (trainerId <= RomFile.VanillaTotalTrainers - 1)
             {
-                if (mainEditorModel.SelectedTrainer.TrainerId <= RomFile.VanillaTotalTrainers - 1)
-                {
-                    MessageBox.Show("This is one of the game's core Trainers.\nYou cannot remove this file as it will cause issues.", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-                else
-                {
-                    var removeTrainer = fileSystemMethods.RemoveTrainer(mainEditorModel.SelectedTrainer.TrainerId);
-                    if (removeTrainer.Success)
-                    {
-                        MessageBox.Show("Trainer removed", "Success");
-                    }
-                    else
-                    {
-                        MessageBox.Show(removeTrainer.ErrorMessage, "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                MessageBox.Show("This is one of the game's core Trainers." +
+                    "\nYou cannot remove this file as it will cause issues.", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (mainEditorModel.BattleMessages.Any(x => x.TrainerId == trainerId))
+            {
+                MessageBox.Show("This Trainer has Battle Messages assigned." +
+                    "\nYou must remove these first before removing the trainer", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (mainEditorModel.SelectedTrainer.TrainerUsages.Count > 0)
+            {
+                var confirmDelete = MessageBox.Show("This Trainer is used either in an event, or script." +
+                    "\nIf you remove this trainer you will have to change the references to the trainer." +
+                    "\nRemove Trainer?", "Trainer Usage Found", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (confirmDelete != DialogResult.Yes) return;
+            }
+
+            DeleteTrainer(trainerId);
+        }
+
+        private void DeleteTrainer(int trainerId)
+        {
+            var removeTrainer = trainerEditorMethods.RemoveTrainer(trainerId);
+
+            if (removeTrainer.Success)
+            {
+                trainer_FilterBox.Text = "";
+                RefreshTrainerData();
+                ReloadTrainersList();
+                ClearUnsavedTrainerChanges();
+                trainer_TrainersListBox.SelectedIndex = trainerId - 1;
+                Console.WriteLine($"Removed Trainer number: {trainerId:D4}");
+                MessageBox.Show($"Removed Trainer number: {trainerId:D4}", "Success");
+            }
+            else
+            {
+                Console.WriteLine(removeTrainer.ErrorMessage);
+                MessageBox.Show(removeTrainer.ErrorMessage, "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -34,7 +34,13 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         (VsTrainersFile VsTrainersFile, bool Success, string ErrorMessage) ImportTrainers(string filePath);
 
-        (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
+        (bool Success, string ErrorMessage) RemoveTrainerData(int trainerId);
+       
+        /// <summary>
+        /// Reorder Trainer Property and Trainer Party data when a trainer file is removed to avoid errors with Trainer IDs
+        /// </summary>
+        /// <returns></returns>
+        (bool Success, string ErrorMessage) ReorderTrainerData();
 
         (bool Success, string ErrorMessage) UpdateTrainerScripts(int totalNumberOfTrainers);
 

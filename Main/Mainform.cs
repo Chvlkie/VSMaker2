@@ -189,7 +189,7 @@ namespace Main
                 mainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
                 ReportProgress();
 
-                mainEditorModel.TrainerNames = romFileMethods.GetTrainerNames(RomFile.TrainerNamesTextNumber);
+                mainEditorModel.TrainerNames =new(RomFile.TrainerNames);
                 ReportProgress();
 
                 mainEditorModel.ClassNames = romFileMethods.GetClassNames(RomFile.ClassNamesTextNumber);
@@ -198,7 +198,7 @@ namespace Main
                 mainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(RomFile.ClassDescriptionMessageNumber);
                 ReportProgress();
 
-                mainEditorModel.Trainers = trainerEditorMethods.GetTrainers(mainEditorModel.TrainerNames);
+                mainEditorModel.Trainers = trainerEditorMethods.GetTrainers();
                 ReportProgress();
 
                 mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
@@ -239,7 +239,7 @@ namespace Main
             {
                 isLoadingData = true;
                 int progressCount = 0;
-                const int totalSteps = 12;
+                const int totalSteps = 13;
                 const int increment = 100 / totalSteps;
 
                 void ReportProgress()
@@ -254,19 +254,22 @@ namespace Main
                 RomFile.EventFileData = eventFileMethods.GetEventFiles();
                 ReportProgress();
 
-                RomFile.TotalNumberOfTrainers = romFileMethods.GetTotalNumberOfTrainers(RomFile.TrainerNamesTextNumber);
+                RomFile.TrainerNames = romFileMethods.GetTrainerNames();
                 ReportProgress();
-
+               
                 RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                 ReportProgress();
 
                 RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
                 ReportProgress();
 
-                RomFile.TrainersData = romFileMethods.GetTrainersData(RomFile.TotalNumberOfTrainers);
+                RomFile.EventFileData = eventFileMethods.GetEventFiles();
                 ReportProgress();
 
-                RomFile.TrainersPartyData = romFileMethods.GetTrainersPartyData(RomFile.TotalNumberOfTrainers, RomFile.TrainersData, RomFile.GameFamily);
+                RomFile.TrainersData = romFileMethods.GetTrainersData();
+                ReportProgress();
+
+                RomFile.TrainersPartyData = romFileMethods.GetTrainersPartyData();
                 ReportProgress();
 
                 RomFile.TrainerNameMaxByte = romFileMethods.SetTrainerNameMax(RomFile.TrainerNameMaxByteOffset);
@@ -953,11 +956,11 @@ namespace Main
             loadingData = new LoadingData();
             romFileMethods = new RomFileMethods();
             scriptFileMethods = new ScriptFileMethods();
+            fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
             eventFileMethods = new EventFileMethods();
             battleMessageEditorMethods = new BattleMessageEditorMethods(romFileMethods);
-            trainerEditorMethods = new TrainerEditorMethods(romFileMethods);
+            trainerEditorMethods = new TrainerEditorMethods(romFileMethods, fileSystemMethods);
             classEditorMethods = new ClassEditorMethods(romFileMethods);
-            fileSystemMethods = new FileSystemMethods(romFileMethods, scriptFileMethods);
             ndsImage = new NdsImage();
 
             if (Config.LoadLastOpened)
@@ -1074,7 +1077,5 @@ namespace Main
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
         }
-
-       
     }
 }
