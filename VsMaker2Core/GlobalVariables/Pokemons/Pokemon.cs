@@ -54,11 +54,11 @@
 
         public static class Constants
         {
-            public const int PokemonNumberBitSize = 10;
-            public const int PokemonNumberBitMask = (1 << PokemonNumberBitSize) - 1;
+            public static int PokemonNumberBitSize => RomFile.GameVersion == Enums.GameVersion.HgEngine ? 11 : 10;
+            public static int PokemonNumberBitMask => (1 << PokemonNumberBitSize) - 1;
 
             public const int PokemonFormBitSize = 6;
-            public const int PokemonFormBitMask = ((1 << PokemonFormBitSize) - 1) << PokemonNumberBitSize;
+            public static int PokemonFormBitMask => ((1 << PokemonFormBitSize) - 1) << PokemonNumberBitSize;
         }
     }
 }

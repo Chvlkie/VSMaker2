@@ -189,7 +189,7 @@ namespace Main
                 mainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
                 ReportProgress();
 
-                mainEditorModel.TrainerNames =new(RomFile.TrainerNames);
+                mainEditorModel.TrainerNames = new(RomFile.TrainerNames);
                 ReportProgress();
 
                 mainEditorModel.ClassNames = romFileMethods.GetClassNames(RomFile.ClassNamesTextNumber);
@@ -226,6 +226,7 @@ namespace Main
             {
                 MessageBox.Show($"Error loading initial data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 progress?.Report(0);
+                throw;
             }
             finally
             {
@@ -256,7 +257,7 @@ namespace Main
 
                 RomFile.TrainerNames = romFileMethods.GetTrainerNames();
                 ReportProgress();
-               
+
                 RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                 ReportProgress();
 
@@ -693,6 +694,14 @@ namespace Main
                     Console.WriteLine("ROM version is unsupported.");
                     return false;
                 }
+                else if (RomFile.GameVersion == GameVersion.HeartGold)
+                {
+                    var isHgEngine = MessageBox.Show("You have opened a HeartGold ROM.\nHas this been expanded with HG Engine?", "Check for HG Engine", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (isHgEngine == DialogResult.Yes)
+                    {
+                        RomFile.GameVersion = GameVersion.HgEngine;
+                    }
+                }
 
                 romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
 
@@ -824,7 +833,6 @@ namespace Main
                 CloseProject();
                 return;
             }
-
             OpenLoadingDialog(LoadType.UnpackRom);
 
             if (!romLoaded || loadingError)

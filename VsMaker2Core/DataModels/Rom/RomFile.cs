@@ -15,6 +15,7 @@ namespace VsMaker2Core.DataModels
         public static string FileName { get; set; }
         public static string GameCode { get; set; }
 
+        public static bool IsHgEngine => GameVersion == GameVersion.HgEngine;
         public static bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
         public static bool IsNotDiamondPearl => GameFamily != GameFamily.DiamondPearl;
 
@@ -23,7 +24,7 @@ namespace VsMaker2Core.DataModels
             GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
             GameVersion.Platinum => GameFamily.Platinum,
             GameVersion.HeartGold or GameVersion.SoulSilver => GameFamily.HeartGoldSoulSilver,
-            GameVersion.HgEngine => GameFamily.HgEngine,
+            GameVersion.HgEngine => GameFamily.HeartGoldSoulSilver,
             _ => GameFamily.Unknown,
         };
 

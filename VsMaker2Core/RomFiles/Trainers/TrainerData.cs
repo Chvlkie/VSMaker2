@@ -7,6 +7,9 @@
         /// Pokemon Has Items = 0x01,
         /// Pokemon Choose Moves = 0x02,
         /// Pokemon Has Items and Choose Moves = 0x03.
+        /// 
+        /// HG ENGINE ONLY
+        /// 
         /// </summary>
         public byte TrainerType { get; set; }
 
