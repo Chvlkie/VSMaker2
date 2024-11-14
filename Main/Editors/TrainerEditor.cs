@@ -25,7 +25,6 @@ namespace Main
         private List<ComboBox> pokeHeldItemComboBoxes;
         private List<PictureBox> pokeIconsPictureBoxes;
         private List<NumericUpDown> pokeLevelNums;
-        private List<Button> pokeMoveButtons;
         private List<ushort[]> pokeMoves;
         private bool TrainerBattleMessagesChange;
         private bool TrainerDataChange;
@@ -292,7 +291,6 @@ namespace Main
             pokeBallCapsuleComboBoxes.ForEach(x => x.Enabled = false);
             pokeFormsComboBoxes.ForEach(x => x.Enabled = false);
             pokeHeldItemComboBoxes.ForEach(x => x.Enabled = false);
-            pokeMoveButtons.ForEach(x => x.Enabled = false);
             pokeGenderComboBoxes.ForEach(x => x.Enabled = false);
             pokeAbilityComboBoxes.ForEach(x => x.Enabled = false);
 
@@ -322,7 +320,6 @@ namespace Main
                             pokeAbilityComboBoxes[i].Enabled = RomFile.IsNotDiamondPearl && species.HasMoreThanOneAbility;
                             pokeFormsComboBoxes[i].Enabled = RomFile.IsNotDiamondPearl && Species.HasMoreThanOneForm(pokemonId);
                             pokeHeldItemComboBoxes[i].Enabled = chooseItems;
-                            pokeMoveButtons[i].Enabled = chooseMoves;
                             pokeGenderComboBoxes[i].Enabled = RomFile.IsNotDiamondPearl && species.HasMoreThanOneGender;
                         }
                     }
@@ -472,28 +469,7 @@ namespace Main
 
         #endregion Initialize
 
-        private void MoveBtn_Click(object sender, EventArgs e)
-        {
-            // Determine which button was clicked
-            var clickedButton = sender as Button;
-            int buttonIndex = pokeMoveButtons.IndexOf(clickedButton);
-
-            if (buttonIndex >= 0 && buttonIndex < pokeComboBoxes.Count)
-            {
-                var selectedItem = pokeComboBoxes[buttonIndex].SelectedItem?.ToString();
-
-                // Check if the selected item is valid
-                var match = System.Text.RegularExpressions.Regex.Match(selectedItem, @"^\[(\d{4})\] .+");
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int number) && number > 0)
-                {
-                    OpenMoveSelector(buttonIndex, GetPokemonIdFromComboBoxText(pokeComboBoxes[buttonIndex].Text));
-                }
-                else
-                {
-                    MessageBox.Show("Please select a valid Pokémon.", "Cannot Set Moves", MessageBoxButtons.OK);
-                }
-            }
-        }
+       
 
         private void OpenMoveSelector(int partyIndex, int pokemonId)
         {
@@ -1365,8 +1341,7 @@ namespace Main
 
             pokeHeldItemComboBoxes = [poke1HeldItemComboBox, poke2HeldItemComboBox, poke3HeldItemComboBox, poke4HeldItemComboBox, poke5HeldItemComboBox, poke6HeldItemComboBox,];
 
-            pokeMoveButtons = [poke1MoveBtn, poke2MoveBtn, poke3MoveBtn, poke4MoveBtn, poke5MoveBtn, poke6MoveBtn,];
-
+         
             pokeMoves = [poke1Moves, poke2Moves, poke3Moves, poke4Moves, poke5Moves, poke6Moves,];
         }
 
