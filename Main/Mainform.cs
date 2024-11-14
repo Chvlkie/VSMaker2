@@ -24,7 +24,6 @@ namespace Main
         #region Forms
 
         private LoadingData loadingData;
-        private MoveSelector moveSelector;
         private RomPatches romPatches;
 
         #endregion Forms
