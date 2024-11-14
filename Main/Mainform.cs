@@ -1086,5 +1086,24 @@ namespace Main
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
         }
+
+        private void trainer_PropertyFlags_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+           
+            if (trainer_PropertyFlags.GetItemChecked(0))
+            {
+                if (trainer_TeamSizeNum.Value < 2)
+                {
+                    trainer_TeamSizeNum.Value = 2;
+                }
+            }
+            trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 2 : 1;
+
+            if (!isLoadingData)
+            {
+                EditedTrainerProperty(true);
+                EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_PropertyFlags.GetItemChecked(2), trainer_PropertyFlags.GetItemChecked(1));
+            }
+        }
     }
 }

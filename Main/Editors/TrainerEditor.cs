@@ -1306,7 +1306,7 @@ namespace Main
 
         private void SetTrainerPartyProperties(TrainerProperty trainerProperties)
         {
-            trainer_TeamSizeNum.Maximum = trainerProperties.DoubleBattle ? 3 : 6;
+            trainer_TeamSizeNum.Minimum = trainerProperties.DoubleBattle ? 2 : 1;
             trainer_TeamSizeNum.Value = trainerProperties.TeamSize == 0 ? 1 : trainerProperties.TeamSize;
 
             trainer_PropertyFlags.SetItemChecked(0, trainerProperties.DoubleBattle);
@@ -1474,7 +1474,7 @@ namespace Main
 
         private void trainer_DblBattleCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            trainer_TeamSizeNum.Maximum = trainer_PropertyFlags.GetItemChecked(0) ? 3 : 6;
+            trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 2 : 1;
 
             if (!isLoadingData)
             {
