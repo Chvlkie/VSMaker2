@@ -1089,18 +1089,16 @@ namespace Main
 
         private void trainer_PropertyFlags_ItemCheck(object sender, ItemCheckEventArgs e)
         {
+           // Had to reverse the flag check logic here, as it sets the flag check after processing this event.
            
-            if (trainer_PropertyFlags.GetItemChecked(0))
-            {
-                if (trainer_TeamSizeNum.Value < 2)
-                {
-                    trainer_TeamSizeNum.Value = 2;
-                }
-            }
-            trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 2 : 1;
 
             if (!isLoadingData)
             {
+                if (!trainer_PropertyFlags.GetItemChecked(0) && trainer_TeamSizeNum.Value < 2)
+                {
+                    trainer_TeamSizeNum.Value = 2;
+                }
+                trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 1 : 2; 
                 EditedTrainerProperty(true);
                 EnableDisableParty((byte)trainer_TeamSizeNum.Value, trainer_PropertyFlags.GetItemChecked(2), trainer_PropertyFlags.GetItemChecked(1));
             }
