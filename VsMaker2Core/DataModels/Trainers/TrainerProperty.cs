@@ -15,6 +15,33 @@
 
         public byte TeamSize { get; set; }
 
+        public List<bool> PropertyFlags => RomFile.IsHgEngine ?
+            [
+            DoubleBattle,
+            ChooseMoves,
+            ChooseItems,
+            ChooseAbility_Hge,
+            ChooseBall_Hge, SetIvEv_Hge,
+            ChooseNature_Hge,
+            ShinyLock_Hge,
+            AdditionalFlags_Hge
+            ]
+        :
+            [
+            DoubleBattle,
+            ChooseMoves,
+            ChooseItems
+            ];
+
+        //HG Engine Parameters
+        public bool ChooseAbility_Hge { get; set; }
+
+        public bool ChooseBall_Hge { get; set; }
+        public bool SetIvEv_Hge { get; set; }
+        public bool ChooseNature_Hge { get; set; }
+        public bool ShinyLock_Hge { get; set; }
+        public bool AdditionalFlags_Hge { get; set; }
+
         public TrainerProperty()
         {
             AIFlags = [true, false, false, false, false, false, false, false, false, false, false];

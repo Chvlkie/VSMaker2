@@ -597,7 +597,7 @@ namespace VsMaker2Core.Methods
             return WriteMessage(trainerNames, trainerNamesArchive, true);
         }
 
-        public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule)
+        public (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool[] trainerTypeFlags, bool hasBallCapsule)
         {
             if (partyData.PokemonData == null)
             {
@@ -605,6 +605,15 @@ namespace VsMaker2Core.Methods
             }
 
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
+
+            bool hasMoves = trainerTypeFlags[0];
+            bool heldItems = trainerTypeFlags[1];
+            bool setAbility = trainerTypeFlags[2];
+            bool chooseBall = trainerTypeFlags[3];
+            bool chooseIvEv = trainerTypeFlags[4];
+            bool chooseNature = trainerTypeFlags[5];
+            bool shinyLock = trainerTypeFlags[6];
+            bool additionalFlags = trainerTypeFlags[7];
 
             try
             {
@@ -620,7 +629,7 @@ namespace VsMaker2Core.Methods
                         writer.Write(pokemon.Level);
                         writer.Write(pokemon.Species);
 
-                        if (chooseItems)
+                        if (heldItems)
                         {
                             if (pokemon.ItemId.HasValue && pokemon.ItemId == 0xFFFF)
                             {
@@ -629,12 +638,59 @@ namespace VsMaker2Core.Methods
                             writer.Write(pokemon.ItemId ?? 0);
                         }
 
-                        if (chooseMoves)
+                        if (hasMoves)
                         {
-                            writer.Write(pokemon.MoveIds[0]);
-                            writer.Write(pokemon.MoveIds[1]);
-                            writer.Write(pokemon.MoveIds[2]);
-                            writer.Write(pokemon.MoveIds[3]);
+                            for (int move = 0; move < 4; move++)
+                            {
+                                writer.Write(pokemon.MoveIds[move]);
+                            }
+                        }
+
+                        if (RomFile.IsHgEngine)
+                        {
+                            if (setAbility)
+                            {
+                                writer.Write(pokemon.Ability_Hge.Value);
+                            }
+                            if (chooseBall)
+                            {
+                                writer.Write(pokemon.Ball_Hge.Value);
+                            }
+                            if (chooseIvEv)
+                            {
+                                for (int iv = 0; iv < 6; iv++)
+                                {
+                                    writer.Write(pokemon.IvNums_Hge[iv]);
+                                }
+                                for (int ev = 0; ev < 6; ev++)
+                                {
+                                    writer.Write(pokemon.EvNums_Hge[ev]);
+                                }
+                            }
+                            if (chooseNature)
+                            {
+                                writer.Write(pokemon.Nature_Hge.Value);
+                            }
+                            if (shinyLock)
+                            {
+                                writer.Write(pokemon.ShinyLock_Hge.Value);
+                            }
+                            if (additionalFlags)
+                            {
+                                writer.Write(pokemon.Ball_Hge.Value);
+                            }
+                            if (chooseBall)
+                            {
+                                writer.Write(pokemon.Ball_Hge.Value);
+                            }
+                            if (chooseBall)
+                            {
+                                writer.Write(pokemon.Ball_Hge.Value);
+                            }
+                            if (chooseBall)
+                            {
+                                writer.Write(pokemon.Ball_Hge.Value);
+                            }
                         }
 
                         if (hasBallCapsule)

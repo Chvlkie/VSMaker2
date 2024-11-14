@@ -1,4 +1,5 @@
-﻿namespace Main
+﻿
+namespace Main
 {
     partial class Mainform
     {
@@ -337,8 +338,6 @@
 
         private Panel panel1;
 
-        private Panel panel10;
-
         private Panel panel11;
 
         private Panel panel12;
@@ -567,8 +566,6 @@
 
         private TabPage trainer_BattleMessageTab;
 
-        private CheckBox trainer_ChooseMovesCheckbox;
-
         private Label trainer_Class_Lbl;
 
         private Panel trainer_Class_Panel;
@@ -583,8 +580,6 @@
 
         private ToolStripButton trainer_CopyProperties_btn;
 
-        private CheckBox trainer_DblBattleCheckBox;
-
         private ListBox trainer_EventUsage;
 
         private ToolStripButton trainer_Export_Btn;
@@ -596,8 +591,6 @@
         private ToolStripButton trainer_ExportProperties_btn;
 
         private TextBox trainer_FilterBox;
-
-        private CheckBox trainer_HeldItemsCheckbox;
 
         private ToolStripButton trainer_Import_Btn;
 
@@ -909,7 +902,7 @@
             label16 = new Label();
             poke4IconPicBox = new PictureBox();
             poke4ComboBox = new ComboBox();
-            panel10 = new Panel();
+            trainer_PropertyFlags = new CheckedListBox();
             trainer_Properties_toolStrip = new ToolStrip();
             trainer_SaveProperties_btn = new ToolStripButton();
             trainer_UndoProperties_btn = new ToolStripButton();
@@ -922,12 +915,9 @@
             trainer_ItemComboBox4 = new ComboBox();
             trainer_ItemComboBox3 = new ComboBox();
             label48 = new Label();
-            trainer_DblBattleCheckBox = new CheckBox();
             trainer_ItemComboBox2 = new ComboBox();
             trainer_TeamSizeNum = new NumericUpDown();
             trainer_ItemComboBox1 = new ComboBox();
-            trainer_HeldItemsCheckbox = new CheckBox();
-            trainer_ChooseMovesCheckbox = new CheckBox();
             label50 = new Label();
             trainer_AiFlags_listbox = new CheckedListBox();
             label49 = new Label();
@@ -1105,6 +1095,9 @@
             main_SettingsBtn = new ToolStripButton();
             romName_Label = new Label();
             romIcon_PicBox = new PictureBox();
+            label72 = new Label();
+            groupBox1 = new GroupBox();
+            toolStripButton5 = new ToolStripButton();
             mainMenu.SuspendLayout();
             startupTab.SuspendLayout();
             startupPage.SuspendLayout();
@@ -1133,7 +1126,6 @@
             ((System.ComponentModel.ISupportInitialize)poke4DVNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke4LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke4IconPicBox).BeginInit();
-            panel10.SuspendLayout();
             trainer_Properties_toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_TeamSizeNum).BeginInit();
             trainer_BattleMessageTab.SuspendLayout();
@@ -1175,6 +1167,7 @@
             toolstripContainer.SuspendLayout();
             mainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenu
@@ -1456,8 +1449,8 @@
             // 
             // trainer_TrainerData_tab
             // 
+            trainer_TrainerData_tab.Controls.Add(groupBox1);
             trainer_TrainerData_tab.Controls.Add(panel11);
-            trainer_TrainerData_tab.Controls.Add(panel10);
             trainer_TrainerData_tab.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             trainer_TrainerData_tab.Location = new Point(4, 24);
             trainer_TrainerData_tab.Name = "trainer_TrainerData_tab";
@@ -2803,36 +2796,25 @@
             poke4ComboBox.Size = new Size(144, 21);
             poke4ComboBox.TabIndex = 100;
             // 
-            // panel10
+            // trainer_PropertyFlags
             // 
-            panel10.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            panel10.Controls.Add(trainer_Properties_toolStrip);
-            panel10.Controls.Add(trainer_ItemComboBox4);
-            panel10.Controls.Add(trainer_ItemComboBox3);
-            panel10.Controls.Add(label48);
-            panel10.Controls.Add(trainer_DblBattleCheckBox);
-            panel10.Controls.Add(trainer_ItemComboBox2);
-            panel10.Controls.Add(trainer_TeamSizeNum);
-            panel10.Controls.Add(trainer_ItemComboBox1);
-            panel10.Controls.Add(trainer_HeldItemsCheckbox);
-            panel10.Controls.Add(trainer_ChooseMovesCheckbox);
-            panel10.Controls.Add(label50);
-            panel10.Controls.Add(trainer_AiFlags_listbox);
-            panel10.Controls.Add(label49);
-            panel10.Location = new Point(6, 3);
-            panel10.Name = "panel10";
-            panel10.Size = new Size(807, 137);
-            panel10.TabIndex = 155;
+            trainer_PropertyFlags.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            trainer_PropertyFlags.CheckOnClick = true;
+            trainer_PropertyFlags.Font = new Font("Segoe UI", 8F);
+            trainer_PropertyFlags.FormattingEnabled = true;
+            trainer_PropertyFlags.Location = new Point(306, 55);
+            trainer_PropertyFlags.MultiColumn = true;
+            trainer_PropertyFlags.Name = "trainer_PropertyFlags";
+            trainer_PropertyFlags.Size = new Size(207, 72);
+            trainer_PropertyFlags.TabIndex = 157;
             // 
             // trainer_Properties_toolStrip
             // 
-            trainer_Properties_toolStrip.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            trainer_Properties_toolStrip.Dock = DockStyle.None;
-            trainer_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveProperties_btn, trainer_UndoProperties_btn, toolStripSeparator13, trainer_CopyProperties_btn, trainer_PastePropeties_btn, toolStripSeparator21, trainer_ImportProperties_btn, trainer_ExportProperties_btn });
+            trainer_Properties_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveProperties_btn, trainer_UndoProperties_btn, toolStripSeparator13, trainer_CopyProperties_btn, trainer_PastePropeties_btn, toolStripSeparator21, trainer_ImportProperties_btn, trainer_ExportProperties_btn, toolStripButton5 });
             trainer_Properties_toolStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
-            trainer_Properties_toolStrip.Location = new Point(569, 5);
+            trainer_Properties_toolStrip.Location = new Point(3, 19);
             trainer_Properties_toolStrip.Name = "trainer_Properties_toolStrip";
-            trainer_Properties_toolStrip.Size = new Size(235, 23);
+            trainer_Properties_toolStrip.Size = new Size(798, 23);
             trainer_Properties_toolStrip.TabIndex = 156;
             trainer_Properties_toolStrip.Text = "toolStrip8";
             // 
@@ -2914,9 +2896,9 @@
             trainer_ItemComboBox4.AutoCompleteSource = AutoCompleteSource.ListItems;
             trainer_ItemComboBox4.Font = new Font("Segoe UI", 8F);
             trainer_ItemComboBox4.FormattingEnabled = true;
-            trainer_ItemComboBox4.Location = new Point(3, 101);
+            trainer_ItemComboBox4.Location = new Point(190, 87);
             trainer_ItemComboBox4.Name = "trainer_ItemComboBox4";
-            trainer_ItemComboBox4.Size = new Size(125, 21);
+            trainer_ItemComboBox4.Size = new Size(110, 21);
             trainer_ItemComboBox4.TabIndex = 7;
             trainer_ItemComboBox4.SelectedIndexChanged += trainer_ItemComboBox4_SelectedIndexChanged;
             // 
@@ -2926,9 +2908,9 @@
             trainer_ItemComboBox3.AutoCompleteSource = AutoCompleteSource.ListItems;
             trainer_ItemComboBox3.Font = new Font("Segoe UI", 8F);
             trainer_ItemComboBox3.FormattingEnabled = true;
-            trainer_ItemComboBox3.Location = new Point(134, 101);
+            trainer_ItemComboBox3.Location = new Point(74, 87);
             trainer_ItemComboBox3.Name = "trainer_ItemComboBox3";
-            trainer_ItemComboBox3.Size = new Size(125, 21);
+            trainer_ItemComboBox3.Size = new Size(110, 21);
             trainer_ItemComboBox3.TabIndex = 6;
             trainer_ItemComboBox3.SelectedIndexChanged += trainer_ItemComboBox3_SelectedIndexChanged;
             // 
@@ -2936,23 +2918,11 @@
             // 
             label48.AutoSize = true;
             label48.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label48.Location = new Point(3, 10);
+            label48.Location = new Point(3, 42);
             label48.Name = "label48";
             label48.Size = new Size(63, 15);
             label48.TabIndex = 154;
             label48.Text = "Team Size";
-            // 
-            // trainer_DblBattleCheckBox
-            // 
-            trainer_DblBattleCheckBox.AutoSize = true;
-            trainer_DblBattleCheckBox.Font = new Font("Segoe UI", 9F);
-            trainer_DblBattleCheckBox.Location = new Point(131, 9);
-            trainer_DblBattleCheckBox.Name = "trainer_DblBattleCheckBox";
-            trainer_DblBattleCheckBox.Size = new Size(97, 19);
-            trainer_DblBattleCheckBox.TabIndex = 2;
-            trainer_DblBattleCheckBox.Text = "Double Battle";
-            trainer_DblBattleCheckBox.UseVisualStyleBackColor = true;
-            trainer_DblBattleCheckBox.CheckedChanged += trainer_DblBattleCheckBox_CheckedChanged;
             // 
             // trainer_ItemComboBox2
             // 
@@ -2960,19 +2930,19 @@
             trainer_ItemComboBox2.AutoCompleteSource = AutoCompleteSource.ListItems;
             trainer_ItemComboBox2.Font = new Font("Segoe UI", 8F);
             trainer_ItemComboBox2.FormattingEnabled = true;
-            trainer_ItemComboBox2.Location = new Point(134, 67);
+            trainer_ItemComboBox2.Location = new Point(190, 60);
             trainer_ItemComboBox2.Name = "trainer_ItemComboBox2";
-            trainer_ItemComboBox2.Size = new Size(125, 21);
+            trainer_ItemComboBox2.Size = new Size(110, 21);
             trainer_ItemComboBox2.TabIndex = 5;
             trainer_ItemComboBox2.SelectedIndexChanged += trainer_ItemComboBox2_SelectedIndexChanged;
             // 
             // trainer_TeamSizeNum
             // 
-            trainer_TeamSizeNum.Location = new Point(72, 8);
+            trainer_TeamSizeNum.Location = new Point(6, 60);
             trainer_TeamSizeNum.Maximum = new decimal(new int[] { 6, 0, 0, 0 });
             trainer_TeamSizeNum.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             trainer_TeamSizeNum.Name = "trainer_TeamSizeNum";
-            trainer_TeamSizeNum.Size = new Size(39, 23);
+            trainer_TeamSizeNum.Size = new Size(62, 23);
             trainer_TeamSizeNum.TabIndex = 1;
             trainer_TeamSizeNum.Value = new decimal(new int[] { 1, 0, 0, 0 });
             trainer_TeamSizeNum.ValueChanged += trainer_TeamSizeNum_ValueChanged;
@@ -2983,40 +2953,16 @@
             trainer_ItemComboBox1.AutoCompleteSource = AutoCompleteSource.ListItems;
             trainer_ItemComboBox1.Font = new Font("Segoe UI", 8F);
             trainer_ItemComboBox1.FormattingEnabled = true;
-            trainer_ItemComboBox1.Location = new Point(3, 67);
+            trainer_ItemComboBox1.Location = new Point(74, 60);
             trainer_ItemComboBox1.Name = "trainer_ItemComboBox1";
-            trainer_ItemComboBox1.Size = new Size(125, 21);
+            trainer_ItemComboBox1.Size = new Size(110, 21);
             trainer_ItemComboBox1.TabIndex = 4;
             trainer_ItemComboBox1.SelectedIndexChanged += trainer_ItemComboBox1_SelectedIndexChanged;
-            // 
-            // trainer_HeldItemsCheckbox
-            // 
-            trainer_HeldItemsCheckbox.AutoSize = true;
-            trainer_HeldItemsCheckbox.Font = new Font("Segoe UI", 9F);
-            trainer_HeldItemsCheckbox.Location = new Point(234, 9);
-            trainer_HeldItemsCheckbox.Name = "trainer_HeldItemsCheckbox";
-            trainer_HeldItemsCheckbox.Size = new Size(83, 19);
-            trainer_HeldItemsCheckbox.TabIndex = 3;
-            trainer_HeldItemsCheckbox.Text = "Held Items";
-            trainer_HeldItemsCheckbox.UseVisualStyleBackColor = true;
-            trainer_HeldItemsCheckbox.CheckedChanged += trainer_HeldItemsCheckbox_CheckedChanged;
-            // 
-            // trainer_ChooseMovesCheckbox
-            // 
-            trainer_ChooseMovesCheckbox.AutoSize = true;
-            trainer_ChooseMovesCheckbox.Font = new Font("Segoe UI", 9F);
-            trainer_ChooseMovesCheckbox.Location = new Point(323, 9);
-            trainer_ChooseMovesCheckbox.Name = "trainer_ChooseMovesCheckbox";
-            trainer_ChooseMovesCheckbox.Size = new Size(104, 19);
-            trainer_ChooseMovesCheckbox.TabIndex = 4;
-            trainer_ChooseMovesCheckbox.Text = "Choose Moves";
-            trainer_ChooseMovesCheckbox.UseVisualStyleBackColor = true;
-            trainer_ChooseMovesCheckbox.CheckedChanged += trainer_ChooseMovesCheckbox_CheckedChanged;
             // 
             // label50
             // 
             label50.AutoSize = true;
-            label50.Location = new Point(3, 42);
+            label50.Location = new Point(74, 42);
             label50.Name = "label50";
             label50.Size = new Size(89, 15);
             label50.TabIndex = 2;
@@ -3028,17 +2974,17 @@
             trainer_AiFlags_listbox.CheckOnClick = true;
             trainer_AiFlags_listbox.Font = new Font("Segoe UI", 8F);
             trainer_AiFlags_listbox.FormattingEnabled = true;
-            trainer_AiFlags_listbox.Location = new Point(276, 67);
+            trainer_AiFlags_listbox.Location = new Point(519, 55);
             trainer_AiFlags_listbox.MultiColumn = true;
             trainer_AiFlags_listbox.Name = "trainer_AiFlags_listbox";
-            trainer_AiFlags_listbox.Size = new Size(528, 55);
+            trainer_AiFlags_listbox.Size = new Size(285, 72);
             trainer_AiFlags_listbox.TabIndex = 3;
             trainer_AiFlags_listbox.ItemCheck += trainer_AiFlags_listbox_ItemCheck;
             // 
             // label49
             // 
             label49.AutoSize = true;
-            label49.Location = new Point(276, 42);
+            label49.Location = new Point(519, 38);
             label49.Name = "label49";
             label49.Size = new Size(49, 15);
             label49.TabIndex = 1;
@@ -4808,6 +4754,46 @@
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
+            // label72
+            // 
+            label72.AutoSize = true;
+            label72.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label72.Location = new Point(100, 24);
+            label72.Name = "label72";
+            label72.Size = new Size(107, 15);
+            label72.TabIndex = 157;
+            label72.Text = "Trainer Properties";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(label48);
+            groupBox1.Controls.Add(trainer_Properties_toolStrip);
+            groupBox1.Controls.Add(label72);
+            groupBox1.Controls.Add(trainer_ItemComboBox4);
+            groupBox1.Controls.Add(trainer_ItemComboBox3);
+            groupBox1.Controls.Add(trainer_TeamSizeNum);
+            groupBox1.Controls.Add(trainer_ItemComboBox2);
+            groupBox1.Controls.Add(trainer_PropertyFlags);
+            groupBox1.Controls.Add(trainer_ItemComboBox1);
+            groupBox1.Controls.Add(trainer_AiFlags_listbox);
+            groupBox1.Controls.Add(label50);
+            groupBox1.Controls.Add(label49);
+            groupBox1.Location = new Point(6, 3);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(804, 138);
+            groupBox1.TabIndex = 158;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Trainer Properties";
+            // 
+            // toolStripButton5
+            // 
+            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
+            toolStripButton5.ImageTransparentColor = Color.Magenta;
+            toolStripButton5.Name = "toolStripButton5";
+            toolStripButton5.Size = new Size(23, 20);
+            toolStripButton5.Text = "toolStripButton5";
+            // 
             // Mainform
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -4857,8 +4843,6 @@
             ((System.ComponentModel.ISupportInitialize)poke4DVNum).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke4LevelNum).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke4IconPicBox).EndInit();
-            panel10.ResumeLayout(false);
-            panel10.PerformLayout();
             trainer_Properties_toolStrip.ResumeLayout(false);
             trainer_Properties_toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trainer_TeamSizeNum).EndInit();
@@ -4922,6 +4906,8 @@
             mainToolStrip.ResumeLayout(false);
             mainToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)romIcon_PicBox).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -4932,5 +4918,9 @@
         private ToolStripButton class_SavePropertyBtn;
         private ToolStripButton class_UndoPropertiesBtn;
         private ToolStripSeparator toolStripSeparator16;
+        private CheckedListBox trainer_PropertyFlags;
+        private GroupBox groupBox1;
+        private Label label72;
+        private ToolStripButton toolStripButton5;
     }
 }

@@ -19,6 +19,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="CustomUi\ComboBox\**" />
+	  <Compile Remove="CustomUi\Extensions\**" />
+	  <EmbeddedResource Remove="CustomUi\ComboBox\**" />
+	  <EmbeddedResource Remove="CustomUi\Extensions\**" />
+	  <None Remove="CustomUi\ComboBox\**" />
+	  <None Remove="CustomUi\Extensions\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Resources\Fonts\pokemon-ds-font.ttf" />
 		<None Remove="Resources\Icons\add_ico.png" />
 		<None Remove="Resources\Icons\copy_ico.png" />
@@ -104,11 +113,6 @@
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="CustomUi\ComboBox\" />
-	  <Folder Include="CustomUi\Extensions\ComboBox\" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -68,6 +68,6 @@ namespace VsMaker2Core.Methods
 
         (bool Success, string ErrorMessage) WriteTrainerName(List<string> trainerNames, int trainerId, string newName, int trainerNamesArchive);
 
-        (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool chooseItems, bool chooseMoves, bool hasBallCapsule);
+        (bool Success, string ErrorMessage) WriteTrainerPartyData(TrainerPartyData partyData, int trainerId, bool[] trainerTypeFlags, bool hasBallCapsule);
     }
 }

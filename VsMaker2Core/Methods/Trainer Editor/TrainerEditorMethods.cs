@@ -19,13 +19,13 @@ namespace VsMaker2Core.Methods
         public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
         {
             var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
-            var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, trainerProperties.ChooseItems, trainerProperties.ChooseMoves, hasBallCapsule);
+            var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, hasBallCapsule, trainerProperties.PropertyFlags);
             var usages = FindTrainerUses(trainerId);
 
             return new Trainer((ushort)trainerId, trainerName, trainerProperties, trainerParty, usages);
         }
 
-        public TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasItems, bool chooseMoves, bool hasBallCapsule)
+        public TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasBallCapsule, List<bool> trainerPropertyFlags)
         {
             var trainerParty = new TrainerParty();
 
@@ -47,10 +47,27 @@ namespace VsMaker2Core.Methods
                     Level = trainerPartyPokemon.Level,
                     PokemonId = (ushort)(trainerPartyPokemon.Species & Pokemon.Constants.PokemonNumberBitMask),
                     FormId = (ushort)((trainerPartyPokemon.Species & Pokemon.Constants.PokemonFormBitMask) >> Pokemon.Constants.PokemonNumberBitSize),
-                    HeldItemId = hasItems ? trainerPartyPokemon.ItemId : null,
-                    Moves = chooseMoves ? trainerPartyPokemon.MoveIds : null,
-                    BallCapsuleId = hasBallCapsule ? trainerPartyPokemon.BallCapsule : null
+                    HeldItemId = trainerPropertyFlags[2] ? trainerPartyPokemon.ItemId : null,
+                    Moves = trainerPropertyFlags[1] ? trainerPartyPokemon.MoveIds : null,
+                    BallCapsuleId = hasBallCapsule ? trainerPartyPokemon.BallCapsule : null,
                 };
+
+                if (RomFile.IsHgEngine)
+                {
+                    pokemon.ChooseStatus_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x01) != 0;
+                    pokemon.ChooseHP_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x02) != 0;
+                    pokemon.ChooseATK_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x04) != 0;
+                    pokemon.ChooseDEF_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x08) != 0;
+                    pokemon.ChooseSPEED_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x10) != 0;
+                    pokemon.Choose_SpATK_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x20) != 0;
+                    pokemon.Choose_SpDEF_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x40) != 0;
+                    pokemon.ChooseTypes_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x80) != 0;
+                    pokemon.ChoosePP_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x100) != 0;
+                    pokemon.ChooseNickname_HGE = (trainerPartyPokemon.AdditionalFlags_Hge & 0x200) != 0;
+
+                    pokemon.Status_Hge = pokemon.ChooseStatus_Hge ? trainerPartyPokemon.Status_Hge : 0;
+                    pokemon.Hp_Hge = pokemon.ChooseHP_Hge ? trainerPartyPokemon.Hp_Hge : 0;
+                }
 
                 trainerParty.Pokemons.Add(pokemon);
             }
@@ -69,12 +86,22 @@ namespace VsMaker2Core.Methods
             var trainerProperty = new TrainerProperty()
             {
                 Items = trainerData.Items,
-                ChooseMoves = (trainerData.TrainerType & 1) != 0,   // Checks if the first bit is set
-                ChooseItems = (trainerData.TrainerType & 2) != 0,   // Checks if the second bit is set
+                ChooseMoves = (trainerData.TrainerType & 0x01) != 0,
+                ChooseItems = (trainerData.TrainerType & 0x02) != 0,
                 TrainerClassId = trainerData.TrainerClassId,
                 TeamSize = trainerData.TeamSize,
                 DoubleBattle = trainerData.IsDoubleBattle == 2
             };
+
+            if (RomFile.IsHgEngine)
+            {
+                trainerProperty.ChooseAbility_Hge = (trainerData.TrainerType & 0x04) != 0;
+                trainerProperty.ChooseBall_Hge = (trainerData.TrainerType & 0x08) != 0;
+                trainerProperty.SetIvEv_Hge = (trainerData.TrainerType & 0x10) != 0;
+                trainerProperty.ChooseNature_Hge = (trainerData.TrainerType & 0x20) != 0;
+                trainerProperty.ShinyLock_Hge = (trainerData.TrainerType & 0x40) != 0;
+                trainerProperty.AdditionalFlags_Hge = (trainerData.TrainerType & 0x80) != 0;
+            }
 
             var aiFlags = new BitArray(BitConverter.GetBytes(trainerData.AIFlags));
 
@@ -110,7 +137,42 @@ namespace VsMaker2Core.Methods
 
         public TrainerData NewTrainerData(TrainerProperty trainerProperties)
         {
-            byte trainerType = (byte)((trainerProperties.ChooseMoves ? 1 : 0) | (trainerProperties.ChooseItems ? 2 : 0));
+            byte trainerType = 0x00;
+            if (trainerProperties.ChooseMoves)
+            {
+                trainerType |= 0x01;
+            }
+            if (trainerProperties.ChooseItems)
+            {
+                trainerType |= 0x02;
+            }
+            if (RomFile.IsHgEngine)
+            {
+                if (trainerProperties.ChooseAbility_Hge)
+                {
+                    trainerType |= 0x04;
+                }
+                if (trainerProperties.ChooseBall_Hge)
+                {
+                    trainerType |= 0x08;
+                }
+                if (trainerProperties.SetIvEv_Hge)
+                {
+                    trainerType |= 0x10;
+                }
+                if (trainerProperties.ChooseNature_Hge)
+                {
+                    trainerType |= 0x20;
+                }
+                if (trainerProperties.ShinyLock_Hge)
+                {
+                    trainerType |= 0x40;
+                }
+                if (trainerProperties.AdditionalFlags_Hge)
+                {
+                    trainerType |= 0x80;
+                }
+            }
 
             uint aiFlags = 0;
             for (int i = 0; i < trainerProperties.AIFlags.Count; i++)
@@ -146,15 +208,22 @@ namespace VsMaker2Core.Methods
             };
         }
 
-        public TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags) => new TrainerProperty
+        public TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags) => new TrainerProperty
         {
-            DoubleBattle = isDouble,
-            ChooseItems = chooseItems,
-            ChooseMoves = chooseMoves,
+            DoubleBattle = propertyFlags[0],
+            ChooseMoves = propertyFlags[1],
+            ChooseItems = propertyFlags[2],
             TeamSize = teamSize,
             Items = [item1, item2, item3, item4],
             TrainerClassId = trainerClassId,
-            AIFlags = aiFlags
+            AIFlags = aiFlags,
+            ChooseAbility_Hge = RomFile.IsHgEngine && propertyFlags[3],
+            ChooseBall_Hge = RomFile.IsHgEngine && propertyFlags[4],
+            SetIvEv_Hge = RomFile.IsHgEngine && propertyFlags[5],
+            ChooseNature_Hge = RomFile.IsHgEngine && propertyFlags[6],
+            ShinyLock_Hge = RomFile.IsHgEngine && propertyFlags[7],
+            AdditionalFlags_Hge = RomFile.IsHgEngine && propertyFlags[8],
+
         };
 
         public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)

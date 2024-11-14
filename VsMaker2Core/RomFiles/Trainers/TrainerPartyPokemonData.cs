@@ -12,23 +12,23 @@
         public ushort[]? MoveIds { get; set; }
 
         //HG Engine Params
-        public ushort? AbilityHge { get; set; }
-        public ushort? BallHge { get; set; }
-        public byte[]? IvNumsHge { get; set; }
-        public byte[]? EvNumsHge { get; set; }
-        public byte? NatureHge { get; set; }
-        public byte? ShinyLockHge { get; set; }
-        public uint? AdditionalFlagsHge { get; set; }
-        public uint? StatusHge { get; set; }
-        public ushort? HpHge { get; set; }
-        public ushort? AtkHge { get; set; }
-        public ushort? DefHge { get; set; }
-        public ushort? SpeedHge { get; set; }
-        public ushort? SpAtkHge { get; set; }
-        public ushort? SpDefHge { get; set; }
-        public byte[]? TypesHge { get; set; }
-        public byte[]? PpCountsHge { get; set; }
-        public ushort[]? NicknameHge { get; set; }
+        public ushort? Ability_Hge { get; set; }
+        public ushort? Ball_Hge { get; set; }
+        public byte[]? IvNums_Hge { get; set; }
+        public byte[]? EvNums_Hge { get; set; }
+        public byte? Nature_Hge { get; set; }
+        public byte? ShinyLock_Hge { get; set; }
+        public uint? AdditionalFlags_Hge { get; set; }
+        public uint? Status_Hge { get; set; }
+        public ushort? Hp_Hge { get; set; }
+        public ushort? Atk_Hge { get; set; }
+        public ushort? Def_Hge { get; set; }
+        public ushort? Speed_Hge { get; set; }
+        public ushort? SpAtk_Hge { get; set; }
+        public ushort? SpDef_Hge { get; set; }
+        public byte[]? Types_Hge { get; set; }
+        public byte[]? PpCounts_Hge { get; set; }
+        public ushort[]? Nickname_Hge { get; set; }
         public TrainerPartyPokemonData()
         { }
 

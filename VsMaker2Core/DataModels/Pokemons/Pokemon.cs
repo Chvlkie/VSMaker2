@@ -1,4 +1,5 @@
-﻿using static VsMaker2Core.Enums;
+﻿using VsMaker2Core.RomFiles;
+using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core.DataModels
 {
@@ -16,6 +17,36 @@ namespace VsMaker2Core.DataModels
         public ushort? HeldItemId { get; set; }
         public ushort[]? Moves { get; set; }
         public ushort? BallCapsuleId { get; set; }
+
+        // HG Engine Data
+        public ushort? Ability_Hge { get; set; }
+        public ushort? Ball_Hge { get; set; }
+        public byte[]? IvNums_Hge { get; set; }
+        public byte[]? EvNums_Hge { get; set; }
+        public byte? Nature_Hge { get; set; }
+        public byte? ShinyLock_Hge { get; set; }
+        public uint? Status_Hge { get; set; }
+        public ushort? Hp_Hge { get; set; }
+        public ushort? Atk_Hge { get; set; }
+        public ushort? Def_Hge { get; set; }
+        public ushort? Speed_Hge { get; set; }
+        public ushort? SpAtk_Hge { get; set; }
+        public ushort? SpDef_Hge { get; set; }
+        public byte[]? Types_Hge { get; set; }
+        public byte[]? PpCounts_Hge { get; set; }
+        public ushort[]? Nickname_Hge { get; set; }
+
+        // Pokemon Additional Flags
+        public bool ChooseStatus_Hge { get; set; } = false;
+        public bool ChooseHP_Hge { get; set; } = false;
+        public bool ChooseATK_Hge { get; set; } = false;
+        public bool ChooseDEF_Hge { get; set; } = false;
+        public bool ChooseSPEED_Hge { get; set; } = false;
+        public bool Choose_SpATK_Hge { get; set; } = false;
+        public bool Choose_SpDEF_Hge { get; set; } = false;
+        public bool ChooseTypes_Hge { get; set; } = false;
+        public bool ChoosePP_Hge { get; set; } = false;
+        public bool ChooseNickname_HGE { get; set; } = false;
 
         public Pokemon()
         {

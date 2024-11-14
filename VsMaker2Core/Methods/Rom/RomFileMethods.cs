@@ -728,115 +728,115 @@ namespace VsMaker2Core.Methods
                     {
                         if (ability)
                         {
-                            trainerPartyPokemonData.AbilityHge = reader.ReadUInt16();
+                            trainerPartyPokemonData.Ability_Hge = reader.ReadUInt16();
                         }
 
                         if (chooseBall)
                         {
-                            trainerPartyPokemonData.BallHge = reader.ReadUInt16();
+                            trainerPartyPokemonData.Ball_Hge = reader.ReadUInt16();
                         }
 
                         if (chooseIvEv)
                         {
-                            trainerPartyPokemonData.IvNumsHge = new byte[6];
-                            trainerPartyPokemonData.EvNumsHge = new byte[6];
+                            trainerPartyPokemonData.IvNums_Hge = new byte[6];
+                            trainerPartyPokemonData.EvNums_Hge = new byte[6];
                             for (int ivs = 0; ivs < 6; ivs++)
                             {
-                                trainerPartyPokemonData.IvNumsHge[ivs] = reader.ReadByte();
+                                trainerPartyPokemonData.IvNums_Hge[ivs] = reader.ReadByte();
                             }
 
                             for (int evs = 0; evs < 6; evs++)
                             {
-                                trainerPartyPokemonData.EvNumsHge[evs] = reader.ReadByte();
+                                trainerPartyPokemonData.EvNums_Hge[evs] = reader.ReadByte();
                             }
                         }
 
                         if (chooseNature)
                         {
-                            trainerPartyPokemonData.NatureHge = reader.ReadByte();
+                            trainerPartyPokemonData.Nature_Hge = reader.ReadByte();
                         }
 
                         if (shinyLock)
                         {
-                            trainerPartyPokemonData.ShinyLockHge = reader.ReadByte();
+                            trainerPartyPokemonData.ShinyLock_Hge = reader.ReadByte();
                         }
 
                         if (additionalFlags)
                         {
-                            trainerPartyPokemonData.AdditionalFlagsHge = reader.ReadUInt32();
+                            trainerPartyPokemonData.AdditionalFlags_Hge = reader.ReadUInt32();
 
 
                             // Now additional flag checks
-                            bool chooseStatus = (trainerPartyPokemonData.AdditionalFlagsHge & 0x01) != 0;
-                            bool chooseHP = (trainerPartyPokemonData.AdditionalFlagsHge & 0x02) != 0;
-                            bool chooseATK = (trainerPartyPokemonData.AdditionalFlagsHge & 0x04) != 0;
-                            bool chooseDEF = (trainerPartyPokemonData.AdditionalFlagsHge & 0x08) != 0;
-                            bool chooseSPEED = (trainerPartyPokemonData.AdditionalFlagsHge & 0x10) != 0;
-                            bool chooseSpATK = (trainerPartyPokemonData.AdditionalFlagsHge & 0x20) != 0;
-                            bool chooseSpDEF = (trainerPartyPokemonData.AdditionalFlagsHge & 0x40) != 0;
-                            bool chooseTypes = (trainerPartyPokemonData.AdditionalFlagsHge & 0x80) != 0;
-                            bool choosePP = (trainerPartyPokemonData.AdditionalFlagsHge & 0x100) != 0;
-                            bool chooseNickname = (trainerPartyPokemonData.AdditionalFlagsHge & 0x200) != 0;
+                            bool chooseStatus = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x01) != 0;
+                            bool chooseHP = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x02) != 0;
+                            bool chooseATK = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x04) != 0;
+                            bool chooseDEF = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x08) != 0;
+                            bool chooseSPEED = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x10) != 0;
+                            bool chooseSpATK = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x20) != 0;
+                            bool chooseSpDEF = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x40) != 0;
+                            bool chooseTypes = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x80) != 0;
+                            bool choosePP = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x100) != 0;
+                            bool chooseNickname = (trainerPartyPokemonData.AdditionalFlags_Hge & 0x200) != 0;
 
                             if (chooseStatus)
                             {
-                                trainerPartyPokemonData.StatusHge = reader.ReadUInt32();
+                                trainerPartyPokemonData.Status_Hge = reader.ReadUInt32();
                             }
 
                             if (chooseHP)
                             {
-                                trainerPartyPokemonData.HpHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.Hp_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseATK)
                             {
-                                trainerPartyPokemonData.AtkHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.Atk_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseDEF)
                             {
-                                trainerPartyPokemonData.DefHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.Def_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseSPEED)
                             {
-                                trainerPartyPokemonData.SpeedHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.Speed_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseSpATK)
                             {
-                                trainerPartyPokemonData.SpAtkHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.SpAtk_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseSpDEF)
                             {
-                                trainerPartyPokemonData.SpDefHge = reader.ReadUInt16();
+                                trainerPartyPokemonData.SpDef_Hge = reader.ReadUInt16();
                             }
 
                             if (chooseTypes)
                             {
-                                trainerPartyPokemonData.TypesHge = new byte[2];
+                                trainerPartyPokemonData.Types_Hge = new byte[2];
                                 for (int types = 0; types < 2; types++)
                                 {
-                                    trainerPartyPokemonData.TypesHge[types] = reader.ReadByte();
+                                    trainerPartyPokemonData.Types_Hge[types] = reader.ReadByte();
                                 }
                             }
 
                             if (choosePP)
                             {
-                                trainerPartyPokemonData.PpCountsHge = new byte[4];
+                                trainerPartyPokemonData.PpCounts_Hge = new byte[4];
                                 for (int pp = 0; pp < 4; pp++)
                                 {
-                                    trainerPartyPokemonData.PpCountsHge[pp] = reader.ReadByte();
+                                    trainerPartyPokemonData.PpCounts_Hge[pp] = reader.ReadByte();
                                 }
                             }
 
                             if (chooseNickname)
                             {
-                                trainerPartyPokemonData.NicknameHge = new ushort[11];
+                                trainerPartyPokemonData.Nickname_Hge = new ushort[11];
                                 for (int nameChar = 0; nameChar < 11; nameChar++)
                                 {
-                                    trainerPartyPokemonData.NicknameHge[nameChar] = reader.ReadUInt16();
+                                    trainerPartyPokemonData.Nickname_Hge[nameChar] = reader.ReadUInt16();
                                 }
                             }
                         }

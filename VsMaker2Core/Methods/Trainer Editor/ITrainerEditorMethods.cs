@@ -20,7 +20,7 @@ namespace VsMaker2Core.Methods
         /// <returns></returns>
         Trainer GetTrainer(List<Trainer> trainers, int trainerId);
 
-        TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasItems, bool chooseMoves, bool hasBallCapsule);
+        TrainerParty BuildTrainerPartyFromRomData(TrainerPartyData trainerPartyData, int teamSize, bool hasBallCapsule, List<bool> trainerPropertyFlags);
 
         TrainerProperty BuildTrainerPropertyFromRomData(TrainerData trainerData);
 
@@ -28,7 +28,7 @@ namespace VsMaker2Core.Methods
 
         TrainerData NewTrainerData(TrainerProperty trainerProperties);
 
-        TrainerProperty NewTrainerProperties(byte teamSize, bool chooseMoves, bool chooseItems, bool isDouble, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags);
+        TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags);
 
         TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule);
         (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);
