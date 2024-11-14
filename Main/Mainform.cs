@@ -261,6 +261,7 @@ namespace Main
                 RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                 ReportProgress();
 
+
                 RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
                 ReportProgress();
 
