@@ -593,9 +593,9 @@ namespace Main
             trainer_PropertiesTabControl = new TabControl();
             trainer_TrainerData_tab = new TabPage();
             groupBox2 = new GroupBox();
-            tabControl1 = new TabControl();
+            poke6Moves_groupBox = new TabControl();
             poke1_Tab = new TabPage();
-            poke1HgEngine = new GroupBox();
+            poke1HgEngine_groupBox = new GroupBox();
             poke1_Shiny_checkBox = new CheckBox();
             poke1_EditStats_button = new Button();
             label17 = new Label();
@@ -649,7 +649,7 @@ namespace Main
             label8 = new Label();
             poke1FormComboBox = new ComboBox();
             poke2_Tab = new TabPage();
-            groupBox11 = new GroupBox();
+            poke2HgEngine_groupBox = new GroupBox();
             checkBox1 = new CheckBox();
             button3 = new Button();
             label18 = new Label();
@@ -671,7 +671,7 @@ namespace Main
             label27 = new Label();
             comboBox12 = new ComboBox();
             checkedListBox2 = new CheckedListBox();
-            groupBox12 = new GroupBox();
+            poke2Moves_groupBox = new GroupBox();
             poke2_Move4_PP_num = new NumericUpDown();
             label28 = new Label();
             poke2_Move3_PP_num = new NumericUpDown();
@@ -703,7 +703,7 @@ namespace Main
             label37 = new Label();
             poke2FormComboBox = new ComboBox();
             poke3_Tab = new TabPage();
-            groupBox17 = new GroupBox();
+            poke3HgEngine_groupBox = new GroupBox();
             checkBox2 = new CheckBox();
             button5 = new Button();
             label38 = new Label();
@@ -725,7 +725,7 @@ namespace Main
             label47 = new Label();
             comboBox28 = new ComboBox();
             checkedListBox3 = new CheckedListBox();
-            groupBox18 = new GroupBox();
+            poke3Moves_groupBox = new GroupBox();
             poke3_Move4_PP_num = new NumericUpDown();
             label48 = new Label();
             poke3_Move3_PP_num = new NumericUpDown();
@@ -757,7 +757,7 @@ namespace Main
             label81 = new Label();
             poke3FormComboBox = new ComboBox();
             poke4_Tab = new TabPage();
-            groupBox23 = new GroupBox();
+            poke4HgEngine_groupBox = new GroupBox();
             checkBox3 = new CheckBox();
             button7 = new Button();
             label82 = new Label();
@@ -779,7 +779,7 @@ namespace Main
             label91 = new Label();
             comboBox44 = new ComboBox();
             checkedListBox4 = new CheckedListBox();
-            groupBox24 = new GroupBox();
+            poke4Moves_groupBox = new GroupBox();
             poke4_Move4_PP_num = new NumericUpDown();
             label92 = new Label();
             poke4_Move3_PP_num = new NumericUpDown();
@@ -811,7 +811,7 @@ namespace Main
             label101 = new Label();
             poke4FormComboBox = new ComboBox();
             poke5_Tab = new TabPage();
-            groupBox29 = new GroupBox();
+            poke5HgEngine_groupBox = new GroupBox();
             checkBox4 = new CheckBox();
             button9 = new Button();
             label102 = new Label();
@@ -833,7 +833,7 @@ namespace Main
             label111 = new Label();
             comboBox60 = new ComboBox();
             checkedListBox5 = new CheckedListBox();
-            groupBox30 = new GroupBox();
+            poke5Moves_groupBox = new GroupBox();
             poke5_Move4_PP_num = new NumericUpDown();
             label112 = new Label();
             poke5_Move3_PP_num = new NumericUpDown();
@@ -865,7 +865,7 @@ namespace Main
             label121 = new Label();
             poke5FormComboBox = new ComboBox();
             poke6_Tab = new TabPage();
-            groupBox35 = new GroupBox();
+            poke6HgEngine_groupBox = new GroupBox();
             checkBox5 = new CheckBox();
             button11 = new Button();
             label122 = new Label();
@@ -1138,9 +1138,9 @@ namespace Main
             trainer_PropertiesTabControl.SuspendLayout();
             trainer_TrainerData_tab.SuspendLayout();
             groupBox2.SuspendLayout();
-            tabControl1.SuspendLayout();
+            poke6Moves_groupBox.SuspendLayout();
             poke1_Tab.SuspendLayout();
-            poke1HgEngine.SuspendLayout();
+            poke1HgEngine_groupBox.SuspendLayout();
             poke1Moves_groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke1_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke1_Move3_PP_num).BeginInit();
@@ -1153,8 +1153,8 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke1DVNum).BeginInit();
             poke1Data.SuspendLayout();
             poke2_Tab.SuspendLayout();
-            groupBox11.SuspendLayout();
-            groupBox12.SuspendLayout();
+            poke2HgEngine_groupBox.SuspendLayout();
+            poke2Moves_groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke2_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke2_Move3_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke2_Move2_PP_num).BeginInit();
@@ -1166,8 +1166,8 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke2DVNum).BeginInit();
             groupBox16.SuspendLayout();
             poke3_Tab.SuspendLayout();
-            groupBox17.SuspendLayout();
-            groupBox18.SuspendLayout();
+            poke3HgEngine_groupBox.SuspendLayout();
+            poke3Moves_groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke3_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke3_Move3_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke3_Move2_PP_num).BeginInit();
@@ -1179,8 +1179,8 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke3DVNum).BeginInit();
             groupBox22.SuspendLayout();
             poke4_Tab.SuspendLayout();
-            groupBox23.SuspendLayout();
-            groupBox24.SuspendLayout();
+            poke4HgEngine_groupBox.SuspendLayout();
+            poke4Moves_groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke4_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke4_Move3_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke4_Move2_PP_num).BeginInit();
@@ -1192,8 +1192,8 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke4DVNum).BeginInit();
             groupBox28.SuspendLayout();
             poke5_Tab.SuspendLayout();
-            groupBox29.SuspendLayout();
-            groupBox30.SuspendLayout();
+            poke5HgEngine_groupBox.SuspendLayout();
+            poke5Moves_groupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke5_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke5_Move3_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke5_Move2_PP_num).BeginInit();
@@ -1205,7 +1205,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke5DVNum).BeginInit();
             groupBox34.SuspendLayout();
             poke6_Tab.SuspendLayout();
-            groupBox35.SuspendLayout();
+            poke6HgEngine_groupBox.SuspendLayout();
             groupBox36.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)poke6_Move4_PP_num).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke6_Move3_PP_num).BeginInit();
@@ -1568,7 +1568,7 @@ namespace Main
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(tabControl1);
+            groupBox2.Controls.Add(poke6Moves_groupBox);
             groupBox2.Controls.Add(trainer_Party_toolStrip);
             groupBox2.Dock = DockStyle.Fill;
             groupBox2.Location = new Point(310, 3);
@@ -1578,24 +1578,24 @@ namespace Main
             groupBox2.TabStop = false;
             groupBox2.Text = "Party Data";
             // 
-            // tabControl1
+            // poke6Moves_groupBox
             // 
-            tabControl1.Controls.Add(poke1_Tab);
-            tabControl1.Controls.Add(poke2_Tab);
-            tabControl1.Controls.Add(poke3_Tab);
-            tabControl1.Controls.Add(poke4_Tab);
-            tabControl1.Controls.Add(poke5_Tab);
-            tabControl1.Controls.Add(poke6_Tab);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(3, 44);
-            tabControl1.Name = "tabControl1";
-            tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(516, 430);
-            tabControl1.TabIndex = 155;
+            poke6Moves_groupBox.Controls.Add(poke1_Tab);
+            poke6Moves_groupBox.Controls.Add(poke2_Tab);
+            poke6Moves_groupBox.Controls.Add(poke3_Tab);
+            poke6Moves_groupBox.Controls.Add(poke4_Tab);
+            poke6Moves_groupBox.Controls.Add(poke5_Tab);
+            poke6Moves_groupBox.Controls.Add(poke6_Tab);
+            poke6Moves_groupBox.Dock = DockStyle.Fill;
+            poke6Moves_groupBox.Location = new Point(3, 44);
+            poke6Moves_groupBox.Name = "poke6Moves_groupBox";
+            poke6Moves_groupBox.SelectedIndex = 0;
+            poke6Moves_groupBox.Size = new Size(516, 430);
+            poke6Moves_groupBox.TabIndex = 155;
             // 
             // poke1_Tab
             // 
-            poke1_Tab.Controls.Add(poke1HgEngine);
+            poke1_Tab.Controls.Add(poke1HgEngine_groupBox);
             poke1_Tab.Controls.Add(poke1Moves_groupBox);
             poke1_Tab.Controls.Add(poke1BallCapsule);
             poke1_Tab.Controls.Add(poke1HeldIItem);
@@ -1609,42 +1609,42 @@ namespace Main
             poke1_Tab.Text = "01 - ";
             poke1_Tab.UseVisualStyleBackColor = true;
             // 
-            // poke1HgEngine
+            // poke1HgEngine_groupBox
             // 
-            poke1HgEngine.Controls.Add(poke1_Shiny_checkBox);
-            poke1HgEngine.Controls.Add(poke1_EditStats_button);
-            poke1HgEngine.Controls.Add(label17);
-            poke1HgEngine.Controls.Add(poke1_EditIv_button);
-            poke1HgEngine.Controls.Add(label16);
-            poke1HgEngine.Controls.Add(label15);
-            poke1HgEngine.Controls.Add(poke1_Nickname_textBox);
-            poke1HgEngine.Controls.Add(label14);
-            poke1HgEngine.Controls.Add(comboBox6);
-            poke1HgEngine.Controls.Add(label13);
-            poke1HgEngine.Controls.Add(poke1_Type1_ComboBox);
-            poke1HgEngine.Controls.Add(label12);
-            poke1HgEngine.Controls.Add(poke1_status_comboBox);
-            poke1HgEngine.Controls.Add(label11);
-            poke1HgEngine.Controls.Add(poke1_Nature_comboBox);
-            poke1HgEngine.Controls.Add(label10);
-            poke1HgEngine.Controls.Add(label9);
-            poke1HgEngine.Controls.Add(poke1_Ball_comboBox);
-            poke1HgEngine.Controls.Add(label6);
-            poke1HgEngine.Controls.Add(poke1_Ability_Hge_comboBox);
-            poke1HgEngine.Controls.Add(poke1_AdditionalFlags_checkBoxList);
-            poke1HgEngine.Location = new Point(6, 220);
-            poke1HgEngine.Name = "poke1HgEngine";
-            poke1HgEngine.Size = new Size(496, 178);
-            poke1HgEngine.TabIndex = 70;
-            poke1HgEngine.TabStop = false;
-            poke1HgEngine.Text = "HG Engine";
+            poke1HgEngine_groupBox.Controls.Add(poke1_Shiny_checkBox);
+            poke1HgEngine_groupBox.Controls.Add(poke1_EditStats_button);
+            poke1HgEngine_groupBox.Controls.Add(label17);
+            poke1HgEngine_groupBox.Controls.Add(poke1_EditIv_button);
+            poke1HgEngine_groupBox.Controls.Add(label16);
+            poke1HgEngine_groupBox.Controls.Add(label15);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Nickname_textBox);
+            poke1HgEngine_groupBox.Controls.Add(label14);
+            poke1HgEngine_groupBox.Controls.Add(comboBox6);
+            poke1HgEngine_groupBox.Controls.Add(label13);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Type1_ComboBox);
+            poke1HgEngine_groupBox.Controls.Add(label12);
+            poke1HgEngine_groupBox.Controls.Add(poke1_status_comboBox);
+            poke1HgEngine_groupBox.Controls.Add(label11);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Nature_comboBox);
+            poke1HgEngine_groupBox.Controls.Add(label10);
+            poke1HgEngine_groupBox.Controls.Add(label9);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Ball_comboBox);
+            poke1HgEngine_groupBox.Controls.Add(label6);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Ability_Hge_comboBox);
+            poke1HgEngine_groupBox.Controls.Add(poke1_AdditionalFlags_checkBoxList);
+            poke1HgEngine_groupBox.Location = new Point(6, 220);
+            poke1HgEngine_groupBox.Name = "poke1HgEngine_groupBox";
+            poke1HgEngine_groupBox.Size = new Size(496, 178);
+            poke1HgEngine_groupBox.TabIndex = 70;
+            poke1HgEngine_groupBox.TabStop = false;
+            poke1HgEngine_groupBox.Text = "HG Engine";
             // 
             // poke1_Shiny_checkBox
             // 
             poke1_Shiny_checkBox.AutoSize = true;
             poke1_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
             poke1_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            poke1_Shiny_checkBox.Location = new Point(428, 128);
+            poke1_Shiny_checkBox.Location = new Point(308, 115);
             poke1_Shiny_checkBox.Name = "poke1_Shiny_checkBox";
             poke1_Shiny_checkBox.Size = new Size(56, 19);
             poke1_Shiny_checkBox.TabIndex = 177;
@@ -1655,9 +1655,9 @@ namespace Main
             // 
             poke1_EditStats_button.Enabled = false;
             poke1_EditStats_button.Font = new Font("Segoe UI", 9F);
-            poke1_EditStats_button.Location = new Point(405, 87);
+            poke1_EditStats_button.Location = new Point(405, 136);
             poke1_EditStats_button.Name = "poke1_EditStats_button";
-            poke1_EditStats_button.Size = new Size(85, 23);
+            poke1_EditStats_button.Size = new Size(85, 36);
             poke1_EditStats_button.TabIndex = 10;
             poke1_EditStats_button.Text = "Edit Stats";
             poke1_EditStats_button.UseVisualStyleBackColor = true;
@@ -1667,7 +1667,7 @@ namespace Main
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label17.ForeColor = SystemColors.MenuHighlight;
-            label17.Location = new Point(101, 66);
+            label17.Location = new Point(101, 68);
             label17.Name = "label17";
             label17.Size = new Size(10, 15);
             label17.TabIndex = 176;
@@ -1677,9 +1677,9 @@ namespace Main
             // 
             poke1_EditIv_button.Enabled = false;
             poke1_EditIv_button.Font = new Font("Segoe UI", 9F);
-            poke1_EditIv_button.Location = new Point(308, 87);
+            poke1_EditIv_button.Location = new Point(308, 136);
             poke1_EditIv_button.Name = "poke1_EditIv_button";
-            poke1_EditIv_button.Size = new Size(85, 23);
+            poke1_EditIv_button.Size = new Size(85, 36);
             poke1_EditIv_button.TabIndex = 177;
             poke1_EditIv_button.Text = "Edit IVs/EVs";
             poke1_EditIv_button.UseVisualStyleBackColor = true;
@@ -1688,7 +1688,7 @@ namespace Main
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label16.Location = new Point(6, 66);
+            label16.Location = new Point(6, 68);
             label16.Name = "label16";
             label16.Size = new Size(93, 15);
             label16.TabIndex = 175;
@@ -1698,7 +1698,7 @@ namespace Main
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label15.Location = new Point(308, 129);
+            label15.Location = new Point(308, 68);
             label15.Name = "label15";
             label15.Size = new Size(63, 15);
             label15.TabIndex = 174;
@@ -1707,7 +1707,7 @@ namespace Main
             // poke1_Nickname_textBox
             // 
             poke1_Nickname_textBox.Font = new Font("Segoe UI", 9F);
-            poke1_Nickname_textBox.Location = new Point(308, 149);
+            poke1_Nickname_textBox.Location = new Point(308, 86);
             poke1_Nickname_textBox.Name = "poke1_Nickname_textBox";
             poke1_Nickname_textBox.Size = new Size(182, 23);
             poke1_Nickname_textBox.TabIndex = 173;
@@ -2196,8 +2196,8 @@ namespace Main
             // 
             // poke2_Tab
             // 
-            poke2_Tab.Controls.Add(groupBox11);
-            poke2_Tab.Controls.Add(groupBox12);
+            poke2_Tab.Controls.Add(poke2HgEngine_groupBox);
+            poke2_Tab.Controls.Add(poke2Moves_groupBox);
             poke2_Tab.Controls.Add(groupBox13);
             poke2_Tab.Controls.Add(groupBox14);
             poke2_Tab.Controls.Add(groupBox15);
@@ -2210,42 +2210,42 @@ namespace Main
             poke2_Tab.Text = "02 - ";
             poke2_Tab.UseVisualStyleBackColor = true;
             // 
-            // groupBox11
+            // poke2HgEngine_groupBox
             // 
-            groupBox11.Controls.Add(checkBox1);
-            groupBox11.Controls.Add(button3);
-            groupBox11.Controls.Add(label18);
-            groupBox11.Controls.Add(button4);
-            groupBox11.Controls.Add(label19);
-            groupBox11.Controls.Add(label20);
-            groupBox11.Controls.Add(textBox2);
-            groupBox11.Controls.Add(label21);
-            groupBox11.Controls.Add(comboBox7);
-            groupBox11.Controls.Add(label22);
-            groupBox11.Controls.Add(comboBox8);
-            groupBox11.Controls.Add(label23);
-            groupBox11.Controls.Add(comboBox9);
-            groupBox11.Controls.Add(label24);
-            groupBox11.Controls.Add(comboBox10);
-            groupBox11.Controls.Add(label25);
-            groupBox11.Controls.Add(label26);
-            groupBox11.Controls.Add(comboBox11);
-            groupBox11.Controls.Add(label27);
-            groupBox11.Controls.Add(comboBox12);
-            groupBox11.Controls.Add(checkedListBox2);
-            groupBox11.Location = new Point(6, 220);
-            groupBox11.Name = "groupBox11";
-            groupBox11.Size = new Size(496, 178);
-            groupBox11.TabIndex = 76;
-            groupBox11.TabStop = false;
-            groupBox11.Text = "HG Engine";
+            poke2HgEngine_groupBox.Controls.Add(checkBox1);
+            poke2HgEngine_groupBox.Controls.Add(button3);
+            poke2HgEngine_groupBox.Controls.Add(label18);
+            poke2HgEngine_groupBox.Controls.Add(button4);
+            poke2HgEngine_groupBox.Controls.Add(label19);
+            poke2HgEngine_groupBox.Controls.Add(label20);
+            poke2HgEngine_groupBox.Controls.Add(textBox2);
+            poke2HgEngine_groupBox.Controls.Add(label21);
+            poke2HgEngine_groupBox.Controls.Add(comboBox7);
+            poke2HgEngine_groupBox.Controls.Add(label22);
+            poke2HgEngine_groupBox.Controls.Add(comboBox8);
+            poke2HgEngine_groupBox.Controls.Add(label23);
+            poke2HgEngine_groupBox.Controls.Add(comboBox9);
+            poke2HgEngine_groupBox.Controls.Add(label24);
+            poke2HgEngine_groupBox.Controls.Add(comboBox10);
+            poke2HgEngine_groupBox.Controls.Add(label25);
+            poke2HgEngine_groupBox.Controls.Add(label26);
+            poke2HgEngine_groupBox.Controls.Add(comboBox11);
+            poke2HgEngine_groupBox.Controls.Add(label27);
+            poke2HgEngine_groupBox.Controls.Add(comboBox12);
+            poke2HgEngine_groupBox.Controls.Add(checkedListBox2);
+            poke2HgEngine_groupBox.Location = new Point(6, 220);
+            poke2HgEngine_groupBox.Name = "poke2HgEngine_groupBox";
+            poke2HgEngine_groupBox.Size = new Size(496, 178);
+            poke2HgEngine_groupBox.TabIndex = 76;
+            poke2HgEngine_groupBox.TabStop = false;
+            poke2HgEngine_groupBox.Text = "HG Engine";
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
             checkBox1.CheckAlign = ContentAlignment.MiddleRight;
             checkBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox1.Location = new Point(428, 128);
+            checkBox1.Location = new Point(308, 115);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(56, 19);
             checkBox1.TabIndex = 177;
@@ -2256,9 +2256,9 @@ namespace Main
             // 
             button3.Enabled = false;
             button3.Font = new Font("Segoe UI", 9F);
-            button3.Location = new Point(405, 87);
+            button3.Location = new Point(405, 136);
             button3.Name = "button3";
-            button3.Size = new Size(85, 23);
+            button3.Size = new Size(85, 36);
             button3.TabIndex = 10;
             button3.Text = "Edit Stats";
             button3.UseVisualStyleBackColor = true;
@@ -2268,7 +2268,7 @@ namespace Main
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label18.ForeColor = SystemColors.MenuHighlight;
-            label18.Location = new Point(101, 66);
+            label18.Location = new Point(101, 68);
             label18.Name = "label18";
             label18.Size = new Size(10, 15);
             label18.TabIndex = 176;
@@ -2278,9 +2278,9 @@ namespace Main
             // 
             button4.Enabled = false;
             button4.Font = new Font("Segoe UI", 9F);
-            button4.Location = new Point(308, 87);
+            button4.Location = new Point(308, 136);
             button4.Name = "button4";
-            button4.Size = new Size(85, 23);
+            button4.Size = new Size(85, 36);
             button4.TabIndex = 177;
             button4.Text = "Edit IVs/EVs";
             button4.UseVisualStyleBackColor = true;
@@ -2289,7 +2289,7 @@ namespace Main
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label19.Location = new Point(6, 66);
+            label19.Location = new Point(6, 68);
             label19.Name = "label19";
             label19.Size = new Size(93, 15);
             label19.TabIndex = 175;
@@ -2299,7 +2299,7 @@ namespace Main
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label20.Location = new Point(308, 129);
+            label20.Location = new Point(308, 68);
             label20.Name = "label20";
             label20.Size = new Size(63, 15);
             label20.TabIndex = 174;
@@ -2308,7 +2308,7 @@ namespace Main
             // textBox2
             // 
             textBox2.Font = new Font("Segoe UI", 9F);
-            textBox2.Location = new Point(308, 149);
+            textBox2.Location = new Point(308, 86);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(182, 23);
             textBox2.TabIndex = 173;
@@ -2463,26 +2463,26 @@ namespace Main
             checkedListBox2.Size = new Size(296, 89);
             checkedListBox2.TabIndex = 158;
             // 
-            // groupBox12
+            // poke2Moves_groupBox
             // 
-            groupBox12.Controls.Add(poke2_Move4_PP_num);
-            groupBox12.Controls.Add(label28);
-            groupBox12.Controls.Add(poke2_Move3_PP_num);
-            groupBox12.Controls.Add(label29);
-            groupBox12.Controls.Add(poke2Moves4_comboBox);
-            groupBox12.Controls.Add(poke2Moves3_comboBox);
-            groupBox12.Controls.Add(poke2_Move2_PP_num);
-            groupBox12.Controls.Add(label30);
-            groupBox12.Controls.Add(poke2_Move1_PP_num);
-            groupBox12.Controls.Add(label31);
-            groupBox12.Controls.Add(poke2Moves2_comboBox);
-            groupBox12.Controls.Add(poke2Moves1_comboBox);
-            groupBox12.Location = new Point(6, 140);
-            groupBox12.Name = "groupBox12";
-            groupBox12.Size = new Size(496, 77);
-            groupBox12.TabIndex = 75;
-            groupBox12.TabStop = false;
-            groupBox12.Text = "Moves";
+            poke2Moves_groupBox.Controls.Add(poke2_Move4_PP_num);
+            poke2Moves_groupBox.Controls.Add(label28);
+            poke2Moves_groupBox.Controls.Add(poke2_Move3_PP_num);
+            poke2Moves_groupBox.Controls.Add(label29);
+            poke2Moves_groupBox.Controls.Add(poke2Moves4_comboBox);
+            poke2Moves_groupBox.Controls.Add(poke2Moves3_comboBox);
+            poke2Moves_groupBox.Controls.Add(poke2_Move2_PP_num);
+            poke2Moves_groupBox.Controls.Add(label30);
+            poke2Moves_groupBox.Controls.Add(poke2_Move1_PP_num);
+            poke2Moves_groupBox.Controls.Add(label31);
+            poke2Moves_groupBox.Controls.Add(poke2Moves2_comboBox);
+            poke2Moves_groupBox.Controls.Add(poke2Moves1_comboBox);
+            poke2Moves_groupBox.Location = new Point(6, 140);
+            poke2Moves_groupBox.Name = "poke2Moves_groupBox";
+            poke2Moves_groupBox.Size = new Size(496, 77);
+            poke2Moves_groupBox.TabIndex = 75;
+            poke2Moves_groupBox.TabStop = false;
+            poke2Moves_groupBox.Text = "Moves";
             // 
             // poke2_Move4_PP_num
             // 
@@ -2790,8 +2790,8 @@ namespace Main
             // 
             // poke3_Tab
             // 
-            poke3_Tab.Controls.Add(groupBox17);
-            poke3_Tab.Controls.Add(groupBox18);
+            poke3_Tab.Controls.Add(poke3HgEngine_groupBox);
+            poke3_Tab.Controls.Add(poke3Moves_groupBox);
             poke3_Tab.Controls.Add(groupBox19);
             poke3_Tab.Controls.Add(groupBox20);
             poke3_Tab.Controls.Add(groupBox21);
@@ -2804,42 +2804,42 @@ namespace Main
             poke3_Tab.Text = "03 - ";
             poke3_Tab.UseVisualStyleBackColor = true;
             // 
-            // groupBox17
+            // poke3HgEngine_groupBox
             // 
-            groupBox17.Controls.Add(checkBox2);
-            groupBox17.Controls.Add(button5);
-            groupBox17.Controls.Add(label38);
-            groupBox17.Controls.Add(button6);
-            groupBox17.Controls.Add(label39);
-            groupBox17.Controls.Add(label40);
-            groupBox17.Controls.Add(textBox3);
-            groupBox17.Controls.Add(label41);
-            groupBox17.Controls.Add(comboBox23);
-            groupBox17.Controls.Add(label42);
-            groupBox17.Controls.Add(comboBox24);
-            groupBox17.Controls.Add(label43);
-            groupBox17.Controls.Add(comboBox25);
-            groupBox17.Controls.Add(label44);
-            groupBox17.Controls.Add(comboBox26);
-            groupBox17.Controls.Add(label45);
-            groupBox17.Controls.Add(label46);
-            groupBox17.Controls.Add(comboBox27);
-            groupBox17.Controls.Add(label47);
-            groupBox17.Controls.Add(comboBox28);
-            groupBox17.Controls.Add(checkedListBox3);
-            groupBox17.Location = new Point(6, 220);
-            groupBox17.Name = "groupBox17";
-            groupBox17.Size = new Size(496, 178);
-            groupBox17.TabIndex = 76;
-            groupBox17.TabStop = false;
-            groupBox17.Text = "HG Engine";
+            poke3HgEngine_groupBox.Controls.Add(checkBox2);
+            poke3HgEngine_groupBox.Controls.Add(button5);
+            poke3HgEngine_groupBox.Controls.Add(label38);
+            poke3HgEngine_groupBox.Controls.Add(button6);
+            poke3HgEngine_groupBox.Controls.Add(label39);
+            poke3HgEngine_groupBox.Controls.Add(label40);
+            poke3HgEngine_groupBox.Controls.Add(textBox3);
+            poke3HgEngine_groupBox.Controls.Add(label41);
+            poke3HgEngine_groupBox.Controls.Add(comboBox23);
+            poke3HgEngine_groupBox.Controls.Add(label42);
+            poke3HgEngine_groupBox.Controls.Add(comboBox24);
+            poke3HgEngine_groupBox.Controls.Add(label43);
+            poke3HgEngine_groupBox.Controls.Add(comboBox25);
+            poke3HgEngine_groupBox.Controls.Add(label44);
+            poke3HgEngine_groupBox.Controls.Add(comboBox26);
+            poke3HgEngine_groupBox.Controls.Add(label45);
+            poke3HgEngine_groupBox.Controls.Add(label46);
+            poke3HgEngine_groupBox.Controls.Add(comboBox27);
+            poke3HgEngine_groupBox.Controls.Add(label47);
+            poke3HgEngine_groupBox.Controls.Add(comboBox28);
+            poke3HgEngine_groupBox.Controls.Add(checkedListBox3);
+            poke3HgEngine_groupBox.Location = new Point(6, 220);
+            poke3HgEngine_groupBox.Name = "poke3HgEngine_groupBox";
+            poke3HgEngine_groupBox.Size = new Size(496, 178);
+            poke3HgEngine_groupBox.TabIndex = 76;
+            poke3HgEngine_groupBox.TabStop = false;
+            poke3HgEngine_groupBox.Text = "HG Engine";
             // 
             // checkBox2
             // 
             checkBox2.AutoSize = true;
             checkBox2.CheckAlign = ContentAlignment.MiddleRight;
             checkBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox2.Location = new Point(428, 128);
+            checkBox2.Location = new Point(308, 115);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(56, 19);
             checkBox2.TabIndex = 177;
@@ -2850,9 +2850,9 @@ namespace Main
             // 
             button5.Enabled = false;
             button5.Font = new Font("Segoe UI", 9F);
-            button5.Location = new Point(405, 87);
+            button5.Location = new Point(405, 136);
             button5.Name = "button5";
-            button5.Size = new Size(85, 23);
+            button5.Size = new Size(85, 36);
             button5.TabIndex = 10;
             button5.Text = "Edit Stats";
             button5.UseVisualStyleBackColor = true;
@@ -2862,7 +2862,7 @@ namespace Main
             label38.AutoSize = true;
             label38.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label38.ForeColor = SystemColors.MenuHighlight;
-            label38.Location = new Point(101, 66);
+            label38.Location = new Point(101, 68);
             label38.Name = "label38";
             label38.Size = new Size(10, 15);
             label38.TabIndex = 176;
@@ -2872,9 +2872,9 @@ namespace Main
             // 
             button6.Enabled = false;
             button6.Font = new Font("Segoe UI", 9F);
-            button6.Location = new Point(308, 87);
+            button6.Location = new Point(308, 136);
             button6.Name = "button6";
-            button6.Size = new Size(85, 23);
+            button6.Size = new Size(85, 36);
             button6.TabIndex = 177;
             button6.Text = "Edit IVs/EVs";
             button6.UseVisualStyleBackColor = true;
@@ -2883,7 +2883,7 @@ namespace Main
             // 
             label39.AutoSize = true;
             label39.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label39.Location = new Point(6, 66);
+            label39.Location = new Point(6, 68);
             label39.Name = "label39";
             label39.Size = new Size(93, 15);
             label39.TabIndex = 175;
@@ -2893,7 +2893,7 @@ namespace Main
             // 
             label40.AutoSize = true;
             label40.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label40.Location = new Point(308, 129);
+            label40.Location = new Point(308, 68);
             label40.Name = "label40";
             label40.Size = new Size(63, 15);
             label40.TabIndex = 174;
@@ -2902,7 +2902,7 @@ namespace Main
             // textBox3
             // 
             textBox3.Font = new Font("Segoe UI", 9F);
-            textBox3.Location = new Point(308, 149);
+            textBox3.Location = new Point(308, 86);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(182, 23);
             textBox3.TabIndex = 173;
@@ -3057,26 +3057,26 @@ namespace Main
             checkedListBox3.Size = new Size(296, 89);
             checkedListBox3.TabIndex = 158;
             // 
-            // groupBox18
+            // poke3Moves_groupBox
             // 
-            groupBox18.Controls.Add(poke3_Move4_PP_num);
-            groupBox18.Controls.Add(label48);
-            groupBox18.Controls.Add(poke3_Move3_PP_num);
-            groupBox18.Controls.Add(label49);
-            groupBox18.Controls.Add(poke3Moves4_comboBox);
-            groupBox18.Controls.Add(poke3Moves3_comboBox);
-            groupBox18.Controls.Add(poke3_Move2_PP_num);
-            groupBox18.Controls.Add(label50);
-            groupBox18.Controls.Add(poke3_Move1_PP_num);
-            groupBox18.Controls.Add(label73);
-            groupBox18.Controls.Add(poke3Moves2_comboBox);
-            groupBox18.Controls.Add(poke3Moves1_comboBox);
-            groupBox18.Location = new Point(6, 140);
-            groupBox18.Name = "groupBox18";
-            groupBox18.Size = new Size(496, 77);
-            groupBox18.TabIndex = 75;
-            groupBox18.TabStop = false;
-            groupBox18.Text = "Moves";
+            poke3Moves_groupBox.Controls.Add(poke3_Move4_PP_num);
+            poke3Moves_groupBox.Controls.Add(label48);
+            poke3Moves_groupBox.Controls.Add(poke3_Move3_PP_num);
+            poke3Moves_groupBox.Controls.Add(label49);
+            poke3Moves_groupBox.Controls.Add(poke3Moves4_comboBox);
+            poke3Moves_groupBox.Controls.Add(poke3Moves3_comboBox);
+            poke3Moves_groupBox.Controls.Add(poke3_Move2_PP_num);
+            poke3Moves_groupBox.Controls.Add(label50);
+            poke3Moves_groupBox.Controls.Add(poke3_Move1_PP_num);
+            poke3Moves_groupBox.Controls.Add(label73);
+            poke3Moves_groupBox.Controls.Add(poke3Moves2_comboBox);
+            poke3Moves_groupBox.Controls.Add(poke3Moves1_comboBox);
+            poke3Moves_groupBox.Location = new Point(6, 140);
+            poke3Moves_groupBox.Name = "poke3Moves_groupBox";
+            poke3Moves_groupBox.Size = new Size(496, 77);
+            poke3Moves_groupBox.TabIndex = 75;
+            poke3Moves_groupBox.TabStop = false;
+            poke3Moves_groupBox.Text = "Moves";
             // 
             // poke3_Move4_PP_num
             // 
@@ -3384,8 +3384,8 @@ namespace Main
             // 
             // poke4_Tab
             // 
-            poke4_Tab.Controls.Add(groupBox23);
-            poke4_Tab.Controls.Add(groupBox24);
+            poke4_Tab.Controls.Add(poke4HgEngine_groupBox);
+            poke4_Tab.Controls.Add(poke4Moves_groupBox);
             poke4_Tab.Controls.Add(groupBox25);
             poke4_Tab.Controls.Add(groupBox26);
             poke4_Tab.Controls.Add(groupBox27);
@@ -3398,42 +3398,42 @@ namespace Main
             poke4_Tab.Text = "04 - ";
             poke4_Tab.UseVisualStyleBackColor = true;
             // 
-            // groupBox23
+            // poke4HgEngine_groupBox
             // 
-            groupBox23.Controls.Add(checkBox3);
-            groupBox23.Controls.Add(button7);
-            groupBox23.Controls.Add(label82);
-            groupBox23.Controls.Add(button8);
-            groupBox23.Controls.Add(label83);
-            groupBox23.Controls.Add(label84);
-            groupBox23.Controls.Add(textBox4);
-            groupBox23.Controls.Add(label85);
-            groupBox23.Controls.Add(comboBox39);
-            groupBox23.Controls.Add(label86);
-            groupBox23.Controls.Add(comboBox40);
-            groupBox23.Controls.Add(label87);
-            groupBox23.Controls.Add(comboBox41);
-            groupBox23.Controls.Add(label88);
-            groupBox23.Controls.Add(comboBox42);
-            groupBox23.Controls.Add(label89);
-            groupBox23.Controls.Add(label90);
-            groupBox23.Controls.Add(comboBox43);
-            groupBox23.Controls.Add(label91);
-            groupBox23.Controls.Add(comboBox44);
-            groupBox23.Controls.Add(checkedListBox4);
-            groupBox23.Location = new Point(6, 220);
-            groupBox23.Name = "groupBox23";
-            groupBox23.Size = new Size(496, 178);
-            groupBox23.TabIndex = 76;
-            groupBox23.TabStop = false;
-            groupBox23.Text = "HG Engine";
+            poke4HgEngine_groupBox.Controls.Add(checkBox3);
+            poke4HgEngine_groupBox.Controls.Add(button7);
+            poke4HgEngine_groupBox.Controls.Add(label82);
+            poke4HgEngine_groupBox.Controls.Add(button8);
+            poke4HgEngine_groupBox.Controls.Add(label83);
+            poke4HgEngine_groupBox.Controls.Add(label84);
+            poke4HgEngine_groupBox.Controls.Add(textBox4);
+            poke4HgEngine_groupBox.Controls.Add(label85);
+            poke4HgEngine_groupBox.Controls.Add(comboBox39);
+            poke4HgEngine_groupBox.Controls.Add(label86);
+            poke4HgEngine_groupBox.Controls.Add(comboBox40);
+            poke4HgEngine_groupBox.Controls.Add(label87);
+            poke4HgEngine_groupBox.Controls.Add(comboBox41);
+            poke4HgEngine_groupBox.Controls.Add(label88);
+            poke4HgEngine_groupBox.Controls.Add(comboBox42);
+            poke4HgEngine_groupBox.Controls.Add(label89);
+            poke4HgEngine_groupBox.Controls.Add(label90);
+            poke4HgEngine_groupBox.Controls.Add(comboBox43);
+            poke4HgEngine_groupBox.Controls.Add(label91);
+            poke4HgEngine_groupBox.Controls.Add(comboBox44);
+            poke4HgEngine_groupBox.Controls.Add(checkedListBox4);
+            poke4HgEngine_groupBox.Location = new Point(6, 220);
+            poke4HgEngine_groupBox.Name = "poke4HgEngine_groupBox";
+            poke4HgEngine_groupBox.Size = new Size(496, 178);
+            poke4HgEngine_groupBox.TabIndex = 76;
+            poke4HgEngine_groupBox.TabStop = false;
+            poke4HgEngine_groupBox.Text = "HG Engine";
             // 
             // checkBox3
             // 
             checkBox3.AutoSize = true;
             checkBox3.CheckAlign = ContentAlignment.MiddleRight;
             checkBox3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox3.Location = new Point(428, 128);
+            checkBox3.Location = new Point(308, 115);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new Size(56, 19);
             checkBox3.TabIndex = 177;
@@ -3444,9 +3444,9 @@ namespace Main
             // 
             button7.Enabled = false;
             button7.Font = new Font("Segoe UI", 9F);
-            button7.Location = new Point(405, 87);
+            button7.Location = new Point(405, 136);
             button7.Name = "button7";
-            button7.Size = new Size(85, 23);
+            button7.Size = new Size(85, 36);
             button7.TabIndex = 10;
             button7.Text = "Edit Stats";
             button7.UseVisualStyleBackColor = true;
@@ -3456,7 +3456,7 @@ namespace Main
             label82.AutoSize = true;
             label82.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label82.ForeColor = SystemColors.MenuHighlight;
-            label82.Location = new Point(101, 66);
+            label82.Location = new Point(101, 68);
             label82.Name = "label82";
             label82.Size = new Size(10, 15);
             label82.TabIndex = 176;
@@ -3466,9 +3466,9 @@ namespace Main
             // 
             button8.Enabled = false;
             button8.Font = new Font("Segoe UI", 9F);
-            button8.Location = new Point(308, 87);
+            button8.Location = new Point(308, 136);
             button8.Name = "button8";
-            button8.Size = new Size(85, 23);
+            button8.Size = new Size(85, 36);
             button8.TabIndex = 177;
             button8.Text = "Edit IVs/EVs";
             button8.UseVisualStyleBackColor = true;
@@ -3477,7 +3477,7 @@ namespace Main
             // 
             label83.AutoSize = true;
             label83.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label83.Location = new Point(6, 66);
+            label83.Location = new Point(6, 68);
             label83.Name = "label83";
             label83.Size = new Size(93, 15);
             label83.TabIndex = 175;
@@ -3487,7 +3487,7 @@ namespace Main
             // 
             label84.AutoSize = true;
             label84.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label84.Location = new Point(308, 129);
+            label84.Location = new Point(308, 68);
             label84.Name = "label84";
             label84.Size = new Size(63, 15);
             label84.TabIndex = 174;
@@ -3496,7 +3496,7 @@ namespace Main
             // textBox4
             // 
             textBox4.Font = new Font("Segoe UI", 9F);
-            textBox4.Location = new Point(308, 149);
+            textBox4.Location = new Point(308, 86);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(182, 23);
             textBox4.TabIndex = 173;
@@ -3651,26 +3651,26 @@ namespace Main
             checkedListBox4.Size = new Size(296, 89);
             checkedListBox4.TabIndex = 158;
             // 
-            // groupBox24
+            // poke4Moves_groupBox
             // 
-            groupBox24.Controls.Add(poke4_Move4_PP_num);
-            groupBox24.Controls.Add(label92);
-            groupBox24.Controls.Add(poke4_Move3_PP_num);
-            groupBox24.Controls.Add(label93);
-            groupBox24.Controls.Add(poke4Moves4_comboBox);
-            groupBox24.Controls.Add(poke4Moves3_comboBox);
-            groupBox24.Controls.Add(poke4_Move2_PP_num);
-            groupBox24.Controls.Add(label94);
-            groupBox24.Controls.Add(poke4_Move1_PP_num);
-            groupBox24.Controls.Add(label95);
-            groupBox24.Controls.Add(poke4Moves2_comboBox);
-            groupBox24.Controls.Add(poke4Moves1_comboBox);
-            groupBox24.Location = new Point(6, 140);
-            groupBox24.Name = "groupBox24";
-            groupBox24.Size = new Size(496, 77);
-            groupBox24.TabIndex = 75;
-            groupBox24.TabStop = false;
-            groupBox24.Text = "Moves";
+            poke4Moves_groupBox.Controls.Add(poke4_Move4_PP_num);
+            poke4Moves_groupBox.Controls.Add(label92);
+            poke4Moves_groupBox.Controls.Add(poke4_Move3_PP_num);
+            poke4Moves_groupBox.Controls.Add(label93);
+            poke4Moves_groupBox.Controls.Add(poke4Moves4_comboBox);
+            poke4Moves_groupBox.Controls.Add(poke4Moves3_comboBox);
+            poke4Moves_groupBox.Controls.Add(poke4_Move2_PP_num);
+            poke4Moves_groupBox.Controls.Add(label94);
+            poke4Moves_groupBox.Controls.Add(poke4_Move1_PP_num);
+            poke4Moves_groupBox.Controls.Add(label95);
+            poke4Moves_groupBox.Controls.Add(poke4Moves2_comboBox);
+            poke4Moves_groupBox.Controls.Add(poke4Moves1_comboBox);
+            poke4Moves_groupBox.Location = new Point(6, 140);
+            poke4Moves_groupBox.Name = "poke4Moves_groupBox";
+            poke4Moves_groupBox.Size = new Size(496, 77);
+            poke4Moves_groupBox.TabIndex = 75;
+            poke4Moves_groupBox.TabStop = false;
+            poke4Moves_groupBox.Text = "Moves";
             // 
             // poke4_Move4_PP_num
             // 
@@ -3978,8 +3978,8 @@ namespace Main
             // 
             // poke5_Tab
             // 
-            poke5_Tab.Controls.Add(groupBox29);
-            poke5_Tab.Controls.Add(groupBox30);
+            poke5_Tab.Controls.Add(poke5HgEngine_groupBox);
+            poke5_Tab.Controls.Add(poke5Moves_groupBox);
             poke5_Tab.Controls.Add(groupBox31);
             poke5_Tab.Controls.Add(groupBox32);
             poke5_Tab.Controls.Add(groupBox33);
@@ -3992,42 +3992,42 @@ namespace Main
             poke5_Tab.Text = "05 - ";
             poke5_Tab.UseVisualStyleBackColor = true;
             // 
-            // groupBox29
+            // poke5HgEngine_groupBox
             // 
-            groupBox29.Controls.Add(checkBox4);
-            groupBox29.Controls.Add(button9);
-            groupBox29.Controls.Add(label102);
-            groupBox29.Controls.Add(button10);
-            groupBox29.Controls.Add(label103);
-            groupBox29.Controls.Add(label104);
-            groupBox29.Controls.Add(textBox5);
-            groupBox29.Controls.Add(label105);
-            groupBox29.Controls.Add(comboBox55);
-            groupBox29.Controls.Add(label106);
-            groupBox29.Controls.Add(comboBox56);
-            groupBox29.Controls.Add(label107);
-            groupBox29.Controls.Add(comboBox57);
-            groupBox29.Controls.Add(label108);
-            groupBox29.Controls.Add(comboBox58);
-            groupBox29.Controls.Add(label109);
-            groupBox29.Controls.Add(label110);
-            groupBox29.Controls.Add(comboBox59);
-            groupBox29.Controls.Add(label111);
-            groupBox29.Controls.Add(comboBox60);
-            groupBox29.Controls.Add(checkedListBox5);
-            groupBox29.Location = new Point(6, 220);
-            groupBox29.Name = "groupBox29";
-            groupBox29.Size = new Size(496, 178);
-            groupBox29.TabIndex = 76;
-            groupBox29.TabStop = false;
-            groupBox29.Text = "HG Engine";
+            poke5HgEngine_groupBox.Controls.Add(checkBox4);
+            poke5HgEngine_groupBox.Controls.Add(button9);
+            poke5HgEngine_groupBox.Controls.Add(label102);
+            poke5HgEngine_groupBox.Controls.Add(button10);
+            poke5HgEngine_groupBox.Controls.Add(label103);
+            poke5HgEngine_groupBox.Controls.Add(label104);
+            poke5HgEngine_groupBox.Controls.Add(textBox5);
+            poke5HgEngine_groupBox.Controls.Add(label105);
+            poke5HgEngine_groupBox.Controls.Add(comboBox55);
+            poke5HgEngine_groupBox.Controls.Add(label106);
+            poke5HgEngine_groupBox.Controls.Add(comboBox56);
+            poke5HgEngine_groupBox.Controls.Add(label107);
+            poke5HgEngine_groupBox.Controls.Add(comboBox57);
+            poke5HgEngine_groupBox.Controls.Add(label108);
+            poke5HgEngine_groupBox.Controls.Add(comboBox58);
+            poke5HgEngine_groupBox.Controls.Add(label109);
+            poke5HgEngine_groupBox.Controls.Add(label110);
+            poke5HgEngine_groupBox.Controls.Add(comboBox59);
+            poke5HgEngine_groupBox.Controls.Add(label111);
+            poke5HgEngine_groupBox.Controls.Add(comboBox60);
+            poke5HgEngine_groupBox.Controls.Add(checkedListBox5);
+            poke5HgEngine_groupBox.Location = new Point(6, 220);
+            poke5HgEngine_groupBox.Name = "poke5HgEngine_groupBox";
+            poke5HgEngine_groupBox.Size = new Size(496, 178);
+            poke5HgEngine_groupBox.TabIndex = 76;
+            poke5HgEngine_groupBox.TabStop = false;
+            poke5HgEngine_groupBox.Text = "HG Engine";
             // 
             // checkBox4
             // 
             checkBox4.AutoSize = true;
             checkBox4.CheckAlign = ContentAlignment.MiddleRight;
             checkBox4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox4.Location = new Point(428, 128);
+            checkBox4.Location = new Point(308, 115);
             checkBox4.Name = "checkBox4";
             checkBox4.Size = new Size(56, 19);
             checkBox4.TabIndex = 177;
@@ -4038,9 +4038,9 @@ namespace Main
             // 
             button9.Enabled = false;
             button9.Font = new Font("Segoe UI", 9F);
-            button9.Location = new Point(405, 87);
+            button9.Location = new Point(405, 136);
             button9.Name = "button9";
-            button9.Size = new Size(85, 23);
+            button9.Size = new Size(85, 36);
             button9.TabIndex = 10;
             button9.Text = "Edit Stats";
             button9.UseVisualStyleBackColor = true;
@@ -4050,7 +4050,7 @@ namespace Main
             label102.AutoSize = true;
             label102.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label102.ForeColor = SystemColors.MenuHighlight;
-            label102.Location = new Point(101, 66);
+            label102.Location = new Point(101, 68);
             label102.Name = "label102";
             label102.Size = new Size(10, 15);
             label102.TabIndex = 176;
@@ -4060,9 +4060,9 @@ namespace Main
             // 
             button10.Enabled = false;
             button10.Font = new Font("Segoe UI", 9F);
-            button10.Location = new Point(308, 87);
+            button10.Location = new Point(308, 136);
             button10.Name = "button10";
-            button10.Size = new Size(85, 23);
+            button10.Size = new Size(85, 36);
             button10.TabIndex = 177;
             button10.Text = "Edit IVs/EVs";
             button10.UseVisualStyleBackColor = true;
@@ -4071,7 +4071,7 @@ namespace Main
             // 
             label103.AutoSize = true;
             label103.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label103.Location = new Point(6, 66);
+            label103.Location = new Point(6, 68);
             label103.Name = "label103";
             label103.Size = new Size(93, 15);
             label103.TabIndex = 175;
@@ -4081,7 +4081,7 @@ namespace Main
             // 
             label104.AutoSize = true;
             label104.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label104.Location = new Point(308, 129);
+            label104.Location = new Point(308, 68);
             label104.Name = "label104";
             label104.Size = new Size(63, 15);
             label104.TabIndex = 174;
@@ -4090,7 +4090,7 @@ namespace Main
             // textBox5
             // 
             textBox5.Font = new Font("Segoe UI", 9F);
-            textBox5.Location = new Point(308, 149);
+            textBox5.Location = new Point(308, 86);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(182, 23);
             textBox5.TabIndex = 173;
@@ -4245,26 +4245,26 @@ namespace Main
             checkedListBox5.Size = new Size(296, 89);
             checkedListBox5.TabIndex = 158;
             // 
-            // groupBox30
+            // poke5Moves_groupBox
             // 
-            groupBox30.Controls.Add(poke5_Move4_PP_num);
-            groupBox30.Controls.Add(label112);
-            groupBox30.Controls.Add(poke5_Move3_PP_num);
-            groupBox30.Controls.Add(label113);
-            groupBox30.Controls.Add(poke5Moves4_comboBox);
-            groupBox30.Controls.Add(poke5Moves3_comboBox);
-            groupBox30.Controls.Add(poke5_Move2_PP_num);
-            groupBox30.Controls.Add(label114);
-            groupBox30.Controls.Add(poke5_Move1_PP_num);
-            groupBox30.Controls.Add(label115);
-            groupBox30.Controls.Add(poke5Moves2_comboBox);
-            groupBox30.Controls.Add(poke5Moves1_comboBox);
-            groupBox30.Location = new Point(6, 140);
-            groupBox30.Name = "groupBox30";
-            groupBox30.Size = new Size(496, 77);
-            groupBox30.TabIndex = 75;
-            groupBox30.TabStop = false;
-            groupBox30.Text = "Moves";
+            poke5Moves_groupBox.Controls.Add(poke5_Move4_PP_num);
+            poke5Moves_groupBox.Controls.Add(label112);
+            poke5Moves_groupBox.Controls.Add(poke5_Move3_PP_num);
+            poke5Moves_groupBox.Controls.Add(label113);
+            poke5Moves_groupBox.Controls.Add(poke5Moves4_comboBox);
+            poke5Moves_groupBox.Controls.Add(poke5Moves3_comboBox);
+            poke5Moves_groupBox.Controls.Add(poke5_Move2_PP_num);
+            poke5Moves_groupBox.Controls.Add(label114);
+            poke5Moves_groupBox.Controls.Add(poke5_Move1_PP_num);
+            poke5Moves_groupBox.Controls.Add(label115);
+            poke5Moves_groupBox.Controls.Add(poke5Moves2_comboBox);
+            poke5Moves_groupBox.Controls.Add(poke5Moves1_comboBox);
+            poke5Moves_groupBox.Location = new Point(6, 140);
+            poke5Moves_groupBox.Name = "poke5Moves_groupBox";
+            poke5Moves_groupBox.Size = new Size(496, 77);
+            poke5Moves_groupBox.TabIndex = 75;
+            poke5Moves_groupBox.TabStop = false;
+            poke5Moves_groupBox.Text = "Moves";
             // 
             // poke5_Move4_PP_num
             // 
@@ -4572,7 +4572,7 @@ namespace Main
             // 
             // poke6_Tab
             // 
-            poke6_Tab.Controls.Add(groupBox35);
+            poke6_Tab.Controls.Add(poke6HgEngine_groupBox);
             poke6_Tab.Controls.Add(groupBox36);
             poke6_Tab.Controls.Add(groupBox37);
             poke6_Tab.Controls.Add(groupBox38);
@@ -4586,42 +4586,42 @@ namespace Main
             poke6_Tab.Text = "06 - ";
             poke6_Tab.UseVisualStyleBackColor = true;
             // 
-            // groupBox35
+            // poke6HgEngine_groupBox
             // 
-            groupBox35.Controls.Add(checkBox5);
-            groupBox35.Controls.Add(button11);
-            groupBox35.Controls.Add(label122);
-            groupBox35.Controls.Add(button12);
-            groupBox35.Controls.Add(label123);
-            groupBox35.Controls.Add(label124);
-            groupBox35.Controls.Add(textBox6);
-            groupBox35.Controls.Add(label125);
-            groupBox35.Controls.Add(comboBox71);
-            groupBox35.Controls.Add(label126);
-            groupBox35.Controls.Add(comboBox72);
-            groupBox35.Controls.Add(label127);
-            groupBox35.Controls.Add(comboBox73);
-            groupBox35.Controls.Add(label128);
-            groupBox35.Controls.Add(comboBox74);
-            groupBox35.Controls.Add(label129);
-            groupBox35.Controls.Add(label130);
-            groupBox35.Controls.Add(comboBox75);
-            groupBox35.Controls.Add(label131);
-            groupBox35.Controls.Add(comboBox76);
-            groupBox35.Controls.Add(checkedListBox6);
-            groupBox35.Location = new Point(6, 220);
-            groupBox35.Name = "groupBox35";
-            groupBox35.Size = new Size(496, 178);
-            groupBox35.TabIndex = 76;
-            groupBox35.TabStop = false;
-            groupBox35.Text = "HG Engine";
+            poke6HgEngine_groupBox.Controls.Add(checkBox5);
+            poke6HgEngine_groupBox.Controls.Add(button11);
+            poke6HgEngine_groupBox.Controls.Add(label122);
+            poke6HgEngine_groupBox.Controls.Add(button12);
+            poke6HgEngine_groupBox.Controls.Add(label123);
+            poke6HgEngine_groupBox.Controls.Add(label124);
+            poke6HgEngine_groupBox.Controls.Add(textBox6);
+            poke6HgEngine_groupBox.Controls.Add(label125);
+            poke6HgEngine_groupBox.Controls.Add(comboBox71);
+            poke6HgEngine_groupBox.Controls.Add(label126);
+            poke6HgEngine_groupBox.Controls.Add(comboBox72);
+            poke6HgEngine_groupBox.Controls.Add(label127);
+            poke6HgEngine_groupBox.Controls.Add(comboBox73);
+            poke6HgEngine_groupBox.Controls.Add(label128);
+            poke6HgEngine_groupBox.Controls.Add(comboBox74);
+            poke6HgEngine_groupBox.Controls.Add(label129);
+            poke6HgEngine_groupBox.Controls.Add(label130);
+            poke6HgEngine_groupBox.Controls.Add(comboBox75);
+            poke6HgEngine_groupBox.Controls.Add(label131);
+            poke6HgEngine_groupBox.Controls.Add(comboBox76);
+            poke6HgEngine_groupBox.Controls.Add(checkedListBox6);
+            poke6HgEngine_groupBox.Location = new Point(6, 220);
+            poke6HgEngine_groupBox.Name = "poke6HgEngine_groupBox";
+            poke6HgEngine_groupBox.Size = new Size(496, 178);
+            poke6HgEngine_groupBox.TabIndex = 76;
+            poke6HgEngine_groupBox.TabStop = false;
+            poke6HgEngine_groupBox.Text = "HG Engine";
             // 
             // checkBox5
             // 
             checkBox5.AutoSize = true;
             checkBox5.CheckAlign = ContentAlignment.MiddleRight;
             checkBox5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox5.Location = new Point(428, 128);
+            checkBox5.Location = new Point(308, 115);
             checkBox5.Name = "checkBox5";
             checkBox5.Size = new Size(56, 19);
             checkBox5.TabIndex = 177;
@@ -4632,9 +4632,9 @@ namespace Main
             // 
             button11.Enabled = false;
             button11.Font = new Font("Segoe UI", 9F);
-            button11.Location = new Point(405, 87);
+            button11.Location = new Point(405, 136);
             button11.Name = "button11";
-            button11.Size = new Size(85, 23);
+            button11.Size = new Size(85, 36);
             button11.TabIndex = 10;
             button11.Text = "Edit Stats";
             button11.UseVisualStyleBackColor = true;
@@ -4644,7 +4644,7 @@ namespace Main
             label122.AutoSize = true;
             label122.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             label122.ForeColor = SystemColors.MenuHighlight;
-            label122.Location = new Point(101, 66);
+            label122.Location = new Point(101, 68);
             label122.Name = "label122";
             label122.Size = new Size(10, 15);
             label122.TabIndex = 176;
@@ -4654,9 +4654,9 @@ namespace Main
             // 
             button12.Enabled = false;
             button12.Font = new Font("Segoe UI", 9F);
-            button12.Location = new Point(308, 87);
+            button12.Location = new Point(308, 136);
             button12.Name = "button12";
-            button12.Size = new Size(85, 23);
+            button12.Size = new Size(85, 36);
             button12.TabIndex = 177;
             button12.Text = "Edit IVs/EVs";
             button12.UseVisualStyleBackColor = true;
@@ -4665,7 +4665,7 @@ namespace Main
             // 
             label123.AutoSize = true;
             label123.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label123.Location = new Point(6, 66);
+            label123.Location = new Point(6, 68);
             label123.Name = "label123";
             label123.Size = new Size(93, 15);
             label123.TabIndex = 175;
@@ -4675,7 +4675,7 @@ namespace Main
             // 
             label124.AutoSize = true;
             label124.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label124.Location = new Point(308, 129);
+            label124.Location = new Point(308, 68);
             label124.Name = "label124";
             label124.Size = new Size(63, 15);
             label124.TabIndex = 174;
@@ -4684,7 +4684,7 @@ namespace Main
             // textBox6
             // 
             textBox6.Font = new Font("Segoe UI", 9F);
-            textBox6.Location = new Point(308, 149);
+            textBox6.Location = new Point(308, 86);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(182, 23);
             textBox6.TabIndex = 173;
@@ -7351,10 +7351,10 @@ namespace Main
             trainer_PropertiesTabControl.ResumeLayout(false);
             trainer_TrainerData_tab.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
-            tabControl1.ResumeLayout(false);
+            poke6Moves_groupBox.ResumeLayout(false);
             poke1_Tab.ResumeLayout(false);
-            poke1HgEngine.ResumeLayout(false);
-            poke1HgEngine.PerformLayout();
+            poke1HgEngine_groupBox.ResumeLayout(false);
+            poke1HgEngine_groupBox.PerformLayout();
             poke1Moves_groupBox.ResumeLayout(false);
             poke1Moves_groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke1_Move4_PP_num).EndInit();
@@ -7370,10 +7370,10 @@ namespace Main
             poke1Data.ResumeLayout(false);
             poke1Data.PerformLayout();
             poke2_Tab.ResumeLayout(false);
-            groupBox11.ResumeLayout(false);
-            groupBox11.PerformLayout();
-            groupBox12.ResumeLayout(false);
-            groupBox12.PerformLayout();
+            poke2HgEngine_groupBox.ResumeLayout(false);
+            poke2HgEngine_groupBox.PerformLayout();
+            poke2Moves_groupBox.ResumeLayout(false);
+            poke2Moves_groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke2_Move4_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke2_Move3_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke2_Move2_PP_num).EndInit();
@@ -7387,10 +7387,10 @@ namespace Main
             groupBox16.ResumeLayout(false);
             groupBox16.PerformLayout();
             poke3_Tab.ResumeLayout(false);
-            groupBox17.ResumeLayout(false);
-            groupBox17.PerformLayout();
-            groupBox18.ResumeLayout(false);
-            groupBox18.PerformLayout();
+            poke3HgEngine_groupBox.ResumeLayout(false);
+            poke3HgEngine_groupBox.PerformLayout();
+            poke3Moves_groupBox.ResumeLayout(false);
+            poke3Moves_groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke3_Move4_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke3_Move3_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke3_Move2_PP_num).EndInit();
@@ -7404,10 +7404,10 @@ namespace Main
             groupBox22.ResumeLayout(false);
             groupBox22.PerformLayout();
             poke4_Tab.ResumeLayout(false);
-            groupBox23.ResumeLayout(false);
-            groupBox23.PerformLayout();
-            groupBox24.ResumeLayout(false);
-            groupBox24.PerformLayout();
+            poke4HgEngine_groupBox.ResumeLayout(false);
+            poke4HgEngine_groupBox.PerformLayout();
+            poke4Moves_groupBox.ResumeLayout(false);
+            poke4Moves_groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke4_Move4_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke4_Move3_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke4_Move2_PP_num).EndInit();
@@ -7421,10 +7421,10 @@ namespace Main
             groupBox28.ResumeLayout(false);
             groupBox28.PerformLayout();
             poke5_Tab.ResumeLayout(false);
-            groupBox29.ResumeLayout(false);
-            groupBox29.PerformLayout();
-            groupBox30.ResumeLayout(false);
-            groupBox30.PerformLayout();
+            poke5HgEngine_groupBox.ResumeLayout(false);
+            poke5HgEngine_groupBox.PerformLayout();
+            poke5Moves_groupBox.ResumeLayout(false);
+            poke5Moves_groupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke5_Move4_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke5_Move3_PP_num).EndInit();
             ((System.ComponentModel.ISupportInitialize)poke5_Move2_PP_num).EndInit();
@@ -7438,8 +7438,8 @@ namespace Main
             groupBox34.ResumeLayout(false);
             groupBox34.PerformLayout();
             poke6_Tab.ResumeLayout(false);
-            groupBox35.ResumeLayout(false);
-            groupBox35.PerformLayout();
+            poke6HgEngine_groupBox.ResumeLayout(false);
+            poke6HgEngine_groupBox.PerformLayout();
             groupBox36.ResumeLayout(false);
             groupBox36.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)poke6_Move4_PP_num).EndInit();
@@ -7550,7 +7550,7 @@ namespace Main
         private GroupBox groupBox1;
         private Label label72;
         private GroupBox groupBox2;
-        private TabControl tabControl1;
+        private TabControl poke6Moves_groupBox;
         private TabPage poke1_Tab;
         private GroupBox poke1Data;
         private GroupBox poke1Stats;
@@ -7559,7 +7559,7 @@ namespace Main
         private ComboBox poke1Moves1_comboBox;
         private GroupBox poke1BallCapsule;
         private GroupBox poke1HeldIItem;
-        private GroupBox poke1HgEngine;
+        private GroupBox poke1HgEngine_groupBox;
         private CheckedListBox poke1_AdditionalFlags_checkBoxList;
         private NumericUpDown poke1_Move4_PP_num;
         private Label label74;
@@ -7604,7 +7604,7 @@ namespace Main
         private CheckBox poke1_Shiny_checkBox;
         private Button poke1_EditStats_button;
         private Button poke1_EditIv_button;
-        private GroupBox groupBox11;
+        private GroupBox poke2HgEngine_groupBox;
         private CheckBox checkBox1;
         private Button button3;
         private Label label18;
@@ -7626,7 +7626,7 @@ namespace Main
         private Label label27;
         private ComboBox comboBox12;
         private CheckedListBox checkedListBox2;
-        private GroupBox groupBox12;
+        private GroupBox poke2Moves_groupBox;
         private NumericUpDown poke2_Move4_PP_num;
         private Label label28;
         private NumericUpDown poke2_Move3_PP_num;
@@ -7657,7 +7657,7 @@ namespace Main
         private ComboBox poke2GenderComboBox;
         private Label label37;
         private ComboBox poke2FormComboBox;
-        private GroupBox groupBox17;
+        private GroupBox poke3HgEngine_groupBox;
         private CheckBox checkBox2;
         private Button button5;
         private Label label38;
@@ -7679,7 +7679,7 @@ namespace Main
         private Label label47;
         private ComboBox comboBox28;
         private CheckedListBox checkedListBox3;
-        private GroupBox groupBox18;
+        private GroupBox poke3Moves_groupBox;
         private NumericUpDown poke3_Move4_PP_num;
         private Label label48;
         private NumericUpDown poke3_Move3_PP_num;
@@ -7710,7 +7710,7 @@ namespace Main
         private ComboBox poke3GenderComboBox;
         private Label label81;
         private ComboBox poke3FormComboBox;
-        private GroupBox groupBox23;
+        private GroupBox poke4HgEngine_groupBox;
         private CheckBox checkBox3;
         private Button button7;
         private Label label82;
@@ -7732,7 +7732,7 @@ namespace Main
         private Label label91;
         private ComboBox comboBox44;
         private CheckedListBox checkedListBox4;
-        private GroupBox groupBox24;
+        private GroupBox poke4Moves_groupBox;
         private NumericUpDown poke4_Move4_PP_num;
         private Label label92;
         private NumericUpDown poke4_Move3_PP_num;
@@ -7763,7 +7763,7 @@ namespace Main
         private ComboBox poke4GenderComboBox;
         private Label label101;
         private ComboBox poke4FormComboBox;
-        private GroupBox groupBox29;
+        private GroupBox poke5HgEngine_groupBox;
         private CheckBox checkBox4;
         private Button button9;
         private Label label102;
@@ -7785,7 +7785,7 @@ namespace Main
         private Label label111;
         private ComboBox comboBox60;
         private CheckedListBox checkedListBox5;
-        private GroupBox groupBox30;
+        private GroupBox poke5Moves_groupBox;
         private NumericUpDown poke5_Move4_PP_num;
         private Label label112;
         private NumericUpDown poke5_Move3_PP_num;
@@ -7816,7 +7816,7 @@ namespace Main
         private ComboBox poke5GenderComboBox;
         private Label label121;
         private ComboBox poke5FormComboBox;
-        private GroupBox groupBox35;
+        private GroupBox poke6HgEngine_groupBox;
         private CheckBox checkBox5;
         private Button button11;
         private Label label122;
