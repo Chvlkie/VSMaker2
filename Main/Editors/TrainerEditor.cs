@@ -325,8 +325,13 @@ namespace Main
                 DisableControls(pokePpNumberBoxes[i]);
             }
 
+            if (trainer_PropertyFlags.GetItemChecked(0) && trainer_TeamSizeNum.Value < 2)
+            {
+                trainer_TeamSizeNum.Value = 2;
+            }
             // Reset selected tab
             trainer_PartyData_tabControl.SelectedIndex = 0;
+            trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 2 : 1;
 
             int partySize = (int)trainer_TeamSizeNum.Value;
 
@@ -1133,7 +1138,6 @@ namespace Main
             return writeFile.Success;
         }
 
-
         private bool SaveTrainerProperties(int trainerId, bool displaySucces = false)
         {
             List<bool> aiFlags = [];
@@ -1229,7 +1233,6 @@ namespace Main
                     {
                         switch (pokemonId)
                         {
-
                             default:
                                 pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
                                 break;
@@ -1238,9 +1241,11 @@ namespace Main
                     else
                     {
                         pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
-                    } break;
+                    }
+                    break;
             }
         }
+
         private void SetPokemonSpecialData(int partyIndex)
         {
             var selectedPokemonName = pokeComboBoxes[partyIndex].Text;
@@ -1313,8 +1318,12 @@ namespace Main
                 int pokemonId = trainerParty.Pokemons[i].PokemonId;
 
                 // Ensure pokemonId is within bounds
-                if (pokemonId >= 0 && pokemonId < mainEditorModel.PokemonNames.Count)
+                if (pokemonId >= 0 && pokemonId < mainEditorModel.PokemonNamesFull.Count)
                 {
+                    if (pokemonId > 543)
+                    {
+                        pokemonId -= 50;
+                    }
                     // Set the selected item directly to match the Pokémon name
                     pokeComboBoxes[i].SelectedItem = mainEditorModel.PokemonNames[pokemonId];
                 }
@@ -2021,35 +2030,19 @@ namespace Main
         {
             if (trainer_PropertyFlags.GetItemChecked(1))
             {
-                int partyCount = 0;
-                foreach (var moveArray in pokeMovesComboBoxes)
+                for (int i = 0; i < trainer_TeamSizeNum.Value; i++)
                 {
-                    if (partyCount == trainer_TeamSizeNum.Value)
-                    {
-                        break;
-                    }
+                    var moveArray = pokeMovesComboBoxes[i];
                     if (moveArray == null)
                     {
                         MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
-
-                    int movesSelected = 0;
-
-                    //for (int i = 0; i < 4; i++)
-                    //{
-                    //    if (moveArray[i] > 0)
-                    //    {
-                    //        movesSelected++;
-                    //    }
-                    //}
-
-                    if (movesSelected == 0)
+                    else if (!moveArray.Any(x => x.SelectedIndex > 0))
                     {
                         MessageBox.Show("You have not set moves for all Party Pokemon!\nClick the Moves button next to each Pokemon to set moves", "Unable to Save Trainer Properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return false;
                     }
-                    partyCount++;
                 }
             }
             return true;
@@ -2122,9 +2115,8 @@ namespace Main
             {
                 return -1; // Return -1 if the input is invalid
             }
-
-            int pokemonId = mainEditorModel.PokemonNames.IndexOf(selectedItemText);
-
+            string pokemonName = selectedItemText.Substring(7);
+            int pokemonId = mainEditorModel.PokemonNamesFull.IndexOf(pokemonName);
             return pokemonId;
         }
 

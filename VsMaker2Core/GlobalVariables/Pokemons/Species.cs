@@ -9,7 +9,7 @@
             Pokemon.Pokedex.Rotom => formId > 0 ? AltForms.RotomAltForms(formId) : pokemonId,
             Pokemon.Pokedex.Giratina => formId > 0 ? AltForms.GiratinaAltForm : pokemonId,
             Pokemon.Pokedex.Shaymin => formId > 0 ? (ushort)(AltForms.ShayminAltForm + formId) : pokemonId,
-            _ => pokemonId,
+            _ =>  pokemonId,
         };
 
         public static class AltForms
@@ -41,26 +41,12 @@
                 public static List<string> ShayminForms => ["Land", "Sky"];
                 public static List<string> ShellosGastrodon => ["West", "East"];
 
-                public static List<string> Unown
-                {
-                    get
-                    {
-                        List<string> forms = [];
-                        for (char c = 'A'; c <= 'Z'; c++)
-                        {
-                            forms.Add(c.ToString());
-                        }
-                        forms.Add("!");
-                        forms.Add("?");
-
-                        return forms;
-                    }
-                }
+                public static List<string> Unown => Enumerable.Range('A', 26).Select(c => ((char)c).ToString()).Concat(["!", "?"]).ToList();
 
                 public static class HgEngineForms
                 {
                     #region HG Engine Forms
-                    
+
                     #region GEN I
 
                     public static List<string> Aerodactyl => [Default, .. MegaEvolutionForm()];
@@ -171,6 +157,7 @@
                     public static List<string> Basulin => [Default, .. BasculingCosmetic];
                     public static List<string> Deerling => [Default, .. DeerlingCosmetic];
                     public static List<string> Sawsbuck => [Default, .. Sawsbuck];
+
                     #endregion GEN V
 
                     #region GEN VI
@@ -187,10 +174,7 @@
                     public const string MegaX = "Mega X";
                     public const string MegaY = "Mega Y";
 
-                    public static List<string> MegaEvolutionForm(bool hasXY = false)
-                    {
-                        return hasXY ? [MegaX, MegaY] : [Mega];
-                    }
+                    public static List<string> MegaEvolutionForm(bool hasXY = false) => hasXY ? [MegaX, MegaY] : [Mega];
 
                     #endregion Mega Evolutions
 
@@ -213,6 +197,7 @@
                     #endregion Galarian
 
                     #region Cosmetic
+
                     public static List<string> PikachuCosmetic =>
                         ["Cosplay", "Rock Star", "Belle", "Pop Star", "PHD", "Libre", "Original Cap", "Hoen Cap", "Sinnoh Cap", "Unova Cap", "Kalos Cap", "Alola Cap",
                     "Partner Cap", "World Cap", "Let's Go"];
@@ -236,22 +221,22 @@
                      ["White", "Black"];
 
                     public const string KeldeoCosmetic = "Resolute";
+
                     public static List<string> GenesectCosmetic =>
                                ["Blue Stripe", "White Stripe"];
-
 
                     #endregion Cosmetic
                 }
             }
+        }
 
-            public static class Constants
-            {
-                public const int AbilitySlot1ByteOffset = 22;
-                public const int GenderRatioByteOffset = 16;
-                public const int GenderRatioFemale = 254;
-                public const int GenderRatioGenderless = 255;
-                public const int GenderRatioMale = 0;
-            }
+        public static class Constants
+        {
+            public const int AbilitySlot1ByteOffset = 22;
+            public const int GenderRatioByteOffset = 16;
+            public const int GenderRatioFemale = 254;
+            public const int GenderRatioGenderless = 255;
+            public const int GenderRatioMale = 0;
         }
     }
 }

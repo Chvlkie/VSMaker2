@@ -17,15 +17,11 @@ namespace Main.Models
         public List<BattleMessage> BattleMessages { get; set; } = [];
         public List<string> PokemonNames { get; set; } = [];
 
-        public static List<string> SetPokemonNames(List<string> pokemonNamesFull)
-        {
-            var names = new List<string>(pokemonNamesFull.Count + 1) { "----------" };
-            for (int i = 1; i < pokemonNamesFull.Count; i++)
-            {
-                names.Add($"[{i:D4}] {pokemonNamesFull[i]}");
-            }
-            return names;
-        }
+        public static List<string> SetPokemonNames(List<string> pokemonNamesFull) => pokemonNamesFull
+                .Where((name, index) => index < 494 || (index > 543 && index < 1076))
+                .Select((name, i) => $"[{i:D4}] {name}")
+                .ToList();
+
 
         #region TrainerEditor
 

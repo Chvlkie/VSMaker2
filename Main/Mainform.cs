@@ -1089,13 +1089,6 @@ namespace Main
         {
             if (!isLoadingData)
             {
-                if (!trainer_PropertyFlags.GetItemChecked(0) && trainer_TeamSizeNum.Value < 2)
-                {
-                    trainer_TeamSizeNum.Value = 2;
-                }
-
-                trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 1 : 2;
-
                 EditedTrainerProperty(true);
 
                 BeginInvoke(new Action(() => EnableDisableParty()));
