@@ -1186,50 +1186,61 @@ namespace Main
             pokeFormsComboBoxes[partyIndex].Items.Clear();
             switch (pokemonId)
             {
-                case Pokemon.Pokedex.PichuId:
+                case Pokemon.Pokedex.Pichu:
                     Species.AltForms.FormNames.Pichu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.UnownId:
+                case Pokemon.Pokedex.Unown:
                     Species.AltForms.FormNames.Unown.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.CastformId:
+                case Pokemon.Pokedex.Castform:
                     Species.AltForms.FormNames.Castform.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.DeoxysId:
+                case Pokemon.Pokedex.Deoxys:
                     Species.AltForms.FormNames.Deoxys.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.BurmyId:
-                case Pokemon.Pokedex.WormadamId:
+                case Pokemon.Pokedex.Burmy:
+                case Pokemon.Pokedex.Wormadam:
                     Species.AltForms.FormNames.BurmyWormadam.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.ShellosId:
-                case Pokemon.Pokedex.GastrodonId:
+                case Pokemon.Pokedex.Shellos:
+                case Pokemon.Pokedex.Gastrodon:
                     Species.AltForms.FormNames.ShellosGastrodon.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.RotomId:
+                case Pokemon.Pokedex.Rotom:
                     Species.AltForms.FormNames.Rotom.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.GiratinaId:
+                case Pokemon.Pokedex.Giratina:
                     Species.AltForms.FormNames.GiratinaForms.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                case Pokemon.Pokedex.ShayminId:
+                case Pokemon.Pokedex.Shaymin:
                     Species.AltForms.FormNames.ShayminForms.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                     break;
 
-                    case Pokemon.Pokedex.PichuId
                 default:
-                    pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default); break;
+                    if (RomFile.IsHgEngine)
+                    {
+                        switch (pokemonId)
+                        {
+
+                            default:
+                                pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
+                    } break;
             }
         }
-
         private void SetPokemonSpecialData(int partyIndex)
         {
             var selectedPokemonName = pokeComboBoxes[partyIndex].Text;
