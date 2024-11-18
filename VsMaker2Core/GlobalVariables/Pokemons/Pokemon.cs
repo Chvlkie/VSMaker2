@@ -1111,10 +1111,10 @@
 
         public static class Constants
         {
-            public static int PokemonNumberBitSize => RomFile.GameVersion == Enums.GameVersion.HgEngine ? 11 : 10;
+            public static int PokemonNumberBitSize => RomFile.IsHgEngine ? 11 : 10;
             public static int PokemonNumberBitMask => (1 << PokemonNumberBitSize) - 1;
 
-            public const int PokemonFormBitSize = 6;
+            public static int PokemonFormBitSize = 6;
             public static int PokemonFormBitMask => ((1 << PokemonFormBitSize) - 1) << PokemonNumberBitSize;
         }
     }

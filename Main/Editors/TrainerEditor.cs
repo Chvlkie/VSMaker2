@@ -1,4 +1,5 @@
 ﻿using Main.Forms;
+using System.Xml.Linq;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -330,7 +331,6 @@ namespace Main
                 trainer_TeamSizeNum.Value = 2;
             }
             // Reset selected tab
-            trainer_PartyData_tabControl.SelectedIndex = 0;
             trainer_TeamSizeNum.Minimum = trainer_PropertyFlags.GetItemChecked(0) ? 2 : 1;
 
             int partySize = (int)trainer_TeamSizeNum.Value;
@@ -363,6 +363,7 @@ namespace Main
                         }
                     }
                 }
+                UpdatePokemonTabName(i);
             }
         }
 
@@ -1049,7 +1050,7 @@ namespace Main
 
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
         {
-            bool isDiamondPearl = RomFile.IsNotDiamondPearl;
+            bool isNotDiamondPearl = RomFile.IsNotDiamondPearl;
             List<bool> trainerTypeFlags = [];
 
             // Populate the flags based on the checklistbox items
@@ -1066,7 +1067,8 @@ namespace Main
             for (int i = 0; i < teamSize; i++)
             {
                 int pokemonId = GetPokemonIdFromComboBoxText(pokeComboBoxes[i].Text);
-                ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, 0);
+                ushort formId = isNotDiamondPearl ? (ushort)pokeFormsComboBoxes[i].SelectedIndex : (ushort)0;
+                ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, formId);
                 var species = GetSpeciesBySpeciesId(speciesId);
 
                 byte genderAbilityOverride = species.HasMoreThanOneGender
@@ -1088,14 +1090,13 @@ namespace Main
                     genderAbilityOverride,
                     (ushort)pokeLevelNums[i].Value,
                     (ushort)pokemonId,
-                    (ushort)pokeFormsComboBoxes[i].SelectedIndex,
+                    formId,
                     (ushort?)pokeHeldItemComboBoxes[i].SelectedIndex,
                     pokemonMoves,
                     (ushort?)pokeBallCapsuleComboBoxes[i].SelectedIndex
                 );
-
                 var newPokemonData = trainerEditorMethods.NewTrainerPartyPokemonData(
-                    newPokemon, trainerTypeFlags[1], trainerTypeFlags[2], isDiamondPearl
+                    newPokemon, trainerTypeFlags[1], trainerTypeFlags[2], isNotDiamondPearl
                 );
 
                 newPokemons.Add(newPokemon);
@@ -1111,7 +1112,7 @@ namespace Main
             var trainerPartyData = new TrainerPartyData(newPokemonDatas.ToArray());
 
             var writeFile = fileSystemMethods.WriteTrainerPartyData(
-                trainerPartyData, trainerId, trainerTypeFlags.ToArray(), isDiamondPearl
+                trainerPartyData, trainerId, trainerTypeFlags.ToArray(), isNotDiamondPearl
             );
 
             if (writeFile.Success)
@@ -1233,6 +1234,12 @@ namespace Main
                     {
                         switch (pokemonId)
                         {
+                            case Pokemon.Pokedex.Pikachu:
+                                Species.AltForms.FormNames.HgEngineForms.Pikachu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Groudon:
+                                Species.AltForms.FormNames.HgEngineForms.Groudon.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             default:
                                 pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
                                 break;
@@ -1981,9 +1988,17 @@ namespace Main
 
         private void UpdatePokemonTabName(int index)
         {
-            string selectedText = pokeComboBoxes[index].Text;
-            string name = selectedText.Substring(7);
-            trainer_PartyData_tabControl.TabPages[index].Text = $"{name}";
+            if (pokeComboBoxes[index].Enabled)
+            {
+                string selectedText = pokeComboBoxes[index].Text;
+                string name = selectedText.Substring(7);
+                trainer_PartyData_tabControl.TabPages[index].Text = $"{name}";
+            }
+            else
+            {
+                trainer_PartyData_tabControl.TabPages[index].Text = $"-----";
+            }
+            
         }
 
         private void UpdateAbilty(int index) => EditedTrainerParty(true);

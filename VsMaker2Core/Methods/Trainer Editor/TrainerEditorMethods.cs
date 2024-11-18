@@ -18,6 +18,7 @@ namespace VsMaker2Core.Methods
 
         public Trainer BuildTrainerData(int trainerId, string trainerName, TrainerData trainerData, TrainerPartyData trainerPartyData, bool hasBallCapsule)
         {
+           
             var trainerProperties = BuildTrainerPropertyFromRomData(trainerData);
             var trainerParty = BuildTrainerPartyFromRomData(trainerPartyData, trainerProperties.TeamSize, hasBallCapsule, trainerProperties.PropertyFlags);
             var usages = FindTrainerUses(trainerId);
@@ -35,8 +36,6 @@ namespace VsMaker2Core.Methods
                 trainerParty.Pokemons.AddRange(Enumerable.Repeat(new Pokemon(), 6));
                 return trainerParty;
             }
-
-            // Process valid Pokémon in the team
             for (int i = 0; i < teamSize; i++)
             {
                 var trainerPartyPokemon = trainerPartyData.PokemonData[i];
@@ -196,11 +195,12 @@ namespace VsMaker2Core.Methods
 
         public TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule)
         {
+           
             return new TrainerPartyPokemonData
             {
                 Difficulty = pokemon.DifficultyValue,
                 GenderAbilityOverride = pokemon.GenderAbilityOverride,
-                Species = (ushort)(pokemon.PokemonId + (pokemon.FormId << Pokemon.Constants.PokemonNumberBitSize)),
+                Species = (ushort)((pokemon.FormId << Pokemon.Constants.PokemonNumberBitSize)|pokemon.PokemonId),
                 Level = pokemon.Level,
                 ItemId = chooseItems && pokemon.HeldItemId.HasValue ? pokemon.HeldItemId.Value : null,
                 MoveIds = chooseMoves ? pokemon.Moves : null,

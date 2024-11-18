@@ -606,14 +606,14 @@ namespace VsMaker2Core.Methods
 
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
 
-            bool hasMoves = trainerTypeFlags[0];
-            bool heldItems = trainerTypeFlags[1];
-            bool setAbility = trainerTypeFlags[2];
-            bool chooseBall = trainerTypeFlags[3];
-            bool chooseIvEv = trainerTypeFlags[4];
-            bool chooseNature = trainerTypeFlags[5];
-            bool shinyLock = trainerTypeFlags[6];
-            bool additionalFlags = trainerTypeFlags[7];
+            bool hasMoves = trainerTypeFlags[1];
+            bool heldItems = trainerTypeFlags[2];
+            bool setAbility = trainerTypeFlags[3];
+            bool chooseBall = trainerTypeFlags[4];
+            bool chooseIvEv = trainerTypeFlags[5];
+            bool chooseNature = trainerTypeFlags[6];
+            bool shinyLock = trainerTypeFlags[7];
+            bool additionalFlags = trainerTypeFlags[8];
 
             try
             {
@@ -677,19 +677,67 @@ namespace VsMaker2Core.Methods
                             }
                             if (additionalFlags)
                             {
-                                writer.Write(pokemon.Ball_Hge.Value);
-                            }
-                            if (chooseBall)
-                            {
-                                writer.Write(pokemon.Ball_Hge.Value);
-                            }
-                            if (chooseBall)
-                            {
-                                writer.Write(pokemon.Ball_Hge.Value);
-                            }
-                            if (chooseBall)
-                            {
-                                writer.Write(pokemon.Ball_Hge.Value);
+                                writer.Write(pokemon.AdditionalFlags_Hge.Value);
+
+                                bool chooseStatus = (pokemon.AdditionalFlags_Hge & 0x01) != 0;
+                                bool chooseHP = (pokemon.AdditionalFlags_Hge & 0x02) != 0;
+                                bool chooseATK = (pokemon.AdditionalFlags_Hge & 0x04) != 0;
+                                bool chooseDEF = (pokemon.AdditionalFlags_Hge & 0x08) != 0;
+                                bool chooseSPEED = (pokemon.AdditionalFlags_Hge & 0x10) != 0;
+                                bool chooseSpATK = (pokemon.AdditionalFlags_Hge & 0x20) != 0;
+                                bool chooseSpDEF = (pokemon.AdditionalFlags_Hge & 0x40) != 0;
+                                bool chooseTypes = (pokemon.AdditionalFlags_Hge & 0x80) != 0;
+                                bool choosePP = (pokemon.AdditionalFlags_Hge & 0x100) != 0;
+                                bool chooseNickname = (pokemon.AdditionalFlags_Hge & 0x200) != 0;
+                                if (chooseStatus)
+                                {
+                                    writer.Write(pokemon.Status_Hge.Value);
+                                }
+                                if (chooseHP)
+                                {
+                                    writer.Write(pokemon.Hp_Hge.Value);
+                                }
+                                if (chooseATK)
+                                {
+                                    writer.Write(pokemon.Atk_Hge.Value);
+                                }
+                                if (chooseDEF)
+                                {
+                                    writer.Write(pokemon.Def_Hge.Value);
+                                }
+                                if (chooseSPEED)
+                                {
+                                    writer.Write(pokemon.Speed_Hge.Value);
+                                }
+                                if (chooseSpATK)
+                                {
+                                    writer.Write(pokemon.SpAtk_Hge.Value);
+                                }
+                                if (chooseSpDEF)
+                                {
+                                    writer.Write(pokemon.SpDef_Hge.Value);
+                                }
+                                if (chooseTypes)
+                                {
+                                    for (int type = 0; type < 2; type++)
+                                    {
+                                        writer.Write(pokemon.Types_Hge[type]);
+                                    }
+                                }
+                                if (choosePP)
+                                {
+                                    for (int pp = 0; pp < 4; pp++)
+                                    {
+                                        writer.Write(pokemon.PpCounts_Hge[pp]);
+                                    }
+                                }
+                                if (chooseNickname)
+                                {
+                                    for (int name = 0; name < 11; name++)
+                                    {
+                                        writer.Write(pokemon.Nickname_Hge[name]);
+                                    }
+                                }
                             }
                         }
 

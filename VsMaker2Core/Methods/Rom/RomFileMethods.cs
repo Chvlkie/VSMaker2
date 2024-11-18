@@ -609,6 +609,10 @@ namespace VsMaker2Core.Methods
 
                 try
                 {
+                    if (i == 11)
+                    {
+                        bool test = true;
+                    }
                     var partyData = ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
                     trainersPartyData.Add(partyData);
                 }
@@ -703,6 +707,7 @@ namespace VsMaker2Core.Methods
                 using var reader = new BinaryReader(fileStream);
                 for (int i = 0; i < teamSize; i++)
                 {
+                
                     var trainerPartyPokemonData = new TrainerPartyPokemonData
                     {
                         Difficulty = reader.ReadByte(),
