@@ -193,6 +193,7 @@ namespace VsMaker2Core.DataModels
             #endregion GEN VI
 
             #region GEN VII
+
             Pokedex.Decidueye => RomFile.IsHgEngine,
             Pokedex.Oricorio => RomFile.IsHgEngine,
             Pokedex.Rockruff => RomFile.IsHgEngine,
@@ -203,7 +204,9 @@ namespace VsMaker2Core.DataModels
             Pokedex.Magearna => RomFile.IsHgEngine,
 
             #endregion GEN VII
+
             #region GEN VIII
+
             Pokedex.Cramorant => RomFile.IsHgEngine,
             Pokedex.Toxtricity => RomFile.IsHgEngine,
             Pokedex.Sinistea => RomFile.IsHgEngine,
@@ -225,6 +228,7 @@ namespace VsMaker2Core.DataModels
             #endregion GEN VIII
 
             #region GEN IX
+
             Pokedex.Oinkologne => RomFile.IsHgEngine,
             Pokedex.Maushold => RomFile.IsHgEngine,
             Pokedex.Squawkabilly => RomFile.IsHgEngine,
@@ -239,6 +243,7 @@ namespace VsMaker2Core.DataModels
             Pokedex.Terapagos => RomFile.IsHgEngine,
 
             #endregion GEN IX
+
             _ => false,
         };
 

@@ -615,7 +615,7 @@ namespace VsMaker2Core.Methods
                 catch (Exception ex)
                 {
                     Console.WriteLine($"An error occurred while reading party data for trainer {i}: {ex.Message}");
-                    throw;
+                    throw ex;
                 }
             }
 

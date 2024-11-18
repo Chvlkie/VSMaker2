@@ -1070,7 +1070,7 @@
             public const ushort IronBoulder = 1022;
             public const ushort IronCrown = 1023;
             public const ushort Terapagos = 1024;
-            public const ushort Pechaflame = 1025;
+            public const ushort Pecharunt = 1025;
 
             #endregion GEN IX
         }
