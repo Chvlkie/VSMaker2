@@ -311,7 +311,20 @@ namespace VsMaker2Core.Methods
         {
             try
             {
-                if (RomFile.ClassGenderExpanded)
+                if (RomFile.IsHgEngine)
+                {
+                    using FileStream overlayStream = new(Overlay.OverlayFilePath(RomFile.HgEngineOverlay), FileMode.Open, FileAccess.Write);
+                    using BinaryWriter writer = new(overlayStream);
+
+                    if (classGenderData.Offset < 0 || classGenderData.Offset > overlayStream.Length)
+                    {
+                        return (false, $"Invalid offset {classGenderData.Offset} for writing class gender data.");
+                    }
+
+                    overlayStream.Position = (uint)classGenderData.Offset;
+                    writer.Write(classGenderData.Gender);
+                }
+                else if (RomFile.ClassGenderExpanded)
                 {
                     using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
                     using BinaryWriter writer = new(overlayStream);
@@ -393,7 +406,17 @@ namespace VsMaker2Core.Methods
                 byte[] musicDayBytes = BitConverter.GetBytes(eyeContactMusicData.MusicDayId);
                 byte[] musicNightBytes = BitConverter.GetBytes(eyeContactMusicData.MusicNightId ?? 0);
 
-                if (RomFile.EyeContactExpanded)
+                if (RomFile.IsHgEngine)
+                {
+                    using FileStream overlayStream = new(Overlay.OverlayFilePath(RomFile.HgEngineOverlay), FileMode.Open, FileAccess.Write);
+                    using BinaryWriter writer = new(overlayStream);
+
+                    overlayStream.Position = eyeContactMusicData.Offset + 2;
+                    writer.Write(musicDayBytes);
+                    overlayStream.Position = eyeContactMusicData.Offset + 4;
+                    writer.Write(musicNightBytes);
+                }
+                else if (RomFile.EyeContactExpanded)
                 {
                     using FileStream overlayStream = new(RomFile.SynthOverlayFilePath, FileMode.Open, FileAccess.Write);
                     using BinaryWriter writer = new(overlayStream);
@@ -478,8 +501,11 @@ namespace VsMaker2Core.Methods
             try
             {
                 string filePath;
-
-                if (RomFile.IsHeartGoldSoulSilver)
+                if (RomFile.IsHgEngine)
+                {
+                    filePath = Overlay.OverlayFilePath(RomFile.HgEngineOverlay);
+                }
+                else if (RomFile.IsHeartGoldSoulSilver)
                 {
                     if (!RomFile.PrizeMoneyExpanded)
                     {
@@ -500,7 +526,7 @@ namespace VsMaker2Core.Methods
                     filePath = RomFile.OverlayPath;
                 }
 
-                using EasyWriter writer = new(filePath, prizeMoneyData.Offset);
+                await using EasyWriter writer = new(filePath, prizeMoneyData.Offset);
 
                 // Write prize money data
                 if (RomFile.IsHeartGoldSoulSilver)

@@ -1237,6 +1237,24 @@ namespace Main
                             case Pokemon.Pokedex.Pikachu:
                                 Species.AltForms.FormNames.HgEngineForms.Pikachu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+                            case Pokemon.Pokedex.Growlithe:
+                                Species.AltForms.FormNames.HgEngineForms.Growlithe.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Meowth:
+                                Species.AltForms.FormNames.HgEngineForms.Meowth.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Rattata:
+                                Species.AltForms.FormNames.HgEngineForms.Rattata.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Raticate:
+                                Species.AltForms.FormNames.HgEngineForms.Raticate.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Ponyta:
+                                Species.AltForms.FormNames.HgEngineForms.Ponyta.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Rapidash:
+                                Species.AltForms.FormNames.HgEngineForms.Rapidash.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             case Pokemon.Pokedex.Groudon:
                                 Species.AltForms.FormNames.HgEngineForms.Groudon.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;

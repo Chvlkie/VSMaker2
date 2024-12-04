@@ -6,7 +6,6 @@ namespace VsMaker2Core.DataModels
     {
         #region ARM9
 
-        public const uint SynthOverlayLoadAddress = 0x023C8000;
         public static string Arm9Path => $"{WorkingDirectory}{Common.Arm9FilePath}";
         public static uint Arm9SpawnOffset { get; set; }
 
@@ -17,7 +16,10 @@ namespace VsMaker2Core.DataModels
         public static string OverlayPath => $"{WorkingDirectory}{Common.OverlayFilePath}";
         public static string OverlayTablePath => $"{WorkingDirectory}{Common.Y9FilePath}";
         public static string SynthOverlayFilePath => Path.Combine(Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.synthOverlay].unpackedDirectory, "0000");
+        public const uint SynthOverlayLoadAddress = 0x023C8000;
 
+        public const int HgEngineOverlay = 129;
+        public const uint HgEngineOverlayLoadAddress = 0x023D8000;
         #endregion Overlay
 
         #region Battle Message Table
@@ -36,7 +38,7 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
             GameFamily.Platinum => 0x359E0,
             GameFamily.HeartGoldSoulSilver => 0x34C04,
-            GameFamily.HgEngine => 0x34C04,
+            GameFamily.HgEngine => 0x5F1A,
             _ => 0
         };
 

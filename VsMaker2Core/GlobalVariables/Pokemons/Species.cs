@@ -13,7 +13,12 @@
             #region HG Engine Only
 
             Pokemon.Pokedex.Pikachu => formId > 0 ? AltForms.PikachuAltForms(formId) : pokemonId,
-
+            Pokemon.Pokedex.Meowth => formId > 0 ? AltForms.MeowthAltForms(formId) : pokemonId,
+            Pokemon.Pokedex.Rattata => formId > 0 ? AltForms.HgEngineForms.AlolanForms.Rattata : pokemonId,
+            Pokemon.Pokedex.Raticate => formId > 0 ? AltForms.HgEngineForms.AlolanForms.Raticate : pokemonId,
+            Pokemon.Pokedex.Growlithe => formId > 0 ? AltForms.HgEngineForms.HisuianForms.Growlithe : pokemonId,
+            Pokemon.Pokedex.Ponyta => formId > 0 ? AltForms.HgEngineForms.GalarianForms.Ponyta : pokemonId,
+            Pokemon.Pokedex.Rapidash => formId > 0 ? AltForms.HgEngineForms.GalarianForms.Rapidah : pokemonId,
             #endregion HG Engine Only
 
             _ => pokemonId,
@@ -31,8 +36,13 @@
 
             public static ushort WormadamAltForms(ushort formId) => (ushort)(498 + formId);
 
-            public static ushort PikachuAltForms(ushort formId) => HgEngineForms.CosmeticForms.PikachuForms()[formId -1];
-
+            public static ushort PikachuAltForms(ushort formId) => HgEngineForms.CosmeticForms.PikachuForms()[formId - 1];
+            public static ushort MeowthAltForms(ushort formId) => formId switch
+            {
+                1 => HgEngineForms.AlolanForms.Meowth,
+                2 => HgEngineForms.GalarianForms.Meowth,
+                _ => 0
+            };
             public static class HgEngineForms
             {
                 public static ushort MaxPokemon => Pokemon.Pokedex.Pecharunt + 50;
@@ -133,7 +143,23 @@
                 {
                     public static ushort Start => (ushort)(PrimalForms.End + 1);
                     public static ushort End => Marowak;
-
+                    public static ushort Rattata => Start;
+                    public static ushort Raticate => (ushort)(Start + 1);
+                    public static ushort Raichu => (ushort)(Start + 2);
+                    public static ushort Sandshrew => (ushort)(Start + 3);
+                    public static ushort Sandslash => (ushort)(Start + 4);
+                    public static ushort Vulpix => (ushort)(Start + 5);
+                    public static ushort Ninetales => (ushort)(Start + 6);
+                    public static ushort Diglet => (ushort)(Start + 7);
+                    public static ushort Dugtrio => (ushort)(Start + 8);
+                    public static ushort Meowth => (ushort)(Start + 9);
+                    public static ushort Persian => (ushort)(Start + 10);
+                    public static ushort Geodude => (ushort)(Start + 11);
+                    public static ushort Graveler => (ushort)(Start + 12);
+                    public static ushort Golem => (ushort)(Start + 13);
+                    public static ushort Grimer => (ushort)(Start + 14);
+                    public static ushort Muk => (ushort)(Start + 15);
+                    public static ushort Exeggutor => (ushort)(Start + 16);
                     public static ushort Marowak => (ushort)(Start + 17);
                 }
 
@@ -141,6 +167,9 @@
                 {
                     public static ushort Start => (ushort)(AlolanForms.End + 1);
                     public static ushort End => Stunfisk;
+                    public static ushort Meowth => Start;
+                    public static ushort Ponyta => (ushort)(Start + 1);
+                    public static ushort Rapidah => (ushort)(Start + 2);
 
                     public static ushort Stunfisk => (ushort)(Start + 18);
                 }
@@ -167,6 +196,7 @@
                 {
                     public static ushort Start => (ushort)(CosmeticForms.End + 1);
                     public static ushort End => Decidueye;
+                    public static ushort Growlithe => Start;
                     public static ushort Decidueye => (ushort)(Start + 15);
                 }
 
@@ -246,6 +276,7 @@
                     public static List<string> Pinsir => [Default, .. MegaEvolutionForm()];
                     public static List<string> Ponyta => [Default, Galarian];
                     public static List<string> Pikachu => [Default, .. PikachuCosmetic];
+                    public static List<string> Growlithe => [Default, Hisuan];
                     public static List<string> Raichu => [Default, Alolan];
                     public static List<string> Rapidash => [Default, Galarian];
                     public static List<string> Raticate => [Default, Alolan];
@@ -407,6 +438,12 @@
 
                     #endregion Cosmetic
                 }
+
+                #region Hisuan
+                public const string Hisuan = "Hisuan";
+
+                #endregion Hisuan
+
 
                 #endregion HG Engine
             }

@@ -279,7 +279,7 @@ namespace Main
                 ReportProgress();
 
                 RomFile.Arm9Expanded = RomPatches.CheckFilesArm9ExpansionApplied();
-                if (RomFile.Arm9Expanded)
+                if (RomFile.Arm9Expanded && !RomFile.IsHgEngine)
                 {
                     RomFile.PrizeMoneyExpanded = await RomFile.CheckForPrizeMoneyExpansionAsync();
                     RomFile.ClassGenderExpanded = RomFile.CheckForClassGenderExpansion();
