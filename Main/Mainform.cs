@@ -248,6 +248,12 @@ namespace Main
                     progress?.Report(progressCount);
                 }
 
+                // Check HG-Engine
+                if (RomFile.GameVersion == GameVersion.HeartGold && File.Exists(Overlay.OverlayFilePath(129)))
+                {
+                    RomFile.GameVersion = GameVersion.HgEngine;
+                }
+
                 RomFile.ScriptFileData = scriptFileMethods.GetScriptFiles();
                 ReportProgress();
 
@@ -693,15 +699,7 @@ namespace Main
                     Console.WriteLine("ROM version is unsupported.");
                     return false;
                 }
-                else if (RomFile.GameVersion == GameVersion.HeartGold)
-                {
-                    var isHgEngine = MessageBox.Show("You have opened a HeartGold ROM.\nHas this been expanded with HG Engine?", "Check for HG Engine", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (isHgEngine == DialogResult.Yes)
-                    {
-                        RomFile.GameVersion = GameVersion.HgEngine;
-                    }
-                }
-
+              
                 romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
 
                 Console.WriteLine("Reading ROM File | Success");
@@ -801,7 +799,7 @@ namespace Main
                 CloseProject();
                 Console.WriteLine("Opening existing contents folder " + workingDirectory);
                 romLoaded = ReadRomExtractedFolder(workingDirectory);
-                return false;
+                return true;
             }
 
             var extractContentsAgain = MessageBox.Show(
