@@ -217,7 +217,6 @@ namespace VsMaker2Core.Methods
                 using var overlayStream = new FileStream(Overlay.OverlayFilePath(RomFile.HgEngineOverlay), FileMode.Open, FileAccess.Read);
                 uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(0xFFB90, 4), 0) - RomFile.HgEngineOverlayLoadAddress;
 
-
                 overlayStream.Position = tableStartAddress;
 
                 using var reader = new BinaryReader(overlayStream);
@@ -238,7 +237,6 @@ namespace VsMaker2Core.Methods
             }
             else
             {
-
                 uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(classGenderOffsetToRam, 4), 0);
                 tableStartAddress = RomFile.ClassGenderExpanded ? tableStartAddress - RomFile.SynthOverlayLoadAddress : tableStartAddress - Arm9.Address;
 
@@ -289,15 +287,14 @@ namespace VsMaker2Core.Methods
             return messageArchives.ConvertAll(item => item.MessageText);
         }
 
-        public List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily)
+        public List<EyeContactMusicData> GetEyeContactMusicData()
         {
             var eyeContactMusic = new List<EyeContactMusicData>();
             if (RomFile.IsHgEngine)
             {
-
-                uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - RomFile.HgEngineOverlayLoadAddress;
-                byte tableSize = Arm9.ReadByte(0x550D4);
-                using var overlayStream = new FileStream(Overlay.OverlayFilePath(129), FileMode.Open, FileAccess.Read);
+                byte tableSize = Arm9.ReadByte(RomFile.EyeContactTableSizeOffset);
+                uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(RomFile.EyeContactTablePointerOffset, 4), 0) - RomFile.HgEngineOverlayLoadAddress;
+                using var overlayStream = new FileStream(Overlay.OverlayFilePath(RomFile.HgEngineOverlay), FileMode.Open, FileAccess.Read);
                 overlayStream.Position = tableStartAddress;
 
                 using var reader = new BinaryReader(overlayStream);
@@ -347,9 +344,9 @@ namespace VsMaker2Core.Methods
             }
             else
             {
-                uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(eyeContactMusicTableOffsetToRam, 4), 0) - Arm9.Address;
+                uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(RomFile.EyeContactTablePointerOffset, 4), 0) - Arm9.Address;
                 uint tableSizeOffset = (uint)(RomFile.IsHeartGoldSoulSilver ? 12 : 10);
-                byte tableSize = Arm9.ReadByte(eyeContactMusicTableOffsetToRam - tableSizeOffset);
+                byte tableSize = Arm9.ReadByte(RomFile.EyeContactTableSizeOffset);
                 using Arm9.Arm9Reader reader = new(tableStartAddress);
 
                 try
@@ -494,31 +491,57 @@ namespace VsMaker2Core.Methods
 
             try
             {
+                Console.WriteLine("Getting Prize Money table data...");
                 if (RomFile.IsHgEngine)
                 {
-                    string filePath = Overlay.OverlayFilePath(RomFile.HgEngineOverlay);
-
-                    if (!File.Exists(filePath))
+                    try
                     {
-                        Console.WriteLine($"File not found: {filePath}");
-                        return prizeMoneyData;
+                        string filePath = Overlay.OverlayFilePath(12);
+
+                        if (!File.Exists(filePath))
+                        {
+                            Console.WriteLine($"File not found: {filePath}");
+                            return prizeMoneyData;
+                        }
+                        await using var overlay12 = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                        using var reader1 = new BinaryReader(overlay12);
+                        reader1.BaseStream.Position = RomFile.PrizeMoneyTableSizeOffset;
+                        byte tableSize = reader1.ReadByte();
+
+                        reader1.BaseStream.Position = RomFile.PrizeMoneyPointerOffset;
+                        uint tableOffset = (reader1.ReadUInt32() - RomFile.HgEngineOverlayLoadAddress);
+
+                        filePath = Overlay.OverlayFilePath(RomFile.HgEngineOverlay);
+
+                        if (!File.Exists(filePath))
+                        {
+                            Console.WriteLine($"File not found: {filePath}");
+                            return prizeMoneyData;
+                        }
+                        reader1.Close();
+                        overlay12.Close();
+
+                        await using var overlayStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                        using var reader2 = new BinaryReader(overlayStream);
+
+                        reader2.BaseStream.Position = tableOffset;
+
+                        for (int i = 0; i < tableSize; i++)
+                        {
+                            long offset = reader2.BaseStream.Position;
+                            ushort trainerClassId = reader2.ReadUInt16();
+                            ushort prizeMoney = reader2.ReadUInt16();
+                            prizeMoneyData.Add(new PrizeMoneyData(offset, trainerClassId, prizeMoney));
+                        }
                     }
-
-                    await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                    using var reader = new BinaryReader(fileStream);
-                    reader.BaseStream.Position = 0x5F1A;
-                    uint streamEnd = 0x5F1A + 0x0204;
-                    while (reader.BaseStream.Position < streamEnd)
+                    catch (Exception ex)
                     {
-                        long offset = reader.BaseStream.Position;
-                        ushort trainerClassId = reader.ReadUInt16();
-                        ushort prizeMoney = reader.ReadUInt16();
-                        prizeMoneyData.Add(new PrizeMoneyData(offset, trainerClassId, prizeMoney));
+                        Console.WriteLine("Getting Prize Money Table failed | " + ex.Message);
+                        throw;
                     }
                 }
                 else
                 {
-
                     if (RomFile.IsHeartGoldSoulSilver && !RomFile.PrizeMoneyExpanded)
                     {
                         bool isCompressed = await Overlay.CheckOverlayIsCompressedAsync(RomFile.PrizeMoneyTableOverlayNumber);
@@ -998,7 +1021,7 @@ namespace VsMaker2Core.Methods
                     [NarcDirectory.trainerTextOffset] = @"data\poketool\trmsg\trtblofs.narc",
                     [NarcDirectory.trainerTextTable] = @"data\poketool\trmsg\trtbl.narc",
                 },
-                GameFamily.HeartGoldSoulSilver or GameFamily.HgEngine => new Dictionary<NarcDirectory, string>
+                GameFamily.HeartGoldSoulSilver => new Dictionary<NarcDirectory, string>
                 {
                     [NarcDirectory.battleStagePokeData] = @"data\a\2\0\4",
                     [NarcDirectory.battleTowerPokeData] = @"data\a\2\0\3",

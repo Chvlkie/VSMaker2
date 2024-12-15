@@ -65,12 +65,10 @@ namespace VsMaker2Core.Methods
         List<string> GetClassNames(int classNamesArchive);
 
         /// <summary>
-        ///
+        /// Get Eye Contact Music Data
         /// </summary>
-        /// <param name="eyeContactMusicTableOffsetToRam"></param>
-        /// <param name="gameFamily"></param>
         /// <returns></returns>
-        List<EyeContactMusicData> GetEyeContactMusicData(uint eyeContactMusicTableOffsetToRam, GameFamily gameFamily);
+        List<EyeContactMusicData> GetEyeContactMusicData();
 
         /// <summary>
         ///

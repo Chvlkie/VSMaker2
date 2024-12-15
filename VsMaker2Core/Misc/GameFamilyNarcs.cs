@@ -1,4 +1,5 @@
-﻿using static VsMaker2Core.Enums;
+﻿using VsMaker2Core.DataModels;
+using static VsMaker2Core.Enums;
 
 namespace VsMaker2Core
 {
@@ -74,8 +75,7 @@ namespace VsMaker2Core
         {
             GameFamily.DiamondPearl => DiamondPearl,
             GameFamily.Platinum => Platinum,
-            GameFamily.HeartGoldSoulSilver => HeartGoldSoulSilver,
-            GameFamily.HgEngine => HgEngine,
+            GameFamily.HeartGoldSoulSilver =>  HeartGoldSoulSilver,
             _ => [],
         };
     }

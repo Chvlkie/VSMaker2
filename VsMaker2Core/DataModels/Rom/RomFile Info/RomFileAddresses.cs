@@ -33,12 +33,22 @@ namespace VsMaker2Core.DataModels
 
         public const uint PrizeMoneyRepointOffset = 0x1100;
 
+        public static uint PrizeMoneyTableSizeOffset => GameFamily switch
+        {
+            GameFamily.HeartGoldSoulSilver => 0x08310,
+            _ => 0
+        };
+
+        public static uint PrizeMoneyPointerOffset => GameFamily switch
+        {
+            GameFamily.HeartGoldSoulSilver => 0x08380,
+            _ => 0
+        };
         public static uint PrizeMoneyTableOffset => PrizeMoneyExpanded ? PrizeMoneyRepointOffset : GameFamily switch
         {
             GameFamily.DiamondPearl => GameLanguage == GameLanguage.Japanese ? (uint)0x32960 : 0x32960,
             GameFamily.Platinum => 0x359E0,
             GameFamily.HeartGoldSoulSilver => 0x34C04,
-            GameFamily.HgEngine => 0x5F1A,
             _ => 0
         };
 
@@ -47,7 +57,6 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => 11,
             GameFamily.Platinum => 16,
             GameFamily.HeartGoldSoulSilver => 12,
-            GameFamily.HgEngine => 12,
             _ => 0
         };
 
@@ -56,7 +65,6 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => PrizeMoneyExpanded ? 150 : 98,
             GameFamily.Platinum => PrizeMoneyExpanded ? 150 : 105,
             GameFamily.HeartGoldSoulSilver => PrizeMoneyExpanded ? 600 : 516,
-            GameFamily.HgEngine => PrizeMoneyExpanded ? 600 : 516,
             _ => 0
         };
 
@@ -80,17 +88,7 @@ namespace VsMaker2Core.DataModels
                 GameLanguage.Spanish => GameVersion == GameVersion.HeartGold ? (uint)0x0735f8 : 0x073600,
                 _ => 0
             },
-            GameFamily.HgEngine =>
-            GameLanguage switch
-            {
-                GameLanguage.English => 0x073600,
-                GameLanguage.French => 0x073600,
-                GameLanguage.German => 0x073600,
-                GameLanguage.Italian => 0x073600,
-                GameLanguage.Japanese => 0x073098,
-                GameLanguage.Spanish => 0x0735f8,
-                _ => 0
-            },
+
             GameFamily.Platinum =>
             GameLanguage switch
             {
@@ -111,7 +109,23 @@ namespace VsMaker2Core.DataModels
 
         public const uint EyeContactRepointOffset = 0x1600;
 
-        public static uint EyeContactMusicTableOffsetToRam => GameFamily switch
+        public static uint EyeContactTableSizeOffset => GameFamily switch
+        {
+
+            GameFamily.HeartGoldSoulSilver => GameLanguage switch
+            {
+                GameLanguage.English => 0x550D4,
+                GameLanguage.French => 0x550D4,
+                GameLanguage.German => 0x550D4,
+                GameLanguage.Italian => 0x550D4,
+                GameLanguage.Japanese => 0x54B50,
+                GameLanguage.Spanish => GameVersion == GameVersion.HeartGold ? (uint)0x550D8 : 0x550D4,
+                _ => RomFile.IsHgEngine ? (uint)0x550D4 : 0x0,
+            },
+
+            _ => 0,
+        };
+        public static uint EyeContactTablePointerOffset => GameFamily switch
         {
             GameFamily.HeartGoldSoulSilver => GameLanguage switch
             {
@@ -121,17 +135,6 @@ namespace VsMaker2Core.DataModels
                 GameLanguage.Italian => 0x550E0,
                 GameLanguage.Japanese => 0x54B44,
                 GameLanguage.Spanish => GameVersion == GameVersion.HeartGold ? (uint)0x550D8 : 0x550E0,
-                _ => 0,
-            },
-
-            GameFamily.HgEngine => GameLanguage switch
-            {
-                GameLanguage.English => 0x550E0,
-                GameLanguage.French => 0x550E0,
-                GameLanguage.German => 0x550E0,
-                GameLanguage.Italian => 0x550E0,
-                GameLanguage.Japanese => 0x54B44,
-                GameLanguage.Spanish => 0x550D8,
                 _ => 0,
             },
 
@@ -210,7 +213,7 @@ namespace VsMaker2Core.DataModels
                     GameLanguage.Spanish => 0x72EC2,
                     _ => -1
                 },
-                GameVersion.HeartGold => GameLanguage switch
+                GameVersion.HeartGold or GameVersion.HgEngine => GameLanguage switch
                 {
                     GameLanguage.English => 0x7342E,
                     GameLanguage.French => 0x7342E,
@@ -223,16 +226,7 @@ namespace VsMaker2Core.DataModels
 
                 _ => -1
             },
-            GameFamily.HgEngine => GameLanguage switch
-            {
-                GameLanguage.English => 0x7342E,
-                GameLanguage.French => 0x7342E,
-                GameLanguage.German => 0x7342E,
-                GameLanguage.Italian => 0x7342E,
-                GameLanguage.Japanese => 0x7342E,
-                GameLanguage.Spanish => 0x73426,
-                _ => -1,
-            },
+
             _ => throw new NotImplementedException()
         };
 
@@ -245,7 +239,6 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => 851,
             GameFamily.Platinum => 929,
             GameFamily.HeartGoldSoulSilver => 740,
-            GameFamily.HgEngine => 740,
             _ => 0
         };
 
@@ -282,16 +275,6 @@ namespace VsMaker2Core.DataModels
                 GameLanguage.Japanese => 0x63C44,
                 _ => 0
             },
-            GameFamily.HgEngine => GameLanguage switch
-            {
-                GameLanguage.English => 0x641E8,
-                GameLanguage.French => 0x641E8,
-                GameLanguage.Spanish => GameVersion == GameVersion.SoulSilver ? (uint)0x641E8 : 0x641E0,
-                GameLanguage.Italian => 0x641E8,
-                GameLanguage.German => 0x641E8,
-                GameLanguage.Japanese => 0x63C44,
-                _ => 0
-            },
             _ => 0
         };
 
@@ -300,7 +283,6 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => 1040,
             GameFamily.Platinum => 1114,
             GameFamily.HeartGoldSoulSilver => 953,
-            GameFamily.HgEngine => 953,
             _ => 0
         };
 
@@ -311,7 +293,6 @@ namespace VsMaker2Core.DataModels
             GameFamily.DiamondPearl => 52,
             GameFamily.Platinum => 57,
             GameFamily.HeartGoldSoulSilver => 36,
-            GameFamily.HgEngine => 36,
             _ => -1
         };
 

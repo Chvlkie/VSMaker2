@@ -1,4 +1,6 @@
-﻿using VsMaker2Core.DataModels;
+﻿using System.Windows.Forms;
+using VsMaker2Core.DataModels;
+using VsMaker2Core.RomFiles;
 
 namespace VsMaker2Core.Methods
 {
@@ -30,7 +32,20 @@ namespace VsMaker2Core.Methods
 
             for (int i = 0; i < trainerClassNames.Count; i++)
             {
-                var eyeContactData = RomFile.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
+                Console.WriteLine($"Getting data from Trainer Class: {trainerClassNames[i]}");
+                EyeContactMusicData eyeContactData;
+                try
+                {
+                    Console.WriteLine("Checking Eye-contact table...");
+                    eyeContactData = RomFile.EyeContactMusicData.SingleOrDefault(x => x.TrainerClassId == i);
+                    Console.WriteLine("Eye-contact table checked.");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    MessageBox.Show("More than 1 entry for Trainer Class\nin Eye-Contact table found!", "Multiple Entries", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.Write(ex.Message);
+                    throw;
+                }
 
                 var gender = (RomFile.IsNotDiamondPearl && i < RomFile.ClassGenderData.Count)
                     ? (byte?)RomFile.ClassGenderData[i].Gender : null;

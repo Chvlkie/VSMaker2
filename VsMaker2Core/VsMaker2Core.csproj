@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Images\Images.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Windows.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

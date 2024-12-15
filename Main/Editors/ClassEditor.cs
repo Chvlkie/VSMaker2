@@ -548,7 +548,6 @@ namespace Main
             GameFamily.DiamondPearl => EyeContactMusics.DiamondPearl.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
             GameFamily.Platinum => EyeContactMusics.Platinum.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
             GameFamily.HeartGoldSoulSilver => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
-            GameFamily.HgEngine => EyeContactMusics.HeartGoldSoulSilver.FindIndex(x => x.MusicId == trainerClass.ClassProperties.EyeContactMusicDay),
             _ => -1
         };
 

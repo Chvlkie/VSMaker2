@@ -15,7 +15,6 @@
             DiamondPearl,
             Platinum,
             HeartGoldSoulSilver,
-            HgEngine
         }
 
         public enum GameLanguage : byte

@@ -16,15 +16,14 @@ namespace VsMaker2Core.DataModels
         public static string GameCode { get; set; }
 
         public static bool IsHgEngine => GameVersion == GameVersion.HgEngine;
-        public static bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver || GameFamily == GameFamily.HgEngine;
+        public static bool IsHeartGoldSoulSilver => GameFamily == GameFamily.HeartGoldSoulSilver;
         public static bool IsNotDiamondPearl => GameFamily != GameFamily.DiamondPearl;
 
         public static GameFamily GameFamily => GameVersion switch
         {
             GameVersion.Diamond or GameVersion.Pearl => GameFamily.DiamondPearl,
             GameVersion.Platinum => GameFamily.Platinum,
-            GameVersion.HeartGold or GameVersion.SoulSilver => GameFamily.HeartGoldSoulSilver,
-            GameVersion.HgEngine => GameFamily.HeartGoldSoulSilver,
+            GameVersion.HeartGold or GameVersion.SoulSilver or GameVersion.HgEngine => GameFamily.HeartGoldSoulSilver,
             _ => GameFamily.Unknown,
         };
 
@@ -179,7 +178,7 @@ namespace VsMaker2Core.DataModels
         {
             try
             {
-                uint currentPointer = BitConverter.ToUInt32(Arm9.ReadBytes(EyeContactMusicTableOffsetToRam, 4), 0);
+                uint currentPointer = BitConverter.ToUInt32(Arm9.ReadBytes(EyeContactTablePointerOffset, 4), 0);
                 uint calculatedOffset = currentPointer - SynthOverlayLoadAddress;
 
                 return calculatedOffset == EyeContactRepointOffset;

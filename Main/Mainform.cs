@@ -297,7 +297,7 @@ namespace Main
                     : [];
                 ReportProgress();
 
-                RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData();
                 ReportProgress();
 
                 RomFile.PrizeMoneyData = await romFileMethods.GetPrizeMoneyDataAsync();

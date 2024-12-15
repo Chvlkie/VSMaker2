@@ -42,7 +42,7 @@ namespace Main.Resources.Toolbox
                 ["initOffset" + "_" + GameFamily.Platinum + "_" + GameLanguage.English] = 0x02100E20,
                 ["initOffset" + "_" + GameFamily.Platinum + "_" + GameLanguage.Spanish] = 0x0210101C,
                 ["initOffset" + "_" + GameFamily.HeartGoldSoulSilver + "_" + GameLanguage.English] = 0x02110334,
-                ["initOffset" + "_" + GameFamily.HeartGoldSoulSilver + "_" + GameLanguage.Spanish] = 0x02110354
+                ["initOffset" + "_" + GameFamily.HeartGoldSoulSilver + "_" + GameLanguage.Spanish] = 0x02110354,
             };
 
             internal ARM9PatchData()

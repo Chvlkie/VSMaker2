@@ -136,6 +136,7 @@ namespace VsMaker2Core.Methods
 
             return new ScriptData(index + 1, ScriptType.Script, lines: lines);
         }
+
         private static void ProcessRelativeJump(BinaryReader reader, ref List<byte[]> parameters, ref List<int> offsetsList)
         {
             int relativeOffset = reader.ReadInt32();
@@ -350,7 +351,6 @@ namespace VsMaker2Core.Methods
                     break;
 
                 case GameFamily.HeartGoldSoulSilver:
-                case GameFamily.HgEngine:
                     switch (id)
                     {
                         case 0x16: //Jump
@@ -596,15 +596,22 @@ namespace VsMaker2Core.Methods
             string directory = VsMakerDatabase.RomData.GameDirectories[NarcDirectory.scripts].unpackedDirectory;
 
             var files = new DirectoryInfo(directory).EnumerateFiles();
-
-            foreach (var file in files)
+            try
             {
-                int index = int.Parse(Path.GetFileNameWithoutExtension(file.Name)); // Assuming file names are indices
-                scripts.Add(GetScriptFileData(index));
+                foreach (var file in files)
+                {
+                    int index = int.Parse(Path.GetFileNameWithoutExtension(file.Name)); // Assuming file names are indices
+                    scripts.Add(GetScriptFileData(index));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
 
             return scripts;
         }
+
         #endregion Get
 
         private struct CallerReference(Enums.ScriptType scriptType, uint callerId, Enums.ScriptType invokedType, uint invokedId, int position)
@@ -627,6 +634,7 @@ namespace VsMaker2Core.Methods
             public uint Id { get; set; }
             public uint Offset { get; set; }
         }
+
         #region Write
 
         public (bool Success, string ErrorMessage) WriteScriptData(ScriptFileData scriptFileData)
@@ -808,6 +816,7 @@ namespace VsMaker2Core.Methods
                 }
             }
         }
+
         #endregion Write
     }
 }

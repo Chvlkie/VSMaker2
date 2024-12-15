@@ -28,7 +28,7 @@ namespace Main.Forms
             checkBox_TrainerNames.Checked = RomFile.TrainerNameExpansion;
             if (RomFile.GameLanguage == GameLanguage.Spanish || RomFile.GameLanguage == GameLanguage.English && !RomFile.Arm9Expanded)
             {
-                RomFile.Arm9Expanded = CheckFilesArm9ExpansionApplied();
+                RomFile.Arm9Expanded = !RomFile.IsHgEngine && CheckFilesArm9ExpansionApplied();
             }
             patchArm9Btn.Enabled = !RomFile.Arm9Expanded;
             arm9PatchCheckBox.Checked = RomFile.Arm9Expanded;
@@ -47,19 +47,14 @@ namespace Main.Forms
 
             byte[] initCode = Arm9.HexStringToByteArray(data.initString);
             byte[] initCodeRead = Arm9.ReadBytes(data.initOffset, data.initString.Length / 3 + 1);
-            if (initCodeRead.Length != initCode.Length || !initCodeRead.SequenceEqual(initCode))
-                return false;
-
-            return true;
+            return initCodeRead.Length == initCode.Length && initCodeRead.SequenceEqual(initCode);
         }
 
         public static async Task CopyFileAsync(string sourceFile, string destinationFile)
         {
-            using (FileStream sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
-            using (FileStream destinationStream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write))
-            {
-                await sourceStream.CopyToAsync(destinationStream);
-            }
+            await using FileStream sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read);
+            await using FileStream destinationStream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write);
+            await sourceStream.CopyToAsync(destinationStream);
         }
 
         public static bool ExpandTrainerNames()
@@ -84,14 +79,14 @@ namespace Main.Forms
 
         public static async Task<(bool Success, string Error)> RepointEyeContactTableAsync()
         {
-            uint newPointer = RomFile.SynthOverlayLoadAddress + RomFile.EyeContactRepointOffset;
+            const uint newPointer = RomFile.SynthOverlayLoadAddress + RomFile.EyeContactRepointOffset;
 
             try
             {
-                uint pointerOffset = RomFile.EyeContactMusicTableOffsetToRam;
+                uint pointerOffset = RomFile.EyeContactTablePointerOffset;
 
-                using (FileStream arm9Stream = new(RomFile.Arm9Path, FileMode.Open, FileAccess.Write))
-                using (BinaryWriter writer = new(arm9Stream))
+                await using (FileStream arm9Stream = new(RomFile.Arm9Path, FileMode.Open, FileAccess.Write))
+                await using (BinaryWriter writer = new(arm9Stream))
                 {
                     arm9Stream.Position = pointerOffset;
 
@@ -452,7 +447,7 @@ namespace Main.Forms
                 {
                     var newEyeContactData = CreateEyeContactTable();
                     await WriteEyeContactTableAsync(newEyeContactData);
-                    RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData(RomFile.EyeContactMusicTableOffsetToRam, RomFile.GameFamily);
+                    RomFile.EyeContactMusicData = romFileMethods.GetEyeContactMusicData();
                 }
 
                 // Handle the result
