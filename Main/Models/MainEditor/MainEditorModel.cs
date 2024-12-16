@@ -16,13 +16,16 @@ namespace Main.Models
         public List<TrainerClass> Classes { get; set; } = [];
         public List<BattleMessage> BattleMessages { get; set; } = [];
         public List<string> PokemonNames { get; set; } = [];
-
         public static List<string> SetPokemonNames(List<string> pokemonNamesFull) => pokemonNamesFull
                 .Where((name, index) => index < 494 || (index > 543 && index < 1076))
                 .Select((name, i) => $"[{i:D4}] {name}")
                 .ToList();
 
+        #region HG Engine Only
+        public List<string> PokeBallNames { get; set; } = [];
+        public List<string> TypeNames { get; set; } = [];
 
+        #endregion HG Engine Only
         #region TrainerEditor
 
         public Trainer SelectedTrainer { get; set; } = new();

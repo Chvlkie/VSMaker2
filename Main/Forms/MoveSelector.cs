@@ -58,7 +58,7 @@
             MoveId4 = moves[3];
         }
 
-        private void SetPokemonName(int partyIndex, string pokemonName) => pokeName.Text = $"{(partyIndex + 1):D2} - {pokemonName}";
+        private void SetPokemonName(int partyIndex, string pokemonName) => pokeName.Text = $"{partyIndex + 1:D2} - {pokemonName}";
 
         private void move01ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {

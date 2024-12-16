@@ -75,7 +75,7 @@ namespace VsMaker2Core.MessageEncrypt
                                     shift -= 0xF;
                                     if (shift > 0)
                                     {
-                                        compChar = (trans | ((textChar << (9 - shift)) & 0x1FF));
+                                        compChar = trans | ((textChar << (9 - shift)) & 0x1FF);
                                         if ((compChar & 0xFF) == 0xFF)
                                         {
                                             break;
@@ -157,7 +157,7 @@ namespace VsMaker2Core.MessageEncrypt
 
                             for (int i = 0; i < stringCount; i++)
                             {
-                                int key2 = (key * (i + 1) & 0xFFFF);
+                                int key2 = key * (i + 1) & 0xFFFF;
                                 int actualKey = key2 | (key2 << 16);
                                 offsets[i] = ((int)reader.ReadUInt32()) ^ actualKey;
                                 sizes[i] = ((int)reader.ReadUInt32()) ^ actualKey;
@@ -284,7 +284,7 @@ namespace VsMaker2Core.MessageEncrypt
             }
             if (isTrainerName && bit > 1)
             {
-                compressionBuffer |= (0xFFFF << bit);
+                compressionBuffer |= 0xFFFF << bit;
                 encoded.Add((int)Convert.ToUInt32(compressionBuffer & 0x7FFF));
             }
             encoded.Add(0xFFFF);

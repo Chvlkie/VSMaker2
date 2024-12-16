@@ -137,7 +137,7 @@ namespace Ekona.Images
 
         public static Bitmap Get_Image(Color[] colors)
         {
-            int height = (colors.Length / 0x10);
+            int height = colors.Length / 0x10;
             if (colors.Length % 0x10 != 0)
                 height++;
 
@@ -156,7 +156,7 @@ namespace Ekona.Images
 
                     for (int k = 0; k < 10; k++)
                         for (int q = 0; q < 10; q++)
-                            palette.SetPixel((j * 10 + q), (i * 10 + k), colors[j + 16 * i]);
+                            palette.SetPixel(j * 10 + q, i * 10 + k, colors[j + 16 * i]);
                 }
             }
 
@@ -222,7 +222,7 @@ namespace Ekona.Images
                 if (format == ColorFormat.A3I5)
                 {
                     int colorIndex = data[i] & 0x1F;
-                    int alpha = (data[i] >> 5);
+                    int alpha = data[i] >> 5;
                     alpha = ((alpha * 4) + (alpha / 2)) * 8;
                     color = Color.FromArgb(alpha,
                         palette[colorIndex].R,
@@ -232,7 +232,7 @@ namespace Ekona.Images
                 else if (format == ColorFormat.A5I3)
                 {
                     int colorIndex = data[i] & 0x7;
-                    int alpha = (data[i] >> 3);
+                    int alpha = data[i] >> 3;
                     alpha *= 8;
                     color = Color.FromArgb(alpha,
                         palette[colorIndex].R,
@@ -306,7 +306,7 @@ namespace Ekona.Images
                 case ColorFormat.A3I5:
                     if (data.Length <= pos) { break; }
                     index = data[pos] & 0x1F;
-                    alpha = (data[pos] >> 5);
+                    alpha = data[pos] >> 5;
                     alpha = ((alpha * 4) + (alpha / 2)) * 8;
                     if (palette.Length > index)
                         color = Color.FromArgb(alpha,
@@ -320,7 +320,7 @@ namespace Ekona.Images
                 case ColorFormat.A4I4:
                     if (data.Length <= pos) { break; }
                     index = data[pos] & 0xF;
-                    alpha = (data[pos] >> 4);
+                    alpha = data[pos] >> 4;
                     alpha *= 16;
                     if (palette.Length > index)
                         color = Color.FromArgb(alpha,
@@ -334,7 +334,7 @@ namespace Ekona.Images
                 case ColorFormat.A5I3:
                     if (data.Length <= pos) { break; }
                     index = data[pos] & 0x7;
-                    alpha = (data[pos] >> 3);
+                    alpha = data[pos] >> 3;
                     alpha *= 8;
                     if (palette.Length > index)
                         color = Color.FromArgb(alpha,
@@ -384,7 +384,7 @@ namespace Ekona.Images
 
                     ushort byteColor = BitConverter.ToUInt16(data, pos);
                     color = Color.FromArgb(
-                        ((byteColor >> 15) == 1 ? 255 : 0),
+                        (byteColor >> 15) == 1 ? 255 : 0,
                         (byteColor & 0x1F) * 8,
                         ((byteColor >> 5) & 0x1F) * 8,
                         ((byteColor >> 10) & 0x1F) * 8);
@@ -434,12 +434,12 @@ namespace Ekona.Images
                     {
                         for (int w = 0; w < tile_width; w++)
                         {
-                            if ((w + h * tile_width * tilesX) + wt * tile_width + ht * tilesX * tile_size * tile_width >= lineal.Length)
+                            if (w + h * tile_width * tilesX + wt * tile_width + ht * tilesX * tile_size * tile_width >= lineal.Length)
                                 continue;
                             if (pos >= lineal.Length)
                                 continue;
 
-                            lineal[pos++] = horizontal[(w + h * tile_width * tilesX) + wt * tile_width + ht * tilesX * tile_size * tile_width];
+                            lineal[pos++] = horizontal[w + h * tile_width * tilesX + wt * tile_width + ht * tilesX * tile_size * tile_width];
                         }
                     }
                 }
@@ -466,12 +466,12 @@ namespace Ekona.Images
                     {
                         for (int w = 0; w < tile_width; w++)
                         {
-                            if ((w + h * tile_width * tilesX) + wt * tile_width + ht * tilesX * tile_size * tile_width >= lineal.Length)
+                            if (w + h * tile_width * tilesX + wt * tile_width + ht * tilesX * tile_size * tile_width >= lineal.Length)
                                 continue;
                             if (pos >= lineal.Length)
                                 continue;
 
-                            horizontal[(w + h * tile_width * tilesX) + wt * tile_width + ht * tilesX * tile_size * tile_width] = lineal[pos++];
+                            horizontal[w + h * tile_width * tilesX + wt * tile_width + ht * tilesX * tile_size * tile_width] = lineal[pos++];
                         }
                     }
                 }
@@ -621,11 +621,11 @@ namespace Ekona.Images
             int num_pix = fileSize * 8 / bpp;
 
             // If the image it's a square
-            if (Math.Pow((int)(Math.Sqrt(num_pix)), 2) == num_pix)
+            if (Math.Pow((int)Math.Sqrt(num_pix), 2) == num_pix)
                 width = height = (int)Math.Sqrt(num_pix);
             else
             {
-                width = (num_pix < 0x100 ? num_pix : 0x0100);
+                width = num_pix < 0x100 ? num_pix : 0x0100;
                 height = num_pix / width;
             }
 
@@ -870,11 +870,11 @@ namespace Ekona.Images
             {
                 for (int w = 0; w < tile_width / 2; w++)
                 {
-                    byte b = tile[((tile_width - 1) - w) + h * tile_width];
+                    byte b = tile[tile_width - 1 - w + h * tile_width];
                     newTile[w + h * tile_width] = Reverse_Bits(b, bpp);
 
                     b = tile[w + h * tile_width];
-                    newTile[((tile_width - 1) - w) + h * tile_width] = Reverse_Bits(b, bpp);
+                    newTile[tile_width - 1 - w + h * tile_width] = Reverse_Bits(b, bpp);
                 }
             }
             return newTile;
@@ -1126,13 +1126,13 @@ namespace Ekona.Images
 
             if (draw_grid)
             {
-                for (int i = (0 - size.Width); i < size.Width; i += 8)
+                for (int i = 0 - size.Width; i < size.Width; i += 8)
                 {
                     graphic.DrawLine(Pens.LightBlue, (i + size.Width / 2) * zoom, 0, (i + size.Width / 2) * zoom, size.Height * zoom);
                     graphic.DrawLine(Pens.LightBlue, 0, (i + size.Height / 2) * zoom, size.Width * zoom, (i + size.Height / 2) * zoom);
                 }
-                graphic.DrawLine(Pens.Blue, (max_width / 2) * zoom, 0, (max_width / 2) * zoom, max_height * zoom);
-                graphic.DrawLine(Pens.Blue, 0, (max_height / 2) * zoom, max_width * zoom, (max_height / 2) * zoom);
+                graphic.DrawLine(Pens.Blue, max_width / 2 * zoom, 0, max_width / 2 * zoom, max_height * zoom);
+                graphic.DrawLine(Pens.Blue, 0, max_height / 2 * zoom, max_width * zoom, max_height / 2 * zoom);
             }
 
             Image cell;
@@ -1265,7 +1265,7 @@ namespace Ekona.Images
 
             // OBJ0
             obj[0] = 0;
-            obj[0] += (ushort)((sbyte)(oam.obj0.yOffset) & 0xFF);
+            obj[0] += (ushort)((sbyte)oam.obj0.yOffset & 0xFF);
             obj[0] += (ushort)((oam.obj0.rs_flag & 1) << 8);
             if (oam.obj0.rs_flag == 0x00)
                 obj[0] += (ushort)((oam.obj0.objDisable & 1) << 9);

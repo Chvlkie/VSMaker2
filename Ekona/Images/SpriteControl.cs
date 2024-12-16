@@ -150,7 +150,7 @@ namespace Ekona.Images
 
             return sprite.Get_Image(image, palette, comboBank.SelectedIndex, 512, 256,
                 checkGrid.Checked, checkCellBorder.Checked, checkNumber.Checked, checkTransparency.Checked,
-                checkImage.Checked, (checkSelectOAM.Checked ? checkListOAM.SelectedIndex : -1),
+                checkImage.Checked, checkSelectOAM.Checked ? checkListOAM.SelectedIndex : -1,
                 index);
         }
 
@@ -163,7 +163,7 @@ namespace Ekona.Images
 
         private void Update_Info()
         {
-            this.btnImport.Enabled = (sprite.CanEdit && image.CanEdit && palette.CanEdit ? true : false);
+            this.btnImport.Enabled = sprite.CanEdit && image.CanEdit && palette.CanEdit ? true : false;
             this.btnOAMeditor.Enabled = sprite.CanEdit;
             groupBox2.Enabled = sprite.CanEdit;
             groupBox3.Enabled = sprite.CanEdit;
@@ -543,7 +543,7 @@ namespace Ekona.Images
             }
 
             // If everthing goes right then set the new data
-            int height = (imgData.Length * 8 / image.BPP) / image.Width;
+            int height = imgData.Length * 8 / image.BPP / image.Width;
             image.Set_Tiles(imgData, image.Width, height, image.FormatColor, image.FormTile, image.CanEdit);
             sprite.Banks[banki].oams = oams;
             palette.Set_Palette(pals);

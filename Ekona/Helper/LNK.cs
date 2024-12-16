@@ -428,7 +428,7 @@ namespace Ekona.Helper
         private bool Get_Boolean(uint value)
         {
             uint v = value & 1;
-            return (v == 0 ? false : true);
+            return v == 0 ? false : true;
         }
 
         private string Get_String(BinaryReader br, bool unicode, uint offset = 0)

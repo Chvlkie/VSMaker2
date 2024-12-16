@@ -597,21 +597,21 @@ namespace Main
             poke1_Tab = new TabPage();
             poke1HgEngine_groupBox = new GroupBox();
             poke1_Shiny_checkBox = new CheckBox();
-            poke1_EditStats_button = new Button();
+            poke1_EditStats_btn = new Button();
             poke1_hgeFlags_info = new Label();
             poke1_EditIv_button = new Button();
             label16 = new Label();
             label15 = new Label();
             poke1_Nickname_textBox = new TextBox();
             label14 = new Label();
-            comboBox6 = new ComboBox();
+            poke1_Type2_ComboBox = new ComboBox();
             label13 = new Label();
             poke1_Type1_ComboBox = new ComboBox();
             label12 = new Label();
-            poke1_status_comboBox = new ComboBox();
+            poke1_Status_comboBox = new ComboBox();
             label11 = new Label();
             poke1_Nature_comboBox = new ComboBox();
-            poke1_hgeAbility_info = new Label();
+            poke1_HgeAbiilty_label = new Label();
             label9 = new Label();
             poke1_Ball_comboBox = new ComboBox();
             label6 = new Label();
@@ -650,27 +650,27 @@ namespace Main
             poke1FormComboBox = new ComboBox();
             poke2_Tab = new TabPage();
             poke2HgEngine_groupBox = new GroupBox();
-            checkBox1 = new CheckBox();
-            button3 = new Button();
+            poke2_Shiny_checkBox = new CheckBox();
+            poke2_EditStats_btn = new Button();
             label18 = new Label();
-            button4 = new Button();
+            poke2_EditIv_button = new Button();
             label19 = new Label();
             label20 = new Label();
-            textBox2 = new TextBox();
+            poke2_Nickname_textBox = new TextBox();
             label21 = new Label();
-            comboBox7 = new ComboBox();
+            poke2_Type2_ComboBox = new ComboBox();
             label22 = new Label();
-            comboBox8 = new ComboBox();
+            poke2_Type1_ComboBox = new ComboBox();
             label23 = new Label();
-            comboBox9 = new ComboBox();
+            poke2_Status_comboBox = new ComboBox();
             label24 = new Label();
             poke2_Nature_comboBox = new ComboBox();
-            label25 = new Label();
+            poke2_HgeAbiilty_label = new Label();
             label26 = new Label();
-            comboBox11 = new ComboBox();
+            poke2_Ball_comboBox = new ComboBox();
             label27 = new Label();
             poke2_Ability_Hge_comboBox = new ComboBox();
-            checkedListBox2 = new CheckedListBox();
+            poke2_AdditionalFlags_checkBoxList = new CheckedListBox();
             poke2Moves_groupBox = new GroupBox();
             poke2_Move4_PP_num = new NumericUpDown();
             label28 = new Label();
@@ -704,27 +704,27 @@ namespace Main
             poke2FormComboBox = new ComboBox();
             poke3_Tab = new TabPage();
             poke3HgEngine_groupBox = new GroupBox();
-            checkBox2 = new CheckBox();
-            button5 = new Button();
+            poke3_Shiny_checkBox = new CheckBox();
+            poke3_EditStats_btn = new Button();
             label38 = new Label();
-            button6 = new Button();
+            poke3_EditIv_button = new Button();
             label39 = new Label();
             label40 = new Label();
-            textBox3 = new TextBox();
+            poke3_Nickname_textBox = new TextBox();
             label41 = new Label();
-            comboBox23 = new ComboBox();
+            poke3_Type2_ComboBox = new ComboBox();
             label42 = new Label();
-            comboBox24 = new ComboBox();
+            poke3_Type1_ComboBox = new ComboBox();
             label43 = new Label();
-            comboBox25 = new ComboBox();
+            poke3_Status_comboBox = new ComboBox();
             label44 = new Label();
             poke3_Nature_comboBox = new ComboBox();
-            label45 = new Label();
+            poke3_HgeAbiilty_label = new Label();
             label46 = new Label();
-            comboBox27 = new ComboBox();
+            poke3_Ball_comboBox = new ComboBox();
             label47 = new Label();
             poke3_Ability_Hge_comboBox = new ComboBox();
-            checkedListBox3 = new CheckedListBox();
+            poke3_AdditionalFlags_checkBoxList = new CheckedListBox();
             poke3Moves_groupBox = new GroupBox();
             poke3_Move4_PP_num = new NumericUpDown();
             label48 = new Label();
@@ -758,27 +758,27 @@ namespace Main
             poke3FormComboBox = new ComboBox();
             poke4_Tab = new TabPage();
             poke4HgEngine_groupBox = new GroupBox();
-            checkBox3 = new CheckBox();
-            button7 = new Button();
+            poke4_Shiny_checkBox = new CheckBox();
+            poke4_EditStats_btn = new Button();
             label82 = new Label();
-            button8 = new Button();
+            poke4_EditIv_button = new Button();
             label83 = new Label();
             label84 = new Label();
-            textBox4 = new TextBox();
+            poke4_Nickname_textBox = new TextBox();
             label85 = new Label();
-            comboBox39 = new ComboBox();
+            poke4_Type2_ComboBox = new ComboBox();
             label86 = new Label();
-            comboBox40 = new ComboBox();
+            poke4_Type1_ComboBox = new ComboBox();
             label87 = new Label();
-            comboBox41 = new ComboBox();
+            poke4_Status_comboBox = new ComboBox();
             label88 = new Label();
             poke4_Nature_comboBox = new ComboBox();
-            label89 = new Label();
+            poke4_HgeAbiilty_label = new Label();
             label90 = new Label();
-            comboBox43 = new ComboBox();
+            poke4_Ball_comboBox = new ComboBox();
             label91 = new Label();
             poke4_Ability_Hge_comboBox = new ComboBox();
-            checkedListBox4 = new CheckedListBox();
+            poke4_AdditionalFlags_checkBoxList = new CheckedListBox();
             poke4Moves_groupBox = new GroupBox();
             poke4_Move4_PP_num = new NumericUpDown();
             label92 = new Label();
@@ -812,27 +812,27 @@ namespace Main
             poke4FormComboBox = new ComboBox();
             poke5_Tab = new TabPage();
             poke5HgEngine_groupBox = new GroupBox();
-            checkBox4 = new CheckBox();
-            button9 = new Button();
+            poke5_Shiny_checkBox = new CheckBox();
+            poke5_EditStats_btn = new Button();
             label102 = new Label();
-            button10 = new Button();
+            poke5_EditIv_button = new Button();
             label103 = new Label();
             label104 = new Label();
-            textBox5 = new TextBox();
+            poke5_Nickname_textBox = new TextBox();
             label105 = new Label();
-            comboBox55 = new ComboBox();
+            poke5_Type2_ComboBox = new ComboBox();
             label106 = new Label();
-            comboBox56 = new ComboBox();
+            poke5_Type1_ComboBox = new ComboBox();
             label107 = new Label();
-            comboBox57 = new ComboBox();
+            poke5_Status_comboBox = new ComboBox();
             label108 = new Label();
             poke5_Nature_comboBox = new ComboBox();
-            label109 = new Label();
+            poke5_HgeAbiilty_label = new Label();
             label110 = new Label();
-            comboBox59 = new ComboBox();
+            poke5_Ball_comboBox = new ComboBox();
             label111 = new Label();
             poke5_Ability_Hge_comboBox = new ComboBox();
-            checkedListBox5 = new CheckedListBox();
+            poke5_AdditionalFlags_checkBoxList = new CheckedListBox();
             poke5Moves_groupBox = new GroupBox();
             poke5_Move4_PP_num = new NumericUpDown();
             label112 = new Label();
@@ -866,27 +866,27 @@ namespace Main
             poke5FormComboBox = new ComboBox();
             poke6_Tab = new TabPage();
             poke6HgEngine_groupBox = new GroupBox();
-            checkBox5 = new CheckBox();
-            button11 = new Button();
+            poke6_Shiny_checkBox = new CheckBox();
+            poke6_EditStats_btn = new Button();
             label122 = new Label();
-            button12 = new Button();
+            poke6_EditIv_button = new Button();
             label123 = new Label();
             label124 = new Label();
-            textBox6 = new TextBox();
+            poke6_Nickname_textBox = new TextBox();
             label125 = new Label();
-            comboBox71 = new ComboBox();
+            poke6_Type2_ComboBox = new ComboBox();
             label126 = new Label();
-            comboBox72 = new ComboBox();
+            poke6_Type1_ComboBox = new ComboBox();
             label127 = new Label();
-            comboBox73 = new ComboBox();
+            poke6_Status_comboBox = new ComboBox();
             label128 = new Label();
             poke6_Nature_comboBox = new ComboBox();
-            label129 = new Label();
+            poke6_HgeAbiilty_label = new Label();
             label130 = new Label();
-            comboBox75 = new ComboBox();
+            poke6_Ball_comboBox = new ComboBox();
             label131 = new Label();
             poke6_Ability_Hge_comboBox = new ComboBox();
-            checkedListBox6 = new CheckedListBox();
+            poke6_AdditionalFlags_checkBoxList = new CheckedListBox();
             poke6Moves_groupBox = new GroupBox();
             poke6_Move4_PP_num = new NumericUpDown();
             label132 = new Label();
@@ -1612,21 +1612,21 @@ namespace Main
             // poke1HgEngine_groupBox
             // 
             poke1HgEngine_groupBox.Controls.Add(poke1_Shiny_checkBox);
-            poke1HgEngine_groupBox.Controls.Add(poke1_EditStats_button);
+            poke1HgEngine_groupBox.Controls.Add(poke1_EditStats_btn);
             poke1HgEngine_groupBox.Controls.Add(poke1_hgeFlags_info);
             poke1HgEngine_groupBox.Controls.Add(poke1_EditIv_button);
             poke1HgEngine_groupBox.Controls.Add(label16);
             poke1HgEngine_groupBox.Controls.Add(label15);
             poke1HgEngine_groupBox.Controls.Add(poke1_Nickname_textBox);
             poke1HgEngine_groupBox.Controls.Add(label14);
-            poke1HgEngine_groupBox.Controls.Add(comboBox6);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Type2_ComboBox);
             poke1HgEngine_groupBox.Controls.Add(label13);
             poke1HgEngine_groupBox.Controls.Add(poke1_Type1_ComboBox);
             poke1HgEngine_groupBox.Controls.Add(label12);
-            poke1HgEngine_groupBox.Controls.Add(poke1_status_comboBox);
+            poke1HgEngine_groupBox.Controls.Add(poke1_Status_comboBox);
             poke1HgEngine_groupBox.Controls.Add(label11);
             poke1HgEngine_groupBox.Controls.Add(poke1_Nature_comboBox);
-            poke1HgEngine_groupBox.Controls.Add(poke1_hgeAbility_info);
+            poke1HgEngine_groupBox.Controls.Add(poke1_HgeAbiilty_label);
             poke1HgEngine_groupBox.Controls.Add(label9);
             poke1HgEngine_groupBox.Controls.Add(poke1_Ball_comboBox);
             poke1HgEngine_groupBox.Controls.Add(label6);
@@ -1651,16 +1651,17 @@ namespace Main
             poke1_Shiny_checkBox.Text = "Shiny";
             poke1_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // poke1_EditStats_button
+            // poke1_EditStats_btn
             // 
-            poke1_EditStats_button.Enabled = false;
-            poke1_EditStats_button.Font = new Font("Segoe UI", 9F);
-            poke1_EditStats_button.Location = new Point(405, 136);
-            poke1_EditStats_button.Name = "poke1_EditStats_button";
-            poke1_EditStats_button.Size = new Size(85, 36);
-            poke1_EditStats_button.TabIndex = 10;
-            poke1_EditStats_button.Text = "Edit Stats";
-            poke1_EditStats_button.UseVisualStyleBackColor = true;
+            poke1_EditStats_btn.Enabled = false;
+            poke1_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke1_EditStats_btn.Location = new Point(405, 136);
+            poke1_EditStats_btn.Name = "poke1_EditStats_btn";
+            poke1_EditStats_btn.Size = new Size(85, 36);
+            poke1_EditStats_btn.TabIndex = 10;
+            poke1_EditStats_btn.Text = "Edit Stats";
+            poke1_EditStats_btn.UseVisualStyleBackColor = true;
+            poke1_EditStats_btn.Click += poke1_EditStats_btn_Click;
             // 
             // poke1_hgeFlags_info
             // 
@@ -1683,6 +1684,7 @@ namespace Main
             poke1_EditIv_button.TabIndex = 177;
             poke1_EditIv_button.Text = "Edit IVs/EVs";
             poke1_EditIv_button.UseVisualStyleBackColor = true;
+            poke1_EditIv_button.Click += poke1_EditIv_button_Click;
             // 
             // label16
             // 
@@ -1722,16 +1724,16 @@ namespace Main
             label14.TabIndex = 172;
             label14.Text = "Type 2";
             // 
-            // comboBox6
+            // poke1_Type2_ComboBox
             // 
-            comboBox6.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox6.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox6.Font = new Font("Segoe UI", 8F);
-            comboBox6.FormattingEnabled = true;
-            comboBox6.Location = new Point(389, 42);
-            comboBox6.Name = "comboBox6";
-            comboBox6.Size = new Size(89, 21);
-            comboBox6.TabIndex = 171;
+            poke1_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke1_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke1_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke1_Type2_ComboBox.FormattingEnabled = true;
+            poke1_Type2_ComboBox.Location = new Point(389, 42);
+            poke1_Type2_ComboBox.Name = "poke1_Type2_ComboBox";
+            poke1_Type2_ComboBox.Size = new Size(89, 21);
+            poke1_Type2_ComboBox.TabIndex = 171;
             // 
             // label13
             // 
@@ -1764,16 +1766,16 @@ namespace Main
             label12.TabIndex = 168;
             label12.Text = "Status";
             // 
-            // poke1_status_comboBox
+            // poke1_Status_comboBox
             // 
-            poke1_status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            poke1_status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-            poke1_status_comboBox.Font = new Font("Segoe UI", 8F);
-            poke1_status_comboBox.FormattingEnabled = true;
-            poke1_status_comboBox.Location = new Point(224, 42);
-            poke1_status_comboBox.Name = "poke1_status_comboBox";
-            poke1_status_comboBox.Size = new Size(89, 21);
-            poke1_status_comboBox.TabIndex = 167;
+            poke1_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke1_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke1_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke1_Status_comboBox.FormattingEnabled = true;
+            poke1_Status_comboBox.Location = new Point(224, 42);
+            poke1_Status_comboBox.Name = "poke1_Status_comboBox";
+            poke1_Status_comboBox.Size = new Size(89, 21);
+            poke1_Status_comboBox.TabIndex = 167;
             // 
             // label11
             // 
@@ -1796,16 +1798,16 @@ namespace Main
             poke1_Nature_comboBox.Size = new Size(89, 21);
             poke1_Nature_comboBox.TabIndex = 165;
             // 
-            // poke1_hgeAbility_info
+            // poke1_HgeAbiilty_label
             // 
-            poke1_hgeAbility_info.AutoSize = true;
-            poke1_hgeAbility_info.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            poke1_hgeAbility_info.ForeColor = SystemColors.MenuHighlight;
-            poke1_hgeAbility_info.Location = new Point(53, 20);
-            poke1_hgeAbility_info.Name = "poke1_hgeAbility_info";
-            poke1_hgeAbility_info.Size = new Size(10, 15);
-            poke1_hgeAbility_info.TabIndex = 164;
-            poke1_hgeAbility_info.Text = "i";
+            poke1_HgeAbiilty_label.AutoSize = true;
+            poke1_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke1_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke1_HgeAbiilty_label.Location = new Point(53, 20);
+            poke1_HgeAbiilty_label.Name = "poke1_HgeAbiilty_label";
+            poke1_HgeAbiilty_label.Size = new Size(10, 15);
+            poke1_HgeAbiilty_label.TabIndex = 164;
+            poke1_HgeAbiilty_label.Text = "i";
             // 
             // label9
             // 
@@ -1861,6 +1863,7 @@ namespace Main
             poke1_AdditionalFlags_checkBoxList.Name = "poke1_AdditionalFlags_checkBoxList";
             poke1_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
             poke1_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke1_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke1Moves_groupBox
             // 
@@ -2212,27 +2215,27 @@ namespace Main
             // 
             // poke2HgEngine_groupBox
             // 
-            poke2HgEngine_groupBox.Controls.Add(checkBox1);
-            poke2HgEngine_groupBox.Controls.Add(button3);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Shiny_checkBox);
+            poke2HgEngine_groupBox.Controls.Add(poke2_EditStats_btn);
             poke2HgEngine_groupBox.Controls.Add(label18);
-            poke2HgEngine_groupBox.Controls.Add(button4);
+            poke2HgEngine_groupBox.Controls.Add(poke2_EditIv_button);
             poke2HgEngine_groupBox.Controls.Add(label19);
             poke2HgEngine_groupBox.Controls.Add(label20);
-            poke2HgEngine_groupBox.Controls.Add(textBox2);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Nickname_textBox);
             poke2HgEngine_groupBox.Controls.Add(label21);
-            poke2HgEngine_groupBox.Controls.Add(comboBox7);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Type2_ComboBox);
             poke2HgEngine_groupBox.Controls.Add(label22);
-            poke2HgEngine_groupBox.Controls.Add(comboBox8);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Type1_ComboBox);
             poke2HgEngine_groupBox.Controls.Add(label23);
-            poke2HgEngine_groupBox.Controls.Add(comboBox9);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Status_comboBox);
             poke2HgEngine_groupBox.Controls.Add(label24);
             poke2HgEngine_groupBox.Controls.Add(poke2_Nature_comboBox);
-            poke2HgEngine_groupBox.Controls.Add(label25);
+            poke2HgEngine_groupBox.Controls.Add(poke2_HgeAbiilty_label);
             poke2HgEngine_groupBox.Controls.Add(label26);
-            poke2HgEngine_groupBox.Controls.Add(comboBox11);
+            poke2HgEngine_groupBox.Controls.Add(poke2_Ball_comboBox);
             poke2HgEngine_groupBox.Controls.Add(label27);
             poke2HgEngine_groupBox.Controls.Add(poke2_Ability_Hge_comboBox);
-            poke2HgEngine_groupBox.Controls.Add(checkedListBox2);
+            poke2HgEngine_groupBox.Controls.Add(poke2_AdditionalFlags_checkBoxList);
             poke2HgEngine_groupBox.Location = new Point(6, 220);
             poke2HgEngine_groupBox.Name = "poke2HgEngine_groupBox";
             poke2HgEngine_groupBox.Size = new Size(496, 178);
@@ -2240,28 +2243,29 @@ namespace Main
             poke2HgEngine_groupBox.TabStop = false;
             poke2HgEngine_groupBox.Text = "HG Engine";
             // 
-            // checkBox1
+            // poke2_Shiny_checkBox
             // 
-            checkBox1.AutoSize = true;
-            checkBox1.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox1.Location = new Point(308, 115);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(56, 19);
-            checkBox1.TabIndex = 177;
-            checkBox1.Text = "Shiny";
-            checkBox1.UseVisualStyleBackColor = true;
+            poke2_Shiny_checkBox.AutoSize = true;
+            poke2_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
+            poke2_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke2_Shiny_checkBox.Location = new Point(308, 115);
+            poke2_Shiny_checkBox.Name = "poke2_Shiny_checkBox";
+            poke2_Shiny_checkBox.Size = new Size(56, 19);
+            poke2_Shiny_checkBox.TabIndex = 177;
+            poke2_Shiny_checkBox.Text = "Shiny";
+            poke2_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // poke2_EditStats_btn
             // 
-            button3.Enabled = false;
-            button3.Font = new Font("Segoe UI", 9F);
-            button3.Location = new Point(405, 136);
-            button3.Name = "button3";
-            button3.Size = new Size(85, 36);
-            button3.TabIndex = 10;
-            button3.Text = "Edit Stats";
-            button3.UseVisualStyleBackColor = true;
+            poke2_EditStats_btn.Enabled = false;
+            poke2_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke2_EditStats_btn.Location = new Point(405, 136);
+            poke2_EditStats_btn.Name = "poke2_EditStats_btn";
+            poke2_EditStats_btn.Size = new Size(85, 36);
+            poke2_EditStats_btn.TabIndex = 10;
+            poke2_EditStats_btn.Text = "Edit Stats";
+            poke2_EditStats_btn.UseVisualStyleBackColor = true;
+            poke2_EditStats_btn.Click += poke2_EditStats_btn_Click;
             // 
             // label18
             // 
@@ -2274,16 +2278,17 @@ namespace Main
             label18.TabIndex = 176;
             label18.Text = "i";
             // 
-            // button4
+            // poke2_EditIv_button
             // 
-            button4.Enabled = false;
-            button4.Font = new Font("Segoe UI", 9F);
-            button4.Location = new Point(308, 136);
-            button4.Name = "button4";
-            button4.Size = new Size(85, 36);
-            button4.TabIndex = 177;
-            button4.Text = "Edit IVs/EVs";
-            button4.UseVisualStyleBackColor = true;
+            poke2_EditIv_button.Enabled = false;
+            poke2_EditIv_button.Font = new Font("Segoe UI", 9F);
+            poke2_EditIv_button.Location = new Point(308, 136);
+            poke2_EditIv_button.Name = "poke2_EditIv_button";
+            poke2_EditIv_button.Size = new Size(85, 36);
+            poke2_EditIv_button.TabIndex = 177;
+            poke2_EditIv_button.Text = "Edit IVs/EVs";
+            poke2_EditIv_button.UseVisualStyleBackColor = true;
+            poke2_EditIv_button.Click += poke2_EditIv_button_Click;
             // 
             // label19
             // 
@@ -2305,13 +2310,13 @@ namespace Main
             label20.TabIndex = 174;
             label20.Text = "Nickname";
             // 
-            // textBox2
+            // poke2_Nickname_textBox
             // 
-            textBox2.Font = new Font("Segoe UI", 9F);
-            textBox2.Location = new Point(308, 86);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(182, 23);
-            textBox2.TabIndex = 173;
+            poke2_Nickname_textBox.Font = new Font("Segoe UI", 9F);
+            poke2_Nickname_textBox.Location = new Point(308, 86);
+            poke2_Nickname_textBox.Name = "poke2_Nickname_textBox";
+            poke2_Nickname_textBox.Size = new Size(182, 23);
+            poke2_Nickname_textBox.TabIndex = 173;
             // 
             // label21
             // 
@@ -2323,16 +2328,16 @@ namespace Main
             label21.TabIndex = 172;
             label21.Text = "Type 2";
             // 
-            // comboBox7
+            // poke2_Type2_ComboBox
             // 
-            comboBox7.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox7.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox7.Font = new Font("Segoe UI", 8F);
-            comboBox7.FormattingEnabled = true;
-            comboBox7.Location = new Point(389, 42);
-            comboBox7.Name = "comboBox7";
-            comboBox7.Size = new Size(89, 21);
-            comboBox7.TabIndex = 171;
+            poke2_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke2_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke2_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke2_Type2_ComboBox.FormattingEnabled = true;
+            poke2_Type2_ComboBox.Location = new Point(389, 42);
+            poke2_Type2_ComboBox.Name = "poke2_Type2_ComboBox";
+            poke2_Type2_ComboBox.Size = new Size(89, 21);
+            poke2_Type2_ComboBox.TabIndex = 171;
             // 
             // label22
             // 
@@ -2344,16 +2349,16 @@ namespace Main
             label22.TabIndex = 170;
             label22.Text = "Type 1";
             // 
-            // comboBox8
+            // poke2_Type1_ComboBox
             // 
-            comboBox8.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox8.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox8.Font = new Font("Segoe UI", 8F);
-            comboBox8.FormattingEnabled = true;
-            comboBox8.Location = new Point(389, 18);
-            comboBox8.Name = "comboBox8";
-            comboBox8.Size = new Size(89, 21);
-            comboBox8.TabIndex = 169;
+            poke2_Type1_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke2_Type1_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke2_Type1_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke2_Type1_ComboBox.FormattingEnabled = true;
+            poke2_Type1_ComboBox.Location = new Point(389, 18);
+            poke2_Type1_ComboBox.Name = "poke2_Type1_ComboBox";
+            poke2_Type1_ComboBox.Size = new Size(89, 21);
+            poke2_Type1_ComboBox.TabIndex = 169;
             // 
             // label23
             // 
@@ -2365,16 +2370,16 @@ namespace Main
             label23.TabIndex = 168;
             label23.Text = "Status";
             // 
-            // comboBox9
+            // poke2_Status_comboBox
             // 
-            comboBox9.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox9.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox9.Font = new Font("Segoe UI", 8F);
-            comboBox9.FormattingEnabled = true;
-            comboBox9.Location = new Point(224, 42);
-            comboBox9.Name = "comboBox9";
-            comboBox9.Size = new Size(89, 21);
-            comboBox9.TabIndex = 167;
+            poke2_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke2_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke2_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke2_Status_comboBox.FormattingEnabled = true;
+            poke2_Status_comboBox.Location = new Point(224, 42);
+            poke2_Status_comboBox.Name = "poke2_Status_comboBox";
+            poke2_Status_comboBox.Size = new Size(89, 21);
+            poke2_Status_comboBox.TabIndex = 167;
             // 
             // label24
             // 
@@ -2397,16 +2402,16 @@ namespace Main
             poke2_Nature_comboBox.Size = new Size(89, 21);
             poke2_Nature_comboBox.TabIndex = 165;
             // 
-            // label25
+            // poke2_HgeAbiilty_label
             // 
-            label25.AutoSize = true;
-            label25.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label25.ForeColor = SystemColors.MenuHighlight;
-            label25.Location = new Point(53, 20);
-            label25.Name = "label25";
-            label25.Size = new Size(10, 15);
-            label25.TabIndex = 164;
-            label25.Text = "i";
+            poke2_HgeAbiilty_label.AutoSize = true;
+            poke2_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke2_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke2_HgeAbiilty_label.Location = new Point(53, 20);
+            poke2_HgeAbiilty_label.Name = "poke2_HgeAbiilty_label";
+            poke2_HgeAbiilty_label.Size = new Size(10, 15);
+            poke2_HgeAbiilty_label.TabIndex = 164;
+            poke2_HgeAbiilty_label.Text = "i";
             // 
             // label26
             // 
@@ -2418,16 +2423,16 @@ namespace Main
             label26.TabIndex = 163;
             label26.Text = "Ball";
             // 
-            // comboBox11
+            // poke2_Ball_comboBox
             // 
-            comboBox11.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox11.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox11.Font = new Font("Segoe UI", 8F);
-            comboBox11.FormattingEnabled = true;
-            comboBox11.Location = new Point(69, 42);
-            comboBox11.Name = "comboBox11";
-            comboBox11.Size = new Size(89, 21);
-            comboBox11.TabIndex = 162;
+            poke2_Ball_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke2_Ball_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke2_Ball_comboBox.Font = new Font("Segoe UI", 8F);
+            poke2_Ball_comboBox.FormattingEnabled = true;
+            poke2_Ball_comboBox.Location = new Point(69, 42);
+            poke2_Ball_comboBox.Name = "poke2_Ball_comboBox";
+            poke2_Ball_comboBox.Size = new Size(89, 21);
+            poke2_Ball_comboBox.TabIndex = 162;
             // 
             // label27
             // 
@@ -2450,18 +2455,19 @@ namespace Main
             poke2_Ability_Hge_comboBox.Size = new Size(89, 21);
             poke2_Ability_Hge_comboBox.TabIndex = 160;
             // 
-            // checkedListBox2
+            // poke2_AdditionalFlags_checkBoxList
             // 
-            checkedListBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkedListBox2.CheckOnClick = true;
-            checkedListBox2.Font = new Font("Segoe UI", 8F);
-            checkedListBox2.FormattingEnabled = true;
-            checkedListBox2.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
-            checkedListBox2.Location = new Point(6, 87);
-            checkedListBox2.MultiColumn = true;
-            checkedListBox2.Name = "checkedListBox2";
-            checkedListBox2.Size = new Size(296, 89);
-            checkedListBox2.TabIndex = 158;
+            poke2_AdditionalFlags_checkBoxList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            poke2_AdditionalFlags_checkBoxList.CheckOnClick = true;
+            poke2_AdditionalFlags_checkBoxList.Font = new Font("Segoe UI", 8F);
+            poke2_AdditionalFlags_checkBoxList.FormattingEnabled = true;
+            poke2_AdditionalFlags_checkBoxList.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
+            poke2_AdditionalFlags_checkBoxList.Location = new Point(6, 87);
+            poke2_AdditionalFlags_checkBoxList.MultiColumn = true;
+            poke2_AdditionalFlags_checkBoxList.Name = "poke2_AdditionalFlags_checkBoxList";
+            poke2_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
+            poke2_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke2_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke2Moves_groupBox
             // 
@@ -2806,27 +2812,27 @@ namespace Main
             // 
             // poke3HgEngine_groupBox
             // 
-            poke3HgEngine_groupBox.Controls.Add(checkBox2);
-            poke3HgEngine_groupBox.Controls.Add(button5);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Shiny_checkBox);
+            poke3HgEngine_groupBox.Controls.Add(poke3_EditStats_btn);
             poke3HgEngine_groupBox.Controls.Add(label38);
-            poke3HgEngine_groupBox.Controls.Add(button6);
+            poke3HgEngine_groupBox.Controls.Add(poke3_EditIv_button);
             poke3HgEngine_groupBox.Controls.Add(label39);
             poke3HgEngine_groupBox.Controls.Add(label40);
-            poke3HgEngine_groupBox.Controls.Add(textBox3);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Nickname_textBox);
             poke3HgEngine_groupBox.Controls.Add(label41);
-            poke3HgEngine_groupBox.Controls.Add(comboBox23);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Type2_ComboBox);
             poke3HgEngine_groupBox.Controls.Add(label42);
-            poke3HgEngine_groupBox.Controls.Add(comboBox24);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Type1_ComboBox);
             poke3HgEngine_groupBox.Controls.Add(label43);
-            poke3HgEngine_groupBox.Controls.Add(comboBox25);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Status_comboBox);
             poke3HgEngine_groupBox.Controls.Add(label44);
             poke3HgEngine_groupBox.Controls.Add(poke3_Nature_comboBox);
-            poke3HgEngine_groupBox.Controls.Add(label45);
+            poke3HgEngine_groupBox.Controls.Add(poke3_HgeAbiilty_label);
             poke3HgEngine_groupBox.Controls.Add(label46);
-            poke3HgEngine_groupBox.Controls.Add(comboBox27);
+            poke3HgEngine_groupBox.Controls.Add(poke3_Ball_comboBox);
             poke3HgEngine_groupBox.Controls.Add(label47);
             poke3HgEngine_groupBox.Controls.Add(poke3_Ability_Hge_comboBox);
-            poke3HgEngine_groupBox.Controls.Add(checkedListBox3);
+            poke3HgEngine_groupBox.Controls.Add(poke3_AdditionalFlags_checkBoxList);
             poke3HgEngine_groupBox.Location = new Point(6, 220);
             poke3HgEngine_groupBox.Name = "poke3HgEngine_groupBox";
             poke3HgEngine_groupBox.Size = new Size(496, 178);
@@ -2834,28 +2840,29 @@ namespace Main
             poke3HgEngine_groupBox.TabStop = false;
             poke3HgEngine_groupBox.Text = "HG Engine";
             // 
-            // checkBox2
+            // poke3_Shiny_checkBox
             // 
-            checkBox2.AutoSize = true;
-            checkBox2.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox2.Location = new Point(308, 115);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(56, 19);
-            checkBox2.TabIndex = 177;
-            checkBox2.Text = "Shiny";
-            checkBox2.UseVisualStyleBackColor = true;
+            poke3_Shiny_checkBox.AutoSize = true;
+            poke3_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
+            poke3_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke3_Shiny_checkBox.Location = new Point(308, 115);
+            poke3_Shiny_checkBox.Name = "poke3_Shiny_checkBox";
+            poke3_Shiny_checkBox.Size = new Size(56, 19);
+            poke3_Shiny_checkBox.TabIndex = 177;
+            poke3_Shiny_checkBox.Text = "Shiny";
+            poke3_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // poke3_EditStats_btn
             // 
-            button5.Enabled = false;
-            button5.Font = new Font("Segoe UI", 9F);
-            button5.Location = new Point(405, 136);
-            button5.Name = "button5";
-            button5.Size = new Size(85, 36);
-            button5.TabIndex = 10;
-            button5.Text = "Edit Stats";
-            button5.UseVisualStyleBackColor = true;
+            poke3_EditStats_btn.Enabled = false;
+            poke3_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke3_EditStats_btn.Location = new Point(405, 136);
+            poke3_EditStats_btn.Name = "poke3_EditStats_btn";
+            poke3_EditStats_btn.Size = new Size(85, 36);
+            poke3_EditStats_btn.TabIndex = 10;
+            poke3_EditStats_btn.Text = "Edit Stats";
+            poke3_EditStats_btn.UseVisualStyleBackColor = true;
+            poke3_EditStats_btn.Click += poke3_EditStats_btn_Click;
             // 
             // label38
             // 
@@ -2868,16 +2875,17 @@ namespace Main
             label38.TabIndex = 176;
             label38.Text = "i";
             // 
-            // button6
+            // poke3_EditIv_button
             // 
-            button6.Enabled = false;
-            button6.Font = new Font("Segoe UI", 9F);
-            button6.Location = new Point(308, 136);
-            button6.Name = "button6";
-            button6.Size = new Size(85, 36);
-            button6.TabIndex = 177;
-            button6.Text = "Edit IVs/EVs";
-            button6.UseVisualStyleBackColor = true;
+            poke3_EditIv_button.Enabled = false;
+            poke3_EditIv_button.Font = new Font("Segoe UI", 9F);
+            poke3_EditIv_button.Location = new Point(308, 136);
+            poke3_EditIv_button.Name = "poke3_EditIv_button";
+            poke3_EditIv_button.Size = new Size(85, 36);
+            poke3_EditIv_button.TabIndex = 177;
+            poke3_EditIv_button.Text = "Edit IVs/EVs";
+            poke3_EditIv_button.UseVisualStyleBackColor = true;
+            poke3_EditIv_button.Click += poke3_EditIv_button_Click;
             // 
             // label39
             // 
@@ -2899,13 +2907,13 @@ namespace Main
             label40.TabIndex = 174;
             label40.Text = "Nickname";
             // 
-            // textBox3
+            // poke3_Nickname_textBox
             // 
-            textBox3.Font = new Font("Segoe UI", 9F);
-            textBox3.Location = new Point(308, 86);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(182, 23);
-            textBox3.TabIndex = 173;
+            poke3_Nickname_textBox.Font = new Font("Segoe UI", 9F);
+            poke3_Nickname_textBox.Location = new Point(308, 86);
+            poke3_Nickname_textBox.Name = "poke3_Nickname_textBox";
+            poke3_Nickname_textBox.Size = new Size(182, 23);
+            poke3_Nickname_textBox.TabIndex = 173;
             // 
             // label41
             // 
@@ -2917,16 +2925,16 @@ namespace Main
             label41.TabIndex = 172;
             label41.Text = "Type 2";
             // 
-            // comboBox23
+            // poke3_Type2_ComboBox
             // 
-            comboBox23.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox23.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox23.Font = new Font("Segoe UI", 8F);
-            comboBox23.FormattingEnabled = true;
-            comboBox23.Location = new Point(389, 42);
-            comboBox23.Name = "comboBox23";
-            comboBox23.Size = new Size(89, 21);
-            comboBox23.TabIndex = 171;
+            poke3_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke3_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke3_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke3_Type2_ComboBox.FormattingEnabled = true;
+            poke3_Type2_ComboBox.Location = new Point(389, 42);
+            poke3_Type2_ComboBox.Name = "poke3_Type2_ComboBox";
+            poke3_Type2_ComboBox.Size = new Size(89, 21);
+            poke3_Type2_ComboBox.TabIndex = 171;
             // 
             // label42
             // 
@@ -2938,16 +2946,16 @@ namespace Main
             label42.TabIndex = 170;
             label42.Text = "Type 1";
             // 
-            // comboBox24
+            // poke3_Type1_ComboBox
             // 
-            comboBox24.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox24.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox24.Font = new Font("Segoe UI", 8F);
-            comboBox24.FormattingEnabled = true;
-            comboBox24.Location = new Point(389, 18);
-            comboBox24.Name = "comboBox24";
-            comboBox24.Size = new Size(89, 21);
-            comboBox24.TabIndex = 169;
+            poke3_Type1_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke3_Type1_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke3_Type1_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke3_Type1_ComboBox.FormattingEnabled = true;
+            poke3_Type1_ComboBox.Location = new Point(389, 18);
+            poke3_Type1_ComboBox.Name = "poke3_Type1_ComboBox";
+            poke3_Type1_ComboBox.Size = new Size(89, 21);
+            poke3_Type1_ComboBox.TabIndex = 169;
             // 
             // label43
             // 
@@ -2959,16 +2967,16 @@ namespace Main
             label43.TabIndex = 168;
             label43.Text = "Status";
             // 
-            // comboBox25
+            // poke3_Status_comboBox
             // 
-            comboBox25.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox25.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox25.Font = new Font("Segoe UI", 8F);
-            comboBox25.FormattingEnabled = true;
-            comboBox25.Location = new Point(224, 42);
-            comboBox25.Name = "comboBox25";
-            comboBox25.Size = new Size(89, 21);
-            comboBox25.TabIndex = 167;
+            poke3_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke3_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke3_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke3_Status_comboBox.FormattingEnabled = true;
+            poke3_Status_comboBox.Location = new Point(224, 42);
+            poke3_Status_comboBox.Name = "poke3_Status_comboBox";
+            poke3_Status_comboBox.Size = new Size(89, 21);
+            poke3_Status_comboBox.TabIndex = 167;
             // 
             // label44
             // 
@@ -2991,16 +2999,16 @@ namespace Main
             poke3_Nature_comboBox.Size = new Size(89, 21);
             poke3_Nature_comboBox.TabIndex = 165;
             // 
-            // label45
+            // poke3_HgeAbiilty_label
             // 
-            label45.AutoSize = true;
-            label45.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label45.ForeColor = SystemColors.MenuHighlight;
-            label45.Location = new Point(53, 20);
-            label45.Name = "label45";
-            label45.Size = new Size(10, 15);
-            label45.TabIndex = 164;
-            label45.Text = "i";
+            poke3_HgeAbiilty_label.AutoSize = true;
+            poke3_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke3_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke3_HgeAbiilty_label.Location = new Point(53, 20);
+            poke3_HgeAbiilty_label.Name = "poke3_HgeAbiilty_label";
+            poke3_HgeAbiilty_label.Size = new Size(10, 15);
+            poke3_HgeAbiilty_label.TabIndex = 164;
+            poke3_HgeAbiilty_label.Text = "i";
             // 
             // label46
             // 
@@ -3012,16 +3020,16 @@ namespace Main
             label46.TabIndex = 163;
             label46.Text = "Ball";
             // 
-            // comboBox27
+            // poke3_Ball_comboBox
             // 
-            comboBox27.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox27.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox27.Font = new Font("Segoe UI", 8F);
-            comboBox27.FormattingEnabled = true;
-            comboBox27.Location = new Point(69, 42);
-            comboBox27.Name = "comboBox27";
-            comboBox27.Size = new Size(89, 21);
-            comboBox27.TabIndex = 162;
+            poke3_Ball_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke3_Ball_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke3_Ball_comboBox.Font = new Font("Segoe UI", 8F);
+            poke3_Ball_comboBox.FormattingEnabled = true;
+            poke3_Ball_comboBox.Location = new Point(69, 42);
+            poke3_Ball_comboBox.Name = "poke3_Ball_comboBox";
+            poke3_Ball_comboBox.Size = new Size(89, 21);
+            poke3_Ball_comboBox.TabIndex = 162;
             // 
             // label47
             // 
@@ -3044,18 +3052,19 @@ namespace Main
             poke3_Ability_Hge_comboBox.Size = new Size(89, 21);
             poke3_Ability_Hge_comboBox.TabIndex = 160;
             // 
-            // checkedListBox3
+            // poke3_AdditionalFlags_checkBoxList
             // 
-            checkedListBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkedListBox3.CheckOnClick = true;
-            checkedListBox3.Font = new Font("Segoe UI", 8F);
-            checkedListBox3.FormattingEnabled = true;
-            checkedListBox3.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
-            checkedListBox3.Location = new Point(6, 87);
-            checkedListBox3.MultiColumn = true;
-            checkedListBox3.Name = "checkedListBox3";
-            checkedListBox3.Size = new Size(296, 89);
-            checkedListBox3.TabIndex = 158;
+            poke3_AdditionalFlags_checkBoxList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            poke3_AdditionalFlags_checkBoxList.CheckOnClick = true;
+            poke3_AdditionalFlags_checkBoxList.Font = new Font("Segoe UI", 8F);
+            poke3_AdditionalFlags_checkBoxList.FormattingEnabled = true;
+            poke3_AdditionalFlags_checkBoxList.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
+            poke3_AdditionalFlags_checkBoxList.Location = new Point(6, 87);
+            poke3_AdditionalFlags_checkBoxList.MultiColumn = true;
+            poke3_AdditionalFlags_checkBoxList.Name = "poke3_AdditionalFlags_checkBoxList";
+            poke3_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
+            poke3_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke3_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke3Moves_groupBox
             // 
@@ -3400,27 +3409,27 @@ namespace Main
             // 
             // poke4HgEngine_groupBox
             // 
-            poke4HgEngine_groupBox.Controls.Add(checkBox3);
-            poke4HgEngine_groupBox.Controls.Add(button7);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Shiny_checkBox);
+            poke4HgEngine_groupBox.Controls.Add(poke4_EditStats_btn);
             poke4HgEngine_groupBox.Controls.Add(label82);
-            poke4HgEngine_groupBox.Controls.Add(button8);
+            poke4HgEngine_groupBox.Controls.Add(poke4_EditIv_button);
             poke4HgEngine_groupBox.Controls.Add(label83);
             poke4HgEngine_groupBox.Controls.Add(label84);
-            poke4HgEngine_groupBox.Controls.Add(textBox4);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Nickname_textBox);
             poke4HgEngine_groupBox.Controls.Add(label85);
-            poke4HgEngine_groupBox.Controls.Add(comboBox39);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Type2_ComboBox);
             poke4HgEngine_groupBox.Controls.Add(label86);
-            poke4HgEngine_groupBox.Controls.Add(comboBox40);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Type1_ComboBox);
             poke4HgEngine_groupBox.Controls.Add(label87);
-            poke4HgEngine_groupBox.Controls.Add(comboBox41);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Status_comboBox);
             poke4HgEngine_groupBox.Controls.Add(label88);
             poke4HgEngine_groupBox.Controls.Add(poke4_Nature_comboBox);
-            poke4HgEngine_groupBox.Controls.Add(label89);
+            poke4HgEngine_groupBox.Controls.Add(poke4_HgeAbiilty_label);
             poke4HgEngine_groupBox.Controls.Add(label90);
-            poke4HgEngine_groupBox.Controls.Add(comboBox43);
+            poke4HgEngine_groupBox.Controls.Add(poke4_Ball_comboBox);
             poke4HgEngine_groupBox.Controls.Add(label91);
             poke4HgEngine_groupBox.Controls.Add(poke4_Ability_Hge_comboBox);
-            poke4HgEngine_groupBox.Controls.Add(checkedListBox4);
+            poke4HgEngine_groupBox.Controls.Add(poke4_AdditionalFlags_checkBoxList);
             poke4HgEngine_groupBox.Location = new Point(6, 220);
             poke4HgEngine_groupBox.Name = "poke4HgEngine_groupBox";
             poke4HgEngine_groupBox.Size = new Size(496, 178);
@@ -3428,28 +3437,29 @@ namespace Main
             poke4HgEngine_groupBox.TabStop = false;
             poke4HgEngine_groupBox.Text = "HG Engine";
             // 
-            // checkBox3
+            // poke4_Shiny_checkBox
             // 
-            checkBox3.AutoSize = true;
-            checkBox3.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox3.Location = new Point(308, 115);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(56, 19);
-            checkBox3.TabIndex = 177;
-            checkBox3.Text = "Shiny";
-            checkBox3.UseVisualStyleBackColor = true;
+            poke4_Shiny_checkBox.AutoSize = true;
+            poke4_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
+            poke4_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke4_Shiny_checkBox.Location = new Point(308, 115);
+            poke4_Shiny_checkBox.Name = "poke4_Shiny_checkBox";
+            poke4_Shiny_checkBox.Size = new Size(56, 19);
+            poke4_Shiny_checkBox.TabIndex = 177;
+            poke4_Shiny_checkBox.Text = "Shiny";
+            poke4_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // button7
+            // poke4_EditStats_btn
             // 
-            button7.Enabled = false;
-            button7.Font = new Font("Segoe UI", 9F);
-            button7.Location = new Point(405, 136);
-            button7.Name = "button7";
-            button7.Size = new Size(85, 36);
-            button7.TabIndex = 10;
-            button7.Text = "Edit Stats";
-            button7.UseVisualStyleBackColor = true;
+            poke4_EditStats_btn.Enabled = false;
+            poke4_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke4_EditStats_btn.Location = new Point(405, 136);
+            poke4_EditStats_btn.Name = "poke4_EditStats_btn";
+            poke4_EditStats_btn.Size = new Size(85, 36);
+            poke4_EditStats_btn.TabIndex = 10;
+            poke4_EditStats_btn.Text = "Edit Stats";
+            poke4_EditStats_btn.UseVisualStyleBackColor = true;
+            poke4_EditStats_btn.Click += poke4_EditStats_btn_Click;
             // 
             // label82
             // 
@@ -3462,16 +3472,17 @@ namespace Main
             label82.TabIndex = 176;
             label82.Text = "i";
             // 
-            // button8
+            // poke4_EditIv_button
             // 
-            button8.Enabled = false;
-            button8.Font = new Font("Segoe UI", 9F);
-            button8.Location = new Point(308, 136);
-            button8.Name = "button8";
-            button8.Size = new Size(85, 36);
-            button8.TabIndex = 177;
-            button8.Text = "Edit IVs/EVs";
-            button8.UseVisualStyleBackColor = true;
+            poke4_EditIv_button.Enabled = false;
+            poke4_EditIv_button.Font = new Font("Segoe UI", 9F);
+            poke4_EditIv_button.Location = new Point(308, 136);
+            poke4_EditIv_button.Name = "poke4_EditIv_button";
+            poke4_EditIv_button.Size = new Size(85, 36);
+            poke4_EditIv_button.TabIndex = 177;
+            poke4_EditIv_button.Text = "Edit IVs/EVs";
+            poke4_EditIv_button.UseVisualStyleBackColor = true;
+            poke4_EditIv_button.Click += poke4_EditIv_button_Click;
             // 
             // label83
             // 
@@ -3493,13 +3504,13 @@ namespace Main
             label84.TabIndex = 174;
             label84.Text = "Nickname";
             // 
-            // textBox4
+            // poke4_Nickname_textBox
             // 
-            textBox4.Font = new Font("Segoe UI", 9F);
-            textBox4.Location = new Point(308, 86);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(182, 23);
-            textBox4.TabIndex = 173;
+            poke4_Nickname_textBox.Font = new Font("Segoe UI", 9F);
+            poke4_Nickname_textBox.Location = new Point(308, 86);
+            poke4_Nickname_textBox.Name = "poke4_Nickname_textBox";
+            poke4_Nickname_textBox.Size = new Size(182, 23);
+            poke4_Nickname_textBox.TabIndex = 173;
             // 
             // label85
             // 
@@ -3511,16 +3522,16 @@ namespace Main
             label85.TabIndex = 172;
             label85.Text = "Type 2";
             // 
-            // comboBox39
+            // poke4_Type2_ComboBox
             // 
-            comboBox39.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox39.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox39.Font = new Font("Segoe UI", 8F);
-            comboBox39.FormattingEnabled = true;
-            comboBox39.Location = new Point(389, 42);
-            comboBox39.Name = "comboBox39";
-            comboBox39.Size = new Size(89, 21);
-            comboBox39.TabIndex = 171;
+            poke4_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke4_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke4_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke4_Type2_ComboBox.FormattingEnabled = true;
+            poke4_Type2_ComboBox.Location = new Point(389, 42);
+            poke4_Type2_ComboBox.Name = "poke4_Type2_ComboBox";
+            poke4_Type2_ComboBox.Size = new Size(89, 21);
+            poke4_Type2_ComboBox.TabIndex = 171;
             // 
             // label86
             // 
@@ -3532,16 +3543,16 @@ namespace Main
             label86.TabIndex = 170;
             label86.Text = "Type 1";
             // 
-            // comboBox40
+            // poke4_Type1_ComboBox
             // 
-            comboBox40.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox40.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox40.Font = new Font("Segoe UI", 8F);
-            comboBox40.FormattingEnabled = true;
-            comboBox40.Location = new Point(389, 18);
-            comboBox40.Name = "comboBox40";
-            comboBox40.Size = new Size(89, 21);
-            comboBox40.TabIndex = 169;
+            poke4_Type1_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke4_Type1_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke4_Type1_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke4_Type1_ComboBox.FormattingEnabled = true;
+            poke4_Type1_ComboBox.Location = new Point(389, 18);
+            poke4_Type1_ComboBox.Name = "poke4_Type1_ComboBox";
+            poke4_Type1_ComboBox.Size = new Size(89, 21);
+            poke4_Type1_ComboBox.TabIndex = 169;
             // 
             // label87
             // 
@@ -3553,16 +3564,16 @@ namespace Main
             label87.TabIndex = 168;
             label87.Text = "Status";
             // 
-            // comboBox41
+            // poke4_Status_comboBox
             // 
-            comboBox41.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox41.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox41.Font = new Font("Segoe UI", 8F);
-            comboBox41.FormattingEnabled = true;
-            comboBox41.Location = new Point(224, 42);
-            comboBox41.Name = "comboBox41";
-            comboBox41.Size = new Size(89, 21);
-            comboBox41.TabIndex = 167;
+            poke4_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke4_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke4_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke4_Status_comboBox.FormattingEnabled = true;
+            poke4_Status_comboBox.Location = new Point(224, 42);
+            poke4_Status_comboBox.Name = "poke4_Status_comboBox";
+            poke4_Status_comboBox.Size = new Size(89, 21);
+            poke4_Status_comboBox.TabIndex = 167;
             // 
             // label88
             // 
@@ -3585,16 +3596,16 @@ namespace Main
             poke4_Nature_comboBox.Size = new Size(89, 21);
             poke4_Nature_comboBox.TabIndex = 165;
             // 
-            // label89
+            // poke4_HgeAbiilty_label
             // 
-            label89.AutoSize = true;
-            label89.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label89.ForeColor = SystemColors.MenuHighlight;
-            label89.Location = new Point(53, 20);
-            label89.Name = "label89";
-            label89.Size = new Size(10, 15);
-            label89.TabIndex = 164;
-            label89.Text = "i";
+            poke4_HgeAbiilty_label.AutoSize = true;
+            poke4_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke4_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke4_HgeAbiilty_label.Location = new Point(53, 20);
+            poke4_HgeAbiilty_label.Name = "poke4_HgeAbiilty_label";
+            poke4_HgeAbiilty_label.Size = new Size(10, 15);
+            poke4_HgeAbiilty_label.TabIndex = 164;
+            poke4_HgeAbiilty_label.Text = "i";
             // 
             // label90
             // 
@@ -3606,16 +3617,16 @@ namespace Main
             label90.TabIndex = 163;
             label90.Text = "Ball";
             // 
-            // comboBox43
+            // poke4_Ball_comboBox
             // 
-            comboBox43.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox43.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox43.Font = new Font("Segoe UI", 8F);
-            comboBox43.FormattingEnabled = true;
-            comboBox43.Location = new Point(69, 42);
-            comboBox43.Name = "comboBox43";
-            comboBox43.Size = new Size(89, 21);
-            comboBox43.TabIndex = 162;
+            poke4_Ball_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke4_Ball_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke4_Ball_comboBox.Font = new Font("Segoe UI", 8F);
+            poke4_Ball_comboBox.FormattingEnabled = true;
+            poke4_Ball_comboBox.Location = new Point(69, 42);
+            poke4_Ball_comboBox.Name = "poke4_Ball_comboBox";
+            poke4_Ball_comboBox.Size = new Size(89, 21);
+            poke4_Ball_comboBox.TabIndex = 162;
             // 
             // label91
             // 
@@ -3638,18 +3649,19 @@ namespace Main
             poke4_Ability_Hge_comboBox.Size = new Size(89, 21);
             poke4_Ability_Hge_comboBox.TabIndex = 160;
             // 
-            // checkedListBox4
+            // poke4_AdditionalFlags_checkBoxList
             // 
-            checkedListBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkedListBox4.CheckOnClick = true;
-            checkedListBox4.Font = new Font("Segoe UI", 8F);
-            checkedListBox4.FormattingEnabled = true;
-            checkedListBox4.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
-            checkedListBox4.Location = new Point(6, 87);
-            checkedListBox4.MultiColumn = true;
-            checkedListBox4.Name = "checkedListBox4";
-            checkedListBox4.Size = new Size(296, 89);
-            checkedListBox4.TabIndex = 158;
+            poke4_AdditionalFlags_checkBoxList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            poke4_AdditionalFlags_checkBoxList.CheckOnClick = true;
+            poke4_AdditionalFlags_checkBoxList.Font = new Font("Segoe UI", 8F);
+            poke4_AdditionalFlags_checkBoxList.FormattingEnabled = true;
+            poke4_AdditionalFlags_checkBoxList.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
+            poke4_AdditionalFlags_checkBoxList.Location = new Point(6, 87);
+            poke4_AdditionalFlags_checkBoxList.MultiColumn = true;
+            poke4_AdditionalFlags_checkBoxList.Name = "poke4_AdditionalFlags_checkBoxList";
+            poke4_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
+            poke4_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke4_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke4Moves_groupBox
             // 
@@ -3994,27 +4006,27 @@ namespace Main
             // 
             // poke5HgEngine_groupBox
             // 
-            poke5HgEngine_groupBox.Controls.Add(checkBox4);
-            poke5HgEngine_groupBox.Controls.Add(button9);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Shiny_checkBox);
+            poke5HgEngine_groupBox.Controls.Add(poke5_EditStats_btn);
             poke5HgEngine_groupBox.Controls.Add(label102);
-            poke5HgEngine_groupBox.Controls.Add(button10);
+            poke5HgEngine_groupBox.Controls.Add(poke5_EditIv_button);
             poke5HgEngine_groupBox.Controls.Add(label103);
             poke5HgEngine_groupBox.Controls.Add(label104);
-            poke5HgEngine_groupBox.Controls.Add(textBox5);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Nickname_textBox);
             poke5HgEngine_groupBox.Controls.Add(label105);
-            poke5HgEngine_groupBox.Controls.Add(comboBox55);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Type2_ComboBox);
             poke5HgEngine_groupBox.Controls.Add(label106);
-            poke5HgEngine_groupBox.Controls.Add(comboBox56);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Type1_ComboBox);
             poke5HgEngine_groupBox.Controls.Add(label107);
-            poke5HgEngine_groupBox.Controls.Add(comboBox57);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Status_comboBox);
             poke5HgEngine_groupBox.Controls.Add(label108);
             poke5HgEngine_groupBox.Controls.Add(poke5_Nature_comboBox);
-            poke5HgEngine_groupBox.Controls.Add(label109);
+            poke5HgEngine_groupBox.Controls.Add(poke5_HgeAbiilty_label);
             poke5HgEngine_groupBox.Controls.Add(label110);
-            poke5HgEngine_groupBox.Controls.Add(comboBox59);
+            poke5HgEngine_groupBox.Controls.Add(poke5_Ball_comboBox);
             poke5HgEngine_groupBox.Controls.Add(label111);
             poke5HgEngine_groupBox.Controls.Add(poke5_Ability_Hge_comboBox);
-            poke5HgEngine_groupBox.Controls.Add(checkedListBox5);
+            poke5HgEngine_groupBox.Controls.Add(poke5_AdditionalFlags_checkBoxList);
             poke5HgEngine_groupBox.Location = new Point(6, 220);
             poke5HgEngine_groupBox.Name = "poke5HgEngine_groupBox";
             poke5HgEngine_groupBox.Size = new Size(496, 178);
@@ -4022,28 +4034,29 @@ namespace Main
             poke5HgEngine_groupBox.TabStop = false;
             poke5HgEngine_groupBox.Text = "HG Engine";
             // 
-            // checkBox4
+            // poke5_Shiny_checkBox
             // 
-            checkBox4.AutoSize = true;
-            checkBox4.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox4.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox4.Location = new Point(308, 115);
-            checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(56, 19);
-            checkBox4.TabIndex = 177;
-            checkBox4.Text = "Shiny";
-            checkBox4.UseVisualStyleBackColor = true;
+            poke5_Shiny_checkBox.AutoSize = true;
+            poke5_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
+            poke5_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke5_Shiny_checkBox.Location = new Point(308, 115);
+            poke5_Shiny_checkBox.Name = "poke5_Shiny_checkBox";
+            poke5_Shiny_checkBox.Size = new Size(56, 19);
+            poke5_Shiny_checkBox.TabIndex = 177;
+            poke5_Shiny_checkBox.Text = "Shiny";
+            poke5_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // button9
+            // poke5_EditStats_btn
             // 
-            button9.Enabled = false;
-            button9.Font = new Font("Segoe UI", 9F);
-            button9.Location = new Point(405, 136);
-            button9.Name = "button9";
-            button9.Size = new Size(85, 36);
-            button9.TabIndex = 10;
-            button9.Text = "Edit Stats";
-            button9.UseVisualStyleBackColor = true;
+            poke5_EditStats_btn.Enabled = false;
+            poke5_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke5_EditStats_btn.Location = new Point(405, 136);
+            poke5_EditStats_btn.Name = "poke5_EditStats_btn";
+            poke5_EditStats_btn.Size = new Size(85, 36);
+            poke5_EditStats_btn.TabIndex = 10;
+            poke5_EditStats_btn.Text = "Edit Stats";
+            poke5_EditStats_btn.UseVisualStyleBackColor = true;
+            poke5_EditStats_btn.Click += poke5_EditStats_btn_Click;
             // 
             // label102
             // 
@@ -4056,16 +4069,17 @@ namespace Main
             label102.TabIndex = 176;
             label102.Text = "i";
             // 
-            // button10
+            // poke5_EditIv_button
             // 
-            button10.Enabled = false;
-            button10.Font = new Font("Segoe UI", 9F);
-            button10.Location = new Point(308, 136);
-            button10.Name = "button10";
-            button10.Size = new Size(85, 36);
-            button10.TabIndex = 177;
-            button10.Text = "Edit IVs/EVs";
-            button10.UseVisualStyleBackColor = true;
+            poke5_EditIv_button.Enabled = false;
+            poke5_EditIv_button.Font = new Font("Segoe UI", 9F);
+            poke5_EditIv_button.Location = new Point(308, 136);
+            poke5_EditIv_button.Name = "poke5_EditIv_button";
+            poke5_EditIv_button.Size = new Size(85, 36);
+            poke5_EditIv_button.TabIndex = 177;
+            poke5_EditIv_button.Text = "Edit IVs/EVs";
+            poke5_EditIv_button.UseVisualStyleBackColor = true;
+            poke5_EditIv_button.Click += poke5_EditIv_button_Click;
             // 
             // label103
             // 
@@ -4087,13 +4101,13 @@ namespace Main
             label104.TabIndex = 174;
             label104.Text = "Nickname";
             // 
-            // textBox5
+            // poke5_Nickname_textBox
             // 
-            textBox5.Font = new Font("Segoe UI", 9F);
-            textBox5.Location = new Point(308, 86);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(182, 23);
-            textBox5.TabIndex = 173;
+            poke5_Nickname_textBox.Font = new Font("Segoe UI", 9F);
+            poke5_Nickname_textBox.Location = new Point(308, 86);
+            poke5_Nickname_textBox.Name = "poke5_Nickname_textBox";
+            poke5_Nickname_textBox.Size = new Size(182, 23);
+            poke5_Nickname_textBox.TabIndex = 173;
             // 
             // label105
             // 
@@ -4105,16 +4119,16 @@ namespace Main
             label105.TabIndex = 172;
             label105.Text = "Type 2";
             // 
-            // comboBox55
+            // poke5_Type2_ComboBox
             // 
-            comboBox55.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox55.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox55.Font = new Font("Segoe UI", 8F);
-            comboBox55.FormattingEnabled = true;
-            comboBox55.Location = new Point(389, 42);
-            comboBox55.Name = "comboBox55";
-            comboBox55.Size = new Size(89, 21);
-            comboBox55.TabIndex = 171;
+            poke5_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke5_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke5_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke5_Type2_ComboBox.FormattingEnabled = true;
+            poke5_Type2_ComboBox.Location = new Point(389, 42);
+            poke5_Type2_ComboBox.Name = "poke5_Type2_ComboBox";
+            poke5_Type2_ComboBox.Size = new Size(89, 21);
+            poke5_Type2_ComboBox.TabIndex = 171;
             // 
             // label106
             // 
@@ -4126,16 +4140,16 @@ namespace Main
             label106.TabIndex = 170;
             label106.Text = "Type 1";
             // 
-            // comboBox56
+            // poke5_Type1_ComboBox
             // 
-            comboBox56.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox56.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox56.Font = new Font("Segoe UI", 8F);
-            comboBox56.FormattingEnabled = true;
-            comboBox56.Location = new Point(389, 18);
-            comboBox56.Name = "comboBox56";
-            comboBox56.Size = new Size(89, 21);
-            comboBox56.TabIndex = 169;
+            poke5_Type1_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke5_Type1_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke5_Type1_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke5_Type1_ComboBox.FormattingEnabled = true;
+            poke5_Type1_ComboBox.Location = new Point(389, 18);
+            poke5_Type1_ComboBox.Name = "poke5_Type1_ComboBox";
+            poke5_Type1_ComboBox.Size = new Size(89, 21);
+            poke5_Type1_ComboBox.TabIndex = 169;
             // 
             // label107
             // 
@@ -4147,16 +4161,16 @@ namespace Main
             label107.TabIndex = 168;
             label107.Text = "Status";
             // 
-            // comboBox57
+            // poke5_Status_comboBox
             // 
-            comboBox57.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox57.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox57.Font = new Font("Segoe UI", 8F);
-            comboBox57.FormattingEnabled = true;
-            comboBox57.Location = new Point(224, 42);
-            comboBox57.Name = "comboBox57";
-            comboBox57.Size = new Size(89, 21);
-            comboBox57.TabIndex = 167;
+            poke5_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke5_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke5_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke5_Status_comboBox.FormattingEnabled = true;
+            poke5_Status_comboBox.Location = new Point(224, 42);
+            poke5_Status_comboBox.Name = "poke5_Status_comboBox";
+            poke5_Status_comboBox.Size = new Size(89, 21);
+            poke5_Status_comboBox.TabIndex = 167;
             // 
             // label108
             // 
@@ -4179,16 +4193,16 @@ namespace Main
             poke5_Nature_comboBox.Size = new Size(89, 21);
             poke5_Nature_comboBox.TabIndex = 165;
             // 
-            // label109
+            // poke5_HgeAbiilty_label
             // 
-            label109.AutoSize = true;
-            label109.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label109.ForeColor = SystemColors.MenuHighlight;
-            label109.Location = new Point(53, 20);
-            label109.Name = "label109";
-            label109.Size = new Size(10, 15);
-            label109.TabIndex = 164;
-            label109.Text = "i";
+            poke5_HgeAbiilty_label.AutoSize = true;
+            poke5_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke5_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke5_HgeAbiilty_label.Location = new Point(53, 20);
+            poke5_HgeAbiilty_label.Name = "poke5_HgeAbiilty_label";
+            poke5_HgeAbiilty_label.Size = new Size(10, 15);
+            poke5_HgeAbiilty_label.TabIndex = 164;
+            poke5_HgeAbiilty_label.Text = "i";
             // 
             // label110
             // 
@@ -4200,16 +4214,16 @@ namespace Main
             label110.TabIndex = 163;
             label110.Text = "Ball";
             // 
-            // comboBox59
+            // poke5_Ball_comboBox
             // 
-            comboBox59.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox59.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox59.Font = new Font("Segoe UI", 8F);
-            comboBox59.FormattingEnabled = true;
-            comboBox59.Location = new Point(69, 42);
-            comboBox59.Name = "comboBox59";
-            comboBox59.Size = new Size(89, 21);
-            comboBox59.TabIndex = 162;
+            poke5_Ball_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke5_Ball_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke5_Ball_comboBox.Font = new Font("Segoe UI", 8F);
+            poke5_Ball_comboBox.FormattingEnabled = true;
+            poke5_Ball_comboBox.Location = new Point(69, 42);
+            poke5_Ball_comboBox.Name = "poke5_Ball_comboBox";
+            poke5_Ball_comboBox.Size = new Size(89, 21);
+            poke5_Ball_comboBox.TabIndex = 162;
             // 
             // label111
             // 
@@ -4232,18 +4246,19 @@ namespace Main
             poke5_Ability_Hge_comboBox.Size = new Size(89, 21);
             poke5_Ability_Hge_comboBox.TabIndex = 160;
             // 
-            // checkedListBox5
+            // poke5_AdditionalFlags_checkBoxList
             // 
-            checkedListBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkedListBox5.CheckOnClick = true;
-            checkedListBox5.Font = new Font("Segoe UI", 8F);
-            checkedListBox5.FormattingEnabled = true;
-            checkedListBox5.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
-            checkedListBox5.Location = new Point(6, 87);
-            checkedListBox5.MultiColumn = true;
-            checkedListBox5.Name = "checkedListBox5";
-            checkedListBox5.Size = new Size(296, 89);
-            checkedListBox5.TabIndex = 158;
+            poke5_AdditionalFlags_checkBoxList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            poke5_AdditionalFlags_checkBoxList.CheckOnClick = true;
+            poke5_AdditionalFlags_checkBoxList.Font = new Font("Segoe UI", 8F);
+            poke5_AdditionalFlags_checkBoxList.FormattingEnabled = true;
+            poke5_AdditionalFlags_checkBoxList.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
+            poke5_AdditionalFlags_checkBoxList.Location = new Point(6, 87);
+            poke5_AdditionalFlags_checkBoxList.MultiColumn = true;
+            poke5_AdditionalFlags_checkBoxList.Name = "poke5_AdditionalFlags_checkBoxList";
+            poke5_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
+            poke5_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke5_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke5Moves_groupBox
             // 
@@ -4588,27 +4603,27 @@ namespace Main
             // 
             // poke6HgEngine_groupBox
             // 
-            poke6HgEngine_groupBox.Controls.Add(checkBox5);
-            poke6HgEngine_groupBox.Controls.Add(button11);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Shiny_checkBox);
+            poke6HgEngine_groupBox.Controls.Add(poke6_EditStats_btn);
             poke6HgEngine_groupBox.Controls.Add(label122);
-            poke6HgEngine_groupBox.Controls.Add(button12);
+            poke6HgEngine_groupBox.Controls.Add(poke6_EditIv_button);
             poke6HgEngine_groupBox.Controls.Add(label123);
             poke6HgEngine_groupBox.Controls.Add(label124);
-            poke6HgEngine_groupBox.Controls.Add(textBox6);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Nickname_textBox);
             poke6HgEngine_groupBox.Controls.Add(label125);
-            poke6HgEngine_groupBox.Controls.Add(comboBox71);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Type2_ComboBox);
             poke6HgEngine_groupBox.Controls.Add(label126);
-            poke6HgEngine_groupBox.Controls.Add(comboBox72);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Type1_ComboBox);
             poke6HgEngine_groupBox.Controls.Add(label127);
-            poke6HgEngine_groupBox.Controls.Add(comboBox73);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Status_comboBox);
             poke6HgEngine_groupBox.Controls.Add(label128);
             poke6HgEngine_groupBox.Controls.Add(poke6_Nature_comboBox);
-            poke6HgEngine_groupBox.Controls.Add(label129);
+            poke6HgEngine_groupBox.Controls.Add(poke6_HgeAbiilty_label);
             poke6HgEngine_groupBox.Controls.Add(label130);
-            poke6HgEngine_groupBox.Controls.Add(comboBox75);
+            poke6HgEngine_groupBox.Controls.Add(poke6_Ball_comboBox);
             poke6HgEngine_groupBox.Controls.Add(label131);
             poke6HgEngine_groupBox.Controls.Add(poke6_Ability_Hge_comboBox);
-            poke6HgEngine_groupBox.Controls.Add(checkedListBox6);
+            poke6HgEngine_groupBox.Controls.Add(poke6_AdditionalFlags_checkBoxList);
             poke6HgEngine_groupBox.Location = new Point(6, 220);
             poke6HgEngine_groupBox.Name = "poke6HgEngine_groupBox";
             poke6HgEngine_groupBox.Size = new Size(496, 178);
@@ -4616,28 +4631,29 @@ namespace Main
             poke6HgEngine_groupBox.TabStop = false;
             poke6HgEngine_groupBox.Text = "HG Engine";
             // 
-            // checkBox5
+            // poke6_Shiny_checkBox
             // 
-            checkBox5.AutoSize = true;
-            checkBox5.CheckAlign = ContentAlignment.MiddleRight;
-            checkBox5.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            checkBox5.Location = new Point(308, 115);
-            checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(56, 19);
-            checkBox5.TabIndex = 177;
-            checkBox5.Text = "Shiny";
-            checkBox5.UseVisualStyleBackColor = true;
+            poke6_Shiny_checkBox.AutoSize = true;
+            poke6_Shiny_checkBox.CheckAlign = ContentAlignment.MiddleRight;
+            poke6_Shiny_checkBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke6_Shiny_checkBox.Location = new Point(308, 115);
+            poke6_Shiny_checkBox.Name = "poke6_Shiny_checkBox";
+            poke6_Shiny_checkBox.Size = new Size(56, 19);
+            poke6_Shiny_checkBox.TabIndex = 177;
+            poke6_Shiny_checkBox.Text = "Shiny";
+            poke6_Shiny_checkBox.UseVisualStyleBackColor = true;
             // 
-            // button11
+            // poke6_EditStats_btn
             // 
-            button11.Enabled = false;
-            button11.Font = new Font("Segoe UI", 9F);
-            button11.Location = new Point(405, 136);
-            button11.Name = "button11";
-            button11.Size = new Size(85, 36);
-            button11.TabIndex = 10;
-            button11.Text = "Edit Stats";
-            button11.UseVisualStyleBackColor = true;
+            poke6_EditStats_btn.Enabled = false;
+            poke6_EditStats_btn.Font = new Font("Segoe UI", 9F);
+            poke6_EditStats_btn.Location = new Point(405, 136);
+            poke6_EditStats_btn.Name = "poke6_EditStats_btn";
+            poke6_EditStats_btn.Size = new Size(85, 36);
+            poke6_EditStats_btn.TabIndex = 10;
+            poke6_EditStats_btn.Text = "Edit Stats";
+            poke6_EditStats_btn.UseVisualStyleBackColor = true;
+            poke6_EditStats_btn.Click += poke6_EditStats_btn_Click;
             // 
             // label122
             // 
@@ -4650,16 +4666,17 @@ namespace Main
             label122.TabIndex = 176;
             label122.Text = "i";
             // 
-            // button12
+            // poke6_EditIv_button
             // 
-            button12.Enabled = false;
-            button12.Font = new Font("Segoe UI", 9F);
-            button12.Location = new Point(308, 136);
-            button12.Name = "button12";
-            button12.Size = new Size(85, 36);
-            button12.TabIndex = 177;
-            button12.Text = "Edit IVs/EVs";
-            button12.UseVisualStyleBackColor = true;
+            poke6_EditIv_button.Enabled = false;
+            poke6_EditIv_button.Font = new Font("Segoe UI", 9F);
+            poke6_EditIv_button.Location = new Point(308, 136);
+            poke6_EditIv_button.Name = "poke6_EditIv_button";
+            poke6_EditIv_button.Size = new Size(85, 36);
+            poke6_EditIv_button.TabIndex = 177;
+            poke6_EditIv_button.Text = "Edit IVs/EVs";
+            poke6_EditIv_button.UseVisualStyleBackColor = true;
+            poke6_EditIv_button.Click += poke6_EditIv_button_Click;
             // 
             // label123
             // 
@@ -4681,13 +4698,13 @@ namespace Main
             label124.TabIndex = 174;
             label124.Text = "Nickname";
             // 
-            // textBox6
+            // poke6_Nickname_textBox
             // 
-            textBox6.Font = new Font("Segoe UI", 9F);
-            textBox6.Location = new Point(308, 86);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(182, 23);
-            textBox6.TabIndex = 173;
+            poke6_Nickname_textBox.Font = new Font("Segoe UI", 9F);
+            poke6_Nickname_textBox.Location = new Point(308, 86);
+            poke6_Nickname_textBox.Name = "poke6_Nickname_textBox";
+            poke6_Nickname_textBox.Size = new Size(182, 23);
+            poke6_Nickname_textBox.TabIndex = 173;
             // 
             // label125
             // 
@@ -4699,16 +4716,16 @@ namespace Main
             label125.TabIndex = 172;
             label125.Text = "Type 2";
             // 
-            // comboBox71
+            // poke6_Type2_ComboBox
             // 
-            comboBox71.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox71.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox71.Font = new Font("Segoe UI", 8F);
-            comboBox71.FormattingEnabled = true;
-            comboBox71.Location = new Point(389, 42);
-            comboBox71.Name = "comboBox71";
-            comboBox71.Size = new Size(89, 21);
-            comboBox71.TabIndex = 171;
+            poke6_Type2_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke6_Type2_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke6_Type2_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke6_Type2_ComboBox.FormattingEnabled = true;
+            poke6_Type2_ComboBox.Location = new Point(389, 42);
+            poke6_Type2_ComboBox.Name = "poke6_Type2_ComboBox";
+            poke6_Type2_ComboBox.Size = new Size(89, 21);
+            poke6_Type2_ComboBox.TabIndex = 171;
             // 
             // label126
             // 
@@ -4720,16 +4737,16 @@ namespace Main
             label126.TabIndex = 170;
             label126.Text = "Type 1";
             // 
-            // comboBox72
+            // poke6_Type1_ComboBox
             // 
-            comboBox72.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox72.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox72.Font = new Font("Segoe UI", 8F);
-            comboBox72.FormattingEnabled = true;
-            comboBox72.Location = new Point(389, 18);
-            comboBox72.Name = "comboBox72";
-            comboBox72.Size = new Size(89, 21);
-            comboBox72.TabIndex = 169;
+            poke6_Type1_ComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke6_Type1_ComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke6_Type1_ComboBox.Font = new Font("Segoe UI", 8F);
+            poke6_Type1_ComboBox.FormattingEnabled = true;
+            poke6_Type1_ComboBox.Location = new Point(389, 18);
+            poke6_Type1_ComboBox.Name = "poke6_Type1_ComboBox";
+            poke6_Type1_ComboBox.Size = new Size(89, 21);
+            poke6_Type1_ComboBox.TabIndex = 169;
             // 
             // label127
             // 
@@ -4741,16 +4758,16 @@ namespace Main
             label127.TabIndex = 168;
             label127.Text = "Status";
             // 
-            // comboBox73
+            // poke6_Status_comboBox
             // 
-            comboBox73.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox73.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox73.Font = new Font("Segoe UI", 8F);
-            comboBox73.FormattingEnabled = true;
-            comboBox73.Location = new Point(224, 42);
-            comboBox73.Name = "comboBox73";
-            comboBox73.Size = new Size(89, 21);
-            comboBox73.TabIndex = 167;
+            poke6_Status_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke6_Status_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke6_Status_comboBox.Font = new Font("Segoe UI", 8F);
+            poke6_Status_comboBox.FormattingEnabled = true;
+            poke6_Status_comboBox.Location = new Point(224, 42);
+            poke6_Status_comboBox.Name = "poke6_Status_comboBox";
+            poke6_Status_comboBox.Size = new Size(89, 21);
+            poke6_Status_comboBox.TabIndex = 167;
             // 
             // label128
             // 
@@ -4773,16 +4790,16 @@ namespace Main
             poke6_Nature_comboBox.Size = new Size(89, 21);
             poke6_Nature_comboBox.TabIndex = 165;
             // 
-            // label129
+            // poke6_HgeAbiilty_label
             // 
-            label129.AutoSize = true;
-            label129.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            label129.ForeColor = SystemColors.MenuHighlight;
-            label129.Location = new Point(53, 20);
-            label129.Name = "label129";
-            label129.Size = new Size(10, 15);
-            label129.TabIndex = 164;
-            label129.Text = "i";
+            poke6_HgeAbiilty_label.AutoSize = true;
+            poke6_HgeAbiilty_label.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            poke6_HgeAbiilty_label.ForeColor = SystemColors.MenuHighlight;
+            poke6_HgeAbiilty_label.Location = new Point(53, 20);
+            poke6_HgeAbiilty_label.Name = "poke6_HgeAbiilty_label";
+            poke6_HgeAbiilty_label.Size = new Size(10, 15);
+            poke6_HgeAbiilty_label.TabIndex = 164;
+            poke6_HgeAbiilty_label.Text = "i";
             // 
             // label130
             // 
@@ -4794,16 +4811,16 @@ namespace Main
             label130.TabIndex = 163;
             label130.Text = "Ball";
             // 
-            // comboBox75
+            // poke6_Ball_comboBox
             // 
-            comboBox75.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            comboBox75.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBox75.Font = new Font("Segoe UI", 8F);
-            comboBox75.FormattingEnabled = true;
-            comboBox75.Location = new Point(69, 42);
-            comboBox75.Name = "comboBox75";
-            comboBox75.Size = new Size(89, 21);
-            comboBox75.TabIndex = 162;
+            poke6_Ball_comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            poke6_Ball_comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+            poke6_Ball_comboBox.Font = new Font("Segoe UI", 8F);
+            poke6_Ball_comboBox.FormattingEnabled = true;
+            poke6_Ball_comboBox.Location = new Point(69, 42);
+            poke6_Ball_comboBox.Name = "poke6_Ball_comboBox";
+            poke6_Ball_comboBox.Size = new Size(89, 21);
+            poke6_Ball_comboBox.TabIndex = 162;
             // 
             // label131
             // 
@@ -4826,18 +4843,19 @@ namespace Main
             poke6_Ability_Hge_comboBox.Size = new Size(89, 21);
             poke6_Ability_Hge_comboBox.TabIndex = 160;
             // 
-            // checkedListBox6
+            // poke6_AdditionalFlags_checkBoxList
             // 
-            checkedListBox6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkedListBox6.CheckOnClick = true;
-            checkedListBox6.Font = new Font("Segoe UI", 8F);
-            checkedListBox6.FormattingEnabled = true;
-            checkedListBox6.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
-            checkedListBox6.Location = new Point(6, 87);
-            checkedListBox6.MultiColumn = true;
-            checkedListBox6.Name = "checkedListBox6";
-            checkedListBox6.Size = new Size(296, 89);
-            checkedListBox6.TabIndex = 158;
+            poke6_AdditionalFlags_checkBoxList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            poke6_AdditionalFlags_checkBoxList.CheckOnClick = true;
+            poke6_AdditionalFlags_checkBoxList.Font = new Font("Segoe UI", 8F);
+            poke6_AdditionalFlags_checkBoxList.FormattingEnabled = true;
+            poke6_AdditionalFlags_checkBoxList.Items.AddRange(new object[] { "Choose Status", "Choose HP", "Choose ATK", "Choose DEF", "Choose SPEED", "Choose SpATK", "Choose SpDEF", "Choose Types", "Set Move PP", "Choose Nickname" });
+            poke6_AdditionalFlags_checkBoxList.Location = new Point(6, 87);
+            poke6_AdditionalFlags_checkBoxList.MultiColumn = true;
+            poke6_AdditionalFlags_checkBoxList.Name = "poke6_AdditionalFlags_checkBoxList";
+            poke6_AdditionalFlags_checkBoxList.Size = new Size(296, 89);
+            poke6_AdditionalFlags_checkBoxList.TabIndex = 158;
+            poke6_AdditionalFlags_checkBoxList.ItemCheck += trainer_AdditionalFlags_ItemCheck;
             // 
             // poke6Moves_groupBox
             // 
@@ -7587,45 +7605,45 @@ namespace Main
         private ComboBox poke1_Ability_Hge_comboBox;
         private Label label11;
         private ComboBox poke1_Nature_comboBox;
-        private Label poke1_hgeAbility_info;
+        private Label poke1_HgeAbiilty_label;
         private Label label9;
         private ComboBox poke1_Ball_comboBox;
         private Label label6;
         private Label label12;
-        private ComboBox poke1_status_comboBox;
+        private ComboBox poke1_Status_comboBox;
         private Label label15;
         private TextBox poke1_Nickname_textBox;
         private Label label14;
-        private ComboBox comboBox6;
+        private ComboBox poke1_Type2_ComboBox;
         private Label label13;
         private ComboBox poke1_Type1_ComboBox;
         private Label poke1_hgeFlags_info;
         private Label label16;
         private CheckBox poke1_Shiny_checkBox;
-        private Button poke1_EditStats_button;
+        private Button poke1_EditStats_btn;
         private Button poke1_EditIv_button;
         private GroupBox poke2HgEngine_groupBox;
-        private CheckBox checkBox1;
-        private Button button3;
+        private CheckBox poke2_Shiny_checkBox;
+        private Button poke2_EditStats_btn;
         private Label label18;
-        private Button button4;
+        private Button poke2_EditIv_button;
         private Label label19;
         private Label label20;
-        private TextBox textBox2;
+        private TextBox poke2_Nickname_textBox;
         private Label label21;
-        private ComboBox comboBox7;
+        private ComboBox poke2_Type2_ComboBox;
         private Label label22;
-        private ComboBox comboBox8;
+        private ComboBox poke2_Type1_ComboBox;
         private Label label23;
-        private ComboBox comboBox9;
+        private ComboBox poke2_Status_comboBox;
         private Label label24;
         private ComboBox poke2_Nature_comboBox;
-        private Label label25;
+        private Label poke2_HgeAbiilty_label;
         private Label label26;
-        private ComboBox comboBox11;
+        private ComboBox poke2_Ball_comboBox;
         private Label label27;
         private ComboBox poke2_Ability_Hge_comboBox;
-        private CheckedListBox checkedListBox2;
+        private CheckedListBox poke2_AdditionalFlags_checkBoxList;
         private GroupBox poke2Moves_groupBox;
         private NumericUpDown poke2_Move4_PP_num;
         private Label label28;
@@ -7658,27 +7676,27 @@ namespace Main
         private Label label37;
         private ComboBox poke2FormComboBox;
         private GroupBox poke3HgEngine_groupBox;
-        private CheckBox checkBox2;
-        private Button button5;
+        private CheckBox poke3_Shiny_checkBox;
+        private Button poke3_EditStats_btn;
         private Label label38;
-        private Button button6;
+        private Button poke3_EditIv_button;
         private Label label39;
         private Label label40;
-        private TextBox textBox3;
+        private TextBox poke3_Nickname_textBox;
         private Label label41;
-        private ComboBox comboBox23;
+        private ComboBox poke3_Type2_ComboBox;
         private Label label42;
-        private ComboBox comboBox24;
+        private ComboBox poke3_Type1_ComboBox;
         private Label label43;
-        private ComboBox comboBox25;
+        private ComboBox poke3_Status_comboBox;
         private Label label44;
         private ComboBox poke3_Nature_comboBox;
-        private Label label45;
+        private Label poke3_HgeAbiilty_label;
         private Label label46;
-        private ComboBox comboBox27;
+        private ComboBox poke3_Ball_comboBox;
         private Label label47;
         private ComboBox poke3_Ability_Hge_comboBox;
-        private CheckedListBox checkedListBox3;
+        private CheckedListBox poke3_AdditionalFlags_checkBoxList;
         private GroupBox poke3Moves_groupBox;
         private NumericUpDown poke3_Move4_PP_num;
         private Label label48;
@@ -7711,27 +7729,27 @@ namespace Main
         private Label label81;
         private ComboBox poke3FormComboBox;
         private GroupBox poke4HgEngine_groupBox;
-        private CheckBox checkBox3;
-        private Button button7;
+        private CheckBox poke4_Shiny_checkBox;
+        private Button poke4_EditStats_btn;
         private Label label82;
-        private Button button8;
+        private Button poke4_EditIv_button;
         private Label label83;
         private Label label84;
-        private TextBox textBox4;
+        private TextBox poke4_Nickname_textBox;
         private Label label85;
-        private ComboBox comboBox39;
+        private ComboBox poke4_Type2_ComboBox;
         private Label label86;
-        private ComboBox comboBox40;
+        private ComboBox poke4_Type1_ComboBox;
         private Label label87;
-        private ComboBox comboBox41;
+        private ComboBox poke4_Status_comboBox;
         private Label label88;
         private ComboBox poke4_Nature_comboBox;
-        private Label label89;
+        private Label poke4_HgeAbiilty_label;
         private Label label90;
-        private ComboBox comboBox43;
+        private ComboBox poke4_Ball_comboBox;
         private Label label91;
         private ComboBox poke4_Ability_Hge_comboBox;
-        private CheckedListBox checkedListBox4;
+        private CheckedListBox poke4_AdditionalFlags_checkBoxList;
         private GroupBox poke4Moves_groupBox;
         private NumericUpDown poke4_Move4_PP_num;
         private Label label92;
@@ -7764,27 +7782,27 @@ namespace Main
         private Label label101;
         private ComboBox poke4FormComboBox;
         private GroupBox poke5HgEngine_groupBox;
-        private CheckBox checkBox4;
-        private Button button9;
+        private CheckBox poke5_Shiny_checkBox;
+        private Button poke5_EditStats_btn;
         private Label label102;
-        private Button button10;
+        private Button poke5_EditIv_button;
         private Label label103;
         private Label label104;
-        private TextBox textBox5;
+        private TextBox poke5_Nickname_textBox;
         private Label label105;
-        private ComboBox comboBox55;
+        private ComboBox poke5_Type2_ComboBox;
         private Label label106;
-        private ComboBox comboBox56;
+        private ComboBox poke5_Type1_ComboBox;
         private Label label107;
-        private ComboBox comboBox57;
+        private ComboBox poke5_Status_comboBox;
         private Label label108;
         private ComboBox poke5_Nature_comboBox;
-        private Label label109;
+        private Label poke5_HgeAbiilty_label;
         private Label label110;
-        private ComboBox comboBox59;
+        private ComboBox poke5_Ball_comboBox;
         private Label label111;
         private ComboBox poke5_Ability_Hge_comboBox;
-        private CheckedListBox checkedListBox5;
+        private CheckedListBox poke5_AdditionalFlags_checkBoxList;
         private GroupBox poke5Moves_groupBox;
         private NumericUpDown poke5_Move4_PP_num;
         private Label label112;
@@ -7817,27 +7835,27 @@ namespace Main
         private Label label121;
         private ComboBox poke5FormComboBox;
         private GroupBox poke6HgEngine_groupBox;
-        private CheckBox checkBox5;
-        private Button button11;
+        private CheckBox poke6_Shiny_checkBox;
+        private Button poke6_EditStats_btn;
         private Label label122;
-        private Button button12;
+        private Button poke6_EditIv_button;
         private Label label123;
         private Label label124;
-        private TextBox textBox6;
+        private TextBox poke6_Nickname_textBox;
         private Label label125;
-        private ComboBox comboBox71;
+        private ComboBox poke6_Type2_ComboBox;
         private Label label126;
-        private ComboBox comboBox72;
+        private ComboBox poke6_Type1_ComboBox;
         private Label label127;
-        private ComboBox comboBox73;
+        private ComboBox poke6_Status_comboBox;
         private Label label128;
         private ComboBox poke6_Nature_comboBox;
-        private Label label129;
+        private Label poke6_HgeAbiilty_label;
         private Label label130;
-        private ComboBox comboBox75;
+        private ComboBox poke6_Ball_comboBox;
         private Label label131;
         private ComboBox poke6_Ability_Hge_comboBox;
-        private CheckedListBox checkedListBox6;
+        private CheckedListBox poke6_AdditionalFlags_checkBoxList;
         private GroupBox poke6Moves_groupBox;
         private NumericUpDown poke6_Move4_PP_num;
         private Label label132;

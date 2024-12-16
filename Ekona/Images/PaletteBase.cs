@@ -136,8 +136,8 @@ namespace Ekona.Images
             List<Color> colors = new List<Color>();
             colors.AddRange(Actions.BGR555ToColor(data));
 
-            int num_colors = (depth == ColorFormat.colors16 ? 0x10 : 0x100);
-            bool isExact = (colors.Count % num_colors == 0 ? true : false);
+            int num_colors = depth == ColorFormat.colors16 ? 0x10 : 0x100;
+            bool isExact = colors.Count % num_colors == 0 ? true : false;
             palette = new Color[(colors.Count / num_colors) + (isExact ? 0 : 1)][];
             for (int i = 0; i < palette.Length; i++)
             {
@@ -158,7 +158,7 @@ namespace Ekona.Images
 
             loaded = true;
 
-            if (depth == ColorFormat.colors16 && (palette.Length == 1 && palette[0].Length > 0x10))
+            if (depth == ColorFormat.colors16 && palette.Length == 1 && palette[0].Length > 0x10)
             {
                 Color[][] newColors = new Color[palette[0].Length / 0x10][];
                 for (int i = 0; i < newColors.Length; i++)
@@ -188,7 +188,7 @@ namespace Ekona.Images
 
             loaded = true;
 
-            if (depth == ColorFormat.colors16 && (palette.Length == 1 && palette[0].Length > 0x10))
+            if (depth == ColorFormat.colors16 && palette.Length == 1 && palette[0].Length > 0x10)
             {
                 Color[][] newColors = new Color[palette[0].Length / 0x10][];
                 for (int i = 0; i < newColors.Length; i++)
@@ -239,7 +239,7 @@ namespace Ekona.Images
 
             loaded = true;
 
-            if (depth == ColorFormat.colors16 && (palette.Length == 1 && palette[0].Length > 0x10))
+            if (depth == ColorFormat.colors16 && palette.Length == 1 && palette[0].Length > 0x10)
             {
                 Color[][] newColors = new Color[palette[0].Length / 0x10][];
                 for (int i = 0; i < newColors.Length; i++)

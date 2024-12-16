@@ -252,7 +252,7 @@ namespace Ekona.Images.Dialogs
                 return;
 
             picBox.Image = sprite.Get_Image(image, palette, bank, 512, 256, checkGrid.Checked, checkOAM.Checked,
-                checkNumbers.Checked, checkTrans.Checked, checkImage.Checked, (checkCurrOAM.Checked ? (int)numOAM.Value : -1));
+                checkNumbers.Checked, checkTrans.Checked, checkImage.Checked, checkCurrOAM.Checked ? (int)numOAM.Value : -1);
             stop = false;
         }
 

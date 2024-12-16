@@ -94,7 +94,7 @@ namespace Images
             bw.Write(ncgr.rahc.size_section);
             bw.Write(ncgr.rahc.nTilesY);
             bw.Write(ncgr.rahc.nTilesX);
-            bw.Write((uint)(ncgr.rahc.depth));
+            bw.Write((uint)ncgr.rahc.depth);
             bw.Write(ncgr.rahc.unknown1);
             bw.Write(ncgr.rahc.unknown2);
             bw.Write(ncgr.rahc.tiledFlag);

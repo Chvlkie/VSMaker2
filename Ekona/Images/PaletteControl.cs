@@ -68,7 +68,7 @@ namespace Ekona.Images
             numericPalette.Maximum = palette.NumberOfPalettes - 1;
             label3.Text = translation[0] + (palette.NumberOfPalettes - 1).ToString();
             numericStartByte.Maximum = palette.Original.Length - 1;
-            comboDepth.SelectedIndex = (palette.Depth == ColorFormat.colors16 ? 0 : 1);
+            comboDepth.SelectedIndex = palette.Depth == ColorFormat.colors16 ? 0 : 1;
 
             if (palette.Depth == ColorFormat.colors16)
                 numFillColors.Value = 16;
@@ -123,7 +123,7 @@ namespace Ekona.Images
 
         private void comboDepth_SelectedIndexChanged(object sender, EventArgs e)
         {
-            palette.Depth = (comboDepth.SelectedIndex == 0 ? ColorFormat.colors16 : ColorFormat.colors256);
+            palette.Depth = comboDepth.SelectedIndex == 0 ? ColorFormat.colors16 : ColorFormat.colors256;
             picPalette.Image = palette.Get_Image((int)numericPalette.Value);
 
             numericPalette.Value = 0;

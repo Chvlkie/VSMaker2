@@ -203,11 +203,11 @@ namespace Ekona.Images
 
             if (isMap)
             {
-                btnImport.Enabled = (map.CanEdit && image.CanEdit && palette.CanEdit ? true : false);
+                btnImport.Enabled = map.CanEdit && image.CanEdit && palette.CanEdit ? true : false;
                 this.comboBox1.Enabled = false;
 
-                this.numericWidth.Value = (map.Width != 0 ? map.Width : image.Width);
-                this.numericHeight.Value = (map.Height != 0 ? map.Height : image.Height);
+                this.numericWidth.Value = map.Width != 0 ? map.Width : image.Width;
+                this.numericHeight.Value = map.Height != 0 ? map.Height : image.Height;
 
                 comboBox1.SelectedIndex = 1;
                 numericHeight.Minimum = image.TileSize;
@@ -217,7 +217,7 @@ namespace Ekona.Images
             }
             else
             {
-                btnImport.Enabled = (image.CanEdit && palette.CanEdit ? true : false);
+                btnImport.Enabled = image.CanEdit && palette.CanEdit ? true : false;
 
                 this.numericWidth.Value = image.Width;
                 this.numericHeight.Value = image.Height;
@@ -515,7 +515,7 @@ namespace Ekona.Images
                 map.Set_Map(Actions.Create_Map(ref tiles, image.BPP, image.TileSize, (byte)numPal.Value), map.CanEdit, bitmap.Width, bitmap.Height);
             else if (isMap)
             {
-                int num_tiles = (tiles.Length * 8 / image.BPP) / (image.TileSize * image.TileSize);
+                int num_tiles = tiles.Length * 8 / image.BPP / (image.TileSize * image.TileSize);
                 map.Set_Map(Actions.Create_BasicMap(num_tiles, 0, (byte)numPal.Value), map.CanEdit);
             }
 

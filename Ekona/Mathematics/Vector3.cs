@@ -279,11 +279,11 @@ namespace Ekona.Mathematics
         /// <param name="u">Vector</param>
         /// <param name="tolerance">Tolerance (possible deviation)</param>
         /// <returns>True if the vector equivalent, otherwise false</returns>
-        public static bool ApproxEqual(Vector3 v, Vector3 u, double tolerance) => (
+        public static bool ApproxEqual(Vector3 v, Vector3 u, double tolerance) => 
                 (Math.Abs(v.X - u.X) <= tolerance) &&
                 (Math.Abs(v.Y - u.Y) <= tolerance) &&
                 (Math.Abs(v.Z - u.Z) <= tolerance)
-                );
+                ;
 
         /// <summary>
         /// Normalizing the vector
@@ -503,7 +503,7 @@ namespace Ekona.Mathematics
         /// Get the length squared of the vector
         /// </summary>
         /// <returns>The length squared (X*X + Y*Y + Z*Z)</returns>
-        public double LengthSquared() => (x * x + y * y + z * z);
+        public double LengthSquared() => x * x + y * y + z * z;
 
         /// <summary>
         /// Clamp the values of the vector at the origin using the given tolerance
@@ -584,7 +584,7 @@ namespace Ekona.Mathematics
         /// <param name="vector">The vector for comparison</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>True if an equivalent object, false otherwise</returns>
-        public bool Equals(Vector3 vector, double tolerance) => ((Math.Abs(x - vector.X) < tolerance) && (Math.Abs(y - vector.Y) < tolerance) && (Math.Abs(z - vector.Z) < tolerance));
+        public bool Equals(Vector3 vector, double tolerance) => (Math.Abs(x - vector.X) < tolerance) && (Math.Abs(y - vector.Y) < tolerance) && (Math.Abs(z - vector.Z) < tolerance);
 
         /// <summary>
         /// The string representation of a object
@@ -620,34 +620,34 @@ namespace Ekona.Mathematics
 
         public static bool operator >(Vector3 u, Vector3 v)
         {
-            return (
+            return 
                 (u.x > v.x) &&
                 (u.y > v.y) &&
-                (u.z > v.z));
+                (u.z > v.z);
         }
 
         public static bool operator <(Vector3 u, Vector3 v)
         {
-            return (
+            return 
                 (u.x < v.x) &&
                 (u.y < v.y) &&
-                (u.z < v.z));
+                (u.z < v.z);
         }
 
         public static bool operator >=(Vector3 u, Vector3 v)
         {
-            return (
+            return 
                 (u.x >= v.x) &&
                 (u.y >= v.y) &&
-                (u.z >= v.z));
+                (u.z >= v.z);
         }
 
         public static bool operator <=(Vector3 u, Vector3 v)
         {
-            return (
+            return 
                 (u.x <= v.x) &&
                 (u.y <= v.y) &&
-                (u.z <= v.z));
+                (u.z <= v.z);
         }
 
         #endregion Comparison operators

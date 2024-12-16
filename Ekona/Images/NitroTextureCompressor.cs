@@ -260,13 +260,13 @@ namespace Ekona.Images
                     {
                         dxtBoundColors[0] = uniqueColors[0];
                         dxtBoundColors[1] = CalcSecondBoundColor(uniqueColors[2], uniqueColors[1]);
-                        hasAlpha = (dxtBoundColors[1] == uniqueColors[2]);
+                        hasAlpha = dxtBoundColors[1] == uniqueColors[2];
                     }
                     else
                     {
                         dxtBoundColors[0] = CalcSecondBoundColor(uniqueColors[0], uniqueColors[1]);
                         dxtBoundColors[1] = uniqueColors[2];
-                        hasAlpha = (dxtBoundColors[0] == uniqueColors[0]);
+                        hasAlpha = dxtBoundColors[0] == uniqueColors[0];
                     }
                 }
                 else if (!hasAlpha)
@@ -769,7 +769,7 @@ namespace Ekona.Images
                     {
                         for (int i = 0; i < 4; i++)
                         {
-                            uint pixelIndex = (uint)((y + i) * width + (x + j));
+                            uint pixelIndex = (uint)((y + i) * width + x + j);
                             int pixelBlockIndex = i * 4 + j;
                             block[pixelBlockIndex] = Color.FromArgb(
                                 bgra[4 * pixelIndex + 3],

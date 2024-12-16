@@ -25,6 +25,8 @@ namespace Main
 
         private LoadingData loadingData;
         private RomPatches romPatches;
+        private HgeIvEvForm hgeIvEvForm;
+        private EditStatsForm editStatsForm;
 
         #endregion Forms
 
@@ -215,6 +217,7 @@ namespace Main
 
                 mainEditorModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
                 ReportProgress();
+                mainEditorModel.PokeBallNames = mainEditorModel.ItemNames.Where(x => x.EndsWith(" Ball") && !x.Contains("Light") && !x.Contains("Smoke") && !x.Contains("Iron")).ToList();
 
                 mainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                 ReportProgress();
@@ -699,7 +702,7 @@ namespace Main
                     Console.WriteLine("ROM version is unsupported.");
                     return false;
                 }
-              
+
                 romFileMethods.SetNarcDirectories(workingDirectory, RomFile.GameVersion, RomFile.GameFamily, RomFile.GameLanguage);
 
                 Console.WriteLine("Reading ROM File | Success");
@@ -1083,14 +1086,6 @@ namespace Main
             }
         }
 
-        private void trainer_PropertyFlags_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            if (!isLoadingData)
-            {
-                EditedTrainerProperty(true);
-
-                BeginInvoke(new Action(() => EnableDisableParty()));
-            }
-        }
+       
     }
 }

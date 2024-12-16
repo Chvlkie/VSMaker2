@@ -101,6 +101,9 @@
 		<Compile Update="Editors\ClassEditor.cs">
 		  <SubType>Form</SubType>
 		</Compile>
+		<Compile Update="Forms\EditStatsForm.cs">
+		  <SubType>Form</SubType>
+		</Compile>
 		<Compile Update="Properties\Resources.Designer.cs">
 			<DesignTime>True</DesignTime>
 			<AutoGen>True</AutoGen>

@@ -60,7 +60,7 @@ namespace Images
             br.Close();
 
             Set_Tiles(tiles, (int)nccg.charS.width * 8, (int)nccg.charS.height * 8,
-                (nccg.charS.depth == 0 ? ColorFormat.colors16 : ColorFormat.colors256),
+                nccg.charS.depth == 0 ? ColorFormat.colors16 : ColorFormat.colors256,
                 TileForm.Horizontal, false);
         }
 

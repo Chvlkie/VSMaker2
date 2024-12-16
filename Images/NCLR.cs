@@ -89,7 +89,7 @@ namespace Images
 
             bw.Write(nclr.pltt.ID);
             bw.Write(nclr.pltt.length);
-            bw.Write((ushort)(nclr.pltt.depth));
+            bw.Write((ushort)nclr.pltt.depth);
             bw.Write(nclr.pltt.unknown1);
             bw.Write(nclr.pltt.unknown2);
             bw.Write(nclr.pltt.pal_length);

@@ -392,7 +392,7 @@ namespace Images
             ncer.cebk.nBanks = (ushort)Banks.Length;
             ncer.cebk.section_size = 0x20 + size;
             if (ncer.cebk.section_size % 4 != 0)
-                ncer.cebk.section_size += (4 - (ncer.cebk.section_size % 4));
+                ncer.cebk.section_size += 4 - (ncer.cebk.section_size % 4);
 
             // Update partition data info
             if (ncer.cebk.partition_data_offset != 0)

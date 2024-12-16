@@ -509,7 +509,7 @@ namespace VsMaker2Core.Methods
                         byte tableSize = reader1.ReadByte();
 
                         reader1.BaseStream.Position = RomFile.PrizeMoneyPointerOffset;
-                        uint tableOffset = (reader1.ReadUInt32() - RomFile.HgEngineOverlayLoadAddress);
+                        uint tableOffset = reader1.ReadUInt32() - RomFile.HgEngineOverlayLoadAddress;
 
                         filePath = Overlay.OverlayFilePath(RomFile.HgEngineOverlay);
 
