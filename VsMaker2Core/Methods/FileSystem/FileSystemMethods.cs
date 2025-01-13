@@ -717,7 +717,8 @@ namespace VsMaker2Core.Methods
                                 bool chooseNickname = (pokemon.AdditionalFlags_Hge & 0x200) != 0;
                                 if (chooseStatus)
                                 {
-                                    writer.Write(pokemon.Status_Hge.Value);
+                                    writer.Write(0x1);
+                            //        writer.Write(pokemon.Status_Hge.Value);
                                 }
                                 if (chooseHP)
                                 {
@@ -795,7 +796,9 @@ namespace VsMaker2Core.Methods
             }
             catch (Exception ex)
             {
+                throw; 
                 return (false, $"An error occurred: {ex.Message}");
+                
             }
         }
 

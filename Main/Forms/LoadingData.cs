@@ -5,7 +5,7 @@ namespace Main.Forms
     public partial class LoadingData : Form
     {
         private LoadType loadType;
-        private Mainform mainForm;
+        private MainForm mainForm;
         private string FilePath;
 
         public LoadingData()
@@ -13,7 +13,7 @@ namespace Main.Forms
             InitializeComponent();
         }
 
-        public LoadingData(Mainform mainForm, LoadType loadType)
+        public LoadingData(MainForm mainForm, LoadType loadType)
         {
             this.mainForm = mainForm;
             this.loadType = loadType;
@@ -21,7 +21,7 @@ namespace Main.Forms
             LoadData();
         }
 
-        public LoadingData(Mainform mainForm, LoadType loadType, string filePath)
+        public LoadingData(MainForm mainForm, LoadType loadType, string filePath)
         {
             this.mainForm = mainForm;
             this.loadType = loadType;

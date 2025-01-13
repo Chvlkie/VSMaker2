@@ -123,7 +123,7 @@ namespace VsMaker2Core.Methods
             var trainersPartyData = RomFile.TrainersPartyData;
             bool isNotDiamondPearl = RomFile.IsNotDiamondPearl;
 
-            for (int i = 0; i < RomFile.TrainerNames.Count; i++)
+            for (int i = 0; i < trainersData.Count; i++)
             {
                 var trainerData = trainersData[i];
                 var trainerPartyData = trainersPartyData[i];

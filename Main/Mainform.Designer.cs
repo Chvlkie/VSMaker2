@@ -1,7 +1,7 @@
 ﻿
 namespace Main
 {
-    partial class Mainform
+    partial class MainForm
     {
         private ToolStripButton battleMessage_InsertE_Btn;
 
@@ -555,7 +555,7 @@ namespace Main
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Mainform));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             mainMenu = new MenuStrip();
             menu_File = new ToolStripMenuItem();
             menu_File_OpenRom = new ToolStripMenuItem();

@@ -14,7 +14,7 @@ using static VsMaker2Core.Enums;
 
 namespace Main
 {
-    public partial class Mainform : Form
+    public partial class MainForm : Form
     {
         private const int debounceDelay = 300;
         private readonly System.Windows.Forms.Timer filterTimer;
@@ -46,10 +46,10 @@ namespace Main
         private bool inhibitTabChange;
         private bool isLoadingData;
         private bool loadingError;
-        private MainEditorModel mainEditorModel;
+        private MainDataModel mainDataModel;
         private bool romLoaded;
 
-        public Mainform()
+        public MainForm()
         {
             InitializeComponent();
             filterTimer = new System.Windows.Forms.Timer
@@ -61,7 +61,7 @@ namespace Main
             startupTab.Appearance = TabAppearance.FlatButtons; startupTab.ItemSize = new Size(0, 1); startupTab.SizeMode = TabSizeMode.Fixed;
             romLoaded = false;
             romName_Label.Text = "";
-            mainEditorModel = new();
+            mainDataModel = new();
 
             Text = $"VS Maker 2 - v{appVersion}";
         }
@@ -187,39 +187,39 @@ namespace Main
                     progress?.Report(progressCount);
                 }
 
-                mainEditorModel.PokemonSpecies = romFileMethods.GetSpecies();
+                mainDataModel.PokemonSpecies = romFileMethods.GetSpecies();
                 ReportProgress();
 
-                mainEditorModel.TrainerNames = new(RomFile.TrainerNames);
+                mainDataModel.TrainerNames = new(RomFile.TrainerNames);
                 ReportProgress();
 
-                mainEditorModel.ClassNames = romFileMethods.GetClassNames(RomFile.ClassNamesTextNumber);
+                mainDataModel.ClassNames = romFileMethods.GetClassNames(RomFile.ClassNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.ClassDescriptions = romFileMethods.GetClassDescriptions(RomFile.ClassDescriptionMessageNumber);
+                mainDataModel.ClassDescriptions = romFileMethods.GetClassDescriptions(RomFile.ClassDescriptionMessageNumber);
                 ReportProgress();
 
-                mainEditorModel.Trainers = trainerEditorMethods.GetTrainers();
+                mainDataModel.Trainers = trainerEditorMethods.GetTrainers();
                 ReportProgress();
 
-                mainEditorModel.Classes = classEditorMethods.GetTrainerClasses(mainEditorModel.Trainers, mainEditorModel.ClassNames, mainEditorModel.ClassDescriptions);
+                mainDataModel.Classes = classEditorMethods.GetTrainerClasses(mainDataModel.Trainers, mainDataModel.ClassNames, mainDataModel.ClassDescriptions);
                 ReportProgress();
 
-                mainEditorModel.PokemonNamesFull = romFileMethods.GetPokemonNames(RomFile.PokemonNamesTextNumber);
-                mainEditorModel.PokemonNames = MainEditorModel.SetPokemonNames(mainEditorModel.PokemonNamesFull);
+                mainDataModel.PokemonNamesFull = romFileMethods.GetPokemonNames(RomFile.PokemonNamesTextNumber);
+                mainDataModel.PokemonNames = MainDataModel.SetPokemonNames(mainDataModel.PokemonNamesFull);
                 ReportProgress();
 
-                mainEditorModel.MoveNames = romFileMethods.GetMoveNames(RomFile.MoveNameTextNumber);
+                mainDataModel.MoveNames = romFileMethods.GetMoveNames(RomFile.MoveNameTextNumber);
                 ReportProgress();
 
-                mainEditorModel.AbilityNames = romFileMethods.GetAbilityNames(RomFile.AbilityNamesTextNumber);
+                mainDataModel.AbilityNames = romFileMethods.GetAbilityNames(RomFile.AbilityNamesTextNumber);
                 ReportProgress();
 
-                mainEditorModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
+                mainDataModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
                 ReportProgress();
-                mainEditorModel.PokeBallNames = mainEditorModel.ItemNames.Where(x => x.EndsWith(" Ball") && !x.Contains("Light") && !x.Contains("Smoke") && !x.Contains("Iron")).ToList();
+                mainDataModel.PokeBallNames = mainDataModel.ItemNames.Where(x => x.EndsWith(" Ball") && !x.Contains("Light") && !x.Contains("Smoke") && !x.Contains("Iron")).ToList();
 
-                mainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                mainDataModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                 ReportProgress();
 
                 progress?.Report(100);
@@ -365,11 +365,11 @@ namespace Main
             RomFile.Reset();
             romLoaded = false;
             startupTab.SelectedTab = startupPage;
-            mainEditorModel = new();
+            mainDataModel = new();
             ClearTrainerEditorData();
             class_ClassListBox.SelectedIndex = -1;
             class_ClassListBox.Items.Clear();
-            mainEditorModel.SelectedTrainerClass = new();
+            mainDataModel.SelectedTrainerClass = new();
             EnableDisableMenu(false);
             ClearUnsavedChanges();
             isLoadingData = false;
@@ -485,7 +485,7 @@ namespace Main
             OpenLoadingDialog(LoadType.ExportTextTable, exportFile.FileName);
         }
 
-        private string GetPokemonNameById(int pokemonId) => mainEditorModel.PokemonNamesFull[pokemonId];
+        private string GetPokemonNameById(int pokemonId) => mainDataModel.PokemonNamesFull[pokemonId];
 
         private static void HandleArm9Compression(IProgress<int> progress)
         {
@@ -986,7 +986,7 @@ namespace Main
         {
             //if (!IsLoadingData)
             //{
-            //    var trainers = MainEditorModel.Trainers;
+            //    var trainers = MainDataModel.Trainers;
             //    var gameFamily = RomFile.GameFamily;
             //    const int classesCount = 100;
             //    const int battleMessagesCount = 200;

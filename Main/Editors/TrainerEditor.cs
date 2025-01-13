@@ -1,5 +1,4 @@
 ﻿using Main.Forms;
-using Main.Models;
 using VsMaker2Core;
 using VsMaker2Core.DataModels;
 using VsMaker2Core.RomFiles;
@@ -8,7 +7,7 @@ using static VsMaker2Core.Enums;
 namespace Main
 {
     // TRAINER EDITOR
-    public partial class Mainform : Form
+    public partial class MainForm : Form
     {
         public ComboBox[] poke1Moves = new ComboBox[4];
         public ComboBox[] poke2Moves = new ComboBox[4];
@@ -19,33 +18,33 @@ namespace Main
 
         #region HG Engine Only
 
-        public ushort[] poke1Evs = new ushort[6];
-        public ushort[] poke1Ivs = new ushort[6];
+        public byte[] poke1Evs = new byte[6];
+        public byte[] poke1Ivs = new byte[6];
         public NumericUpDown[] poke1PPs = new NumericUpDown[4];
-        public ushort[] poke1StatsArray = new ushort[6];
-        public ushort[] poke2Evs = new ushort[6];
-        public ushort[] poke2Ivs = new ushort[6];
+        public byte[] poke1StatsArray = new byte[6];
+        public byte[] poke2Evs = new byte[6];
+        public byte[] poke2Ivs = new byte[6];
         public NumericUpDown[] poke2PPs = new NumericUpDown[4];
-        public ushort[] poke2StatsArray = new ushort[6];
-        public ushort[] poke3Evs = new ushort[6];
-        public ushort[] poke3Ivs = new ushort[6];
+        public byte[] poke2StatsArray = new byte[6];
+        public byte[] poke3Evs = new byte[6];
+        public byte[] poke3Ivs = new byte[6];
         public NumericUpDown[] poke3PPs = new NumericUpDown[4];
-        public ushort[] poke3StatsArray = new ushort[6];
-        public ushort[] poke4Evs = new ushort[6];
-        public ushort[] poke4Ivs = new ushort[6];
+        public byte[] poke3StatsArray = new byte[6];
+        public byte[] poke4Evs = new byte[6];
+        public byte[] poke4Ivs = new byte[6];
         public NumericUpDown[] poke4PPs = new NumericUpDown[4];
-        public ushort[] poke4StatsArray = new ushort[6];
-        public ushort[] poke5Evs = new ushort[6];
-        public ushort[] poke5Ivs = new ushort[6];
+        public byte[] poke4StatsArray = new byte[6];
+        public byte[] poke5Evs = new byte[6];
+        public byte[] poke5Ivs = new byte[6];
         public NumericUpDown[] poke5PPs = new NumericUpDown[4];
-        public ushort[] poke5StatsArray = new ushort[6];
-        public ushort[] poke6Evs = new ushort[6];
-        public ushort[] poke6Ivs = new ushort[6];
+        public byte[] poke5StatsArray = new byte[6];
+        public byte[] poke6Evs = new byte[6];
+        public byte[] poke6Ivs = new byte[6];
         public NumericUpDown[] poke6PPs = new NumericUpDown[4];
-        public ushort[] poke6StatsArray = new ushort[6];
-        public List<ushort[]> pokeEvs;
-        public List<ushort[]> pokeIvs;
-        public List<ushort[]> pokeStats;
+        public byte[] poke6StatsArray = new byte[6];
+        public List<byte[]> pokeEvs;
+        public List<byte[]> pokeIvs;
+        public List<byte[]> pokeStats;
         private ToolTip hgeAbilityTooltip;
         private List<CheckedListBox> pokeAdditionFlagsLists;
         private List<Button> pokeEditStatsButtons;
@@ -59,6 +58,7 @@ namespace Main
         private List<Button> pokeIvEvButtons;
         private List<ComboBox> pokeNatureComboBoxes;
         private List<TextBox> pokeNicknameTextBoxes;
+
         #endregion HG Engine Only
 
         private bool InhibitTrainerChange = false;
@@ -131,12 +131,12 @@ namespace Main
             trainer_FilterBox.Text = "";
             trainer_TrainersListBox.SelectedIndex = -1;
             int newTrainerId = RomFile.TotalNumberOfTrainers;
-            mainEditorModel.TrainerNames.Add("-");
-            mainEditorModel.Trainers.Add(new Trainer(newTrainerId));
-            UnfilteredTrainers.Add(mainEditorModel.Trainers[newTrainerId].ListName);
+            mainDataModel.TrainerNames.Add("-");
+            mainDataModel.Trainers.Add(new Trainer(newTrainerId));
+            UnfilteredTrainers.Add(mainDataModel.Trainers[newTrainerId].ListName);
 
             // New TrainerProperties
-            fileSystemMethods.WriteTrainerName(mainEditorModel.TrainerNames, newTrainerId, "-", RomFile.TrainerNamesTextNumber);
+            fileSystemMethods.WriteTrainerName(mainDataModel.TrainerNames, newTrainerId, "-", RomFile.TrainerNamesTextNumber);
             fileSystemMethods.WriteTrainerData(new TrainerData(), newTrainerId);
             fileSystemMethods.WriteTrainerPartyData(new TrainerPartyData(), newTrainerId, [false, false, false], RomFile.IsNotDiamondPearl);
 
@@ -148,7 +148,7 @@ namespace Main
             }
 
             RefreshTrainerData();
-            trainer_TrainersListBox.Items.Add(mainEditorModel.Trainers[newTrainerId].ListName);
+            trainer_TrainersListBox.Items.Add(mainDataModel.Trainers[newTrainerId].ListName);
             isLoadingData = false;
             trainer_TrainersListBox.SelectedIndex = newTrainerId;
             EditedTrainerData(true);
@@ -192,7 +192,7 @@ namespace Main
             ClearMovesComboBoxes(pokeMovesComboBoxes);
             ClearPpNumberBoxes(pokePpNumberBoxes);
 
-            mainEditorModel.SelectedTrainer = new Trainer();
+            mainDataModel.SelectedTrainer = new Trainer();
         }
 
         private void ClearUnsavedTrainerChanges()
@@ -430,7 +430,7 @@ namespace Main
             Console.WriteLine("Enable Trainer Editor UI");
             trainer_RemoveBtn.Enabled = true;
             trainer_Copy_Btn.Enabled = true;
-            trainer_Paste_Btn.Enabled = mainEditorModel.ClipboardTrainer != null;
+            trainer_Paste_Btn.Enabled = mainDataModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = true;
             trainer_Export_Btn.Enabled = true;
             trainer_ClassListBox.Enabled = true;
@@ -465,8 +465,6 @@ namespace Main
             pokeStats[index] = editStatsForm.Stats;
             EditedTrainerParty(true);
         }
-
-
 
         private void poke1_EditIv_button_Click(object sender, EventArgs e)
         {
@@ -922,8 +920,9 @@ namespace Main
             ClearComboBoxes(pokeHgeType1ComboBoxes);
             ClearComboBoxes(pokeHgeType2ComboBoxes);
             ClearComboBoxes(pokeNatureComboBoxes);
-            pokeHgeAbilityComboBoxes.ForEach(x => x.Items.AddRange([.. mainEditorModel.AbilityNames]));
-            pokeHgePokeBallComboBoxes.ForEach(x => x.Items.AddRange([.. mainEditorModel.PokeBallNames]));
+            pokeHgeAbilityComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.AbilityNames]));
+            pokeHgePokeBallComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.PokeBallNames]));
+            pokeHgeStatusComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.PokeBallNames]));
             AddToolTipsToLabels();
         }
 
@@ -934,7 +933,7 @@ namespace Main
             if (comboBox.Items.Count == 0)
             {
                 comboBox.BeginUpdate();
-                comboBox.Items.AddRange(mainEditorModel.ItemNames.ToArray());
+                comboBox.Items.AddRange(mainDataModel.ItemNames.ToArray());
                 comboBox.EndUpdate();
             }
         }
@@ -946,7 +945,7 @@ namespace Main
                 for (int i = 0; i < 4; i++)
                 {
                     comboBoxArray[i].Items.Clear();
-                    comboBoxArray[i].Items.AddRange(mainEditorModel.MoveNames.ToArray());
+                    comboBoxArray[i].Items.AddRange(mainDataModel.MoveNames.ToArray());
                 }
             }
         }
@@ -982,7 +981,7 @@ namespace Main
             trainer_MessagePreviewText.Text = "";
             trainer_MessageTextBox.Text = "";
             List<string> messageTriggers = [];
-            foreach (var item in mainEditorModel.BattleMessages.Where(x => x.TrainerId == trainer.TrainerId))
+            foreach (var item in mainDataModel.BattleMessages.Where(x => x.TrainerId == trainer.TrainerId))
             {
                 messageTriggers.Add(MessageTrigger.MessageTriggers.Find(x => x.MessageTriggerId == item.MessageTriggerId).ListName);
             }
@@ -1039,14 +1038,14 @@ namespace Main
 
         private void ReloadTrainersList()
         {
-            mainEditorModel.TrainerNames.Clear();
-            mainEditorModel.Trainers.Clear();
+            mainDataModel.TrainerNames.Clear();
+            mainDataModel.Trainers.Clear();
             UnfilteredTrainers.Clear();
 
             trainer_TrainersListBox.Items.Clear();
-            mainEditorModel.TrainerNames = new List<string>(RomFile.TrainerNames);
-            mainEditorModel.Trainers = trainerEditorMethods.GetTrainers();
-            PopulateTrainerList(mainEditorModel.Trainers);
+            mainDataModel.TrainerNames = new List<string>(RomFile.TrainerNames);
+            mainDataModel.Trainers = trainerEditorMethods.GetTrainers();
+            PopulateTrainerList(mainDataModel.Trainers);
         }
 
         private void ResetPokeComboBoxValidation(int partyIndex)
@@ -1059,7 +1058,7 @@ namespace Main
 
         private bool SaveTrainerMessage(int messageId)
         {
-            var battleMessages = mainEditorModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
+            var battleMessages = mainDataModel.BattleMessages.OrderBy(x => x.MessageId).Select(x => x.MessageText).ToList();
             var saveMessage = fileSystemMethods.WriteBattleMessage(battleMessages, messageId, trainer_MessageTextBox.Text, RomFile.BattleMessageTextNumber);
             if (!saveMessage.Success)
             {
@@ -1067,9 +1066,9 @@ namespace Main
             }
             else
             {
-                int trainerId = mainEditorModel.SelectedTrainer.TrainerId;
+                int trainerId = mainDataModel.SelectedTrainer.TrainerId;
                 int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
-                var message = mainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                var message = mainDataModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
                 if (message != default)
                 {
                     message.MessageText = trainer_MessageTextBox.Text;
@@ -1080,7 +1079,7 @@ namespace Main
 
         private bool SaveTrainerName(int trainerId)
         {
-            var saveTrainerName = fileSystemMethods.WriteTrainerName(mainEditorModel.TrainerNames, trainerId, trainer_NameTextBox.Text, RomFile.TrainerNamesTextNumber);
+            var saveTrainerName = fileSystemMethods.WriteTrainerName(mainDataModel.TrainerNames, trainerId, trainer_NameTextBox.Text, RomFile.TrainerNamesTextNumber);
             if (!saveTrainerName.Success)
             {
                 MessageBox.Show(saveTrainerName.ErrorMessage, "Unable to Save Trainer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1089,17 +1088,100 @@ namespace Main
             {
                 EditedTrainerData(false);
                 trainer_NameTextBox.BackColor = Color.White;
-                mainEditorModel.TrainerNames[trainerId] = trainer_NameTextBox.Text;
-                mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerName = trainer_NameTextBox.Text;
+                mainDataModel.TrainerNames[trainerId] = trainer_NameTextBox.Text;
+                mainDataModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerName = trainer_NameTextBox.Text;
                 var index = trainer_TrainersListBox.FindString(UnfilteredTrainers[trainerId]);
                 if (index > -1)
                 {
-                    trainer_TrainersListBox.Items[index] = mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
+                    trainer_TrainersListBox.Items[index] = mainDataModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
                     trainer_TrainersListBox.SelectedIndex = index;
                 }
-                UnfilteredTrainers[trainerId] = mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
+                UnfilteredTrainers[trainerId] = mainDataModel.Trainers.Single(x => x.TrainerId == trainerId).ListName;
             }
             return saveTrainerName.Success;
+        }
+
+        private TrainerPartyPokemonData SetHgEngineData(int trainerId, int partyIndex, TrainerPartyPokemonData pokemonData)
+        {
+            if (trainer_PropertyFlags.GetItemChecked(3))
+            {
+                pokemonData.Ability_Hge = (ushort)pokeHgeAbilityComboBoxes[partyIndex].SelectedIndex;
+            }
+            if (trainer_PropertyFlags.GetItemChecked(4))
+            {
+                string selectedPokeBall = pokeHgePokeBallComboBoxes[partyIndex].Text;
+                ushort itemId = (ushort)mainDataModel.ItemNames.FindIndex(x => x == selectedPokeBall);
+                pokemonData.Ball_Hge = itemId;
+            }
+            if (trainer_PropertyFlags.GetItemChecked(5))
+            {
+                pokemonData.IvNums_Hge = pokeIvs[partyIndex];
+                pokemonData.EvNums_Hge = pokeEvs[partyIndex];
+            }
+            if (trainer_PropertyFlags.GetItemChecked(6))
+            {
+                pokemonData.Nature_Hge = (byte)pokeNatureComboBoxes[partyIndex].SelectedIndex;
+            }
+            if (trainer_PropertyFlags.GetItemChecked(7))
+            {
+                pokemonData.ShinyLock_Hge = pokeIsShinyCheckBoxes[partyIndex].Checked ? (byte)1 : (byte)0;
+            }
+
+            // ADDITIONAL FLAGS
+            if (trainer_PropertyFlags.GetItemChecked(8))
+            {
+                uint additionalFlag = 0x00;
+
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(0))
+                {
+                    pokemonData.Hp_Hge = pokeStats[partyIndex][0];
+                    additionalFlag |= 0x01;
+                }
+
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(1))
+                {
+                    pokemonData.Atk_Hge = pokeStats[partyIndex][1];
+                    additionalFlag |= 0x02;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(2))
+                {
+                    pokemonData.Def_Hge = pokeStats[partyIndex][2];
+                    additionalFlag |= 0x04;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(3))
+                {
+                    pokemonData.Speed_Hge = pokeStats[partyIndex][3];
+                    additionalFlag |= 0x08;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(4))
+                {
+                    pokemonData.SpAtk_Hge = pokeStats[partyIndex][4];
+                    additionalFlag |= 0x10;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(5))
+                {
+                    pokemonData.SpDef_Hge = pokeStats[partyIndex][5];
+                    additionalFlag |= 0x20;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(6))
+                {
+                    additionalFlag |= 0x40;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(7))
+                {
+                    additionalFlag |= 0x80;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(8))
+                {
+                    additionalFlag |= 0x100;
+                }
+                if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(9))
+                {
+                    additionalFlag |= 0x200;
+                }
+                pokemonData.AdditionalFlags_Hge = additionalFlag;
+            }
+            return pokemonData;
         }
 
         private bool SaveTrainerParty(int trainerId, bool displaySuccess = false)
@@ -1113,8 +1195,8 @@ namespace Main
                 trainerTypeFlags.Add(trainer_PropertyFlags.GetItemChecked(i));
             }
 
-            List<Pokemon> newPokemons = new List<Pokemon>();
-            List<TrainerPartyPokemonData> newPokemonDatas = new List<TrainerPartyPokemonData>();
+            List<Pokemon> newPokemons = [];
+            List<TrainerPartyPokemonData> newPokemonDatas = [];
 
             int teamSize = (int)trainer_TeamSizeNum.Value;
 
@@ -1153,6 +1235,10 @@ namespace Main
                     newPokemon, trainerTypeFlags[1], trainerTypeFlags[2], isNotDiamondPearl
                 );
 
+                if (RomFile.IsHgEngine)
+                {
+                    newPokemonData = SetHgEngineData(trainerId, i, newPokemonData);
+                }
                 newPokemons.Add(newPokemon);
                 newPokemonDatas.Add(newPokemonData);
             }
@@ -1163,19 +1249,19 @@ namespace Main
                 newPokemons.Add(new Pokemon());
             }
 
-            var trainerPartyData = new TrainerPartyData(newPokemonDatas.ToArray());
+            var trainerPartyData = new TrainerPartyData([.. newPokemonDatas]);
 
             var writeFile = fileSystemMethods.WriteTrainerPartyData(
-                trainerPartyData, trainerId, trainerTypeFlags.ToArray(), isNotDiamondPearl
+                trainerPartyData, trainerId, [.. trainerTypeFlags], isNotDiamondPearl
             );
 
             if (writeFile.Success)
             {
                 var trainerParty = new TrainerParty { Pokemons = newPokemons };
-                mainEditorModel.SelectedTrainer.TrainerParty = trainerParty;
-                mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize = (byte)teamSize;
-                mainEditorModel.Trainers[trainerId].TrainerParty = trainerParty;
-                mainEditorModel.Trainers[trainerId].TrainerProperties.TeamSize = (byte)teamSize;
+                mainDataModel.SelectedTrainer.TrainerParty = trainerParty;
+                mainDataModel.SelectedTrainer.TrainerProperties.TeamSize = (byte)teamSize;
+                mainDataModel.Trainers[trainerId].TrainerParty = trainerParty;
+                mainDataModel.Trainers[trainerId].TrainerProperties.TeamSize = (byte)teamSize;
                 RomFile.TrainersPartyData[trainerId] = trainerPartyData;
 
                 EditedTrainerParty(false);
@@ -1224,8 +1310,8 @@ namespace Main
             var writeFile = fileSystemMethods.WriteTrainerData(newTrainerData, trainerId);
             if (writeFile.Success)
             {
-                mainEditorModel.SelectedTrainer.TrainerProperties = trainerProperties;
-                mainEditorModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
+                mainDataModel.SelectedTrainer.TrainerProperties = trainerProperties;
+                mainDataModel.Trainers.Single(x => x.TrainerId == trainerId).TrainerProperties = trainerProperties;
                 RomFile.TrainersData[trainerId] = newTrainerData;
                 EditedTrainerProperty(false);
                 if (displaySucces)
@@ -1398,43 +1484,45 @@ namespace Main
             {
                 pokeComboBoxes[i].BeginUpdate();
                 pokeComboBoxes[i].Items.Clear();
-                pokeComboBoxes[i].Items.AddRange(mainEditorModel.PokemonNames.ToArray());
+                pokeComboBoxes[i].Items.AddRange(mainDataModel.PokemonNames.ToArray());
                 pokeComboBoxes[i].EndUpdate();
 
-                // Use pokemonId as an index into MainEditorModel.PokemonNames
-                int pokemonId = trainerParty.Pokemons[i].PokemonId;
+
+                var currentPokemon = trainerParty.Pokemons[i];
+                // Use pokemonId as an index into MainDataModel.PokemonNames
+                int pokemonId = currentPokemon.PokemonId;
 
                 // Ensure pokemonId is within bounds
-                if (pokemonId >= 0 && pokemonId < mainEditorModel.PokemonNamesFull.Count)
+                if (pokemonId >= 0 && pokemonId < mainDataModel.PokemonNamesFull.Count)
                 {
                     if (pokemonId > 543)
                     {
                         pokemonId -= 50;
                     }
                     // Set the selected item directly to match the Pokémon name
-                    pokeComboBoxes[i].SelectedItem = mainEditorModel.PokemonNames[pokemonId];
+                    pokeComboBoxes[i].SelectedItem = mainDataModel.PokemonNames[pokemonId];
                 }
                 else
                 {
                     // Handle invalid Pokémon ID gracefully
                     pokeComboBoxes[i].SelectedItem = null; // Deselect if ID is out of range
                 }
-                var species = GetSpeciesBySpeciesId(trainerParty.Pokemons[i].SpeciesId);
+                var species = GetSpeciesBySpeciesId(currentPokemon.SpeciesId);
 
                 // Enable filtering and handle events for the ComboBox
                 EnablePokemonComboBoxFiltering(pokeComboBoxes[i], i);
-                pokeLevelNums[i].Value = trainerParty.Pokemons[i].Level;
-                pokeDVNums[i].Value = trainerParty.Pokemons[i].DifficultyValue;
+                pokeLevelNums[i].Value = currentPokemon.Level;
+                pokeDVNums[i].Value = currentPokemon.DifficultyValue;
                 pokeAbilityComboBoxes[i].Items.Clear();
                 pokeFormsComboBoxes[i].Items.Clear();
-                pokeHeldItemComboBoxes[i].SelectedIndex = GetIndex(trainerParty.Pokemons[i].HeldItemId);
-                pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.IsNotDiamondPearl ? GetIndex(trainerParty.Pokemons[i].BallCapsuleId) : -1;
+                pokeHeldItemComboBoxes[i].SelectedIndex = GetIndex(currentPokemon.HeldItemId);
+                pokeBallCapsuleComboBoxes[i].SelectedIndex = RomFile.IsNotDiamondPearl ? GetIndex(currentPokemon.BallCapsuleId) : -1;
 
                 if (chooseMoves)
                 {
                     for (int move = 0; move < 4; move++)
                     {
-                        pokeMovesComboBoxes[i][move].SelectedIndex = trainerParty.Pokemons[i].Moves[move];
+                        pokeMovesComboBoxes[i][move].SelectedIndex = currentPokemon.Moves[move];
                     }
                 }
 
@@ -1449,7 +1537,7 @@ namespace Main
                         case Species.Constants.GenderRatioFemale:
                             pokeGenderComboBoxes[i].SelectedIndex = 2; break;
                         default:
-                            switch (trainerParty.Pokemons[i].GenderOverride)
+                            switch (currentPokemon.GenderOverride)
                             {
                                 case GenderOverride.None:
                                     pokeGenderComboBoxes[i].SelectedIndex = 0; break;
@@ -1464,8 +1552,8 @@ namespace Main
 
                 if (RomFile.IsNotDiamondPearl)
                 {
-                    SetPokemonForms(trainerParty.Pokemons[i].PokemonId, i);
-                    pokeFormsComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].FormId;
+                    SetPokemonForms(currentPokemon.PokemonId, i);
+                    pokeFormsComboBoxes[i].SelectedIndex = currentPokemon.FormId;
                 }
 
                 if (species.Ability1 > 0 && species.Ability2 > 0)
@@ -1473,7 +1561,7 @@ namespace Main
                     pokeAbilityComboBoxes[i].Items.Add("-");
                     pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
                     pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability2));
-                    pokeAbilityComboBoxes[i].SelectedIndex = trainerParty.Pokemons[i].AbilityOverride
+                    pokeAbilityComboBoxes[i].SelectedIndex = currentPokemon.AbilityOverride
                                switch
                     {
                         AbilityOverride.None => 0,
@@ -1487,6 +1575,21 @@ namespace Main
                     pokeAbilityComboBoxes[i].Items.Add(GetAbilityNameByAbilityId(species.Ability1));
                     pokeAbilityComboBoxes[i].SelectedIndex = 0;
                 }
+
+                if (RomFile.IsHgEngine)
+                {
+                    bool additionalFlags = trainer_PropertyFlags.GetItemChecked(8);
+                    pokeAdditionFlagsLists[i].SetItemChecked(0, additionalFlags && currentPokemon.ChooseStatus_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(1, additionalFlags && currentPokemon.ChooseHP_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(2, additionalFlags && currentPokemon.ChooseATK_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(3, additionalFlags && currentPokemon.ChooseDEF_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(4, additionalFlags && currentPokemon.ChooseSPEED_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(5, additionalFlags && currentPokemon.Choose_SpATK_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(6, additionalFlags && currentPokemon.Choose_SpDEF_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(7, additionalFlags && currentPokemon.ChooseTypes_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(8, additionalFlags && currentPokemon.ChoosePP_Hge);
+                    pokeAdditionFlagsLists[i].SetItemChecked(9, additionalFlags && currentPokemon.ChooseNickname_HGE);
+                }
             }
         }
 
@@ -1494,19 +1597,6 @@ namespace Main
         {
             trainer_TeamSizeNum.Minimum = trainerProperties.DoubleBattle ? 2 : 1;
             trainer_TeamSizeNum.Value = trainerProperties.TeamSize == 0 ? 1 : trainerProperties.TeamSize;
-
-            trainer_PropertyFlags.SetItemChecked(0, trainerProperties.DoubleBattle);
-            trainer_PropertyFlags.SetItemChecked(2, trainerProperties.ChooseItems);
-            trainer_PropertyFlags.SetItemChecked(1, trainerProperties.ChooseMoves);
-            if (RomFile.IsHgEngine)
-            {
-                trainer_PropertyFlags.SetItemChecked(3, trainerProperties.ChooseAbility_Hge);
-                trainer_PropertyFlags.SetItemChecked(4, trainerProperties.ChooseBall_Hge);
-                trainer_PropertyFlags.SetItemChecked(5, trainerProperties.SetIvEv_Hge);
-                trainer_PropertyFlags.SetItemChecked(6, trainerProperties.ChooseNature_Hge);
-                trainer_PropertyFlags.SetItemChecked(7, trainerProperties.ShinyLock_Hge);
-                trainer_PropertyFlags.SetItemChecked(8, trainerProperties.AdditionalFlags_Hge);
-            }
         }
 
         private void SetTrainerProperties(TrainerProperty trainerProperties)
@@ -1528,6 +1618,21 @@ namespace Main
                 EditedTrainerParty(true);
                 EditedTrainerProperty(true);
             }
+
+            trainer_PropertyFlags.SetItemChecked(0, trainerProperties.DoubleBattle);
+            trainer_PropertyFlags.SetItemChecked(2, trainerProperties.ChooseItems);
+            trainer_PropertyFlags.SetItemChecked(1, trainerProperties.ChooseMoves);
+            if (RomFile.IsHgEngine)
+            {
+                trainer_PropertyFlags.SetItemChecked(3, trainerProperties.ChooseAbility_Hge);
+                trainer_PropertyFlags.SetItemChecked(4, trainerProperties.ChooseBall_Hge);
+                trainer_PropertyFlags.SetItemChecked(5, trainerProperties.SetIvEv_Hge);
+                trainer_PropertyFlags.SetItemChecked(6, trainerProperties.ChooseNature_Hge);
+                trainer_PropertyFlags.SetItemChecked(7, trainerProperties.ShinyLock_Hge);
+                trainer_PropertyFlags.SetItemChecked(8, trainerProperties.AdditionalFlags_Hge);
+            }
+
+
         }
 
         private void SetupPartyEditorFields()
@@ -1601,12 +1706,12 @@ namespace Main
             if (trainer_TrainersListBox.Items.Count == 0)
             {
                 trainer_TrainersListBox.SelectedIndex = -1;
-                PopulateTrainerList(mainEditorModel.Trainers);
+                PopulateTrainerList(mainDataModel.Trainers);
             }
             if (trainer_ClassListBox.Items.Count == 0)
             {
                 trainer_ClassListBox.SelectedIndex = -1;
-                PopulateTrainerClassList(mainEditorModel.Classes);
+                PopulateTrainerClassList(mainDataModel.Classes);
             }
             if (trainer_AiFlags_listbox.Items.Count == 0)
             {
@@ -1700,9 +1805,9 @@ namespace Main
 
         private void trainer_Copy_Btn_Click(object sender, EventArgs e)
         {
-            mainEditorModel.ClipboardTrainer = new Trainer(mainEditorModel.SelectedTrainer);
-            mainEditorModel.ClipboardTrainerProperties = new TrainerProperty(mainEditorModel.SelectedTrainer.TrainerProperties);
-            mainEditorModel.ClipboardTrainerParty = new TrainerParty(mainEditorModel.SelectedTrainer.TrainerParty);
+            mainDataModel.ClipboardTrainer = new Trainer(mainDataModel.SelectedTrainer);
+            mainDataModel.ClipboardTrainerProperties = new TrainerProperty(mainDataModel.SelectedTrainer.TrainerProperties);
+            mainDataModel.ClipboardTrainerParty = new TrainerParty(mainDataModel.SelectedTrainer.TrainerParty);
             trainer_Paste_Btn.Enabled = true;
             trainer_PastePropeties_btn.Enabled = true;
             trainer_PasteParty_btn.Enabled = true;
@@ -1710,19 +1815,19 @@ namespace Main
 
         private void trainer_CopyParty_btn_Click(object sender, EventArgs e)
         {
-            mainEditorModel.ClipboardTrainerParty = new TrainerParty(mainEditorModel.SelectedTrainer.TrainerParty)
+            mainDataModel.ClipboardTrainerParty = new TrainerParty(mainDataModel.SelectedTrainer.TrainerParty)
             {
-                ChooseItems = mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems,
-                ChooseMoves = mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves,
-                DoubleBattle = mainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle,
-                TeamSize = mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize,
+                ChooseItems = mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems,
+                ChooseMoves = mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves,
+                DoubleBattle = mainDataModel.SelectedTrainer.TrainerProperties.DoubleBattle,
+                TeamSize = mainDataModel.SelectedTrainer.TrainerProperties.TeamSize,
             };
             trainer_PasteParty_btn.Enabled = true;
         }
 
         private void trainer_CopyProperties_btn_Click(object sender, EventArgs e)
         {
-            mainEditorModel.ClipboardTrainerProperties = new TrainerProperty(mainEditorModel.SelectedTrainer.TrainerProperties);
+            mainDataModel.ClipboardTrainerProperties = new TrainerProperty(mainDataModel.SelectedTrainer.TrainerProperties);
             trainer_PastePropeties_btn.Enabled = true;
         }
 
@@ -1732,7 +1837,7 @@ namespace Main
             {
                 if (string.IsNullOrEmpty(trainer_FilterBox.Text))
                 {
-                    PopulateTrainerList(mainEditorModel.Trainers);
+                    PopulateTrainerList(mainDataModel.Trainers);
                     trainer_ClearFilterBtn.Enabled = false;
                 }
                 else
@@ -1797,9 +1902,9 @@ namespace Main
         {
             if (!isLoadingData)
             {
-                int trainerId = mainEditorModel.SelectedTrainer.TrainerId;
+                int trainerId = mainDataModel.SelectedTrainer.TrainerId;
                 int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
-                var message = mainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+                var message = mainDataModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
                 if (message != default)
                 {
                     trainer_MessageTextBox.Text = message.MessageText;
@@ -1829,8 +1934,8 @@ namespace Main
 
         private void trainer_Paste_Btn_Click(object sender, EventArgs e)
         {
-            int selectedTrainerId = mainEditorModel.SelectedTrainer.TrainerId;
-            var pasteTrainer = new Trainer(selectedTrainerId, mainEditorModel.ClipboardTrainer);
+            int selectedTrainerId = mainDataModel.SelectedTrainer.TrainerId;
+            var pasteTrainer = new Trainer(selectedTrainerId, mainDataModel.ClipboardTrainer);
 
             PopulateTrainerData(pasteTrainer);
             PopulatePartyData(pasteTrainer.TrainerParty, pasteTrainer.TrainerProperties.TeamSize, pasteTrainer.TrainerProperties.ChooseMoves);
@@ -1843,16 +1948,16 @@ namespace Main
         private void trainer_PasteParty_btn_Click(object sender, EventArgs e)
         {
             isLoadingData = true;
-            if (mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize != mainEditorModel.ClipboardTrainerParty.TeamSize
-                                || mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != mainEditorModel.ClipboardTrainerParty.ChooseItems
-                || mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != mainEditorModel.ClipboardTrainerParty.ChooseMoves
-                || mainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle != mainEditorModel.ClipboardTrainerParty.DoubleBattle
+            if (mainDataModel.SelectedTrainer.TrainerProperties.TeamSize != mainDataModel.ClipboardTrainerParty.TeamSize
+                                || mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != mainDataModel.ClipboardTrainerParty.ChooseItems
+                || mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != mainDataModel.ClipboardTrainerParty.ChooseMoves
+                || mainDataModel.SelectedTrainer.TrainerProperties.DoubleBattle != mainDataModel.ClipboardTrainerParty.DoubleBattle
                 )
             {
-                var pasteProperties = new TrainerProperty(mainEditorModel.SelectedTrainer.TrainerProperties, mainEditorModel.ClipboardTrainerParty.DoubleBattle,
-                   mainEditorModel.ClipboardTrainerParty.TeamSize,
-                    mainEditorModel.ClipboardTrainerParty.ChooseMoves,
-                   mainEditorModel.ClipboardTrainerParty.ChooseItems);
+                var pasteProperties = new TrainerProperty(mainDataModel.SelectedTrainer.TrainerProperties, mainDataModel.ClipboardTrainerParty.DoubleBattle,
+                   mainDataModel.ClipboardTrainerParty.TeamSize,
+                    mainDataModel.ClipboardTrainerParty.ChooseMoves,
+                   mainDataModel.ClipboardTrainerParty.ChooseItems);
                 SetTrainerPartyProperties(pasteProperties);
                 EditedTrainerProperty(true);
             }
@@ -1860,7 +1965,7 @@ namespace Main
             {
             }
             isLoadingData = false;
-            PopulatePartyData(mainEditorModel.ClipboardTrainerParty, mainEditorModel.ClipboardTrainerParty.TeamSize, mainEditorModel.ClipboardTrainerParty.ChooseMoves);
+            PopulatePartyData(mainDataModel.ClipboardTrainerParty, mainDataModel.ClipboardTrainerParty.TeamSize, mainDataModel.ClipboardTrainerParty.ChooseMoves);
             EditedTrainerParty(true);
             EnableDisableParty();
         }
@@ -1868,21 +1973,21 @@ namespace Main
         private void trainer_PastePropeties_btn_Click(object sender, EventArgs e)
         {
             isLoadingData = true;
-            if (mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize != mainEditorModel.ClipboardTrainerProperties.TeamSize
-                                || mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != mainEditorModel.ClipboardTrainerProperties.ChooseItems
-                || mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != mainEditorModel.ClipboardTrainerProperties.ChooseMoves
-                || mainEditorModel.SelectedTrainer.TrainerProperties.DoubleBattle != mainEditorModel.ClipboardTrainerProperties.DoubleBattle
-                || mainEditorModel.SelectedTrainer.TrainerProperties.Items != mainEditorModel.ClipboardTrainerProperties.Items
-                || mainEditorModel.SelectedTrainer.TrainerProperties.AIFlags != mainEditorModel.ClipboardTrainerProperties.AIFlags
+            if (mainDataModel.SelectedTrainer.TrainerProperties.TeamSize != mainDataModel.ClipboardTrainerProperties.TeamSize
+                                || mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != mainDataModel.ClipboardTrainerProperties.ChooseItems
+                || mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != mainDataModel.ClipboardTrainerProperties.ChooseMoves
+                || mainDataModel.SelectedTrainer.TrainerProperties.DoubleBattle != mainDataModel.ClipboardTrainerProperties.DoubleBattle
+                || mainDataModel.SelectedTrainer.TrainerProperties.Items != mainDataModel.ClipboardTrainerProperties.Items
+                || mainDataModel.SelectedTrainer.TrainerProperties.AIFlags != mainDataModel.ClipboardTrainerProperties.AIFlags
                 )
             {
-                var pasteProperties = new TrainerProperty(mainEditorModel.ClipboardTrainerProperties);
+                var pasteProperties = new TrainerProperty(mainDataModel.ClipboardTrainerProperties);
                 SetTrainerProperties(pasteProperties);
                 EditedTrainerProperty(true);
             }
 
             isLoadingData = false;
-            PopulatePartyData(mainEditorModel.SelectedTrainer.TrainerParty, mainEditorModel.ClipboardTrainerProperties.TeamSize, mainEditorModel.ClipboardTrainerProperties.ChooseMoves);
+            PopulatePartyData(mainDataModel.SelectedTrainer.TrainerParty, mainDataModel.ClipboardTrainerProperties.TeamSize, mainDataModel.ClipboardTrainerProperties.ChooseMoves);
             EditedTrainerParty(true);
             EnableDisableParty();
         }
@@ -1896,11 +2001,12 @@ namespace Main
                 BeginInvoke(new Action(() => EnableDisableParty()));
             }
         }
+
         private void trainer_RemoveBtn_Click(object sender, EventArgs e)
         {
             if (isLoadingData) return;
 
-            int trainerId = mainEditorModel.SelectedTrainer.TrainerId;
+            int trainerId = mainDataModel.SelectedTrainer.TrainerId;
 
             if (trainerId <= RomFile.VanillaTotalTrainers - 1)
             {
@@ -1909,14 +2015,14 @@ namespace Main
                 return;
             }
 
-            if (mainEditorModel.BattleMessages.Any(x => x.TrainerId == trainerId))
+            if (mainDataModel.BattleMessages.Any(x => x.TrainerId == trainerId))
             {
                 MessageBox.Show("This Trainer has Battle Messages assigned." +
                     "\nYou must remove these first before removing the trainer", "Unable to Remove Trainer", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            if (mainEditorModel.SelectedTrainer.TrainerUsages.Count > 0)
+            if (mainDataModel.SelectedTrainer.TrainerUsages.Count > 0)
             {
                 var confirmDelete = MessageBox.Show("This Trainer is used either in an event, or script." +
                     "\nIf you remove this trainer you will have to change the references to the trainer." +
@@ -1931,7 +2037,7 @@ namespace Main
         private void trainer_SaveBtn_Click(object sender, EventArgs e)
         {
             isLoadingData = true;
-            if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(mainEditorModel.SelectedTrainer.TrainerId) && SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId) && SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId))
+            if (ValidateTrainerName() && ValidatePokemon() && ValidatePokemonMoves() && SaveTrainerName(mainDataModel.SelectedTrainer.TrainerId) && SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId) && SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId))
             {
                 MessageBox.Show("Trainer Data updated!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1942,40 +2048,40 @@ namespace Main
         {
             if (ValidatePokemon() && ValidatePokemonMoves())
             {
-                if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1)
-                    && mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
+                if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1)
+                    && mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
                         "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
-                else if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1))
+                else if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
                         "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
-                else if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
+                else if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
                         "\nTrainer Property Data must also be saved.\n\nDo you want to save Trainer Property Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
                 else
                 {
-                    SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId, true);
+                    SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId, true);
                 }
             }
         }
@@ -1984,40 +2090,40 @@ namespace Main
         {
             if (ValidatePokemonMoves())
             {
-                if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1)
-                    && mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
+                if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1)
+                    && mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' and 'Choose Items' properties have been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
-                else if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1))
+                else if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves != trainer_PropertyFlags.GetItemChecked(1))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Moves' property has been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
-                else if (mainEditorModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
+                else if (mainDataModel.SelectedTrainer.TrainerProperties.ChooseItems != trainer_PropertyFlags.GetItemChecked(2))
                 {
                     var savePokemonWarning = MessageBox.Show("This Trainer's 'Choose Items' property has been changed." +
                         "\nTrainer Party Data must also be saved.\n\nDo you want to save Trainer Party Data?", "Party Properties Changed",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainEditorModel.SelectedTrainer.TrainerId))
+                    if (savePokemonWarning == DialogResult.Yes && ValidatePokemon() && SaveTrainerParty(mainDataModel.SelectedTrainer.TrainerId))
                     {
-                        SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId, true);
+                        SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId, true);
                     }
                 }
                 else
                 {
-                    SaveTrainerProperties(mainEditorModel.SelectedTrainer.TrainerId, true);
+                    SaveTrainerProperties(mainDataModel.SelectedTrainer.TrainerId, true);
                 }
             }
         }
@@ -2050,7 +2156,7 @@ namespace Main
             {
                 string selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
 
-                if (selectedTrainer != mainEditorModel.SelectedTrainer.ListName)
+                if (selectedTrainer != mainDataModel.SelectedTrainer.ListName)
                 {
                     if (UnsavedTrainerEditorChanges && !InhibitTrainerChange)
                     {
@@ -2061,22 +2167,22 @@ namespace Main
                         else
                         {
                             InhibitTrainerChange = true;
-                            trainer_TrainersListBox.SelectedIndex = trainer_TrainersListBox.Items.IndexOf(mainEditorModel.SelectedTrainer.ListName);
+                            trainer_TrainersListBox.SelectedIndex = trainer_TrainersListBox.Items.IndexOf(mainDataModel.SelectedTrainer.ListName);
                         }
                     }
 
                     if (!InhibitTrainerChange)
                     {
                         selectedTrainer = trainer_TrainersListBox.SelectedItem.ToString();
-                        mainEditorModel.SelectedTrainer = new Trainer(trainerEditorMethods.GetTrainer(mainEditorModel.Trainers, Trainer.ListNameToTrainerId(selectedTrainer)));
+                        mainDataModel.SelectedTrainer = new Trainer(trainerEditorMethods.GetTrainer(mainDataModel.Trainers, Trainer.ListNameToTrainerId(selectedTrainer)));
 
-                        if (mainEditorModel.SelectedTrainer.TrainerId >= 0)
+                        if (mainDataModel.SelectedTrainer.TrainerId >= 0)
                         {
-                            PopulateTrainerData(mainEditorModel.SelectedTrainer);
-                            PopulatePartyData(mainEditorModel.SelectedTrainer.TrainerParty, mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);
-                            PopulateTrainerBattleMessageTriggers(mainEditorModel.SelectedTrainer);
-                            PopualteTrainerUsages(mainEditorModel.SelectedTrainer.TrainerUsages);
-                            PopulateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, mainEditorModel.SelectedTrainer.TrainerProperties.TrainerClassId);
+                            PopulateTrainerData(mainDataModel.SelectedTrainer);
+                            PopulatePartyData(mainDataModel.SelectedTrainer.TrainerParty, mainDataModel.SelectedTrainer.TrainerProperties.TeamSize, mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves);
+                            PopulateTrainerBattleMessageTriggers(mainDataModel.SelectedTrainer);
+                            PopualteTrainerUsages(mainDataModel.SelectedTrainer.TrainerUsages);
+                            PopulateTrainerClassSprite(trainer_SpritePicBox, trainer_SpriteFrameNum, mainDataModel.SelectedTrainer.TrainerProperties.TrainerClassId);
                             EnableTrainerEditor();
                             EnableDisableParty();
                         }
@@ -2115,15 +2221,15 @@ namespace Main
 
         private void trainerEditor_SaveMessage_Click(object sender, EventArgs e)
         {
-            int trainerId = mainEditorModel.SelectedTrainer.TrainerId;
+            int trainerId = mainDataModel.SelectedTrainer.TrainerId;
             int messageTriggerId = MessageTrigger.ListNameToMessageTriggerId(trainer_MessageTriggerListBox!.SelectedItem.ToString());
-            var message = mainEditorModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
+            var message = mainDataModel.BattleMessages.SingleOrDefault(x => x.TrainerId == trainerId && x.MessageTriggerId == messageTriggerId);
             if (SaveTrainerMessage(message.MessageId))
             {
                 if (battleMessage_MessageTableDataGrid.Rows.Count > 0)
                 {
                     var row = battleMessage_MessageTableDataGrid.Rows.Cast<DataGridViewRow>()
-                        .SingleOrDefault(x => x.Cells[1].Value.ToString() == mainEditorModel.SelectedTrainer.ListName
+                        .SingleOrDefault(x => x.Cells[1].Value.ToString() == mainDataModel.SelectedTrainer.ListName
                         && x.Cells[2].Value.ToString() == trainer_MessageTriggerListBox!.SelectedItem.ToString());
 
                     if (row != default)
@@ -2139,7 +2245,7 @@ namespace Main
         private string GetAbilityNameByAbilityId(int abilityId)
         {
             Console.WriteLine($"Getting Ability Name for abilityId {abilityId}");
-            string abiiltyName = mainEditorModel.AbilityNames[abilityId];
+            string abiiltyName = mainDataModel.AbilityNames[abilityId];
             if (!string.IsNullOrEmpty(abiiltyName))
             {
                 Console.WriteLine($"Ability name found: " + abiiltyName);
@@ -2154,7 +2260,7 @@ namespace Main
         private Species GetSpeciesBySpeciesId(int speciesId)
         {
             Console.WriteLine($"Getting Species Data for speciesId {speciesId}");
-            var species = mainEditorModel.PokemonSpecies.Find(x => x.SpeciesId == speciesId);
+            var species = mainDataModel.PokemonSpecies.Find(x => x.SpeciesId == speciesId);
             if (species != null)
             {
                 Console.WriteLine($"Species Data found");
@@ -2166,7 +2272,7 @@ namespace Main
             return species;
         }
 
-        private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId) => mainEditorModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
+        private TrainerClass GetTrainerClassByTrainerClassId(int trainerClassId) => mainDataModel.Classes.Find(x => x.TrainerClassId == trainerClassId);
 
         #endregion Get
 
@@ -2235,7 +2341,7 @@ namespace Main
             trainer_ClearFilterBtn.Enabled = false;
             trainer_TrainersListBox.Enabled = false;
             trainer_Copy_Btn.Enabled = false;
-            trainer_Paste_Btn.Enabled = mainEditorModel.ClipboardTrainer != null;
+            trainer_Paste_Btn.Enabled = mainDataModel.ClipboardTrainer != null;
             trainer_Import_Btn.Enabled = false;
             trainer_Export_Btn.Enabled = false;
             trainer_ClassListBox.Enabled = false;
@@ -2250,11 +2356,11 @@ namespace Main
         private void UndoTrainerChanges()
         {
             isLoadingData = true;
-            SetTrainerName(mainEditorModel.SelectedTrainer);
-            SetTrainerPartyProperties(mainEditorModel.SelectedTrainer.TrainerProperties);
-            SetTrainerProperties(mainEditorModel.SelectedTrainer.TrainerProperties);
+            SetTrainerName(mainDataModel.SelectedTrainer);
+            SetTrainerPartyProperties(mainDataModel.SelectedTrainer.TrainerProperties);
+            SetTrainerProperties(mainDataModel.SelectedTrainer.TrainerProperties);
             InitializePartyEditor();
-            SetTrainerParty(mainEditorModel.SelectedTrainer.TrainerParty, mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);
+            SetTrainerParty(mainDataModel.SelectedTrainer.TrainerParty, mainDataModel.SelectedTrainer.TrainerProperties.TeamSize, mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves);
             EditedTrainerData(false);
             EditedTrainerProperty(false);
             EditedTrainerParty(false);
@@ -2265,7 +2371,7 @@ namespace Main
         {
             isLoadingData = true;
             InitializePartyEditor();
-            SetTrainerParty(mainEditorModel.SelectedTrainer.TrainerParty, mainEditorModel.SelectedTrainer.TrainerProperties.TeamSize, mainEditorModel.SelectedTrainer.TrainerProperties.ChooseMoves);
+            SetTrainerParty(mainDataModel.SelectedTrainer.TrainerParty, mainDataModel.SelectedTrainer.TrainerProperties.TeamSize, mainDataModel.SelectedTrainer.TrainerProperties.ChooseMoves);
             EditedTrainerParty(false);
             isLoadingData = false;
         }
@@ -2273,13 +2379,16 @@ namespace Main
         private void UndoTrainerPropertyChanges()
         {
             isLoadingData = true;
-            SetTrainerPartyProperties(mainEditorModel.SelectedTrainer.TrainerProperties);
-            SetTrainerProperties(mainEditorModel.SelectedTrainer.TrainerProperties);
+            SetTrainerPartyProperties(mainDataModel.SelectedTrainer.TrainerProperties);
+            SetTrainerProperties(mainDataModel.SelectedTrainer.TrainerProperties);
             EditedTrainerProperty(false);
             isLoadingData = false;
         }
 
-        private void UpdateAbilty(int index) => EditedTrainerParty(true);
+        private void UpdateAbilty(int index)
+        {
+            EditedTrainerParty(true);
+        }
 
         private void UpdatePokemonTabName(int index)
         {
@@ -2423,7 +2532,7 @@ namespace Main
                 return -1; // Return -1 if the input is invalid
             }
             string pokemonName = selectedItemText.Substring(7);
-            int pokemonId = mainEditorModel.PokemonNamesFull.IndexOf(pokemonName);
+            int pokemonId = mainDataModel.PokemonNamesFull.IndexOf(pokemonName);
             return pokemonId;
         }
 
@@ -2475,7 +2584,7 @@ namespace Main
             isUpdatingComboBox = true;
 
             string userInput = pokeComboBox.Text.ToLower();
-            var allPokemon = mainEditorModel.PokemonNames;
+            var allPokemon = mainDataModel.PokemonNames;
 
             var filteredPokemon = allPokemon
                 .Where(pokemon => pokemon.ToLower().Contains(userInput))
@@ -2506,7 +2615,7 @@ namespace Main
 
                 comboBox.BeginUpdate();
                 comboBox.Items.Clear();
-                comboBox.Items.AddRange(mainEditorModel.PokemonNames.ToArray());
+                comboBox.Items.AddRange(mainDataModel.PokemonNames.ToArray());
                 EnablePokemonComboBoxFiltering(comboBox, i);
 
                 comboBox.EndUpdate();
@@ -2521,7 +2630,7 @@ namespace Main
 
                 pokeComboBox.BeginUpdate();
                 pokeComboBox.Items.Clear();
-                pokeComboBox.Items.AddRange(mainEditorModel.PokemonNames.ToArray());
+                pokeComboBox.Items.AddRange(mainDataModel.PokemonNames.ToArray());
                 pokeComboBox.EndUpdate();
 
                 isUpdatingComboBox = false;

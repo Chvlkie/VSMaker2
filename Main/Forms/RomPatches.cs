@@ -15,10 +15,10 @@ namespace Main.Forms
         public static uint ExpandedArmFileId = ToolboxDB.SyntheticOverlayFileNumbersDB[RomFile.GameFamily];
         public static bool LoadOverlay1FromBackup;
         public string BackupSuffix = ".backup";
-        private readonly Mainform Main;
+        private readonly MainForm Main;
         private IRomFileMethods romFileMethods;
 
-        public RomPatches(Mainform main, IRomFileMethods romFileMethods)
+        public RomPatches(MainForm main, IRomFileMethods romFileMethods)
         {
             InitializeComponent();
             this.romFileMethods = romFileMethods;

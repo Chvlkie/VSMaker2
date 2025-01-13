@@ -6,7 +6,7 @@ using static VsMaker2Core.Enums;
 namespace Main
 {
     // BATTLE MESSAGES EDITOR
-    public partial class Mainform : Form
+    public partial class MainForm : Form
     {
         private readonly string seperator = @"\r";
         private bool isUndoRedo = false;
@@ -103,7 +103,7 @@ namespace Main
                     {
                         Invoke(new Action(() =>
                         {
-                            mainEditorModel.BattleMessages = newMessages;
+                            mainDataModel.BattleMessages = newMessages;
                             LoadBattleMessages();
                             loadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
                             MessageBox.Show("Battle messages imported successfully!", "Success");
@@ -111,7 +111,7 @@ namespace Main
                     }
                     else
                     {
-                        mainEditorModel.BattleMessages = newMessages;
+                        mainDataModel.BattleMessages = newMessages;
                         LoadBattleMessages();
                         loadingData.UpdateProgressBarStyle(ProgressBarStyle.Blocks);
                         MessageBox.Show("Battle messages imported successfully!", "Success");
@@ -216,9 +216,9 @@ namespace Main
         {
             if (!isLoadingData)
             {
-                mainEditorModel.SelectedBattleMessageRowIndex = battleMessage_MessageTableDataGrid.CurrentCell.RowIndex;
+                mainDataModel.SelectedBattleMessageRowIndex = battleMessage_MessageTableDataGrid.CurrentCell.RowIndex;
                 battleMessages_MessageTextBox.Enabled = true;
-                battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
+                battleMessages_MessageTextBox.Text = battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString();
                 battleMessages_RemoveBtn.Enabled = true;
 
                 undoStack.Clear();
@@ -240,12 +240,12 @@ namespace Main
             {
                 index = battleMessage_MessageTableDataGrid.SelectedCells[0].RowIndex;
             }
-            string[] currentTrainers = new string[mainEditorModel.Trainers.Count];
+            string[] currentTrainers = new string[mainDataModel.Trainers.Count];
             string[] currentMessageTriggers = new string[MessageTrigger.MessageTriggers.Count];
 
-            for (int i = 0; i < mainEditorModel.Trainers.Count; i++)
+            for (int i = 0; i < mainDataModel.Trainers.Count; i++)
             {
-                currentTrainers[i] = mainEditorModel.Trainers[i].ListName;
+                currentTrainers[i] = mainDataModel.Trainers[i].ListName;
             }
 
             for (int i = 0; i < MessageTrigger.MessageTriggers.Count; i++)
@@ -280,12 +280,12 @@ namespace Main
 
                 UpdateUndoRedoButtons();
 
-                if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
+                if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
                 {
                     EditedBattleMessage(true);
                 }
 
-                battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
+                battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
 
                 UpdateTextPreview(battleMessages_MessageTextBox.Text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
             }
@@ -351,7 +351,7 @@ namespace Main
                     OpenLoadingDialog(LoadType.SaveTrainerTextTable);
                     RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                     RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
-                    mainEditorModel.BattleMessages =  battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                    mainDataModel.BattleMessages =  battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
@@ -388,7 +388,7 @@ namespace Main
                     OpenLoadingDialog(LoadType.RepointTextTable);
                     RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                     RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
-                    mainEditorModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                    mainDataModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
@@ -458,11 +458,11 @@ namespace Main
 
         private void battleMessages_UpdateText_Click(object sender, EventArgs e)
         {
-            if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
+            if (battleMessages_MessageTextBox.Text != battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value.ToString())
             {
                 EditedBattleMessage(true);
             }
-            battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
+            battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value = battleMessages_MessageTextBox.Text;
         }
 
         private void BeginPopulateBattleMessages()
@@ -507,49 +507,49 @@ namespace Main
         {
             if (isNext)
             {
-                mainEditorModel.BattleMessageDisplayIndex++;
+                mainDataModel.BattleMessageDisplayIndex++;
             }
             else
             {
-                mainEditorModel.BattleMessageDisplayIndex--;
+                mainDataModel.BattleMessageDisplayIndex--;
             }
 
-            backButton.Enabled = mainEditorModel.BattleMessageDisplayIndex > 0;
+            backButton.Enabled = mainDataModel.BattleMessageDisplayIndex > 0;
             backButton.Visible = backButton.Enabled;
 
-            nextButton.Enabled = mainEditorModel.BattleMessageDisplayIndex < mainEditorModel.DisplayBattleMessageText.Count - 1;
+            nextButton.Enabled = mainDataModel.BattleMessageDisplayIndex < mainDataModel.DisplayBattleMessageText.Count - 1;
             nextButton.Visible = nextButton.Enabled;
 
-            if (mainEditorModel.BattleMessageDisplayIndex >= 0 &&
-                mainEditorModel.BattleMessageDisplayIndex < mainEditorModel.DisplayBattleMessageText.Count)
+            if (mainDataModel.BattleMessageDisplayIndex >= 0 &&
+                mainDataModel.BattleMessageDisplayIndex < mainDataModel.DisplayBattleMessageText.Count)
             {
-                previewText.Text = mainEditorModel.DisplayBattleMessageText[mainEditorModel.BattleMessageDisplayIndex];
+                previewText.Text = mainDataModel.DisplayBattleMessageText[mainDataModel.BattleMessageDisplayIndex];
             }
             else
             {
-                mainEditorModel.BattleMessageDisplayIndex = isNext ? mainEditorModel.BattleMessageDisplayIndex - 1 : mainEditorModel.BattleMessageDisplayIndex + 1;
+                mainDataModel.BattleMessageDisplayIndex = isNext ? mainDataModel.BattleMessageDisplayIndex - 1 : mainDataModel.BattleMessageDisplayIndex + 1;
             }
         }
 
         private void PopulateBattleMessages()
         {
-            string[] currentTrainers = mainEditorModel.Trainers.Select(x => x.ListName).ToArray();
+            string[] currentTrainers = mainDataModel.Trainers.Select(x => x.ListName).ToArray();
             string[] messageTriggers = MessageTrigger.MessageTriggers.Select(x => x.ListName).ToArray();
 
             battleMessage_MessageTableDataGrid.SuspendLayout();
 
             battleMessage_MessageTableDataGrid.Rows.Clear();
 
-            for (int i = 0; i < mainEditorModel.BattleMessages.Count; i++)
+            for (int i = 0; i < mainDataModel.BattleMessages.Count; i++)
             {
-                int trainerId = mainEditorModel.BattleMessages[i].TrainerId;
-                int messageTriggerIndex = mainEditorModel.BattleMessages[i].MessageTriggerId;
+                int trainerId = mainDataModel.BattleMessages[i].TrainerId;
+                int messageTriggerIndex = mainDataModel.BattleMessages[i].MessageTriggerId;
 
                 DataGridViewRow row = (DataGridViewRow)battleMessage_MessageTableDataGrid.Rows[0].Clone();
                 row.Cells[0].Value = i;
                 row.Cells[1] = new DataGridViewComboBoxCell { DataSource = currentTrainers, Value = currentTrainers[trainerId] };
                 row.Cells[2] = new DataGridViewComboBoxCell { DataSource = messageTriggers, Value = messageTriggers[messageTriggerIndex] };
-                row.Cells[3].Value = mainEditorModel.BattleMessages[i].MessageText;
+                row.Cells[3].Value = mainDataModel.BattleMessages[i].MessageText;
 
                 ThreadSafeDataTable(row);
             }
@@ -562,10 +562,10 @@ namespace Main
             progress?.Report(0);
             List<ushort> offsets = [];
             offsets.Add(0);
-            for (int i = 0; i < mainEditorModel.Trainers.Count; i++)
+            for (int i = 0; i < mainDataModel.Trainers.Count; i++)
             {
                 int index = 0;
-                var trainer = mainEditorModel.Trainers[i];
+                var trainer = mainDataModel.Trainers[i];
                 List<BattleMessage> trainerMessages = messageData.Where(x => x.TrainerId == trainer.TrainerId).ToList();
                 if (trainerMessages.Count > 0)
                 {
@@ -665,14 +665,14 @@ namespace Main
 
         private void UpdateDataGridViewAndPreview(string text)
         {
-            battleMessage_MessageTableDataGrid.Rows[mainEditorModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
+            battleMessage_MessageTableDataGrid.Rows[mainDataModel.SelectedBattleMessageRowIndex].Cells[3].Value = text;
             UpdateTextPreview(text, battleMessage_PreviewText, battleMessages_MessageUpBtn, battleMessages_MessageDownBtn);
         }
 
         private void UpdateTextPreview(string battleMessage, Label previewText, Button nextButton, Button backButton)
         {
-            mainEditorModel.BattleMessageDisplayIndex = 0;
-            mainEditorModel.DisplayBattleMessageText = [];
+            mainDataModel.BattleMessageDisplayIndex = 0;
+            mainDataModel.DisplayBattleMessageText = [];
 
             battleMessage = battleMessage.Replace("\\n", Environment.NewLine);
             battleMessage = battleMessage.Replace("\\f", Environment.NewLine);
@@ -685,23 +685,23 @@ namespace Main
                     string text1 = ReadLine(item, 1) + Environment.NewLine + ReadLine(item, 2);
                     string text2 = ReadLine(item, 2) + Environment.NewLine + ReadLine(item, 3);
 
-                    mainEditorModel.DisplayBattleMessageText.Add(text1);
-                    mainEditorModel.DisplayBattleMessageText.Add(text2);
+                    mainDataModel.DisplayBattleMessageText.Add(text1);
+                    mainDataModel.DisplayBattleMessageText.Add(text2);
                 }
                 else
                 {
-                    mainEditorModel.DisplayBattleMessageText.Add(item);
+                    mainDataModel.DisplayBattleMessageText.Add(item);
                 }
             }
 
             // Remove last item if blank line - is the case as trainer text formatted as ending with \n.
-            if (mainEditorModel.DisplayBattleMessageText.Count > 1 && string.IsNullOrEmpty(mainEditorModel.DisplayBattleMessageText[^1]))
+            if (mainDataModel.DisplayBattleMessageText.Count > 1 && string.IsNullOrEmpty(mainDataModel.DisplayBattleMessageText[^1]))
             {
-                mainEditorModel.DisplayBattleMessageText.Remove(mainEditorModel.DisplayBattleMessageText[^1]);
+                mainDataModel.DisplayBattleMessageText.Remove(mainDataModel.DisplayBattleMessageText[^1]);
             }
             //  trainer_Message.Font = new Font(vsMakerFont.VsMakerFontCollection.Families[0], trainer_Message.Font.Size);
-            previewText.Text = mainEditorModel.DisplayBattleMessageText[0];
-            backButton.Enabled = mainEditorModel.DisplayBattleMessageText.Count > 1;
+            previewText.Text = mainDataModel.DisplayBattleMessageText[0];
+            backButton.Enabled = mainDataModel.DisplayBattleMessageText.Count > 1;
             backButton.Visible = backButton.Enabled;
             nextButton.Enabled = false;
             nextButton.Visible = nextButton.Enabled;
@@ -715,7 +715,7 @@ namespace Main
 
         private (bool Valid, int Row) VerifyBattleMessageTable()
         {
-            foreach (var trainer in mainEditorModel.Trainers)
+            foreach (var trainer in mainDataModel.Trainers)
             {
                 var checkMessages = new List<string>();
                 for (int i = 0; i < battleMessage_MessageTableDataGrid.Rows.Count; i++)
