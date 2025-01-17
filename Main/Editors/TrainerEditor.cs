@@ -1374,38 +1374,159 @@ namespace Main
                     {
                         switch (pokemonId)
                         {
-                            case Pokemon.Pokedex.Pikachu:
-                                Species.AltForms.FormNames.HgEngineForms.Pikachu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                            case Pokemon.Pokedex.Aerodactyl:
+                                Species.AltForms.FormNames.HgEngineForms.Aerodactyl.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
-                            case Pokemon.Pokedex.Growlithe:
-                                Species.AltForms.FormNames.HgEngineForms.Growlithe.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                            case Pokemon.Pokedex.Alakazam:
+                                Species.AltForms.FormNames.HgEngineForms.Alakazam.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
+                            case Pokemon.Pokedex.Articuno:
+                                Species.AltForms.FormNames.HgEngineForms.Articuno.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Beedrill:
+                                Species.AltForms.FormNames.HgEngineForms.Beedrill.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Blastoise:
+                                Species.AltForms.FormNames.HgEngineForms.Blastoise.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Charizard:
+                                Species.AltForms.FormNames.HgEngineForms.Charizard.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Diglett:
+                                Species.AltForms.FormNames.HgEngineForms.Diglett.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Eevee:
+                                Species.AltForms.FormNames.HgEngineForms.Eevee.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Dugtrio:
+                                Species.AltForms.FormNames.HgEngineForms.Dugtrio.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Exeggutor:
+                                Species.AltForms.FormNames.HgEngineForms.Exeggutor.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Farfetchd:
+                                Species.AltForms.FormNames.HgEngineForms.Farfetchd.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Gengar:
+                                Species.AltForms.FormNames.HgEngineForms.Gengar.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Geodude:
+                                Species.AltForms.FormNames.HgEngineForms.Geodude.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Golem:
+                                Species.AltForms.FormNames.HgEngineForms.Golem.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Graveler:
+                                Species.AltForms.FormNames.HgEngineForms.Graveler.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Grimer:
+                                Species.AltForms.FormNames.HgEngineForms.Grimer.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Gyarados:
+                                Species.AltForms.FormNames.HgEngineForms.Gyarados.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Kangaskhan:
+                                Species.AltForms.FormNames.HgEngineForms.Kangaskhan.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Marowak:
+                                Species.AltForms.FormNames.HgEngineForms.Marowak.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             case Pokemon.Pokedex.Meowth:
                                 Species.AltForms.FormNames.HgEngineForms.Meowth.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
-                            case Pokemon.Pokedex.Rattata:
-                                Species.AltForms.FormNames.HgEngineForms.Rattata.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                            case Pokemon.Pokedex.Mewtwo:
+                                Species.AltForms.FormNames.HgEngineForms.Mewtwo.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
-                            case Pokemon.Pokedex.Raticate:
-                                Species.AltForms.FormNames.HgEngineForms.Raticate.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                            case Pokemon.Pokedex.Moltres:
+                                Species.AltForms.FormNames.HgEngineForms.Moltres.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
+                            case Pokemon.Pokedex.MrMime:
+                                Species.AltForms.FormNames.HgEngineForms.MrMime.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Muk:
+                                Species.AltForms.FormNames.HgEngineForms.Muk.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Ninetales:
+                                Species.AltForms.FormNames.HgEngineForms.Ninetales.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Persian:
+                                Species.AltForms.FormNames.HgEngineForms.Persian.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Pidgeot:
+                                Species.AltForms.FormNames.HgEngineForms.Pidgeot.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Pinsir:
+                                Species.AltForms.FormNames.HgEngineForms.Pinsir.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             case Pokemon.Pokedex.Ponyta:
                                 Species.AltForms.FormNames.HgEngineForms.Ponyta.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
+                            case Pokemon.Pokedex.Pikachu:
+                                Species.AltForms.FormNames.HgEngineForms.Pikachu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Growlithe:
+                                Species.AltForms.FormNames.HgEngineForms.Growlithe.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Raichu:
+                                Species.AltForms.FormNames.HgEngineForms.Raichu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             case Pokemon.Pokedex.Rapidash:
                                 Species.AltForms.FormNames.HgEngineForms.Rapidash.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
-                            case Pokemon.Pokedex.Groudon:
-                                Species.AltForms.FormNames.HgEngineForms.Groudon.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                            case Pokemon.Pokedex.Raticate:
+                                Species.AltForms.FormNames.HgEngineForms.Raticate.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
-
+                            case Pokemon.Pokedex.Rattata:
+                                Species.AltForms.FormNames.HgEngineForms.Rattata.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Sandshrew:
+                                Species.AltForms.FormNames.HgEngineForms.Sandshrew.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Sandslash:
+                                Species.AltForms.FormNames.HgEngineForms.Sandslash.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Slowbro:
+                                Species.AltForms.FormNames.HgEngineForms.Slowbro.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Slowpoke:
+                                Species.AltForms.FormNames.HgEngineForms.Slowpoke.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Venusaur:
+                                Species.AltForms.FormNames.HgEngineForms.Venusaur.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Vulpix:
+                                Species.AltForms.FormNames.HgEngineForms.Vulpix.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Weezing:
+                                Species.AltForms.FormNames.HgEngineForms.Weezing.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Zapdos:
+                                Species.AltForms.FormNames.HgEngineForms.Zapdos.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Ampharos:
+                                Species.AltForms.FormNames.HgEngineForms.Ampharos.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Steelix:
+                                Species.AltForms.FormNames.HgEngineForms.Steelix.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Scizor:
+                                Species.AltForms.FormNames.HgEngineForms.Scizor.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Heracross:
+                                Species.AltForms.FormNames.HgEngineForms.Heracross.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Houndoom:
+                                Species.AltForms.FormNames.HgEngineForms.Houndoom.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Tyranitar:
+                                Species.AltForms.FormNames.HgEngineForms.Tyranitar.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Slowking:
+                                Species.AltForms.FormNames.HgEngineForms.Slowking.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
+                            case Pokemon.Pokedex.Corsola:
+                                Species.AltForms.FormNames.HgEngineForms.Corsola.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
+                                break;
                             default:
                                 pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
                                 break;

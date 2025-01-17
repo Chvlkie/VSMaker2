@@ -18,7 +18,7 @@
             Pokemon.Pokedex.Raticate => formId > 0 ? AltForms.HgEngineForms.AlolanForms.Raticate : pokemonId,
             Pokemon.Pokedex.Growlithe => formId > 0 ? AltForms.HgEngineForms.HisuianForms.Growlithe : pokemonId,
             Pokemon.Pokedex.Ponyta => formId > 0 ? AltForms.HgEngineForms.GalarianForms.Ponyta : pokemonId,
-            Pokemon.Pokedex.Rapidash => formId > 0 ? AltForms.HgEngineForms.GalarianForms.Rapidah : pokemonId,
+            Pokemon.Pokedex.Rapidash => formId > 0 ? AltForms.HgEngineForms.GalarianForms.Rapidash : pokemonId,
             #endregion HG Engine Only
 
             _ => pokemonId,
@@ -169,8 +169,22 @@
                     public static ushort End => Stunfisk;
                     public static ushort Meowth => Start;
                     public static ushort Ponyta => (ushort)(Start + 1);
-                    public static ushort Rapidah => (ushort)(Start + 2);
-
+                    public static ushort Rapidash => (ushort)(Start + 2);
+                    public static ushort Slowpoke => (ushort)(Start + 3);
+                    public static ushort Slowbro => (ushort)(Start + 4);
+                    public static ushort FarfetchD => (ushort)(Start + 5);
+                    public static ushort Weezing => (ushort)(Start + 6);
+                    public static ushort MrMime => (ushort)(Start + 7);
+                    public static ushort Articuno => (ushort)(Start + 8);
+                    public static ushort Zapdos => (ushort)(Start + 9);
+                    public static ushort Moltres => (ushort)(Start +10);
+                    public static ushort Slowking => (ushort)(Start +11);
+                    public static ushort Corsola => (ushort)(Start +12);
+                    public static ushort Zigzagoon => (ushort)(Start + 13);
+                    public static ushort Linoone => (ushort)(Start + 14);
+                    public static ushort Darumaka => (ushort)(Start +15);
+                    public static ushort Darmantian => (ushort)(Start + 16);
+                    public static ushort Yamask => (ushort)(Start + 17);
                     public static ushort Stunfisk => (ushort)(Start + 18);
                 }
 
@@ -182,13 +196,313 @@
                     public static List<ushort> PikachuForms()
                     {
                         var forms = new List<ushort>();
-                        for (int i = 0; i < FormNames.HgEngineForms.PikachuCosmetic.Count; i++)
+                        for (int i = 0; i < FormNames.HgEngineForms.PikachuCosmetic.Count - 1; i++)
                         {
                             forms.Add((ushort)(i + Start));
+                        }
+
+                        forms.Add(PikachuLetsGo);
+                        return forms;
+                    }
+
+                    public static List<ushort> CastformForms()
+                    {
+                        ushort start = (ushort)(Start + 14);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
                         }
                         return forms;
                     }
 
+                    public static ushort CherimSunshine => (ushort)(Start + 17);
+                    public static ushort ShellosEast => (ushort)(Start + 18);
+                    public static ushort GastrodonEast => (ushort)(Start + 19);
+                    public static ushort DialgaOrigin => (ushort)(Start + 20);
+                    public static ushort PalkiaOrigin => (ushort)(Start + 21);
+
+                    public static List<ushort> BasulinForms()
+                    {
+                        ushort start = (ushort)(Start + 22);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> DarmantianForms()
+                    {
+                        ushort start = (ushort)(Start + 24);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> DeerlingForms()
+                    {
+                        ushort start = (ushort)(Start + 26);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> SawsbuckForms()
+                    {
+                        ushort start = (ushort)(Start + 29);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort TornadusTherian => (ushort)(Start + 32);
+                    public static ushort ThunderousTherian => (ushort)(Start + 32);
+                    public static ushort LandorusTherian => (ushort)(Start + 34);
+
+                    public static List<ushort> KyurimForms()
+                    {
+                        ushort start = (ushort)(Start + 35);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort KeldeoResolute => (ushort)(Start + 37);
+                    public static ushort MeleottaPirouette => (ushort)(Start + 38);
+
+                    public static List<ushort> GenesectForms()
+                    {
+                        ushort start = (ushort)(Start + 39);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> GreninjaForms()
+                    {
+                        ushort start = (ushort)(Start + 43);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+
+                    public static List<ushort> VivilianForms()
+                    {
+                        ushort start = (ushort)(Start + 45);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.VivillianCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> FlabebeForms()
+                    {
+                        ushort start = (ushort)(Start + 64);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.FlabebeCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> FloetteForms()
+                    {
+                        ushort start = (ushort)(Start + 68);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.FloetteCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> FlorgesForms()
+                    {
+                        ushort start = (ushort)(Start + 73);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.FlorgesCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> FurfouForms()
+                    {
+                        ushort start = (ushort)(Start + 77);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.FurfouCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort AegislashBlade => (ushort)(Start + 86);
+
+
+                    public static List<ushort> PumpkabooForms()
+                    {
+                        ushort start = (ushort)(Start + 87);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static List<ushort> GougeistForms()
+                    {
+                        ushort start = (ushort)(Start + 90);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+
+                    public static ushort XerneasActive => (ushort)(Start + 93);
+
+                    public static List<ushort> ZygardeForms()
+                    {
+                        ushort start = (ushort)(Start + 94);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 5; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort HoopaUnbound => (ushort)(Start + 99);
+
+                    public static List<ushort> OricorioForms()
+                    {
+                        ushort start = (ushort)(Start + 100);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 3; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+                    public static ushort RockruffOwnTempo => (ushort)(Start + 103);
+
+
+                    public static List<ushort> LycanrocForms()
+                    {
+                        ushort start = (ushort)(Start + 104);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort WishiWashiSchool => (ushort)(Start + 106);
+
+                    public static List<ushort> MiniorForms()
+                    {
+                        ushort start = (ushort)(Start + 107);
+                        var forms = new List<ushort>();
+
+                        for (int i = 0; i < FormNames.HgEngineForms.MiniorCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort MimikyuBusted => (ushort)(Start + 120);
+
+                    public static List<ushort> NecrozmaForms()
+                    {
+                        ushort start = (ushort)(Start + 121);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 4; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort MagearnaOriginal => (ushort)(Start + 125);
+
+                    public static ushort PikachuLetsGo => (ushort)(Start + 126);
+                    public static ushort EeveeLetsGo => (ushort)(Start + 127);
+
+                    public static List<ushort> CramorantForms()
+                    {
+                        ushort start = (ushort)(Start + 128);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < 2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort ToxtricityLowKey => (ushort)(Start + 130);
+                    public static ushort SinisteaAntique => (ushort)(Start + 131);
+                    public static ushort PolteageistAntique => (ushort)(Start + 132);
+
+                    public static List<ushort> AlcremieForms()
+                    {
+                        ushort start = (ushort)(Start + 133);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i < FormNames.HgEngineForms.AlcremieCosmetic.Count; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
+
+                    public static ushort EiscueNoIce => (ushort)(Start + 141);
+                    public static ushort MorpekoHangry => (ushort)(Start + 142);
+                    public static ushort ZacianCrowned => (ushort)(Start + 143);
+                    public static ushort ZamazentaCrowned => (ushort)(Start + 144);
+                    public static ushort EternatusEternaMax => (ushort)(Start + 145);
+                    public static ushort UrshifuRapidStrike => (ushort)(Start + 146);
+                    public static ushort ZarudeDada => (ushort)(Start + 147);
+
+                    public static List<ushort> CalyrexForms()
+                    {
+                        ushort start = (ushort)(Start + 148);
+                        var forms = new List<ushort>();
+                        for (int i = 0; i <2; i++)
+                        {
+                            forms.Add((ushort)(i + start));
+                        }
+                        return forms;
+                    }
                     public static ushort Enamorus => (ushort)(Start + 150);
                 }
 
@@ -270,7 +584,7 @@
                     public static List<string> Moltres => [Default, Galarian];
                     public static List<string> MrMime => [Default, Galarian];
                     public static List<string> Muk => [Default, Alolan];
-                    public static List<string> Nintetales => [Default, Alolan];
+                    public static List<string> Ninetales => [Default, Alolan];
                     public static List<string> Persian => [Default, Alolan];
                     public static List<string> Pidgeot => [Default, .. MegaEvolutionForm()];
                     public static List<string> Pinsir => [Default, .. MegaEvolutionForm()];
@@ -406,7 +720,7 @@
                     public const ushort CosmeticSpeciesStart = 0;
 
                     public static List<string> PikachuCosmetic =>
-                        ["Cosplay", "Rock Star", "Belle", "Pop Star", "PHD", "Libre", "Original Cap", "Hoen Cap", "Sinnoh Cap", "Unova Cap", "Kalos Cap", "Alola Cap",
+                        ["Cosplay", "Rock Star", "Belle", "Pop Star", "PHD", "Libre", "Original Cap", "Hoenn Cap", "Sinnoh Cap", "Unova Cap", "Kalos Cap", "Alola Cap",
                     "Partner Cap", "World Cap", LetsGo];
 
                     public const string LetsGo = "Let's Go";
@@ -425,17 +739,71 @@
                     public const string KeldeoCosmetic = "Resolute";
 
                     public static List<string> GenesectCosmetic =>
-                               ["Douse Drive", "Shock Drive", "Burn Drive", "Chill Drive", "Battle Bond"];
+                        ["Douse Drive", "Shock Drive", "Burn Drive", "Chill Drive", "Battle Bond"];
 
                     public static List<string> VivillianCosmetic =>
                         ["Polar", "Tundra", "Continental", "Garden", "Elegant", "Meadow", "Modern", "Marine", "Archipelago", "High Plains", "Sandstorm", "River", "Monsoon", "Savanna", "Sun", "Ocean", "Jungle", "Fancy", "Poke Ball"];
 
                     public static List<string> FlabebeCosmetic =>
-                        ["Yellow FLower", "Orange Flower", "Blue Flower", "Blue Flower", "White Flower"];
+                        ["Yellow FLower", "Orange Flower", "Blue Flower","White Flower"];
 
                     public static List<string> FloetteCosmetic =>
-                 ["Yellow FLower", "Orange Flower", "Blue Flower", "Blue Flower", "White Flower"];
+                        ["Yellow FLower", "Orange Flower", "Blue Flower", "White Flower", "Eternal Flower"];
 
+                    public static List<string> FlorgesCosmetic =>
+                        ["Yellow FLower", "Orange Flower", "Blue Flower", "White Flower"];
+
+                    public static List<string> FurfouCosmetic =>
+                        ["Heart", "Star", "Diamond", "Debutante", "Matron", "Dandy", "La Reine", "Kabuki", "Pharoah"];
+
+                    public const string AegislashCosmetic = "Blade";
+                    public static List<string> PumpkabooGourgeistCosmetic =>
+                      ["Small", "Large", "Super"];
+
+                    public const string XerneasCosmetic = "Active";
+
+                    public static List<string> ZygardeCosmetic =>
+                     ["10", "10 Power", "50 Power", "10 Complete", "50 Complete"];
+
+                    public const string HoopaCosmetic = "Unbound";
+
+                    public static List<string> OricorioCosmetic =>
+                    ["PomPom", "Pau", "Sensu"];
+
+
+                    public const string RockRuffOwnTempo = "Own Tempo";
+
+                    public static List<string> LycanrocCosmetic =>
+                   ["Midnight", "Dusk"];
+
+                    public const string WishiWashiCosmetic = "School";
+
+                    public static List<string> MiniorCosmetic =>
+                  ["Meteor - Orange", "Meteor - Yellow", "Meteor - Green", "Meteor - Blue", "Meteor - Indigo", "Meteor - Violet", 
+                        "Core - Red", "Core - Orange","Core - Yellow", "Core - Green", "Core - Blue", "Core - Indigo", "Core - Violet"];
+
+                    public static List<string> NecrozmaCosmetic =>
+                 ["Dusk Mane", "Dawn Wings", "Ultra Dusk Mane", "Ultra Dawn Wings"];
+
+                    public static List<string> CramorantCosmetic =>
+                        ["Gulping", "Gorging"];
+
+                    public const string ToxtricityLowKey = "Low Key";
+
+                    public const string SinisteaPolteaGeistCosmetic = "Antique";
+
+                    public static List<string> AlcremieCosmetic =>
+              ["Berry", "Love", "Star", "Clover", "Flower", "Ribbon", "Filler1", "Filler2"];
+
+                    public const string EiscueNoIce = "No Ice";
+                    public const string Morpeko = "Hangry";
+                    public const string ZacianZamazenta = "Crowned";
+                    public const string Eternatus = "Eternamax";
+                    public const string UrshifuRapidStrike = "Rapid Strike";
+                    public const string ZarudeDada = "Dada";
+
+                    public static List<string> CalyrexCosmetic =>
+                    ["Ice Rider", "Shadow Rider"];
                     #endregion Cosmetic
                 }
 
@@ -444,6 +812,15 @@
 
                 #endregion Hisuan
 
+                #region GenderForms
+
+                #endregion GenderForms
+
+                #region PaldeanForms
+
+                public const string Paldean = "Paldean";
+
+                #endregion PaldeanForms
 
                 #endregion HG Engine
             }

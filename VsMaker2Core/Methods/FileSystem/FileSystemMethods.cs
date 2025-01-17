@@ -717,32 +717,31 @@ namespace VsMaker2Core.Methods
                                 bool chooseNickname = (pokemon.AdditionalFlags_Hge & 0x200) != 0;
                                 if (chooseStatus)
                                 {
-                                    writer.Write(0x1);
-                            //        writer.Write(pokemon.Status_Hge.Value);
+                                    writer.Write(pokemon.Status_Hge.Value);
                                 }
                                 if (chooseHP)
                                 {
-                                    writer.Write(pokemon.Hp_Hge.Value);
+                                    writer.Write(pokemon.Hp_Hge ?? 1);
                                 }
                                 if (chooseATK)
                                 {
-                                    writer.Write(pokemon.Atk_Hge.Value);
+                                    writer.Write(pokemon.Atk_Hge ?? 1);
                                 }
                                 if (chooseDEF)
                                 {
-                                    writer.Write(pokemon.Def_Hge.Value);
+                                    writer.Write(pokemon.Def_Hge ?? 1);
                                 }
                                 if (chooseSPEED)
                                 {
-                                    writer.Write(pokemon.Speed_Hge.Value);
+                                    writer.Write(pokemon.Speed_Hge ?? 1);
                                 }
                                 if (chooseSpATK)
                                 {
-                                    writer.Write(pokemon.SpAtk_Hge.Value);
+                                    writer.Write(pokemon.SpAtk_Hge ?? 1);
                                 }
                                 if (chooseSpDEF)
                                 {
-                                    writer.Write(pokemon.SpDef_Hge.Value);
+                                    writer.Write(pokemon.SpDef_Hge ?? 1);
                                 }
                                 if (chooseTypes)
                                 {
