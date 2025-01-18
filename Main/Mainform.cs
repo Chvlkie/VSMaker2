@@ -63,7 +63,7 @@ namespace Main
             romName_Label.Text = "";
             mainDataModel = new();
 
-            Text = $"VS Maker 2 - v{appVersion}";
+            Text = $"VS Maker 2 - v{appVersion} HgE Experimental Build";
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || unsavedBattleMessageChanges;
