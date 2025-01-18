@@ -2,10 +2,10 @@
 {
     public partial class EditStatsForm : Form
     {
-        public byte[] Stats = new byte[6];
+        public ushort[] Stats = new ushort[6];
         private CheckedListBox AdditionalFlags;
 
-        public EditStatsForm(byte[] stats, CheckedListBox additionalFlags)
+        public EditStatsForm(ushort[] stats, CheckedListBox additionalFlags)
         {
             this.Stats = stats;
             this.AdditionalFlags = additionalFlags;
@@ -26,12 +26,12 @@
 
         private void SaveStatValues()
         {
-            Stats[0] = (byte)num_StatHp.Value;
-            Stats[1] = (byte)num_StatAtk.Value;
-            Stats[2] = (byte)num_StatDef.Value;
-            Stats[3] = (byte)num_StatSpd.Value;
-            Stats[4] = (byte)num_StatSpAtk.Value;
-            Stats[5] = (byte)num_StatSpDef.Value;
+            Stats[0] = (ushort)num_StatHp.Value;
+            Stats[1] = (ushort)num_StatAtk.Value;
+            Stats[2] = (ushort)num_StatDef.Value;
+            Stats[3] = (ushort)num_StatSpd.Value;
+            Stats[4] = (ushort)num_StatSpAtk.Value;
+            Stats[5] = (ushort)num_StatSpDef.Value;
         }
 
         private void EnableDisableItems()

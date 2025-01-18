@@ -642,6 +642,7 @@ namespace Main
             label2 = new Label();
             poke1AbilityComboBox = new ComboBox();
             poke1Data = new GroupBox();
+            poke1_form_numBox = new NumericUpDown();
             poke1ComboBox = new ComboBox();
             poke_Slot1_Pokemon_lbl = new Label();
             label7 = new Label();
@@ -696,6 +697,7 @@ namespace Main
             label34 = new Label();
             poke2AbilityComboBox = new ComboBox();
             groupBox16 = new GroupBox();
+            poke2_form_numBox = new NumericUpDown();
             poke2ComboBox = new ComboBox();
             label35 = new Label();
             label36 = new Label();
@@ -750,6 +752,7 @@ namespace Main
             label78 = new Label();
             poke3AbilityComboBox = new ComboBox();
             groupBox22 = new GroupBox();
+            poke3_form_numBox = new NumericUpDown();
             poke3ComboBox = new ComboBox();
             label79 = new Label();
             label80 = new Label();
@@ -804,6 +807,7 @@ namespace Main
             label98 = new Label();
             poke4AbilityComboBox = new ComboBox();
             groupBox28 = new GroupBox();
+            poke4_form_numBox = new NumericUpDown();
             poke4ComboBox = new ComboBox();
             label99 = new Label();
             label100 = new Label();
@@ -858,6 +862,7 @@ namespace Main
             label118 = new Label();
             poke5AbilityComboBox = new ComboBox();
             groupBox34 = new GroupBox();
+            poke5_form_numBox = new NumericUpDown();
             poke5ComboBox = new ComboBox();
             label119 = new Label();
             label120 = new Label();
@@ -912,6 +917,7 @@ namespace Main
             label138 = new Label();
             poke6AbilityComboBox = new ComboBox();
             groupBox40 = new GroupBox();
+            poke6_form_numBox = new NumericUpDown();
             poke6ComboBox = new ComboBox();
             label139 = new Label();
             label140 = new Label();
@@ -1152,6 +1158,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke1LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke1DVNum).BeginInit();
             poke1Data.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke1_form_numBox).BeginInit();
             poke2_Tab.SuspendLayout();
             poke2HgEngine_groupBox.SuspendLayout();
             poke2Moves_groupBox.SuspendLayout();
@@ -1165,6 +1172,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke2LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke2DVNum).BeginInit();
             groupBox16.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke2_form_numBox).BeginInit();
             poke3_Tab.SuspendLayout();
             poke3HgEngine_groupBox.SuspendLayout();
             poke3Moves_groupBox.SuspendLayout();
@@ -1178,6 +1186,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke3LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke3DVNum).BeginInit();
             groupBox22.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke3_form_numBox).BeginInit();
             poke4_Tab.SuspendLayout();
             poke4HgEngine_groupBox.SuspendLayout();
             poke4Moves_groupBox.SuspendLayout();
@@ -1191,6 +1200,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke4LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke4DVNum).BeginInit();
             groupBox28.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke4_form_numBox).BeginInit();
             poke5_Tab.SuspendLayout();
             poke5HgEngine_groupBox.SuspendLayout();
             poke5Moves_groupBox.SuspendLayout();
@@ -1204,6 +1214,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke5LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke5DVNum).BeginInit();
             groupBox34.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke5_form_numBox).BeginInit();
             poke6_Tab.SuspendLayout();
             poke6HgEngine_groupBox.SuspendLayout();
             poke6Moves_groupBox.SuspendLayout();
@@ -1217,6 +1228,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke6LevelNum).BeginInit();
             ((System.ComponentModel.ISupportInitialize)poke6DVNum).BeginInit();
             groupBox40.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)poke6_form_numBox).BeginInit();
             trainer_Party_toolStrip.SuspendLayout();
             groupBox1.SuspendLayout();
             groupBox10.SuspendLayout();
@@ -1592,6 +1604,7 @@ namespace Main
             trainer_PartyData_tabControl.SelectedIndex = 0;
             trainer_PartyData_tabControl.Size = new Size(516, 430);
             trainer_PartyData_tabControl.TabIndex = 155;
+            trainer_PartyData_tabControl.Visible = true;
             // 
             // poke1_Tab
             // 
@@ -2121,6 +2134,7 @@ namespace Main
             // 
             // poke1Data
             // 
+            poke1Data.Controls.Add(poke1_form_numBox);
             poke1Data.Controls.Add(poke1ComboBox);
             poke1Data.Controls.Add(poke_Slot1_Pokemon_lbl);
             poke1Data.Controls.Add(label7);
@@ -2133,6 +2147,14 @@ namespace Main
             poke1Data.TabIndex = 65;
             poke1Data.TabStop = false;
             poke1Data.Text = "Pokémon Data";
+            // 
+            // poke1_form_numBox
+            // 
+            poke1_form_numBox.Location = new Point(209, 34);
+            poke1_form_numBox.Name = "poke1_form_numBox";
+            poke1_form_numBox.Size = new Size(70, 22);
+            poke1_form_numBox.TabIndex = 60;
+            poke1_form_numBox.Visible = false;
             // 
             // poke1ComboBox
             // 
@@ -2720,6 +2742,7 @@ namespace Main
             // 
             // groupBox16
             // 
+            groupBox16.Controls.Add(poke2_form_numBox);
             groupBox16.Controls.Add(poke2ComboBox);
             groupBox16.Controls.Add(label35);
             groupBox16.Controls.Add(label36);
@@ -2732,6 +2755,14 @@ namespace Main
             groupBox16.TabIndex = 71;
             groupBox16.TabStop = false;
             groupBox16.Text = "Pokémon Data";
+            // 
+            // poke2_form_numBox
+            // 
+            poke2_form_numBox.Location = new Point(209, 34);
+            poke2_form_numBox.Name = "poke2_form_numBox";
+            poke2_form_numBox.Size = new Size(70, 22);
+            poke2_form_numBox.TabIndex = 61;
+            poke2_form_numBox.Visible = false;
             // 
             // poke2ComboBox
             // 
@@ -3317,6 +3348,7 @@ namespace Main
             // 
             // groupBox22
             // 
+            groupBox22.Controls.Add(poke3_form_numBox);
             groupBox22.Controls.Add(poke3ComboBox);
             groupBox22.Controls.Add(label79);
             groupBox22.Controls.Add(label80);
@@ -3329,6 +3361,14 @@ namespace Main
             groupBox22.TabIndex = 71;
             groupBox22.TabStop = false;
             groupBox22.Text = "Pokémon Data";
+            // 
+            // poke3_form_numBox
+            // 
+            poke3_form_numBox.Location = new Point(209, 34);
+            poke3_form_numBox.Name = "poke3_form_numBox";
+            poke3_form_numBox.Size = new Size(70, 22);
+            poke3_form_numBox.TabIndex = 62;
+            poke3_form_numBox.Visible = false;
             // 
             // poke3ComboBox
             // 
@@ -3914,6 +3954,7 @@ namespace Main
             // 
             // groupBox28
             // 
+            groupBox28.Controls.Add(poke4_form_numBox);
             groupBox28.Controls.Add(poke4ComboBox);
             groupBox28.Controls.Add(label99);
             groupBox28.Controls.Add(label100);
@@ -3926,6 +3967,13 @@ namespace Main
             groupBox28.TabIndex = 71;
             groupBox28.TabStop = false;
             groupBox28.Text = "Pokémon Data";
+            // 
+            // poke4_form_numBox
+            // 
+            poke4_form_numBox.Location = new Point(209, 34);
+            poke4_form_numBox.Name = "poke4_form_numBox";
+            poke4_form_numBox.Size = new Size(70, 22);
+            poke4_form_numBox.TabIndex = 62;
             // 
             // poke4ComboBox
             // 
@@ -4511,6 +4559,7 @@ namespace Main
             // 
             // groupBox34
             // 
+            groupBox34.Controls.Add(poke5_form_numBox);
             groupBox34.Controls.Add(poke5ComboBox);
             groupBox34.Controls.Add(label119);
             groupBox34.Controls.Add(label120);
@@ -4523,6 +4572,14 @@ namespace Main
             groupBox34.TabIndex = 71;
             groupBox34.TabStop = false;
             groupBox34.Text = "Pokémon Data";
+            // 
+            // poke5_form_numBox
+            // 
+            poke5_form_numBox.Location = new Point(209, 34);
+            poke5_form_numBox.Name = "poke5_form_numBox";
+            poke5_form_numBox.Size = new Size(70, 22);
+            poke5_form_numBox.TabIndex = 62;
+            poke5_form_numBox.Visible = false;
             // 
             // poke5ComboBox
             // 
@@ -5108,6 +5165,7 @@ namespace Main
             // 
             // groupBox40
             // 
+            groupBox40.Controls.Add(poke6_form_numBox);
             groupBox40.Controls.Add(poke6ComboBox);
             groupBox40.Controls.Add(label139);
             groupBox40.Controls.Add(label140);
@@ -5120,6 +5178,14 @@ namespace Main
             groupBox40.TabIndex = 71;
             groupBox40.TabStop = false;
             groupBox40.Text = "Pokémon Data";
+            // 
+            // poke6_form_numBox
+            // 
+            poke6_form_numBox.Location = new Point(209, 36);
+            poke6_form_numBox.Name = "poke6_form_numBox";
+            poke6_form_numBox.Size = new Size(70, 22);
+            poke6_form_numBox.TabIndex = 62;
+            poke6_form_numBox.Visible = false;
             // 
             // poke6ComboBox
             // 
@@ -5181,6 +5247,7 @@ namespace Main
             poke6FormComboBox.Name = "poke6FormComboBox";
             poke6FormComboBox.Size = new Size(70, 21);
             poke6FormComboBox.TabIndex = 59;
+            poke6FormComboBox.Visible = false;
             // 
             // trainer_Party_toolStrip
             // 
@@ -7341,7 +7408,7 @@ namespace Main
             romIcon_PicBox.TabIndex = 0;
             romIcon_PicBox.TabStop = false;
             // 
-            // Mainform
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -7353,7 +7420,7 @@ namespace Main
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mainMenu;
             MinimumSize = new Size(1280, 720);
-            Name = "Mainform";
+            Name = "MainForm";
             Text = "VS Maker 2";
             FormClosing += Mainform_FormClosing;
             Load += Mainform_Load;
@@ -7387,6 +7454,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke1DVNum).EndInit();
             poke1Data.ResumeLayout(false);
             poke1Data.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke1_form_numBox).EndInit();
             poke2_Tab.ResumeLayout(false);
             poke2HgEngine_groupBox.ResumeLayout(false);
             poke2HgEngine_groupBox.PerformLayout();
@@ -7404,6 +7472,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke2DVNum).EndInit();
             groupBox16.ResumeLayout(false);
             groupBox16.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke2_form_numBox).EndInit();
             poke3_Tab.ResumeLayout(false);
             poke3HgEngine_groupBox.ResumeLayout(false);
             poke3HgEngine_groupBox.PerformLayout();
@@ -7421,6 +7490,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke3DVNum).EndInit();
             groupBox22.ResumeLayout(false);
             groupBox22.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke3_form_numBox).EndInit();
             poke4_Tab.ResumeLayout(false);
             poke4HgEngine_groupBox.ResumeLayout(false);
             poke4HgEngine_groupBox.PerformLayout();
@@ -7438,6 +7508,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke4DVNum).EndInit();
             groupBox28.ResumeLayout(false);
             groupBox28.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke4_form_numBox).EndInit();
             poke5_Tab.ResumeLayout(false);
             poke5HgEngine_groupBox.ResumeLayout(false);
             poke5HgEngine_groupBox.PerformLayout();
@@ -7455,6 +7526,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke5DVNum).EndInit();
             groupBox34.ResumeLayout(false);
             groupBox34.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke5_form_numBox).EndInit();
             poke6_Tab.ResumeLayout(false);
             poke6HgEngine_groupBox.ResumeLayout(false);
             poke6HgEngine_groupBox.PerformLayout();
@@ -7472,6 +7544,7 @@ namespace Main
             ((System.ComponentModel.ISupportInitialize)poke6DVNum).EndInit();
             groupBox40.ResumeLayout(false);
             groupBox40.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)poke6_form_numBox).EndInit();
             trainer_Party_toolStrip.ResumeLayout(false);
             trainer_Party_toolStrip.PerformLayout();
             groupBox1.ResumeLayout(false);
@@ -7887,5 +7960,11 @@ namespace Main
         private ComboBox poke6GenderComboBox;
         private Label label141;
         private ComboBox poke6FormComboBox;
+        private NumericUpDown poke1_form_numBox;
+        private NumericUpDown poke2_form_numBox;
+        private NumericUpDown poke3_form_numBox;
+        private NumericUpDown poke4_form_numBox;
+        private NumericUpDown poke5_form_numBox;
+        private NumericUpDown poke6_form_numBox;
     }
 }

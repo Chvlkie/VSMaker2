@@ -721,27 +721,27 @@ namespace VsMaker2Core.Methods
                                 }
                                 if (chooseHP)
                                 {
-                                    writer.Write(pokemon.Hp_Hge ?? 1);
+                                    writer.Write(pokemon.Hp_Hge.Value);
                                 }
                                 if (chooseATK)
                                 {
-                                    writer.Write(pokemon.Atk_Hge ?? 1);
+                                    writer.Write(pokemon.Atk_Hge.Value);
                                 }
                                 if (chooseDEF)
                                 {
-                                    writer.Write(pokemon.Def_Hge ?? 1);
+                                    writer.Write(pokemon.Def_Hge.Value);
                                 }
                                 if (chooseSPEED)
                                 {
-                                    writer.Write(pokemon.Speed_Hge ?? 1);
+                                    writer.Write(pokemon.Speed_Hge.Value);
                                 }
                                 if (chooseSpATK)
                                 {
-                                    writer.Write(pokemon.SpAtk_Hge ?? 1);
+                                    writer.Write(pokemon.SpAtk_Hge.Value);
                                 }
                                 if (chooseSpDEF)
                                 {
-                                    writer.Write(pokemon.SpDef_Hge ?? 1);
+                                    writer.Write(pokemon.SpDef_Hge.Value);
                                 }
                                 if (chooseTypes)
                                 {

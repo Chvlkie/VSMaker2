@@ -217,8 +217,10 @@ namespace Main
 
                 mainDataModel.ItemNames = romFileMethods.GetItemNames(RomFile.ItemNamesTextNumber);
                 ReportProgress();
-                mainDataModel.PokeBallNames = mainDataModel.ItemNames.Where(x => x.EndsWith(" Ball") && !x.Contains("Light") && !x.Contains("Smoke") && !x.Contains("Iron")).ToList();
-
+                mainDataModel.PokeBallNames = SetPokeBallNames();
+                mainDataModel.TypeNames = SetTypeNames();
+                mainDataModel.StatusNames = SetStatusNames();
+                mainDataModel.NatureNames = SetNatureNames();
                 mainDataModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                 ReportProgress();
 
@@ -234,6 +236,34 @@ namespace Main
             {
                 isLoadingData = false;
             }
+        }
+
+        private List<string> SetPokeBallNames()
+        {
+            var pokeBalls = new List<string> { "-" };
+            pokeBalls.AddRange(mainDataModel.ItemNames.Where(x => x.EndsWith(" Ball") && !x.Contains("Light") && !x.Contains("Smoke") && !x.Contains("Iron")).ToList());
+            return pokeBalls;
+        }
+
+        private List<string> SetTypeNames()
+        {
+            var typeNames = new List<string> { "-" };
+
+            return typeNames;
+        }
+
+        private List<string> SetStatusNames()
+        {
+            var statusNames = new List<string> { "-" };
+
+            return statusNames;
+        }
+
+        private List<string> SetNatureNames()
+        {
+            var natures = new List<string> { "-" };
+
+            return natures;
         }
 
         public async Task LoadRomDataAsync(IProgress<int> progress)
@@ -1085,7 +1115,5 @@ namespace Main
                 pictureBox.Image = ndsImage.GetTrainerClassSrite(palette, image, sprite, frame);
             }
         }
-
-       
     }
 }

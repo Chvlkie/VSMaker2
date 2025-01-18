@@ -21,43 +21,44 @@ namespace Main
         public byte[] poke1Evs = new byte[6];
         public byte[] poke1Ivs = new byte[6];
         public NumericUpDown[] poke1PPs = new NumericUpDown[4];
-        public byte[] poke1StatsArray = new byte[6];
+        public ushort[] poke1StatsArray = new ushort[6];
         public byte[] poke2Evs = new byte[6];
         public byte[] poke2Ivs = new byte[6];
         public NumericUpDown[] poke2PPs = new NumericUpDown[4];
-        public byte[] poke2StatsArray = new byte[6];
+        public ushort[] poke2StatsArray = new ushort[6];
         public byte[] poke3Evs = new byte[6];
         public byte[] poke3Ivs = new byte[6];
         public NumericUpDown[] poke3PPs = new NumericUpDown[4];
-        public byte[] poke3StatsArray = new byte[6];
+        public ushort[] poke3StatsArray = new ushort[6];
         public byte[] poke4Evs = new byte[6];
         public byte[] poke4Ivs = new byte[6];
         public NumericUpDown[] poke4PPs = new NumericUpDown[4];
-        public byte[] poke4StatsArray = new byte[6];
+        public ushort[] poke4StatsArray = new ushort[6];
         public byte[] poke5Evs = new byte[6];
         public byte[] poke5Ivs = new byte[6];
         public NumericUpDown[] poke5PPs = new NumericUpDown[4];
-        public byte[] poke5StatsArray = new byte[6];
+        public ushort[] poke5StatsArray = new ushort[6];
         public byte[] poke6Evs = new byte[6];
         public byte[] poke6Ivs = new byte[6];
         public NumericUpDown[] poke6PPs = new NumericUpDown[4];
-        public byte[] poke6StatsArray = new byte[6];
+        public ushort[] poke6StatsArray = new ushort[6];
         public List<byte[]> pokeEvs;
         public List<byte[]> pokeIvs;
-        public List<byte[]> pokeStats;
+        public List<ushort[]> pokeStats;
         private ToolTip hgeAbilityTooltip;
-        private List<CheckedListBox> pokeAdditionFlagsLists;
-        private List<Button> pokeEditStatsButtons;
-        private List<ComboBox> pokeHgeAbilityComboBoxes;
+        private List<CheckedListBox> pokeAdditionFlagsLists = [];
+        private List<Button> pokeEditStatsButtons = [];
+        private List<ComboBox> pokeHgeAbilityComboBoxes = [];
         private List<Label> pokeHgeAbilityLabels = [];
-        private List<ComboBox> pokeHgePokeBallComboBoxes;
-        private List<ComboBox> pokeHgeStatusComboBoxes;
-        private List<ComboBox> pokeHgeType1ComboBoxes;
-        private List<ComboBox> pokeHgeType2ComboBoxes;
-        private List<CheckBox> pokeIsShinyCheckBoxes;
-        private List<Button> pokeIvEvButtons;
-        private List<ComboBox> pokeNatureComboBoxes;
-        private List<TextBox> pokeNicknameTextBoxes;
+        private List<ComboBox> pokeHgePokeBallComboBoxes = [];
+        private List<ComboBox> pokeHgeStatusComboBoxes = [];
+        private List<ComboBox> pokeHgeType1ComboBoxes = [];
+        private List<ComboBox> pokeHgeType2ComboBoxes = [];
+        private List<CheckBox> pokeIsShinyCheckBoxes = [];
+        private List<Button> pokeIvEvButtons = [];
+        private List<ComboBox> pokeNatureComboBoxes = [];
+        private List<TextBox> pokeNicknameTextBoxes = [];
+        public List<NumericUpDown> pokeHgFormsNumBox = [];
 
         #endregion HG Engine Only
 
@@ -269,6 +270,21 @@ namespace Main
                         comboBox.BackColor = Color.White;
                 }
             }
+            static void ShowHideControls<T>(IEnumerable<T> controls, bool visible) where T : Control
+            {
+                foreach (var control in controls)
+                {
+                    control.Visible = visible;
+                }
+            }
+
+            static void SetNumBoxToZero(IEnumerable<NumericUpDown> numBoxes)
+            {
+                foreach (var numBox in numBoxes)
+                {
+                    numBox.Value = 0;
+                }
+            }
 
             // Disable all controls
             DisableControls(pokeComboBoxes);
@@ -294,6 +310,9 @@ namespace Main
             DisableControls(pokeNatureComboBoxes);
             DisableControls(pokeIsShinyCheckBoxes);
             DisableControls(pokeNicknameTextBoxes);
+            DisableControls(pokeHgFormsNumBox);
+            ShowHideControls(pokeHgFormsNumBox, RomFile.IsHgEngine);
+            ShowHideControls(pokeFormsComboBoxes, !RomFile.IsHgEngine);
 
             #endregion HG Engine
 
@@ -354,6 +373,12 @@ namespace Main
                     && RomFile.IsHgEngine
                     && pokeAdditionFlagsLists[index].GetItemChecked(8);
             }
+            pokeHgFormsNumBox[index].Enabled = RomFile.IsHgEngine && Species.HasMoreThanOneForm(pokemonId);
+
+            if (!pokeHgFormsNumBox[index].Enabled)
+            {
+                pokeHgFormsNumBox[index].Value = 0;
+            }
 
             pokeHgeAbilityComboBoxes[index].Enabled = RomFile.IsHgEngine
                 && trainer_PropertyFlags.GetItemChecked(3);
@@ -408,7 +433,7 @@ namespace Main
             pokeDVNums[index].Enabled = true;
             pokeBallCapsuleComboBoxes[index].Enabled = RomFile.IsNotDiamondPearl;
             pokeAbilityComboBoxes[index].Enabled = RomFile.IsNotDiamondPearl && species.HasMoreThanOneAbility;
-            pokeFormsComboBoxes[index].Enabled = RomFile.IsNotDiamondPearl && Species.HasMoreThanOneForm(pokemonId);
+            pokeFormsComboBoxes[index].Enabled = RomFile.IsNotDiamondPearl && !RomFile.IsHgEngine && Species.HasMoreThanOneForm(pokemonId);
             pokeHeldItemComboBoxes[index].Enabled = trainer_PropertyFlags.GetItemChecked(2);
             pokeGenderComboBoxes[index].Enabled = RomFile.IsNotDiamondPearl && species.HasMoreThanOneGender;
 
@@ -922,7 +947,10 @@ namespace Main
             ClearComboBoxes(pokeNatureComboBoxes);
             pokeHgeAbilityComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.AbilityNames]));
             pokeHgePokeBallComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.PokeBallNames]));
-            pokeHgeStatusComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.PokeBallNames]));
+            pokeHgeStatusComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.StatusNames]));
+            pokeNatureComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.NatureNames]));
+            pokeHgeType1ComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.TypeNames]));
+            pokeHgeType2ComboBoxes.ForEach(x => x.Items.AddRange([.. mainDataModel.TypeNames]));
             AddToolTipsToLabels();
         }
 
@@ -1134,45 +1162,56 @@ namespace Main
 
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(0))
                 {
-                    pokemonData.Hp_Hge = pokeStats[partyIndex][0];
+                    pokemonData.Status_Hge = (uint)pokeHgeStatusComboBoxes[partyIndex].SelectedIndex;
                     additionalFlag |= 0x01;
                 }
-
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(1))
                 {
-                    pokemonData.Atk_Hge = pokeStats[partyIndex][1];
+                    pokemonData.Hp_Hge = pokeStats[partyIndex][0];
                     additionalFlag |= 0x02;
                 }
+
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(2))
                 {
-                    pokemonData.Def_Hge = pokeStats[partyIndex][2];
+                    pokemonData.Atk_Hge = pokeStats[partyIndex][1];
                     additionalFlag |= 0x04;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(3))
                 {
-                    pokemonData.Speed_Hge = pokeStats[partyIndex][3];
+                    pokemonData.Def_Hge = pokeStats[partyIndex][2];
                     additionalFlag |= 0x08;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(4))
                 {
-                    pokemonData.SpAtk_Hge = pokeStats[partyIndex][4];
+                    pokemonData.Speed_Hge = pokeStats[partyIndex][3];
                     additionalFlag |= 0x10;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(5))
                 {
-                    pokemonData.SpDef_Hge = pokeStats[partyIndex][5];
+                    pokemonData.SpAtk_Hge = pokeStats[partyIndex][4];
                     additionalFlag |= 0x20;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(6))
                 {
+                    pokemonData.SpDef_Hge = pokeStats[partyIndex][5];
                     additionalFlag |= 0x40;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(7))
                 {
+                    pokemonData.Types_Hge = [
+                        (byte)pokeHgeType1ComboBoxes[partyIndex].SelectedIndex,
+                        (byte)pokeHgeType2ComboBoxes[partyIndex].SelectedIndex
+                        ];
                     additionalFlag |= 0x80;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(8))
                 {
+                    pokemonData.PpCounts_Hge = [
+                        (byte)pokePpNumberBoxes[partyIndex][0].Value,
+                        (byte)pokePpNumberBoxes[partyIndex][1].Value,
+                        (byte)pokePpNumberBoxes[partyIndex][2].Value,
+                        (byte)pokePpNumberBoxes[partyIndex][3].Value
+                        ];
                     additionalFlag |= 0x100;
                 }
                 if (pokeAdditionFlagsLists[partyIndex].GetItemChecked(9))
@@ -1203,7 +1242,11 @@ namespace Main
             for (int i = 0; i < teamSize; i++)
             {
                 int pokemonId = GetPokemonIdFromComboBoxText(pokeComboBoxes[i].Text);
-                ushort formId = isNotDiamondPearl ? (ushort)pokeFormsComboBoxes[i].SelectedIndex : (ushort)0;
+                ushort formId = isNotDiamondPearl && !RomFile.IsHgEngine ? (ushort)pokeFormsComboBoxes[i].SelectedIndex : (ushort)0;
+                if (RomFile.IsHgEngine)
+                {
+                    formId = (ushort)pokeHgFormsNumBox[i].Value;
+                }
                 ushort speciesId = Species.GetSpecialSpecies((ushort)pokemonId, formId);
                 var species = GetSpeciesBySpeciesId(speciesId);
 
@@ -1238,6 +1281,34 @@ namespace Main
                 if (RomFile.IsHgEngine)
                 {
                     newPokemonData = SetHgEngineData(trainerId, i, newPokemonData);
+
+                    newPokemon.Ability_Hge = newPokemonData.Ability_Hge;
+                    newPokemon.Ball_Hge = newPokemonData.Ball_Hge;
+                    newPokemon.IvNums_Hge = newPokemonData.IvNums_Hge;
+                    newPokemon.EvNums_Hge = newPokemonData.EvNums_Hge;
+                    newPokemon.Nature_Hge = newPokemonData.Nature_Hge;
+                    newPokemon.ShinyLock_Hge = newPokemonData.ShinyLock_Hge;
+                    newPokemon.Status_Hge = newPokemonData.Status_Hge;
+                    newPokemon.Hp_Hge = newPokemonData.Hp_Hge;
+                    newPokemon.Atk_Hge = newPokemonData.Atk_Hge;
+                    newPokemon.Def_Hge = newPokemonData.Def_Hge;
+                    newPokemon.Speed_Hge = newPokemonData.Speed_Hge;
+                    newPokemon.SpAtk_Hge = newPokemonData.SpAtk_Hge;
+                    newPokemon.SpDef_Hge = newPokemonData.SpDef_Hge;
+                    newPokemon.Types_Hge = newPokemonData.Types_Hge;
+                    newPokemon.PpCounts_Hge = newPokemonData.PpCounts_Hge;
+                    newPokemon.Nickname_Hge = newPokemonData.Nickname_Hge;
+                    newPokemon.FormId = (byte)pokeHgFormsNumBox[i].Value;
+                    newPokemon.ChooseStatus_Hge = (newPokemonData.AdditionalFlags_Hge & 0x01) != 0;
+                    newPokemon.ChooseHP_Hge = (newPokemonData.AdditionalFlags_Hge & 0x02) != 0;
+                    newPokemon.ChooseATK_Hge = (newPokemonData.AdditionalFlags_Hge & 0x04) != 0;
+                    newPokemon.ChooseDEF_Hge = (newPokemonData.AdditionalFlags_Hge & 0x08) != 0;
+                    newPokemon.ChooseSPEED_Hge = (newPokemonData.AdditionalFlags_Hge & 0x10) != 0;
+                    newPokemon.Choose_SpATK_Hge = (newPokemonData.AdditionalFlags_Hge & 0x20) != 0;
+                    newPokemon.Choose_SpDEF_Hge = (newPokemonData.AdditionalFlags_Hge & 0x40) != 0;
+                    newPokemon.ChooseTypes_Hge = (newPokemonData.AdditionalFlags_Hge & 0x80) != 0;
+                    newPokemon.ChoosePP_Hge = (newPokemonData.AdditionalFlags_Hge & 0x100) != 0;
+                    newPokemon.ChooseNickname_HGE = (newPokemonData.AdditionalFlags_Hge & 0x200) != 0;
                 }
                 newPokemons.Add(newPokemon);
                 newPokemonDatas.Add(newPokemonData);
@@ -1377,156 +1448,207 @@ namespace Main
                             case Pokemon.Pokedex.Aerodactyl:
                                 Species.AltForms.FormNames.HgEngineForms.Aerodactyl.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Alakazam:
                                 Species.AltForms.FormNames.HgEngineForms.Alakazam.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Articuno:
                                 Species.AltForms.FormNames.HgEngineForms.Articuno.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Beedrill:
                                 Species.AltForms.FormNames.HgEngineForms.Beedrill.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Blastoise:
                                 Species.AltForms.FormNames.HgEngineForms.Blastoise.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Charizard:
                                 Species.AltForms.FormNames.HgEngineForms.Charizard.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Diglett:
                                 Species.AltForms.FormNames.HgEngineForms.Diglett.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Eevee:
                                 Species.AltForms.FormNames.HgEngineForms.Eevee.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Dugtrio:
                                 Species.AltForms.FormNames.HgEngineForms.Dugtrio.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Exeggutor:
                                 Species.AltForms.FormNames.HgEngineForms.Exeggutor.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Farfetchd:
                                 Species.AltForms.FormNames.HgEngineForms.Farfetchd.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Gengar:
                                 Species.AltForms.FormNames.HgEngineForms.Gengar.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Geodude:
                                 Species.AltForms.FormNames.HgEngineForms.Geodude.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Golem:
                                 Species.AltForms.FormNames.HgEngineForms.Golem.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Graveler:
                                 Species.AltForms.FormNames.HgEngineForms.Graveler.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Grimer:
                                 Species.AltForms.FormNames.HgEngineForms.Grimer.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Gyarados:
                                 Species.AltForms.FormNames.HgEngineForms.Gyarados.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Kangaskhan:
                                 Species.AltForms.FormNames.HgEngineForms.Kangaskhan.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Marowak:
                                 Species.AltForms.FormNames.HgEngineForms.Marowak.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Meowth:
                                 Species.AltForms.FormNames.HgEngineForms.Meowth.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Mewtwo:
                                 Species.AltForms.FormNames.HgEngineForms.Mewtwo.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Moltres:
                                 Species.AltForms.FormNames.HgEngineForms.Moltres.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.MrMime:
                                 Species.AltForms.FormNames.HgEngineForms.MrMime.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Muk:
                                 Species.AltForms.FormNames.HgEngineForms.Muk.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Ninetales:
                                 Species.AltForms.FormNames.HgEngineForms.Ninetales.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Persian:
                                 Species.AltForms.FormNames.HgEngineForms.Persian.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Pidgeot:
                                 Species.AltForms.FormNames.HgEngineForms.Pidgeot.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Pinsir:
                                 Species.AltForms.FormNames.HgEngineForms.Pinsir.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Ponyta:
                                 Species.AltForms.FormNames.HgEngineForms.Ponyta.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Pikachu:
                                 Species.AltForms.FormNames.HgEngineForms.Pikachu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Growlithe:
                                 Species.AltForms.FormNames.HgEngineForms.Growlithe.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Raichu:
                                 Species.AltForms.FormNames.HgEngineForms.Raichu.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Rapidash:
                                 Species.AltForms.FormNames.HgEngineForms.Rapidash.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Raticate:
                                 Species.AltForms.FormNames.HgEngineForms.Raticate.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Rattata:
                                 Species.AltForms.FormNames.HgEngineForms.Rattata.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Sandshrew:
                                 Species.AltForms.FormNames.HgEngineForms.Sandshrew.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Sandslash:
                                 Species.AltForms.FormNames.HgEngineForms.Sandslash.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Slowbro:
                                 Species.AltForms.FormNames.HgEngineForms.Slowbro.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Slowpoke:
                                 Species.AltForms.FormNames.HgEngineForms.Slowpoke.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Venusaur:
                                 Species.AltForms.FormNames.HgEngineForms.Venusaur.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Vulpix:
                                 Species.AltForms.FormNames.HgEngineForms.Vulpix.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Weezing:
                                 Species.AltForms.FormNames.HgEngineForms.Weezing.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Zapdos:
                                 Species.AltForms.FormNames.HgEngineForms.Zapdos.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Ampharos:
                                 Species.AltForms.FormNames.HgEngineForms.Ampharos.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Steelix:
                                 Species.AltForms.FormNames.HgEngineForms.Steelix.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Scizor:
                                 Species.AltForms.FormNames.HgEngineForms.Scizor.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Heracross:
                                 Species.AltForms.FormNames.HgEngineForms.Heracross.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Houndoom:
                                 Species.AltForms.FormNames.HgEngineForms.Houndoom.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Tyranitar:
                                 Species.AltForms.FormNames.HgEngineForms.Tyranitar.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Slowking:
                                 Species.AltForms.FormNames.HgEngineForms.Slowking.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             case Pokemon.Pokedex.Corsola:
                                 Species.AltForms.FormNames.HgEngineForms.Corsola.ForEach(x => pokeFormsComboBoxes[partyIndex].Items.Add(x));
                                 break;
+
                             default:
                                 pokeFormsComboBoxes[partyIndex].Items.Add(Species.AltForms.FormNames.Default);
                                 break;
@@ -1608,7 +1730,6 @@ namespace Main
                 pokeComboBoxes[i].Items.AddRange(mainDataModel.PokemonNames.ToArray());
                 pokeComboBoxes[i].EndUpdate();
 
-
                 var currentPokemon = trainerParty.Pokemons[i];
                 // Use pokemonId as an index into MainDataModel.PokemonNames
                 int pokemonId = currentPokemon.PokemonId;
@@ -1671,7 +1792,7 @@ namespace Main
                     }
                 }
 
-                if (RomFile.IsNotDiamondPearl)
+                if (RomFile.IsNotDiamondPearl && !RomFile.IsHgEngine)
                 {
                     SetPokemonForms(currentPokemon.PokemonId, i);
                     pokeFormsComboBoxes[i].SelectedIndex = currentPokemon.FormId;
@@ -1699,6 +1820,22 @@ namespace Main
 
                 if (RomFile.IsHgEngine)
                 {
+                    pokeHgFormsNumBox[i].Value = currentPokemon.FormId;
+
+                    pokeIsShinyCheckBoxes[i].Checked = currentPokemon.ShinyLock_Hge == 1;
+                    pokeHgeAbilityComboBoxes[i].SelectedIndex = (int?)currentPokemon.Ability_Hge ?? 0;
+                    pokeHgePokeBallComboBoxes[i].SelectedIndex = (int?)currentPokemon.Ball_Hge ?? 0;
+
+                    pokeNatureComboBoxes[i].SelectedIndex = (int?)currentPokemon.Nature_Hge ?? 0;
+                    // to do
+                    pokeNicknameTextBoxes[i].Text = "";
+                    pokeEvs[i] = currentPokemon.EvNums_Hge ?? [0, 0, 0, 0, 0, 0];
+                    pokeIvs[i] = currentPokemon.IvNums_Hge ?? [0, 0, 0, 0, 0, 0];
+
+                    for (int pp = 0; pp < 4; pp++)
+                    {
+                        pokePpNumberBoxes[i][pp].Value = (int?)currentPokemon.PpCounts_Hge?[pp] ?? 0;
+                    }
                     bool additionalFlags = trainer_PropertyFlags.GetItemChecked(8);
                     pokeAdditionFlagsLists[i].SetItemChecked(0, additionalFlags && currentPokemon.ChooseStatus_Hge);
                     pokeAdditionFlagsLists[i].SetItemChecked(1, additionalFlags && currentPokemon.ChooseHP_Hge);
@@ -1710,6 +1847,26 @@ namespace Main
                     pokeAdditionFlagsLists[i].SetItemChecked(7, additionalFlags && currentPokemon.ChooseTypes_Hge);
                     pokeAdditionFlagsLists[i].SetItemChecked(8, additionalFlags && currentPokemon.ChoosePP_Hge);
                     pokeAdditionFlagsLists[i].SetItemChecked(9, additionalFlags && currentPokemon.ChooseNickname_HGE);
+                    if (currentPokemon.ChooseStatus_Hge)
+                    {
+                        pokeHgeStatusComboBoxes[i].SelectedIndex = (int?)currentPokemon.Status_Hge ?? 0;
+                    }
+                    if (currentPokemon.ChooseStats_HGE)
+                    {
+                        pokeStats[i] = [
+                     currentPokemon.Hp_Hge ?? 0,
+                        currentPokemon.Atk_Hge ?? 0,
+                        currentPokemon.Def_Hge ?? 0,
+                        currentPokemon.Speed_Hge ?? 0,
+                        currentPokemon.SpAtk_Hge ?? 0,
+                        currentPokemon.SpDef_Hge ?? 0,
+                        ];
+                    }
+                    if (currentPokemon.ChooseTypes_Hge)
+                    {
+                        pokeHgeType1ComboBoxes[i].SelectedIndex = (int?)currentPokemon.Types_Hge[0] ?? 0;
+                        pokeHgeType2ComboBoxes[i].SelectedIndex = (int?)currentPokemon.Types_Hge[1] ?? 0;
+                    }
                 }
             }
         }
@@ -1752,8 +1909,6 @@ namespace Main
                 trainer_PropertyFlags.SetItemChecked(7, trainerProperties.ShinyLock_Hge);
                 trainer_PropertyFlags.SetItemChecked(8, trainerProperties.AdditionalFlags_Hge);
             }
-
-
         }
 
         private void SetupPartyEditorFields()
@@ -1811,6 +1966,7 @@ namespace Main
             pokeIsShinyCheckBoxes = [poke1_Shiny_checkBox, poke2_Shiny_checkBox, poke3_Shiny_checkBox, poke4_Shiny_checkBox, poke5_Shiny_checkBox, poke6_Shiny_checkBox];
             pokeNicknameTextBoxes = [poke1_Nickname_textBox, poke2_Nickname_textBox, poke3_Nickname_textBox, poke4_Nickname_textBox, poke5_Nickname_textBox, poke6_Nickname_textBox];
             pokeHgeAbilityLabels = [poke1_HgeAbiilty_label, poke2_HgeAbiilty_label, poke3_HgeAbiilty_label, poke4_HgeAbiilty_label, poke5_HgeAbiilty_label, poke6_HgeAbiilty_label];
+            pokeHgFormsNumBox = [poke1_form_numBox, poke2_form_numBox, poke3_form_numBox, poke4_form_numBox, poke5_form_numBox, poke6_form_numBox];
 
             #endregion HG Engine Only
         }

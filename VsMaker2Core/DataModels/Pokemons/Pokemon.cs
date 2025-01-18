@@ -15,14 +15,14 @@ namespace VsMaker2Core.DataModels
         public ushort PokemonId { get; set; }
         public ushort FormId { get; set; }
         public ushort? HeldItemId { get; set; }
-        public ushort[]? Moves { get; set; }
+        public ushort[]? Moves { get; set; } = [0, 0, 0, 0];
         public ushort? BallCapsuleId { get; set; }
 
         // HG Engine Data
         public ushort? Ability_Hge { get; set; }
         public ushort? Ball_Hge { get; set; }
-        public byte[]? IvNums_Hge { get; set; }
-        public byte[]? EvNums_Hge { get; set; }
+        public byte[]? IvNums_Hge { get; set; } = [0, 0, 0, 0, 0, 0];
+        public byte[]? EvNums_Hge { get; set; } = [0, 0, 0, 0, 0, 0];
         public byte? Nature_Hge { get; set; }
         public byte? ShinyLock_Hge { get; set; }
         public uint? Status_Hge { get; set; }
@@ -32,9 +32,9 @@ namespace VsMaker2Core.DataModels
         public ushort? Speed_Hge { get; set; }
         public ushort? SpAtk_Hge { get; set; }
         public ushort? SpDef_Hge { get; set; }
-        public byte[]? Types_Hge { get; set; }
-        public byte[]? PpCounts_Hge { get; set; }
-        public ushort[]? Nickname_Hge { get; set; }
+        public byte[]? Types_Hge { get; set; } = [0, 0];
+        public byte[]? PpCounts_Hge { get; set; } = [0, 0, 0, 0];
+        public ushort[]? Nickname_Hge { get; set; } = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         // Pokemon Additional Flags
         public bool ChooseStatus_Hge { get; set; } = false;
@@ -48,6 +48,8 @@ namespace VsMaker2Core.DataModels
         public bool ChoosePP_Hge { get; set; } = false;
         public bool ChooseNickname_HGE { get; set; } = false;
 
+        public bool ChooseStats_HGE =>
+            ChooseHP_Hge || ChooseATK_Hge || ChooseDEF_Hge || ChooseSPEED_Hge || Choose_SpATK_Hge || Choose_SpDEF_Hge;
         public Pokemon()
         {
             DifficultyValue = 0;
