@@ -346,7 +346,7 @@ namespace VsMaker2Core.Methods
             {
                 uint tableStartAddress = BitConverter.ToUInt32(Arm9.ReadBytes(RomFile.EyeContactTablePointerOffset, 4), 0) - Arm9.Address;
                 uint tableSizeOffset = (uint)(RomFile.IsHeartGoldSoulSilver ? 12 : 10);
-                byte tableSize = Arm9.ReadByte(RomFile.EyeContactTableSizeOffset);
+                byte tableSize = Arm9.ReadByte(RomFile.EyeContactTablePointerOffset - tableSizeOffset);
                 using Arm9.Arm9Reader reader = new(tableStartAddress);
 
                 try
