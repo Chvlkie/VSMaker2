@@ -523,7 +523,9 @@ namespace VsMaker2Core.Methods
                 }
                 else
                 {
-                    filePath = RomFile.OverlayPath;
+                    filePath = RomFile.PrizeMoneyExpanded
+                        ? RomFile.SynthOverlayFilePath
+                        : Overlay.OverlayFilePath(RomFile.PrizeMoneyTableOverlayNumber);
                 }
 
                 await using EasyWriter writer = new(filePath, prizeMoneyData.Offset);
@@ -634,12 +636,7 @@ namespace VsMaker2Core.Methods
 
             bool hasMoves = trainerTypeFlags[1];
             bool heldItems = trainerTypeFlags[2];
-            bool setAbility = trainerTypeFlags[3];
-            bool chooseBall = trainerTypeFlags[4];
-            bool chooseIvEv = trainerTypeFlags[5];
-            bool chooseNature = trainerTypeFlags[6];
-            bool shinyLock = trainerTypeFlags[7];
-            bool additionalFlags = trainerTypeFlags[8];
+           
 
             try
             {
@@ -674,6 +671,13 @@ namespace VsMaker2Core.Methods
 
                         if (RomFile.IsHgEngine)
                         {
+                            bool setAbility = trainerTypeFlags[3];
+                            bool chooseBall = trainerTypeFlags[4];
+                            bool chooseIvEv = trainerTypeFlags[5];
+                            bool chooseNature = trainerTypeFlags[6];
+                            bool shinyLock = trainerTypeFlags[7];
+                            bool additionalFlags = trainerTypeFlags[8];
+
                             if (setAbility)
                             {
                                 writer.Write(pokemon.Ability_Hge.Value);
