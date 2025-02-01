@@ -1281,7 +1281,7 @@ namespace Main
                 if (RomFile.IsHgEngine)
                 {
                     newPokemonData = SetHgEngineData(trainerId, i, newPokemonData);
-
+                    newPokemonData.AdditionalFlags_Hge ??= 0;
                     newPokemon.Ability_Hge = newPokemonData.Ability_Hge;
                     newPokemon.Ball_Hge = newPokemonData.Ball_Hge;
                     newPokemon.IvNums_Hge = newPokemonData.IvNums_Hge;
