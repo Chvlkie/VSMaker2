@@ -52,6 +52,9 @@ namespace Main
         public MainForm()
         {
             InitializeComponent();
+            AutoScaleMode = AutoScaleMode.None;
+            this.Font = new Font("Segoe UI", 9f); 
+            AdjustFormSize();
             filterTimer = new System.Windows.Forms.Timer
             {
                 Interval = debounceDelay
@@ -64,6 +67,31 @@ namespace Main
             mainDataModel = new();
 
             Text = $"VS Maker 2 - v{appVersion} HgE Experimental Build";
+        }
+
+        private void AdjustFormSize()
+        {
+            // Get the screen bounds
+            Rectangle screenBounds = Screen.FromControl(this).Bounds;
+
+            // Ensure the form fits within the screen bounds
+            if (this.Width > screenBounds.Width || this.Height > screenBounds.Height)
+            {
+                this.Size = new Size(
+                    Math.Min(this.Width, screenBounds.Width),
+                    Math.Min(this.Height, screenBounds.Height)
+                );
+            }
+
+            // Ensure the form is positioned within the screen bounds
+            if (this.Right > screenBounds.Right)
+            {
+                this.Left = screenBounds.Right - this.Width;
+            }
+            if (this.Bottom > screenBounds.Bottom)
+            {
+                this.Top = screenBounds.Bottom - this.Height;
+            }
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || unsavedBattleMessageChanges;

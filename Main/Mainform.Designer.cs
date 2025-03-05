@@ -1604,7 +1604,6 @@ namespace Main
             trainer_PartyData_tabControl.SelectedIndex = 0;
             trainer_PartyData_tabControl.Size = new Size(516, 430);
             trainer_PartyData_tabControl.TabIndex = 155;
-            trainer_PartyData_tabControl.Visible = true;
             // 
             // poke1_Tab
             // 
@@ -7010,7 +7009,6 @@ namespace Main
             // 
             // panel6
             // 
-            panel6.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panel6.BackColor = Color.Transparent;
             panel6.Controls.Add(panel5);
             panel6.Controls.Add(battleMessage_PreviewText);
@@ -7020,7 +7018,8 @@ namespace Main
             panel6.Controls.Add(battleMessages_MessageUpBtn);
             panel6.Controls.Add(battleMessages_MessageDownBtn);
             panel6.Controls.Add(battleMessages_PreviewPicBox);
-            panel6.Location = new Point(3, 389);
+            panel6.Dock = DockStyle.Bottom;
+            panel6.Location = new Point(0, 392);
             panel6.Name = "panel6";
             panel6.Size = new Size(1242, 150);
             panel6.TabIndex = 0;
@@ -7419,7 +7418,7 @@ namespace Main
             Controls.Add(mainMenu);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = mainMenu;
-            MinimumSize = new Size(1280, 720);
+            MinimumSize = new Size(1278, 670);
             Name = "MainForm";
             Text = "VS Maker 2";
             FormClosing += Mainform_FormClosing;
