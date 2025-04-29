@@ -567,16 +567,15 @@ namespace Main
         {
             progress?.Report(0);
             List<ushort> offsets = [];
-            offsets.Add(0);
-            for (int i = 1; i < mainDataModel.Trainers.Count; i++)
+            for (int i = 0; i < mainDataModel.Trainers.Count; i++)
             {
-                int index = 0;
+                ushort index = 0x0;
                 var trainer = mainDataModel.Trainers[i];
                 List<BattleMessage> trainerMessages = messageData.Where(x => x.TrainerId == trainer.TrainerId).ToList();
                 if (trainerMessages.Count > 0)
                 {
                     var firstMessage = trainerMessages[0];
-                    index = messageData.FindIndex(x => x.TrainerId == firstMessage.TrainerId && x.MessageTriggerId == firstMessage.MessageTriggerId);
+                    index = (ushort)messageData.FindIndex(x => x.TrainerId == firstMessage.TrainerId && x.MessageTriggerId == firstMessage.MessageTriggerId);
                     index *= 4;
                 }
 

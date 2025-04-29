@@ -100,7 +100,7 @@ namespace Main
             var trainerTextTable = VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable];
             var trainerOffsetTable = VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset];
             Narc.FromFolder(trainerTextTable.unpackedDirectory).Save(trainerTextTable.packedDirectory);
-            Narc.FromFolder(trainerOffsetTable.unpackedDirectory).Save(trainerTextTable.packedDirectory);
+            Narc.FromFolder(trainerOffsetTable.unpackedDirectory).Save(trainerOffsetTable.packedDirectory);
         }
         public async Task BeginSaveRomChangesAsync(IProgress<int> progress, string filePath)
         {

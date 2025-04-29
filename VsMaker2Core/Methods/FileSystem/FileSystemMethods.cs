@@ -194,7 +194,7 @@ namespace VsMaker2Core.Methods
                     int totalOffsets = offsets.Count;
                     for (int i = 0; i < totalOffsets; i++)
                     {
-                        binaryWriter.Write(offsets[i]);
+                        binaryWriter.Write((ushort)offsets[i]);
 
                         if (progress != null)
                         {
