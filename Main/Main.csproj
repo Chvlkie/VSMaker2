@@ -9,10 +9,10 @@
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<Title>VS Maker 2</Title>
 		<AssemblyName>VsMaker2</AssemblyName>
-		<Version>0.9.1</Version>
-		<AssemblyVersion>0.9.1.1</AssemblyVersion>
-		<FileVersion>0.9.1.1</FileVersion>
-		<VersionPrefix>0.9.1</VersionPrefix>
+		<Version>0.9.2</Version>
+		<AssemblyVersion>0.9.2</AssemblyVersion>
+		<FileVersion>0.9.2</FileVersion>
+		<VersionPrefix>0.9.2</VersionPrefix>
 		<VersionSuffix>beta</VersionSuffix>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ApplicationIcon>Resources\Icons\vs-maker-2.ico</ApplicationIcon>
@@ -22,10 +22,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Config\**" />
 	  <Compile Remove="CustomUi\ComboBox\**" />
 	  <Compile Remove="CustomUi\Extensions\**" />
+	  <EmbeddedResource Remove="Config\**" />
 	  <EmbeddedResource Remove="CustomUi\ComboBox\**" />
 	  <EmbeddedResource Remove="CustomUi\Extensions\**" />
+	  <None Remove="Config\**" />
 	  <None Remove="CustomUi\ComboBox\**" />
 	  <None Remove="CustomUi\Extensions\**" />
 	</ItemGroup>
@@ -123,10 +126,6 @@
 
 	<ItemGroup>
 	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Config\" />
 	</ItemGroup>
 
 </Project>
