@@ -1764,7 +1764,14 @@ namespace Main
                 {
                     for (int move = 0; move < 4; move++)
                     {
-                        pokeMovesComboBoxes[i][move].SelectedIndex = currentPokemon.Moves[move];
+                        if (currentPokemon.Moves[move] == 0xFFFF)
+                        {
+                            pokeMovesComboBoxes[i][move].SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            pokeMovesComboBoxes[i][move].SelectedIndex = currentPokemon.Moves[move];
+                        }
                     }
                 }
 

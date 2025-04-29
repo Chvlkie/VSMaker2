@@ -95,7 +95,13 @@ namespace Main
         }
 
         private bool UnsavedChanges => UnsavedTrainerEditorChanges || UnsavedClassChanges || unsavedBattleMessageChanges;
-
+        public void CompileTrainerTableChannges()
+        {
+            var trainerTextTable = VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextTable];
+            var trainerOffsetTable = VsMaker2Core.Database.VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerTextOffset];
+            Narc.FromFolder(trainerTextTable.unpackedDirectory).Save(trainerTextTable.packedDirectory);
+            Narc.FromFolder(trainerOffsetTable.unpackedDirectory).Save(trainerTextTable.packedDirectory);
+        }
         public async Task BeginSaveRomChangesAsync(IProgress<int> progress, string filePath)
         {
             try

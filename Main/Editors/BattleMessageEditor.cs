@@ -166,7 +166,13 @@ namespace Main
 
                 messageData.Add(new BattleMessage(trainerId, messageId, messageTriggerId, messageText));
             }
-            messageData = [.. messageData.OrderBy(x => x.TrainerId).ThenBy(x => x.MessageTriggerId)];
+            messageData = [.. messageData.OrderBy(x => x.TrainerId)
+                .ThenBy(static x => x.MessageTriggerId switch {
+                    15 => 0,
+                    16 => 1,
+                    _ => 2
+                }).ThenBy(x => x.MessageTriggerId)];
+
             SaveBattleMessages(messageData, progress);
             RepointBattleMessageOffsets(messageData, progress);
             progress?.Report(max);
@@ -351,13 +357,14 @@ namespace Main
                     OpenLoadingDialog(LoadType.SaveTrainerTextTable);
                     RomFile.BattleMessageTableData = romFileMethods.GetBattleMessageTableData(RomFile.BattleMessageTablePath);
                     RomFile.BattleMessageOffsetData = romFileMethods.GetBattleMessageOffsetData(RomFile.BattleMessageOffsetPath);
-                    mainDataModel.BattleMessages =  battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
+                    mainDataModel.BattleMessages = battleMessageEditorMethods.GetBattleMessages(RomFile.BattleMessageTableData, RomFile.BattleMessageTextNumber);
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
 
                     undoStack.Clear();
                     redoStack.Clear();
+                    CompileTrainerTableChannges();
                     UpdateUndoRedoButtons();
                 }
             }
@@ -392,6 +399,7 @@ namespace Main
                     battleMessage_MessageTableDataGrid.Rows.Clear();
                     LoadBattleMessages();
                     EditedBattleMessage(false);
+                    CompileTrainerTableChannges();
                 }
             }
             isLoadingData = false;
@@ -434,8 +442,6 @@ namespace Main
                 }
             }
         }
-
-
 
         private void battleMessages_UndoMessageBtn_Click(object sender, EventArgs e)
         {
@@ -562,7 +568,7 @@ namespace Main
             progress?.Report(0);
             List<ushort> offsets = [];
             offsets.Add(0);
-            for (int i = 0; i < mainDataModel.Trainers.Count; i++)
+            for (int i = 1; i < mainDataModel.Trainers.Count; i++)
             {
                 int index = 0;
                 var trainer = mainDataModel.Trainers[i];

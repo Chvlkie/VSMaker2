@@ -2207,7 +2207,7 @@ namespace Main
             trainer_PartyData_groupBox.Controls.Add(trainer_Party_toolStrip);
             trainer_PartyData_groupBox.Location = new Point(0, 0);
             trainer_PartyData_groupBox.Name = "trainer_PartyData_groupBox";
-            trainer_PartyData_groupBox.Size = new Size(507, 476);
+            trainer_PartyData_groupBox.Size = new Size(506, 476);
             trainer_PartyData_groupBox.TabIndex = 159;
             trainer_PartyData_groupBox.TabStop = false;
             trainer_PartyData_groupBox.Text = "Party Data";
@@ -2224,7 +2224,7 @@ namespace Main
             trainer_PartyData_tabControl.Location = new Point(3, 44);
             trainer_PartyData_tabControl.Name = "trainer_PartyData_tabControl";
             trainer_PartyData_tabControl.SelectedIndex = 0;
-            trainer_PartyData_tabControl.Size = new Size(501, 429);
+            trainer_PartyData_tabControl.Size = new Size(500, 429);
             trainer_PartyData_tabControl.TabIndex = 155;
             // 
             // poke1_Tab
@@ -2239,7 +2239,7 @@ namespace Main
             poke1_Tab.Location = new Point(4, 24);
             poke1_Tab.Name = "poke1_Tab";
             poke1_Tab.Padding = new Padding(3);
-            poke1_Tab.Size = new Size(493, 401);
+            poke1_Tab.Size = new Size(492, 401);
             poke1_Tab.TabIndex = 0;
             poke1_Tab.UseVisualStyleBackColor = true;
             // 
@@ -2852,7 +2852,7 @@ namespace Main
             poke2_Tab.Location = new Point(4, 24);
             poke2_Tab.Name = "poke2_Tab";
             poke2_Tab.Padding = new Padding(3);
-            poke2_Tab.Size = new Size(494, 402);
+            poke2_Tab.Size = new Size(492, 401);
             poke2_Tab.TabIndex = 2;
             poke2_Tab.UseVisualStyleBackColor = true;
             // 
@@ -3458,7 +3458,7 @@ namespace Main
             poke3_Tab.Location = new Point(4, 24);
             poke3_Tab.Name = "poke3_Tab";
             poke3_Tab.Padding = new Padding(3);
-            poke3_Tab.Size = new Size(494, 402);
+            poke3_Tab.Size = new Size(492, 401);
             poke3_Tab.TabIndex = 3;
             poke3_Tab.UseVisualStyleBackColor = true;
             // 
@@ -4064,7 +4064,7 @@ namespace Main
             poke4_Tab.Location = new Point(4, 24);
             poke4_Tab.Name = "poke4_Tab";
             poke4_Tab.Padding = new Padding(3);
-            poke4_Tab.Size = new Size(494, 402);
+            poke4_Tab.Size = new Size(492, 401);
             poke4_Tab.TabIndex = 4;
             poke4_Tab.UseVisualStyleBackColor = true;
             // 
@@ -4669,7 +4669,7 @@ namespace Main
             poke5_Tab.Location = new Point(4, 24);
             poke5_Tab.Name = "poke5_Tab";
             poke5_Tab.Padding = new Padding(3);
-            poke5_Tab.Size = new Size(494, 402);
+            poke5_Tab.Size = new Size(492, 401);
             poke5_Tab.TabIndex = 5;
             poke5_Tab.UseVisualStyleBackColor = true;
             // 
@@ -5275,7 +5275,7 @@ namespace Main
             poke6_Tab.Location = new Point(4, 24);
             poke6_Tab.Name = "poke6_Tab";
             poke6_Tab.Padding = new Padding(3);
-            poke6_Tab.Size = new Size(494, 402);
+            poke6_Tab.Size = new Size(492, 401);
             poke6_Tab.TabIndex = 6;
             poke6_Tab.UseVisualStyleBackColor = true;
             // 
@@ -5876,7 +5876,7 @@ namespace Main
             trainer_Party_toolStrip.Items.AddRange(new ToolStripItem[] { trainer_SaveParty_btn, trainer_UndoParty_btn, toolStripSeparator10, trainer_CopyParty_btn, trainer_PasteParty_btn, toolStripSeparator12, trainer_ImportParty_btn, trainer_ExportParty_btn });
             trainer_Party_toolStrip.Location = new Point(3, 19);
             trainer_Party_toolStrip.Name = "trainer_Party_toolStrip";
-            trainer_Party_toolStrip.Size = new Size(501, 25);
+            trainer_Party_toolStrip.Size = new Size(500, 25);
             trainer_Party_toolStrip.TabIndex = 154;
             trainer_Party_toolStrip.Text = "toolStrip7";
             // 
@@ -7009,7 +7009,7 @@ namespace Main
             main_MainTable_BattleMessageTab.Controls.Add(panel8);
             main_MainTable_BattleMessageTab.Location = new Point(4, 24);
             main_MainTable_BattleMessageTab.Name = "main_MainTable_BattleMessageTab";
-            main_MainTable_BattleMessageTab.Size = new Size(1242, 542);
+            main_MainTable_BattleMessageTab.Size = new Size(1242, 459);
             main_MainTable_BattleMessageTab.TabIndex = 2;
             main_MainTable_BattleMessageTab.Text = "Battle Messages";
             main_MainTable_BattleMessageTab.UseVisualStyleBackColor = true;
@@ -7022,7 +7022,7 @@ namespace Main
             panel8.Dock = DockStyle.Fill;
             panel8.Location = new Point(0, 0);
             panel8.Name = "panel8";
-            panel8.Size = new Size(1242, 542);
+            panel8.Size = new Size(1242, 459);
             panel8.TabIndex = 1;
             // 
             // panel7
@@ -7031,7 +7031,7 @@ namespace Main
             panel7.Controls.Add(battleMessage_MessageTableDataGrid);
             panel7.Location = new Point(3, 28);
             panel7.Name = "panel7";
-            panel7.Size = new Size(1238, 358);
+            panel7.Size = new Size(1238, 275);
             panel7.TabIndex = 2;
             // 
             // battleMessage_MessageTableDataGrid
@@ -7044,7 +7044,7 @@ namespace Main
             battleMessage_MessageTableDataGrid.Location = new Point(0, 0);
             battleMessage_MessageTableDataGrid.MultiSelect = false;
             battleMessage_MessageTableDataGrid.Name = "battleMessage_MessageTableDataGrid";
-            battleMessage_MessageTableDataGrid.Size = new Size(1238, 358);
+            battleMessage_MessageTableDataGrid.Size = new Size(1238, 275);
             battleMessage_MessageTableDataGrid.TabIndex = 1;
             battleMessage_MessageTableDataGrid.CellBeginEdit += battleMessage_MessageTableDataGrid_CellBeginEdit;
             battleMessage_MessageTableDataGrid.SelectionChanged += battleMessage_MessageTableDataGrid_SelectionChanged;
@@ -7099,7 +7099,7 @@ namespace Main
             panel6.Controls.Add(battleMessages_MessageDownBtn);
             panel6.Controls.Add(battleMessages_PreviewPicBox);
             panel6.Dock = DockStyle.Bottom;
-            panel6.Location = new Point(0, 392);
+            panel6.Location = new Point(0, 309);
             panel6.Name = "panel6";
             panel6.Size = new Size(1242, 150);
             panel6.TabIndex = 0;
