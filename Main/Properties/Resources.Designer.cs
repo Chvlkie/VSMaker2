@@ -83,6 +83,16 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap copyMon_ico {
+            get {
+                object obj = ResourceManager.GetObject("copyMon_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap del_ico {
             get {
                 object obj = ResourceManager.GetObject("del_ico", resourceCulture);
@@ -106,16 +116,6 @@ namespace Main.Properties {
         internal static System.Drawing.Bitmap import_ico {
             get {
                 object obj = ResourceManager.GetObject("import_ico", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap MessageBox {
-            get {
-                object obj = ResourceManager.GetObject("MessageBox", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,6 +153,16 @@ namespace Main.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap pasteMon_ico {
+            get {
+                object obj = ResourceManager.GetObject("pasteMon_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap patch_ico {
             get {
                 object obj = ResourceManager.GetObject("patch_ico", resourceCulture);
@@ -177,16 +187,6 @@ namespace Main.Properties {
             get {
                 object obj = ResourceManager.GetObject("poke_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] pokemon_ds_font {
-            get {
-                object obj = ResourceManager.GetObject("pokemon_ds_font", resourceCulture);
-                return ((byte[])(obj));
             }
         }
         

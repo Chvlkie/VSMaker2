@@ -1,131 +1,87 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<UseWindowsForms>true</UseWindowsForms>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<GenerateDocumentationFile>False</GenerateDocumentationFile>
-		<Title>VS Maker 2</Title>
-		<AssemblyName>VsMaker2</AssemblyName>
-		<Version>0.9.2</Version>
-		<AssemblyVersion>0.9.2</AssemblyVersion>
-		<FileVersion>0.9.2</FileVersion>
-		<VersionPrefix>0.9.2</VersionPrefix>
-		<VersionSuffix>beta</VersionSuffix>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<ApplicationIcon>Resources\Icons\vs-maker-2.ico</ApplicationIcon>
-		<ApplicationManifest>app.manifest</ApplicationManifest>
-		<ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
-		<ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
-	</PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Config\**" />
-	  <Compile Remove="CustomUi\ComboBox\**" />
-	  <Compile Remove="CustomUi\Extensions\**" />
-	  <EmbeddedResource Remove="Config\**" />
-	  <EmbeddedResource Remove="CustomUi\ComboBox\**" />
-	  <EmbeddedResource Remove="CustomUi\Extensions\**" />
-	  <None Remove="Config\**" />
-	  <None Remove="CustomUi\ComboBox\**" />
-	  <None Remove="CustomUi\Extensions\**" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\Icons\add_ico.png" />
+    <None Remove="Resources\Icons\copy_ico.png" />
+    <None Remove="Resources\Icons\del_ico.png" />
+    <None Remove="Resources\Icons\export_ico.png" />
+    <None Remove="Resources\Icons\import_ico.png" />
+    <None Remove="Resources\Icons\nds_ico.png" />
+    <None Remove="Resources\Icons\open_ico.png" />
+    <None Remove="Resources\Icons\paste_ico.png" />
+    <None Remove="Resources\Icons\patch_ico.png" />
+    <None Remove="Resources\Icons\playSound_ico.png" />
+    <None Remove="Resources\Icons\poke_ico.png" />
+    <None Remove="Resources\Icons\redo_ico.png" />
+    <None Remove="Resources\Icons\save_ico.png" />
+    <None Remove="Resources\Icons\settings_ico.png" />
+    <None Remove="Resources\Icons\sort_ico.png" />
+    <None Remove="Resources\Icons\stopSound_ico.png" />
+    <None Remove="Resources\Icons\undo_ico.png" />
+    <None Remove="Resources\Icons\unpack_ico.png" />
+    <None Remove="Resources\Icons\vs-maker-2.ico" />
+    <None Remove="Tools\blz.exe" />
+    <None Remove="Tools\ndstool.exe" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="Resources\Fonts\pokemon-ds-font.ttf" />
-		<None Remove="Resources\Icons\add_ico.png" />
-		<None Remove="Resources\Icons\copy_ico.png" />
-		<None Remove="Resources\Icons\del_ico.png" />
-		<None Remove="Resources\Icons\export_ico.png" />
-		<None Remove="Resources\Icons\import_ico.png" />
-		<None Remove="Resources\Icons\nds_ico.png" />
-		<None Remove="Resources\Icons\open_ico.png" />
-		<None Remove="Resources\Icons\paste_ico.png" />
-		<None Remove="Resources\Icons\patch_ico.png" />
-		<None Remove="Resources\Icons\poke_ico.png" />
-		<None Remove="Resources\Icons\redo_ico.png" />
-		<None Remove="Resources\Icons\save_ico.png" />
-		<None Remove="Resources\Icons\settings_ico.png" />
-		<None Remove="Resources\Icons\sort_ico.png" />
-		<None Remove="Resources\Icons\undo_ico.png" />
-		<None Remove="Resources\Icons\unpack_ico.png" />
-		<None Remove="Resources\Icons\vs-maker-2.ico" />
-		<None Remove="Tools\blz.exe" />
-		<None Remove="Tools\ndstool.exe" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\add_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\copy_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\del_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\export_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\import_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\nds_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\open_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\paste_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\patch_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\playSound_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\poke_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\redo_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\save_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\settings_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\sort_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\stopSound_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\undo_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\unpack_ico.png" />
+    <EmbeddedResource Include="Resources\Icons\vs-maker-2.ico" />
+    <EmbeddedResource Include="Tools\blz.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\ndstool.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Content Include="Resources\Icons\vs-maker-2.ico" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Icons\vs-maker-2.ico" />
-	  <EmbeddedResource Include="Tools\blz.exe">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Tools\ndstool.exe">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries\Data\Data.csproj" />
+    <ProjectReference Include="..\Libraries\Methods\Methods\Methods.csproj" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\Fonts\pokemon-ds-font.ttf" />
-		<EmbeddedResource Include="Resources\Icons\add_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\copy_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\del_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\export_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\import_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\nds_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\open_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\paste_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\patch_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\poke_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\redo_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\save_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\settings_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\sort_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\undo_ico.png" />
-		<EmbeddedResource Include="Resources\Icons\unpack_ico.png" />
-	</ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
 
-	<ItemGroup>
-		<None Include="..\.editorconfig" Link=".editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Ekona\Ekona.csproj" />
-	  <ProjectReference Include="..\Images\Images.csproj" />
-	  <ProjectReference Include="..\VsMaker2Core\VsMaker2Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="Editors\BattleMessageEditor.cs">
-		  <SubType>Form</SubType>
-		</Compile>
-		<Compile Update="Editors\ClassEditor.cs">
-		  <SubType>Form</SubType>
-		</Compile>
-		<Compile Update="Forms\EditStatsForm.cs">
-		  <SubType>Form</SubType>
-		</Compile>
-		<Compile Update="Properties\Resources.Designer.cs">
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
-			<DependentUpon>Resources.resx</DependentUpon>
-		</Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Update="Properties\Resources.resx">
-			<Generator>ResXFileCodeGenerator</Generator>
-			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
-		</EmbeddedResource>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>

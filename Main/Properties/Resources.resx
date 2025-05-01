@@ -130,14 +130,14 @@
   <data name="poke_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\poke_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="import_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\import_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="add_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\add_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pokemon_ds_font" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Fonts\pokemon-ds-font.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="open_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\open_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="settings_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\settings_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="copy_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\copy_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,16 +166,16 @@
   <data name="save_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\save_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="settings_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\settings_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="open_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\open_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="patch_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\patch_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="import_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Icons\import_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="copyMon_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\copyMon_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="MessageBox" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Images\MessageBox.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pasteMon_ico" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\pasteMon_ico.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
