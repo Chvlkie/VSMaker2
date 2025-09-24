@@ -53,7 +53,7 @@ namespace Main
         {
             InitializeComponent();
             AutoScaleMode = AutoScaleMode.None;
-            this.Font = new Font("Segoe UI", 9f); 
+            this.Font = new Font("Segoe UI", 9f);
             AdjustFormSize();
             filterTimer = new System.Windows.Forms.Timer
             {

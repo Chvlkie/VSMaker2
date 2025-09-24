@@ -5,7 +5,7 @@
         public List<Pokemon> Pokemons { get; set; }
         public bool ChooseItems { get; set; }
         public bool ChooseMoves { get; set; }
-        public bool DoubleBattle { get; set; }
+        public uint BattleType { get; set; }
         public byte TeamSize { get; set; }
 
         public TrainerParty()
@@ -23,7 +23,7 @@
             Pokemons = toCopy.Pokemons;
             ChooseItems = toCopy.ChooseItems;
             ChooseMoves = toCopy.ChooseMoves;
-            DoubleBattle = toCopy.DoubleBattle;
+            BattleType = toCopy.BattleType;
         }
 
         public override bool Equals(object? obj) => Equals(obj as TrainerParty);
@@ -32,9 +32,9 @@
                    EqualityComparer<List<Pokemon>>.Default.Equals(Pokemons, other.Pokemons) &&
                    ChooseItems == other.ChooseItems &&
                    ChooseMoves == other.ChooseMoves &&
-                   DoubleBattle == other.DoubleBattle &&
+                   BattleType == other.BattleType &&
                    TeamSize == other.TeamSize;
 
-        public override int GetHashCode() => HashCode.Combine(Pokemons, ChooseItems, ChooseMoves, DoubleBattle, TeamSize);
+        public override int GetHashCode() => HashCode.Combine(Pokemons, ChooseItems, ChooseMoves, BattleType, TeamSize);
     }
 }

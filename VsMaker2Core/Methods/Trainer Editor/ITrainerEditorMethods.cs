@@ -28,7 +28,7 @@ namespace VsMaker2Core.Methods
 
         TrainerData NewTrainerData(TrainerProperty trainerProperties);
 
-        TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags);
+        TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags, uint battleType);
 
         TrainerPartyPokemonData NewTrainerPartyPokemonData(Pokemon pokemon, bool chooseMoves, bool chooseItems, bool hasBallCapsule);
         (bool Success, string ErrorMessage) RemoveTrainer(int trainerId);

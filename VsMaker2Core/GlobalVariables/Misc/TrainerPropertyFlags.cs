@@ -4,7 +4,6 @@ namespace VsMaker2Core
 {
     public static class TrainerPropertyFlags
     {
-        public const string DoubleBattle = "Double Battle";
         public const string ChooseMoves = "Choose Moves";
         public const string ChooseItems = "Choose Held Item";
         public const string ChooseAbility_Hge = "Choose Ability";
@@ -17,7 +16,6 @@ namespace VsMaker2Core
         public static List<string> TrainerPropertyFlagNames =>
             RomFile.IsHgEngine ?
             [
-                DoubleBattle,
                 ChooseMoves,
                 ChooseItems,
                 ChooseAbility_Hge,
@@ -29,7 +27,6 @@ namespace VsMaker2Core
             ]
             :
             [
-                DoubleBattle,
                 ChooseMoves,
                 ChooseItems,
             ];

@@ -18,7 +18,7 @@
         public byte TeamSize { get; set; }
         public ushort[] Items { get; set; }
         public uint AIFlags { get; set; }
-        public uint IsDoubleBattle { get; set; }
+        public uint BattleType { get; set; }
 
         public TrainerData()
         {
@@ -27,11 +27,11 @@
             TeamSize = 0;
             Items = [0, 0, 0, 0];
             AIFlags = 0;
-            IsDoubleBattle = 0;
+            BattleType = 0;
             TrainerClassId = 2;
         }
 
-        public TrainerData(byte trainerType, byte trainerClassId, byte padding, byte teamSize, ushort[] items, uint aiFlags, uint isDoubleBattle)
+        public TrainerData(byte trainerType, byte trainerClassId, byte padding, byte teamSize, ushort[] items, uint aiFlags, uint battleType)
         {
             TrainerType = trainerType;
             TrainerClassId = trainerClassId;
@@ -39,7 +39,7 @@
             TeamSize = teamSize;
             Items = items;
             AIFlags = aiFlags;
-            IsDoubleBattle = isDoubleBattle;
+            BattleType = battleType;
         }
     }
 }

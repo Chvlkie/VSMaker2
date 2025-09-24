@@ -714,11 +714,7 @@ namespace VsMaker2Core.Methods
 
                 try
                 {
-                    if (i == 11)
-                    {
-                        bool test = true;
-                    }
-                    var partyData = ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
+                                    var partyData = ReadTrainerPartyData(i, trainer.TeamSize, trainer.TrainerType, isNotDiamondPearl);
                     trainersPartyData.Add(partyData);
                 }
                 catch (Exception ex)
@@ -762,7 +758,7 @@ namespace VsMaker2Core.Methods
                 }
 
                 trainerData.AIFlags = reader.ReadUInt32();
-                trainerData.IsDoubleBattle = reader.ReadUInt32();
+                trainerData.BattleType = reader.ReadUInt32();
             }
             catch (EndOfStreamException ex)
             {
@@ -969,7 +965,7 @@ namespace VsMaker2Core.Methods
             catch (Exception ex)
             {
                 Console.WriteLine($"An unexpected error occurred while reading trainer party data for Trainer ID {trainerId}: {ex.Message}");
-                throw;
+                throw ex;
             }
 
             return trainerPartyData;

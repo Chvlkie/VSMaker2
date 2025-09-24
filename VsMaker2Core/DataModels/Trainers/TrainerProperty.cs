@@ -11,13 +11,12 @@
 
         public ushort[] Items { get; set; }
 
-        public bool DoubleBattle { get; set; }
+        public uint BattleType { get; set; }
 
         public byte TeamSize { get; set; }
 
         public List<bool> PropertyFlags => RomFile.IsHgEngine ?
             [
-            DoubleBattle,
             ChooseMoves,
             ChooseItems,
             ChooseAbility_Hge,
@@ -28,7 +27,6 @@
             ]
         :
             [
-            DoubleBattle,
             ChooseMoves,
             ChooseItems
             ];
@@ -50,7 +48,7 @@
             TeamSize = 0;
         }
 
-        public TrainerProperty(TrainerProperty original, bool doubleBattle, byte teamSize, bool chooseMoves, bool chooseItems)
+        public TrainerProperty(TrainerProperty original, uint battleType, byte teamSize, bool chooseMoves, bool chooseItems)
         {
             AIFlags = original.AIFlags;
             Items = original.Items;
@@ -58,10 +56,10 @@
             ChooseMoves = chooseMoves;
             ChooseItems = chooseItems;
             TrainerClassId = original.TrainerClassId;
-            DoubleBattle = doubleBattle;
+            BattleType = battleType;
         }
 
-        public TrainerProperty(bool doubleBattle, byte teamSize, bool chooseMoves, bool chooseItems, byte trainerClassId, ushort[] items, List<bool> aiFlags)
+        public TrainerProperty(uint battleType, byte teamSize, bool chooseMoves, bool chooseItems, byte trainerClassId, ushort[] items, List<bool> aiFlags)
         {
             AIFlags = aiFlags;
             Items = items;
@@ -69,7 +67,7 @@
             ChooseMoves = chooseMoves;
             ChooseItems = chooseItems;
             TrainerClassId = trainerClassId;
-            DoubleBattle = doubleBattle;
+            BattleType = battleType;
         }
 
         public TrainerProperty(TrainerProperty toCopy)
@@ -80,7 +78,7 @@
             ChooseMoves = toCopy.ChooseMoves;
             ChooseItems = toCopy.ChooseItems;
             TrainerClassId = toCopy.TrainerClassId;
-            DoubleBattle = toCopy.DoubleBattle;
+            BattleType = toCopy.BattleType;
         }
 
         public override bool Equals(object? obj) => Equals(obj as TrainerProperty);
@@ -91,9 +89,9 @@
                    ChooseItems == other.ChooseItems &&
                    TrainerClassId == other.TrainerClassId &&
                    EqualityComparer<ushort[]>.Default.Equals(Items, other.Items) &&
-                   DoubleBattle == other.DoubleBattle &&
+                   BattleType == other.BattleType &&
                    TeamSize == other.TeamSize;
 
-        public override int GetHashCode() => HashCode.Combine(AIFlags, ChooseMoves, ChooseItems, TrainerClassId, Items, DoubleBattle, TeamSize);
+        public override int GetHashCode() => HashCode.Combine(AIFlags, ChooseMoves, ChooseItems, TrainerClassId, Items, BattleType,  TeamSize);
     }
 }

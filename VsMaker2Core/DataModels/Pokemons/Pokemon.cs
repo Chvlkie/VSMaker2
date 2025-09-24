@@ -44,7 +44,6 @@ namespace VsMaker2Core.DataModels
         public bool ChooseSPEED_Hge { get; set; } = false;
         public bool Choose_SpATK_Hge { get; set; } = false;
         public bool Choose_SpDEF_Hge { get; set; } = false;
-        public bool ChooseTypes_Hge { get; set; } = false;
         public bool ChoosePP_Hge { get; set; } = false;
         public bool ChooseNickname_HGE { get; set; } = false;
 

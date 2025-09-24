@@ -578,7 +578,7 @@ namespace VsMaker2Core.Methods
                     }
 
                     writer.Write(trainerData.AIFlags);
-                    writer.Write(trainerData.IsDoubleBattle);
+                    writer.Write(trainerData.BattleType);
                 }
 
                 File.WriteAllBytes(directory, stream.ToArray());
@@ -634,9 +634,9 @@ namespace VsMaker2Core.Methods
 
             string directory = $"{VsMakerDatabase.RomData.GameDirectories[NarcDirectory.trainerParty].unpackedDirectory}\\{trainerId:D4}";
 
-            bool hasMoves = trainerTypeFlags[1];
-            bool heldItems = trainerTypeFlags[2];
-           
+            bool hasMoves = trainerTypeFlags[0];
+            bool heldItems = trainerTypeFlags[1];
+
 
             try
             {
@@ -671,12 +671,12 @@ namespace VsMaker2Core.Methods
 
                         if (RomFile.IsHgEngine)
                         {
-                            bool setAbility = trainerTypeFlags[3];
-                            bool chooseBall = trainerTypeFlags[4];
-                            bool chooseIvEv = trainerTypeFlags[5];
-                            bool chooseNature = trainerTypeFlags[6];
-                            bool shinyLock = trainerTypeFlags[7];
-                            bool additionalFlags = trainerTypeFlags[8];
+                            bool setAbility = trainerTypeFlags[2];
+                            bool chooseBall = trainerTypeFlags[3];
+                            bool chooseIvEv = trainerTypeFlags[4];
+                            bool chooseNature = trainerTypeFlags[5];
+                            bool shinyLock = trainerTypeFlags[6];
+                            bool additionalFlags = trainerTypeFlags[7];
 
                             if (setAbility)
                             {
@@ -716,9 +716,8 @@ namespace VsMaker2Core.Methods
                                 bool chooseSPEED = (pokemon.AdditionalFlags_Hge & 0x10) != 0;
                                 bool chooseSpATK = (pokemon.AdditionalFlags_Hge & 0x20) != 0;
                                 bool chooseSpDEF = (pokemon.AdditionalFlags_Hge & 0x40) != 0;
-                                bool chooseTypes = (pokemon.AdditionalFlags_Hge & 0x80) != 0;
-                                bool choosePP = (pokemon.AdditionalFlags_Hge & 0x100) != 0;
-                                bool chooseNickname = (pokemon.AdditionalFlags_Hge & 0x200) != 0;
+                                bool choosePP = (pokemon.AdditionalFlags_Hge & 0x80) != 0;
+                                bool chooseNickname = (pokemon.AdditionalFlags_Hge & 0x100) != 0;
                                 if (chooseStatus)
                                 {
                                     writer.Write(pokemon.Status_Hge.Value);
@@ -746,13 +745,6 @@ namespace VsMaker2Core.Methods
                                 if (chooseSpDEF)
                                 {
                                     writer.Write(pokemon.SpDef_Hge.Value);
-                                }
-                                if (chooseTypes)
-                                {
-                                    for (int type = 0; type < 2; type++)
-                                    {
-                                        writer.Write(pokemon.Types_Hge[type]);
-                                    }
                                 }
                                 if (choosePP)
                                 {
@@ -799,9 +791,9 @@ namespace VsMaker2Core.Methods
             }
             catch (Exception ex)
             {
-                throw; 
+                throw;
                 return (false, $"An error occurred: {ex.Message}");
-                
+
             }
         }
 

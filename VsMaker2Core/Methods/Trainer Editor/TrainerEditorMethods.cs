@@ -45,8 +45,8 @@ namespace VsMaker2Core.Methods
                     Level = trainerPartyPokemon.Level,
                     PokemonId = (ushort)(trainerPartyPokemon.Species & Pokemon.Constants.PokemonNumberBitMask),
                     FormId = (ushort)((trainerPartyPokemon.Species & Pokemon.Constants.PokemonFormBitMask) >> Pokemon.Constants.PokemonNumberBitSize),
-                    HeldItemId = trainerPropertyFlags[2] ? trainerPartyPokemon.ItemId : null,
-                    Moves = trainerPropertyFlags[1] ? trainerPartyPokemon.MoveIds : null,
+                    HeldItemId = trainerPropertyFlags[1] ? trainerPartyPokemon.ItemId : null,
+                    Moves = trainerPropertyFlags[0] ? trainerPartyPokemon.MoveIds : null,
                     BallCapsuleId = hasBallCapsule ? trainerPartyPokemon.BallCapsule : null,
                 };
 
@@ -62,28 +62,28 @@ namespace VsMaker2Core.Methods
 
                 if (RomFile.IsHgEngine)
                 {
-                    if (trainerPropertyFlags[3])
+                    if (trainerPropertyFlags[2])
                     {
                         pokemon.Ability_Hge = trainerPartyPokemon.Ability_Hge ?? 0;
                     }
-                    if (trainerPropertyFlags[4])
+                    if (trainerPropertyFlags[3])
                     {
                         pokemon.Ball_Hge = trainerPartyPokemon.Ball_Hge ?? 0;
                     }
-                    if (trainerPropertyFlags[5])
+                    if (trainerPropertyFlags[4])
                     {
                         pokemon.IvNums_Hge = trainerPartyPokemon.IvNums_Hge;
                         pokemon.EvNums_Hge = trainerPartyPokemon.EvNums_Hge;
                     }
-                    if (trainerPropertyFlags[6])
+                    if (trainerPropertyFlags[5])
                     {
                         pokemon.Nature_Hge = trainerPartyPokemon.Nature_Hge ?? 0;
                     }
-                    if (trainerPropertyFlags[7])
+                    if (trainerPropertyFlags[6])
                     {
                         pokemon.ShinyLock_Hge = trainerPartyPokemon.ShinyLock_Hge ?? 0;
                     }
-                    if (trainerPropertyFlags[8])
+                    if (trainerPropertyFlags[7])
                     {
                         pokemon.ChooseStatus_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x01) != 0;
                         pokemon.ChooseHP_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x02) != 0;
@@ -92,9 +92,8 @@ namespace VsMaker2Core.Methods
                         pokemon.ChooseSPEED_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x10) != 0;
                         pokemon.Choose_SpATK_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x20) != 0;
                         pokemon.Choose_SpDEF_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x40) != 0;
-                        pokemon.ChooseTypes_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x80) != 0;
-                        pokemon.ChoosePP_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x100) != 0;
-                        pokemon.ChooseNickname_HGE = (trainerPartyPokemon.AdditionalFlags_Hge & 0x200) != 0;
+                        pokemon.ChoosePP_Hge = (trainerPartyPokemon.AdditionalFlags_Hge & 0x80) != 0;
+                        pokemon.ChooseNickname_HGE = (trainerPartyPokemon.AdditionalFlags_Hge & 0x100) != 0;
 
                         pokemon.Status_Hge = pokemon.ChooseStatus_Hge ? trainerPartyPokemon.Status_Hge : 0;
                         pokemon.Hp_Hge = pokemon.ChooseHP_Hge ? trainerPartyPokemon.Hp_Hge : 0;
@@ -103,7 +102,6 @@ namespace VsMaker2Core.Methods
                         pokemon.Speed_Hge = pokemon.ChooseSPEED_Hge ? trainerPartyPokemon.Speed_Hge : 0;
                         pokemon.SpAtk_Hge = pokemon.Choose_SpATK_Hge ? trainerPartyPokemon.SpAtk_Hge : 0;
                         pokemon.SpDef_Hge = pokemon.Choose_SpDEF_Hge ? trainerPartyPokemon.SpDef_Hge : 0;
-                        pokemon.Types_Hge = pokemon.ChooseTypes_Hge ? trainerPartyPokemon.Types_Hge : [0, 0];
                         pokemon.PpCounts_Hge = pokemon.ChoosePP_Hge ? trainerPartyPokemon.PpCounts_Hge : [0, 0, 0, 0];
                         pokemon.Nickname_Hge = pokemon.ChooseNickname_HGE ? trainerPartyPokemon.Nickname_Hge : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     }
@@ -130,7 +128,7 @@ namespace VsMaker2Core.Methods
                 ChooseItems = (trainerData.TrainerType & 0x02) != 0,
                 TrainerClassId = trainerData.TrainerClassId,
                 TeamSize = trainerData.TeamSize,
-                DoubleBattle = trainerData.IsDoubleBattle == 2
+                BattleType = trainerData.BattleType
             };
 
             if (RomFile.IsHgEngine)
@@ -230,7 +228,7 @@ namespace VsMaker2Core.Methods
                 trainerProperties.TeamSize,
                 trainerProperties.Items,
                 aiFlags,
-                (uint)(trainerProperties.DoubleBattle ? 2 : 0)
+                trainerProperties.BattleType
             );
         }
 
@@ -248,21 +246,21 @@ namespace VsMaker2Core.Methods
             };
         }
 
-        public TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags) => new TrainerProperty
+        public TrainerProperty NewTrainerProperties(byte teamSize, byte trainerClassId, ushort item1, ushort item2, ushort item3, ushort item4, List<bool> aiFlags, List<bool> propertyFlags, uint battleType) => new TrainerProperty
         {
-            DoubleBattle = propertyFlags[0],
-            ChooseMoves = propertyFlags[1],
-            ChooseItems = propertyFlags[2],
+            BattleType = battleType,
+            ChooseMoves = propertyFlags[0],
+            ChooseItems = propertyFlags[1],
             TeamSize = teamSize,
             Items = [item1, item2, item3, item4],
             TrainerClassId = trainerClassId,
             AIFlags = aiFlags,
-            ChooseAbility_Hge = RomFile.IsHgEngine && propertyFlags[3],
-            ChooseBall_Hge = RomFile.IsHgEngine && propertyFlags[4],
-            SetIvEv_Hge = RomFile.IsHgEngine && propertyFlags[5],
-            ChooseNature_Hge = RomFile.IsHgEngine && propertyFlags[6],
-            ShinyLock_Hge = RomFile.IsHgEngine && propertyFlags[7],
-            AdditionalFlags_Hge = RomFile.IsHgEngine && propertyFlags[8],
+            ChooseAbility_Hge = RomFile.IsHgEngine && propertyFlags[2],
+            ChooseBall_Hge = RomFile.IsHgEngine && propertyFlags[3],
+            SetIvEv_Hge = RomFile.IsHgEngine && propertyFlags[4],
+            ChooseNature_Hge = RomFile.IsHgEngine && propertyFlags[5],
+            ShinyLock_Hge = RomFile.IsHgEngine && propertyFlags[6],
+            AdditionalFlags_Hge = RomFile.IsHgEngine && propertyFlags[7],
         };
 
         public (bool Success, string ErrorMessage) RemoveTrainer(int trainerId)
